@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MRA.Web", "MRA.Web\MRA.Web.csproj", "{668FD315-D6AF-4D89-B4A3-207F7B874D03}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MRA.Services", "MRA.Services\MRA.Services.csproj", "{54414AF8-9D06-4992-AB68-45C7F889A5AD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{668FD315-D6AF-4D89-B4A3-207F7B874D03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{668FD315-D6AF-4D89-B4A3-207F7B874D03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{668FD315-D6AF-4D89-B4A3-207F7B874D03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{668FD315-D6AF-4D89-B4A3-207F7B874D03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54414AF8-9D06-4992-AB68-45C7F889A5AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54414AF8-9D06-4992-AB68-45C7F889A5AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54414AF8-9D06-4992-AB68-45C7F889A5AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54414AF8-9D06-4992-AB68-45C7F889A5AD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {58711A87-88DD-4222-942B-37FF0D11299F}
+	EndGlobalSection
+EndGlobal
