@@ -7,12 +7,20 @@
 
 <h3>@Model.QueryId</h3>
 
-@if(Model.Drawing != null)
+@if (Model.Drawing != null)
 {
-    <h6></h6>
+    <h6>
+        @Model.Drawing.Id
+        <span class="badge rounded-pill @(Model.Drawing.IsTraditional ? "bg-secondary" : "bg-dark")">
+            @(Model.Drawing.IsTraditional ? "Traditional" : "Digital")
+        </span>
+    </h6>
 
 
-    @Html.RenderPartialAsync("Images/_ImageThumbnail", new ImageThumbnailModel(Model.Drawing));
+    <div class="mr-img-full-container">
+        <img src="@Model.Drawing.Url" class="mr-img-full rounded">
+    </div>
+
 }
 else
 {

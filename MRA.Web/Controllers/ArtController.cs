@@ -29,10 +29,10 @@ namespace MRA.Web.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> Details(string queryId)
+        public async Task<IActionResult> Details(string id)
         {
-            var model = new DetailsModel(queryId);
-            model.Drawing = await _drawingService.FindDrawingById(queryId);
+            var model = new DetailsModel(id);
+            model.Drawing = await _drawingService.FindDrawingById(id);
             return View(model);
         }
 
