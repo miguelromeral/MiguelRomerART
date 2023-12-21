@@ -27,6 +27,8 @@ namespace MRA.Services.Firebase.Converters
                 Id = drawingDocument.Id,
                 Path = drawingDocument.path,
                 Type = drawingDocument.type,
+                Title = drawingDocument.title,
+                Name = drawingDocument.name,
                 UrlBase = _urlBase
             };
         }
@@ -37,7 +39,9 @@ namespace MRA.Services.Firebase.Converters
             {
                 Id = drawing.Id,
                 path = drawing.Path,
-                type = drawing.Type
+                type = drawing.Type,
+                title = drawing.Title,
+                name = drawing.Name
             };
         }
     }

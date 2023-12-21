@@ -1,8 +1,19 @@
-﻿.mr-img-thumbnail-container {
+﻿.mr-img-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    flex-direction: row;
+    max-height: 100vh;
+}
+
+.mr-img-thumbnail-container {
     position: relative;
-    display: inline-block;
+    display: flex;
     overflow: hidden;
+    width: 300px;
+    height: 300px;
     cursor: pointer;
+    margin: 5px;
 }
 
 .mr-img-thumbnail-container img {
@@ -29,7 +40,7 @@
 
 .mr-image-thumbnail {
     width: 300px;
-    height: 300px;
+    height: auto;
 }
 
 .mr-img-thumbnail-container:hover img {

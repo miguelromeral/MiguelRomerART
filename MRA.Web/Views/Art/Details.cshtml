@@ -2,15 +2,25 @@
 @using MRA.Web.Models.Images
 @model DetailsModel
 
+@{
+    var drawing = Model.Drawing;
+    if (drawing != null)
+    {
+        ViewData["Title"] = drawing?.Title + " - " + drawing.Name;
+    }
+    else
+    {
+        ViewData["Title"] = "Details";
+    }
+}
 
-<h1>Details</h1>
 
-<h3>@Model.QueryId</h3>
+<h1>@(drawing.Title ?? "Details")</h1>
 
-@if (Model.Drawing != null)
+@if (drawing != null)
 {
     <h6>
-        @Model.Drawing.Id
+        @Model.Drawing.Name
         <span class="badge rounded-pill @(Model.Drawing.IsTraditional ? "bg-secondary" : "bg-dark")">
             @(Model.Drawing.IsTraditional ? "Traditional" : "Digital")
         </span>
