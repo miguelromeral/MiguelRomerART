@@ -8,18 +8,12 @@ using System.Threading.Tasks;
 namespace MRA.Services.Firebase.Documents
 {
     [FirestoreData]
-    public class ShoeDocument
+    public class DrawingDocument
     {
         [FirestoreDocumentId]
         public string Id { get; set; }
 
         [FirestoreProperty]
-        public string Name { get; set; }
-
-        [FirestoreProperty]
-        public string Brand { get; set; }
-
-        [FirestoreProperty]
-        public string Price { get; set; }
+        public string path { get; set; }
     }
 }

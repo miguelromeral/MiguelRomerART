@@ -1,6 +1,9 @@
 ﻿using Google.Cloud.Firestore;
+using Microsoft.Extensions.Configuration;
+using MRA.Services.Firebase.Converters;
 using MRA.Services.Firebase.Documents;
 using MRA.Services.Firebase.Interfaces;
+using MRA.Services.Firebase.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,51 +15,33 @@ namespace MRA.Services.Firebase
     public class FirestoreService : IFirestoreService
     {
         private readonly FirestoreDb _firestoreDb;
-        private const string _collectionName = "Shoes";
+        private readonly string _urlBase;
+        private readonly string _collectionName;
+        private readonly DrawingFirebaseConverter _converter;
 
-        public FirestoreService(FirestoreDb firestoreDb)
+        public FirestoreService(IConfiguration configuration, FirestoreDb firestoreDb)
         {
             _firestoreDb = firestoreDb;
+            _collectionName = configuration.GetValue<string>("Firebase:Collection");
+            _converter = new DrawingFirebaseConverter();
         }
 
-        public async Task<List<Shoe>> GetAll()
+        public async Task<List<Drawing>> GetAll()
         {
             var collection = _firestoreDb.Collection(_collectionName);
             var snapshot = await collection.GetSnapshotAsync();
 
-            var shoeDocuments = snapshot.Documents.Select(s => s.ConvertTo<ShoeDocument>()).ToList();
+            var shoeDocuments = snapshot.Documents.Select(s => s.ConvertTo<DrawingDocument>()).ToList();
 
-            return shoeDocuments.Select(ConvertDocumentToModel).ToList();
+            return shoeDocuments.Select(_converter.ConvertToModel).ToList();
         }
 
-        public async Task AddAsync(Shoe shoe)
+        public async Task AddAsync(Drawing document)
         {
             var collection = _firestoreDb.Collection(_collectionName);
-            var shoeDocument = ConvertModelToDocument(shoe);
+            var drawingDocument = _converter.ConvertToDocument(document);
 
-            await collection.AddAsync(shoeDocument);
-        }
-
-        private static Shoe ConvertDocumentToModel(ShoeDocument shoeDocument)
-        {
-            return new Shoe
-            {
-                Id = shoeDocument.Id,
-                Name = shoeDocument.Name,
-                Brand = shoeDocument.Brand,
-                Price = decimal.Parse(shoeDocument.Price)
-            };
-        }
-
-        private static ShoeDocument ConvertModelToDocument(Shoe shoe)
-        {
-            return new ShoeDocument
-            {
-                Id = shoe.Id,
-                Name = shoe.Name,
-                Brand = shoe.Brand,
-                Price = shoe.Price.ToString()
-            };
+            await collection.AddAsync(drawingDocument);
         }
     }
 }

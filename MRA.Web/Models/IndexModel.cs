@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 using MRA.Services.Firebase.Interfaces;
-using MRA.Services.Firebase;
 using MRA.Services;
+using MRA.Services.Firebase.Models;
 
 namespace MRA.Web.Models
 {
@@ -9,8 +9,9 @@ namespace MRA.Web.Models
     {
         private readonly IFirestoreService _firestoreService;
 
-        public List<Shoe>? Shoes;
+        public List<Drawing>? Drawings;
         public List<BlobFileInfo> Blobs;
+        public string BlobURL;
 
         public IndexModel(IFirestoreService firestoreService)
         {
@@ -19,7 +20,7 @@ namespace MRA.Web.Models
 
         public async Task OnGetAsync()
         {
-            Shoes = await _firestoreService.GetAll();
+            Drawings = await _firestoreService.GetAll();
         }
     }
 }

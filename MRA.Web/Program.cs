@@ -19,7 +19,7 @@ builder.Services.AddSingleton<IFirestoreService>(s =>
 {
     try
     {
-        return new FirestoreService(FirestoreDb.Create(builder.Configuration.GetValue<string>("Firebase:ProjectID")));
+        return new FirestoreService(builder.Configuration, FirestoreDb.Create(builder.Configuration.GetValue<string>("Firebase:ProjectID")));
     }
     catch (Exception ex)
     {

@@ -14,6 +14,7 @@ namespace MRA.Services
         private readonly BlobServiceClient _blobServiceClient;
         private readonly IConfiguration _configuration;
         private readonly string blobStorageContainer;
+        public readonly string BlobURL;
 
         public AzureStorageService(IConfiguration configuration)
         {
@@ -21,6 +22,7 @@ namespace MRA.Services
             var connectionString = configuration.GetValue<string>("AzureStorage:ConnectionString");
             blobStorageContainer = configuration.GetValue<string>("AzureStorage:BlobStorageContainer");
             _blobServiceClient = new BlobServiceClient(connectionString);
+            BlobURL = configuration.GetValue<string>("AzureStorage:BlobPath");
         }
 
         public async Task<List<BlobFileInfo>> ListBlobFilesAsync()

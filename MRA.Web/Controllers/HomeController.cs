@@ -10,14 +10,14 @@ namespace MRA.Web.Controllers
     public class HomeController : Controller
     {
 
-        private readonly AzureStorageService _storageService;
+        private readonly AzureStorageService _azureStorageService;
         private readonly IFirestoreService _firestoreService;
         private readonly ILogger<HomeController> _logger;
 
         public HomeController(ILogger<HomeController> logger, AzureStorageService storageService, IFirestoreService firestoreService)
         {
             _logger = logger;
-            _storageService = storageService;
+            _azureStorageService = storageService;
             _firestoreService = firestoreService;
         }
 
@@ -25,7 +25,8 @@ namespace MRA.Web.Controllers
         {
             var model = new IndexModel(_firestoreService);
             await model.OnGetAsync();
-            model.Blobs = await _storageService.ListBlobFilesAsync();
+            model.Blobs = await _azureStorageService.ListBlobFilesAsync();
+            model.BlobURL = _azureStorageService.BlobURL;
 
             return View(model);
         }

@@ -25,31 +25,25 @@
                 <label>Id</label>
             </th>
             <th>
-                <label>Name</label>
+                <label>Path</label>
             </th>
             <th>
-                <label>Brand</label>
-            </th>
-            <th>
-                <label>Price</label>
+                <label>URL</label>
             </th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var shoe in Model.Shoes)
+        @foreach (var shoe in Model.Drawings)
         {
             <tr>
                 <td>
                     <label>@shoe.Id</label>
                 </td>
                 <td>
-                    <label>@shoe.Name</label>
+                    <label>@shoe.Path</label>
                 </td>
                 <td>
-                    <label>@shoe.Brand</label>
-                </td>
-                <td>
-                    <label>@shoe.Price</label>
+                    <img src="@(Model.BlobURL)@(shoe.Path)" width="300" height="auto">
                 </td>
             </tr>
         }
