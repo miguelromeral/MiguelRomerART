@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MRA.Services
+namespace MRA.Services.AzureStorage
 {
     public class BlobFileInfo
     {

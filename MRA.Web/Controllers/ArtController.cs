@@ -1,30 +1,31 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MRA.Services.AzureStorage;
-using MRA.Services.Firebase;
 using MRA.Services.Firebase.Interfaces;
 using MRA.Web.Models;
 using System.Diagnostics;
+using MRA.Services.AzureStorage;
+using MRA.Services;
 
 namespace MRA.Web.Controllers
 {
-    public class HomeController : Controller
+    public class ArtController : Controller
     {
-
+        private readonly DrawingService _drawingService;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public ArtController(ILogger<HomeController> logger, DrawingService drawingService)
         {
             _logger = logger;
+            _drawingService = drawingService;
         }
+
 
         public async Task<IActionResult> Index()
         {
-            return View();
-        }
+            var model = new IndexModel();
 
-        public IActionResult Privacy()
-        {
-            return View();
+            model.Drawings = await _drawingService.GetAllDrawings();
+
+            return View(model);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

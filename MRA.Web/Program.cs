@@ -3,32 +3,28 @@ using MRA.Services;
 using MRA.Services.Firebase.Interfaces;
 using MRA.Services.Firebase;
 using Microsoft.Extensions.Configuration;
+using MRA.Services.AzureStorage;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
-builder.Services.AddSingleton(new AzureStorageService(builder.Configuration));
+var azureStorageService = new AzureStorageService(builder.Configuration);
+
+builder.Services.AddSingleton(azureStorageService);
 
 Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @".\Properties\romerart-6a6c3-firebase-adminsdk-4yop5-839e7a0035.json");
 
 //builder.Services.AddSingleton<IFirestoreService>(s => 
 //    new FirestoreService(FirestoreDb.Create(builder.Configuration.GetValue<string>("Firebase:ProjectID"))));
 
-builder.Services.AddSingleton<IFirestoreService>(s =>
-{
-    try
-    {
-        return new FirestoreService(builder.Configuration, FirestoreDb.Create(builder.Configuration.GetValue<string>("Firebase:ProjectID")));
-    }
-    catch (Exception ex)
-    {
-        // Registra la excepción para análisis
-        Console.WriteLine($"Error al crear FirestoreService: {ex}");
-        throw; // Lanza la excepción nuevamente para interrumpir la aplicación
-    }
-});
+var firebaseService = new FirestoreService(builder.Configuration, FirestoreDb.Create(builder.Configuration.GetValue<string>("Firebase:ProjectID")));
 
+builder.Services.AddSingleton<IFirestoreService>(firebaseService);
+
+var drawingService = new DrawingService(azureStorageService, firebaseService);
+
+builder.Services.AddSingleton(drawingService);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

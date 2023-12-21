@@ -1,0 +1,33 @@
+﻿using Microsoft.Extensions.Logging;
+using MRA.Services.AzureStorage;
+using MRA.Services.Firebase.Interfaces;
+using MRA.Services.Firebase.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MRA.Services
+{
+    public class DrawingService
+    {
+
+        private readonly AzureStorageService _azureStorageService;
+        private readonly IFirestoreService _firestoreService;
+
+        public DrawingService(AzureStorageService storageService, IFirestoreService firestoreService)
+        {
+            _azureStorageService = storageService;
+            _firestoreService = firestoreService;
+        }
+
+        public async Task<List<Drawing>> GetAllDrawings()
+        {
+            var drawings = await _firestoreService.GetAll();
+            drawings.ForEach(d => d.UrlBase = _azureStorageService.BlobURL);
+            // model.Blobs = await _azureStorageService.ListBlobFilesAsync();
+            return drawings;
+        }
+    }
+}

@@ -1,0 +1,39 @@
+﻿@using MRA.Services
+@using MRA.Web.Models.Images
+@model IndexModel
+
+<h1>List</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <label>Id</label>
+            </th>
+            <th>
+                <label>Path</label>
+            </th>
+            <th>
+                <label>URL</label>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var drawing in Model.Drawings)
+        {
+            <tr>
+                <td>
+                    <label>@drawing.Id</label>
+                </td>
+                <td>
+                    <label>@drawing.Path</label>
+                </td>
+                <td>
+                    @{
+                        await Html.RenderPartialAsync("Images/_ImageThumbnail", new ImageThumbnailModel(drawing));
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

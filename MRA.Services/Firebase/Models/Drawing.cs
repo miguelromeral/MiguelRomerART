@@ -10,5 +10,7 @@ namespace MRA.Services.Firebase.Models
     {
         public string Id { get; set; }
         public string Path { get; set; }
+        public string UrlBase { get; set; }
+        public string Url { get { return UrlBase + Path; } }
     }
 }

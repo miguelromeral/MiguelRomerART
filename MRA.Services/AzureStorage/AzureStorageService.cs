@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 
-namespace MRA.Services
+namespace MRA.Services.AzureStorage
 {
     public class AzureStorageService
     {
