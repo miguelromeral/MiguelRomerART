@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MRA.Services;
+using MRA.Services.Firebase;
+using MRA.Services.Firebase.Interfaces;
 using MRA.Web.Models;
 using System.Diagnostics;
 
@@ -9,21 +11,23 @@ namespace MRA.Web.Controllers
     {
 
         private readonly AzureStorageService _storageService;
+        private readonly IFirestoreService _firestoreService;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger, AzureStorageService storageService)
+        public HomeController(ILogger<HomeController> logger, AzureStorageService storageService, IFirestoreService firestoreService)
         {
             _logger = logger;
             _storageService = storageService;
+            _firestoreService = firestoreService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var blobFiles = await _storageService.ListBlobFilesAsync();
+            var model = new IndexModel(_firestoreService);
+            await model.OnGetAsync();
+            model.Blobs = await _storageService.ListBlobFilesAsync();
 
-            // Puedes realizar más lógica si es necesario
-
-            return View(blobFiles);
+            return View(model);
         }
 
         public IActionResult Privacy()

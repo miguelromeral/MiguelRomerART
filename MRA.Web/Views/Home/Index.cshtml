@@ -1,5 +1,5 @@
 ﻿@using MRA.Services
-@model List<BlobFileInfo>
+@model IndexModel
 
 <h1>Lista de Archivos</h1>
 
@@ -8,10 +8,50 @@
 </p>
 
 <ul>
-    @foreach (var fileInfo in Model)
+    @foreach (var fileInfo in Model.Blobs)
     {
         <li>
             <a href="@fileInfo.Url" target="_blank">@fileInfo.Name</a>
         </li>
     }
 </ul>
+
+
+<h2>Shoes</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <label>Id</label>
+            </th>
+            <th>
+                <label>Name</label>
+            </th>
+            <th>
+                <label>Brand</label>
+            </th>
+            <th>
+                <label>Price</label>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var shoe in Model.Shoes)
+        {
+            <tr>
+                <td>
+                    <label>@shoe.Id</label>
+                </td>
+                <td>
+                    <label>@shoe.Name</label>
+                </td>
+                <td>
+                    <label>@shoe.Brand</label>
+                </td>
+                <td>
+                    <label>@shoe.Price</label>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
