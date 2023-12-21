@@ -2,7 +2,7 @@
 @model ImageThumbnailModel
 
 
-<div class="mr-img-thumbnail-container">
-    <img src="@Model.Drawing.Url" width="300" height="auto" class="mr-image-thumbnail img-thumbnail rounded">
+<a class="mr-img-thumbnail-container" href="@Url.Action("Details", "Art", new { queryId = Model.Drawing.Id })">
+    <img src="@Model.Drawing.Url" class="mr-image-thumbnail img-thumbnail rounded">
     <span class="mr-img-thumbnail-title">@Model.Drawing.Id</span>
-</div>
+</a>

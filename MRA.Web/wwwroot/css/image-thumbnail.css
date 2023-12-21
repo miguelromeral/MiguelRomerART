@@ -1,13 +1,16 @@
 ﻿.mr-img-thumbnail-container {
     position: relative;
     display: inline-block;
+    overflow: hidden;
+    cursor: pointer;
 }
 
 .mr-img-thumbnail-container img {
     display: block;
-    width: 100%;
-    height: auto;
+    /*width: 100%;
+height: auto;*/
     transition: opacity 0.3s ease-in-out;
+    object-fit: cover;
 }
 
 .mr-img-thumbnail-title {
@@ -24,6 +27,11 @@
     justify-content: center;
     color: white;
     font-size: 18px;
+}
+
+.mr-image-thumbnail {
+    width: 300px;
+    height: 300px;
 }
 
 .mr-img-thumbnail-container:hover img {

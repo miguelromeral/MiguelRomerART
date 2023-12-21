@@ -10,5 +10,6 @@ namespace MRA.Services.Firebase.Interfaces
     public interface IFirestoreService
     {
         Task<List<Drawing>> GetAll();
+        Task<Drawing> FindDrawingById(string documentId);
     }
 }

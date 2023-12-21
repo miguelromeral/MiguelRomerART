@@ -6,6 +6,7 @@ using MRA.Services.Firebase.Interfaces;
 using MRA.Services.Firebase.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,7 +24,8 @@ namespace MRA.Services.Firebase
         {
             _firestoreDb = firestoreDb;
             _collectionName = configuration.GetValue<string>("Firebase:Collection");
-            _converter = new DrawingFirebaseConverter();
+            _urlBase = configuration.GetValue<string>("AzureStorage:BlobPath");
+            _converter = new DrawingFirebaseConverter(_urlBase);
         }
 
         public async Task<List<Drawing>> GetAll()
@@ -34,6 +36,27 @@ namespace MRA.Services.Firebase
             var shoeDocuments = snapshot.Documents.Select(s => s.ConvertTo<DrawingDocument>()).ToList();
 
             return shoeDocuments.Select(_converter.ConvertToModel).ToList();
+        }
+
+        public async Task<Drawing> FindDrawingById(string documentId)
+        {
+            try
+            {
+                DocumentReference docRef = _firestoreDb.Collection(_collectionName).Document(documentId);
+
+                DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+
+                if (snapshot.Exists)
+                {
+                    return _converter.ConvertToModel(snapshot.ConvertTo<DrawingDocument>());
+                }
+                 
+                return null;
+            }catch(Exception ex)
+            {
+                Debug.WriteLine("Exception when getting document '" + documentId + "': " + ex.Message);
+            }
+            return null;
         }
 
         public async Task AddAsync(Drawing document)

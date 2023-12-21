@@ -13,12 +13,20 @@ namespace MRA.Services.Firebase.Converters
 {
     internal class DrawingFirebaseConverter : IFirebaseConverter<Drawing, DrawingDocument>
     {
+        private readonly string _urlBase;
+
+        public DrawingFirebaseConverter(string urlBase)
+        {
+            _urlBase = urlBase;
+        }
+
         public Drawing ConvertToModel(DrawingDocument drawingDocument)
         {
             return new Drawing
             {
                 Id = drawingDocument.Id,
-                Path = drawingDocument.path
+                Path = drawingDocument.path,
+                UrlBase = _urlBase
             };
         }
 

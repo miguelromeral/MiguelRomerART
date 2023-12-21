@@ -29,5 +29,7 @@ namespace MRA.Services
             // model.Blobs = await _azureStorageService.ListBlobFilesAsync();
             return drawings;
         }
+
+        public async Task<Drawing> FindDrawingById(string documentId) => await _firestoreService.FindDrawingById(documentId);
     }
 }

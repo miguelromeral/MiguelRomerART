@@ -4,6 +4,7 @@ using MRA.Web.Models;
 using System.Diagnostics;
 using MRA.Services.AzureStorage;
 using MRA.Services;
+using MRA.Web.Models.Art;
 
 namespace MRA.Web.Controllers
 {
@@ -25,6 +26,13 @@ namespace MRA.Web.Controllers
 
             model.Drawings = await _drawingService.GetAllDrawings();
 
+            return View(model);
+        }
+
+        public async Task<IActionResult> Details(string queryId)
+        {
+            var model = new DetailsModel(queryId);
+            model.Drawing = await _drawingService.FindDrawingById(queryId);
             return View(model);
         }
 

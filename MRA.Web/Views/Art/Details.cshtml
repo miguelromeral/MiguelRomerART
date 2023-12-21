@@ -1,0 +1,20 @@
+﻿@using MRA.Web.Models.Art
+@using MRA.Web.Models.Images
+@model DetailsModel
+
+
+<h1>Details</h1>
+
+<h3>@Model.QueryId</h3>
+
+@if(Model.Drawing != null)
+{
+    <h6></h6>
+
+
+    @Html.RenderPartialAsync("Images/_ImageThumbnail", new ImageThumbnailModel(Model.Drawing));
+}
+else
+{
+    <h6>Not Found</h6>
+}
