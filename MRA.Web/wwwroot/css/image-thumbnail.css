@@ -1,4 +1,6 @@
-﻿.mr-img-gallery {
+﻿@import 'variables.css';
+
+.mr-img-gallery {
     display: flex;
     flex-wrap: wrap;
     align-items: flex-start;
@@ -14,6 +16,8 @@
     height: 300px;
     cursor: pointer;
     margin: 5px;
+    box-shadow: 1px 1px 0px var(--mr-color-box-shadow), 2px 2px 0px var(--mr-color-box-shadow), 3px 3px 0px var(--mr-color-box-shadow), 4px 4px 0px var(--mr-color-box-shadow), 5px 5px 0px var(--mr-color-box-shadow), 6px 6px 0px var(--mr-color-box-shadow);
+    border: 5px solid var(--mr-color-box-shadow);
 }
 
 .mr-img-thumbnail-container img {
