@@ -4,14 +4,7 @@
 
 @{
     var drawing = Model.Drawing;
-    if (drawing != null)
-    {
-        ViewData["Title"] = drawing?.Title + " - " + drawing.Name;
-    }
-    else
-    {
-        ViewData["Title"] = "Details";
-    }
+    ViewData["Title"] = drawing?.Title ?? drawing?.Name ?? drawing?.Id ?? "Details";
 }
 
 

@@ -19,7 +19,7 @@
 
         <div id="formFilterAlert" class="alert alert-danger" style="display: none;" role="alert"></div>
 
-        <div id="mr-filter-container">
+        <div class="mr-filter-container">
 
             <select class="form-select" name="type" aria-label="Default select example" data-bs-theme="dark" onchange="sendFormFilterGallery()">
                 <option value="all" selected>Type</option>
@@ -38,13 +38,22 @@
 </div>
 <div class="row">
 
-    <div class="mr-img-gallery">
+    <div class="mr-loader-container">
+        <div id="artGalleryLoader" class="mr-loader" style="display: none;">
+            <img src="~/assets/bean eater-0.3s-200px.svg" class="mr-loading-icon-pacman" />
+            <span class="mr-loader-subtitle">Filtering images. Please, wait.</span>
+        </div>
+        <div id="artGallery" class="mr-img-gallery">
 
-        @foreach (var drawing in Model.Drawings)
-        {
-            await Html.RenderPartialAsync("Images/_ImageThumbnail", new ImageThumbnailModel(drawing));
-
-        }
+            @foreach (var drawing in Model.Drawings)
+            {
+                await Html.RenderPartialAsync("Images/_ImageThumbnail", new ImageThumbnailModel(drawing));
+            }
+        </div>
     </div>
 
 </div>
+
+@section Scripts {
+    <script src="~/js/art-gallery.js"></script>
+}

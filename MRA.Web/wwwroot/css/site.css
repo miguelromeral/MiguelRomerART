@@ -22,3 +22,28 @@ body {
 .mr-filter-container {
     display: inline-flex;
 }
+
+.mr-loader-container {
+    position: relative;
+}
+
+.mr-loader {
+    position: absolute;
+    z-index: 10000;
+    display: flex;
+    background: #000000d4;
+    width: 100%;
+    height: 100%;
+    align-content: center;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+img.mr-loading-icon-pacman {
+    width: 100px;
+    height: auto;
+}
+span.mr-loader-subtitle{
+    font-style: italic;
+}
