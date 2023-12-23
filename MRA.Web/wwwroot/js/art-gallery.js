@@ -10,13 +10,13 @@ function sendFormFilterGallery() {
 }
 
 function onBeginFilter() {
-    $("#" + DIV_ART_GALLERY).hide();
+    //document.getElementById(DIV_ART_GALLERY).style.visibility = 'hidden';
     $("#" + LOADING_ICON_ART_GALLERY).show();
 }
 
 function onCompleteFilter() {
     $("#" + LOADING_ICON_ART_GALLERY).hide();
-    $("#" + DIV_ART_GALLERY).show();
+    //document.getElementById(DIV_ART_GALLERY).style.visibility = 'visible';
 }
 
 function onSuccessFilter(data) {
