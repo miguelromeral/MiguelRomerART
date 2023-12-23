@@ -33,7 +33,7 @@ namespace MRA.Services.Firebase
             var collection = _firestoreDb.Collection(_collectionName);
             //var snapshot = await collection.OrderByDescending("date").OrderBy(FieldPath.DocumentId).GetSnapshotAsync();
             
-            var documents = (await collection.OrderByDescending("date").GetSnapshotAsync())
+            var documents = (await collection/*.WhereEqualTo("type", "traditional")*/.OrderByDescending("date").GetSnapshotAsync())
                 .Documents.Select(s => s.ConvertTo<DrawingDocument>()).ToList();
 
             //var documentsNoDate = (await collection.Where(new  WhereLessThan("date", DateTime.MinValue).GetSnapshotAsync())
@@ -42,6 +42,23 @@ namespace MRA.Services.Firebase
             //documents.AddRange(documentsNoDate);
 
             return documents.Select(_converter.ConvertToModel).ToList();
+        }
+
+        public async Task<List<Drawing>> Filter(string type)
+        {
+            try
+            {
+                var collection = _firestoreDb.Collection(_collectionName);
+
+                var documents = (await collection.WhereEqualTo("type", type).OrderByDescending("date").GetSnapshotAsync())
+                    .Documents.Select(s => s.ConvertTo<DrawingDocument>()).ToList();
+
+                return documents.Select(_converter.ConvertToModel).ToList();
+            }catch(Exception ex)
+            {
+                Debug.WriteLine("Error when filtering documents: " + ex.Message);
+            }
+            return new List<Drawing>();
         }
 
         public async Task<Drawing> FindDrawingById(string documentId)

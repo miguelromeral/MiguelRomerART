@@ -5,17 +5,46 @@
 @{
     ViewData["Title"] = "Art Gallery";
 }
+<div>
+    <h1>Art Gallery</h1>
 
-<h1>Art Gallery</h1>
+</div>
 
 
-<div class="container">
+<div class="row">
+    <form id="formFilter" asp-action="Filter" asp-controller="Art"
+          data-ajax="true" data-ajax-method="POST"
+          data-ajax-begin="onBeginFilter" data-ajax-failure="OnFailure"
+          data-ajax-success="onSuccessFilter" data-ajax-complete="onCompleteFilter">
+
+        <div id="formFilterAlert" class="alert alert-danger" style="display: none;" role="alert"></div>
+
+        <div id="mr-filter-container">
+
+            <select class="form-select" name="type" aria-label="Default select example" data-bs-theme="dark" onchange="sendFormFilterGallery()">
+                <option value="all" selected>Type</option>
+                <option value="traditional">Traditional</option>
+                <option value="digital">Digital</option>
+            </select>
+
+        </div>
+
+
+    </form>
+    <div id="result"></div>
+
+    <form method="post" asp-page-handler="Filter">
+    </form>
+</div>
+<div class="row">
+
     <div class="mr-img-gallery">
 
         @foreach (var drawing in Model.Drawings)
         {
             await Html.RenderPartialAsync("Images/_ImageThumbnail", new ImageThumbnailModel(drawing));
-         
+
         }
     </div>
+
 </div>

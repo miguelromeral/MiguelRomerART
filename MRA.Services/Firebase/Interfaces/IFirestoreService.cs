@@ -10,6 +10,7 @@ namespace MRA.Services.Firebase.Interfaces
     public interface IFirestoreService
     {
         Task<List<Drawing>> GetAll();
+        Task<List<Drawing>> Filter(string type);
         Task<Drawing> FindDrawingById(string documentId);
     }
 }

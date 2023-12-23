@@ -5,6 +5,7 @@ using System.Diagnostics;
 using MRA.Services.AzureStorage;
 using MRA.Services;
 using MRA.Web.Models.Art;
+using MRA.Services.Firebase.Models;
 
 namespace MRA.Web.Controllers
 {
@@ -34,6 +35,13 @@ namespace MRA.Web.Controllers
             var model = new DetailsModel(id);
             model.Drawing = await _drawingService.FindDrawingById(id);
             return View(model);
+        }
+
+        [HttpPost]
+        public async Task<List<Drawing>> Filter(string type)
+        {
+            var list = await _drawingService.FilterDrawings(type);
+            return list;
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

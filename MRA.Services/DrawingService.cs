@@ -25,9 +25,25 @@ namespace MRA.Services
         public async Task<List<Drawing>> GetAllDrawings()
         {
             var drawings = await _firestoreService.GetAll();
-            drawings.ForEach(d => d.UrlBase = _azureStorageService.BlobURL);
-            // model.Blobs = await _azureStorageService.ListBlobFilesAsync();
+            SetBlobUrl(ref drawings);
             return drawings;
+        }
+
+        public async Task<List<Drawing>> FilterDrawings(string type)
+        {
+            if (type.Equals("all"))
+            {
+                return await GetAllDrawings();
+            }
+
+            var drawings = await _firestoreService.Filter(type);
+            SetBlobUrl(ref drawings);
+            return drawings;
+        }
+
+        private void SetBlobUrl(ref List<Drawing> drawings)
+        {
+            drawings.ForEach(d => d.UrlBase = _azureStorageService.BlobURL);
         }
 
         public async Task<Drawing> FindDrawingById(string documentId) => await _firestoreService.FindDrawingById(documentId);

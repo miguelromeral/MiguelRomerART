@@ -16,3 +16,9 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+
+
+.mr-filter-container {
+    display: inline-flex;
+}
