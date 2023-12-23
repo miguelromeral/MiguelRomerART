@@ -29,6 +29,8 @@ namespace MRA.Services.Firebase.Converters
                 Type = drawingDocument.type,
                 Title = drawingDocument.title,
                 Name = drawingDocument.name,
+                Date = drawingDocument.date,
+                Time = drawingDocument.time,
                 UrlBase = _urlBase
             };
         }
@@ -41,6 +43,8 @@ namespace MRA.Services.Firebase.Converters
                 path = drawing.Path,
                 type = drawing.Type,
                 title = drawing.Title,
+                date = drawing.Date,
+                time = drawing.Time,
                 name = drawing.Name
             };
         }

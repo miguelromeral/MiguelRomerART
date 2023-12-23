@@ -177,3 +177,9 @@ nav {
     color: white;
     background-color: #160f28;
 }
+
+footer {
+    height: 50px;
+    border-top: 1px solid #c35de3;
+    padding-top: 10px;
+}

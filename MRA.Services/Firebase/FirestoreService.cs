@@ -31,11 +31,17 @@ namespace MRA.Services.Firebase
         public async Task<List<Drawing>> GetAll()
         {
             var collection = _firestoreDb.Collection(_collectionName);
-            var snapshot = await collection.GetSnapshotAsync();
+            //var snapshot = await collection.OrderByDescending("date").OrderBy(FieldPath.DocumentId).GetSnapshotAsync();
+            
+            var documents = (await collection.OrderByDescending("date").GetSnapshotAsync())
+                .Documents.Select(s => s.ConvertTo<DrawingDocument>()).ToList();
 
-            var shoeDocuments = snapshot.Documents.Select(s => s.ConvertTo<DrawingDocument>()).ToList();
+            //var documentsNoDate = (await collection.Where(new  WhereLessThan("date", DateTime.MinValue).GetSnapshotAsync())
+            //    .Documents.Select(s => s.ConvertTo<DrawingDocument>()).ToList();
 
-            return shoeDocuments.Select(_converter.ConvertToModel).ToList();
+            //documents.AddRange(documentsNoDate);
+
+            return documents.Select(_converter.ConvertToModel).ToList();
         }
 
         public async Task<Drawing> FindDrawingById(string documentId)

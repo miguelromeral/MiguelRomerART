@@ -24,5 +24,11 @@ namespace MRA.Services.Firebase.Documents
 
         [FirestoreProperty]
         public string title { get; set; }
+
+        [FirestoreProperty]
+        public string date { get; set; }
+
+        [FirestoreProperty]
+        public string time { get; set; }
     }
 }

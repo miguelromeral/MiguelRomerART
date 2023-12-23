@@ -17,19 +17,49 @@
 
 <h1>@(drawing.Title ?? "Details")</h1>
 
+
 @if (drawing != null)
 {
-    <h6>
-        @Model.Drawing.Name
-        <span class="badge rounded-pill @(Model.Drawing.IsTraditional ? "bg-secondary" : "bg-dark")">
-            @(Model.Drawing.IsTraditional ? "Traditional" : "Digital")
-        </span>
-    </h6>
+    <div class="row">
+        <h6>
+            @Model.Drawing.Name
+            <span class="badge rounded-pill @(Model.Drawing.IsTraditional ? "bg-secondary" : "bg-dark")">
+                @(Model.Drawing.IsTraditional ? "Traditional" : "Digital")
+            </span>
+        </h6>
 
-
-    <div class="mr-img-full-container">
-        <img src="@Model.Drawing.Url" class="mr-img-full rounded">
     </div>
+    <div class="row">
+        <div class="col-sm-12 col-md-6">
+
+            <div class="mr-img-full-container">
+                <img src="@Model.Drawing.Url" class="mr-img-full rounded">
+            </div>
+
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="mr-details-container">
+                <div class="mr-details-section">
+                    <span class="mr-details-section-title">
+                        📅 Date
+                    </span>
+                    <span class="mr-details-section-content">
+                        @(String.IsNullOrEmpty(Model.Drawing.Date) ? "No Date Known" : Model.Drawing.FormattedDate)
+                    </span>
+                </div>
+                <div class="mr-details-section">
+                    <span class="mr-details-section-title">
+                        ⏱ Time (estimated)
+                    </span>
+                    <span class="mr-details-section-content">
+                        @(String.IsNullOrEmpty(Model.Drawing.Time) ? "No Time Known" : Model.Drawing.Time)
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
 }
 else
