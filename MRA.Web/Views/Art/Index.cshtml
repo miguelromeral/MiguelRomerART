@@ -11,32 +11,40 @@
 </div>
 
 
-<div class="row">
-    <form id="formFilter" asp-action="Filter" asp-controller="Art"
-          data-ajax="true" data-ajax-method="POST"
-          data-ajax-begin="onBeginFilter" data-ajax-failure="OnFailure"
-          data-ajax-success="onSuccessFilter" data-ajax-complete="onCompleteFilter">
+<form id="formFilter" asp-action="Filter" asp-controller="Art"
+      data-ajax="true" data-ajax-method="POST"
+      data-ajax-begin="onBeginFilter" data-ajax-failure="OnFailure"
+      data-ajax-success="onSuccessFilter" data-ajax-complete="onCompleteFilter">
+    <div class="row">
+        <div class="mr-sort-filter-container" data-bs-theme="dark">
+            <div class="mr-sort-filter">
+                <span>
+                    Sort by...
+                </span>
+                <select class="form-select form-select-sm" name="Sortby" aria-label="Default select example" data-bs-theme="dark" onchange="sendFormFilterGallery()"
+                        data-bs-theme="dark">
+                    <option value="date-desc">Newest</option>
+                    <option value="date-asc">Oldest</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
 
         <div id="formFilterAlert" class="alert alert-danger" style="display: none;" role="alert"></div>
 
         <div class="mr-filter-container">
 
-            <select class="form-select" name="type" aria-label="Default select example" data-bs-theme="dark" onchange="sendFormFilterGallery()"
-                    data-bs-theme="dark">
+            <select class="form-select form-select-sm" name="Type" aria-label="Default select example" data-bs-theme="dark" onchange="sendFormFilterGallery()">
                 <option value="all" selected>🖌 Type</option>
                 <option value="traditional">Traditional</option>
                 <option value="digital">Digital</option>
             </select>
 
         </div>
+    </div>
 
-
-    </form>
-    <div id="result"></div>
-
-    <form method="post" asp-page-handler="Filter">
-    </form>
-</div>
+</form>
 <div class="row">
 
     <div class="mr-loader-container">

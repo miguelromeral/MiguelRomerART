@@ -174,12 +174,21 @@ table {
 /* Add your custom styles below this line */
 
 nav {
-    color: white;
-    background-color: #160f28;
+    background-color: var(--mr-chat-color);
 }
 
-footer {
-    height: 50px;
-    border-top: 1px solid #c35de3;
-    padding-top: 10px;
+nav a, .nav-link {
+    color: black;
+    transition: 0.5s ease-in-out;
 }
+
+    nav a:hover, .nav-link:hover {
+        text-shadow: 0px 0px 12px black;
+        color: white;
+    }
+
+    footer {
+        height: 50px;
+        border-top: 1px solid var(--mr-chat-color);
+        padding-top: 10px;
+    }

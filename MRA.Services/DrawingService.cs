@@ -2,6 +2,7 @@
 using MRA.Services.AzureStorage;
 using MRA.Services.Firebase.Interfaces;
 using MRA.Services.Firebase.Models;
+using MRA.Web.Models.Art;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,15 +30,30 @@ namespace MRA.Services
             return drawings;
         }
 
-        public async Task<List<Drawing>> FilterDrawings(string type)
+        public async Task<List<Drawing>> FilterDrawings(FilterDrawingModel filter)
         {
-            if (type.Equals("all"))
+            List<Drawing> drawings = new List<Drawing>();
+            if (filter.Type.Equals("all"))
             {
-                return await GetAllDrawings();
+                drawings = await GetAllDrawings();
+            }
+            else
+            {
+                drawings = await _firestoreService.Filter(filter.Type);
             }
 
-            var drawings = await _firestoreService.Filter(type);
             SetBlobUrl(ref drawings);
+
+            switch (filter.Sortby){
+                //case "date-desc": 
+                case "date-asc": 
+                    drawings = drawings.OrderBy(x => x.Date).ToList();
+                    break;
+                default:
+                    drawings = drawings.OrderByDescending(x => x.Date).ToList();
+                    break;
+            }
+
             return drawings;
         }
 

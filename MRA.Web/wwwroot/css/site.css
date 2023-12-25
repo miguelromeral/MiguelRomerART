@@ -1,3 +1,5 @@
+@import 'variables.css';
+
 html {
   font-size: 14px;
 }
@@ -18,9 +20,26 @@ body {
 }
 
 
-
 .mr-filter-container {
     display: inline-flex;
+    width: fit-content;
+}
+
+.mr-sort-filter-container {
+    display: inline-flex;
+    flex-direction: row-reverse;
+    width: 100%;
+}
+
+.mr-sort-filter-container .mr-sort-filter {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.mr-sort-filter-container .mr-sort-filter span {
+    font-size: small;
+    color: grey;
 }
 
 .mr-loader-container {

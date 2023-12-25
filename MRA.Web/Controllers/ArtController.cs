@@ -38,10 +38,9 @@ namespace MRA.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<List<Drawing>> Filter(string type)
+        public async Task<List<Drawing>> Filter(FilterDrawingModel filters)
         {
-            var list = await _drawingService.FilterDrawings(type);
-            return list;
+            return await _drawingService.FilterDrawings(filters);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
