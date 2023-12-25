@@ -31,6 +31,11 @@ namespace MRA.Services.Firebase.Converters
                 Name = drawingDocument.name,
                 Date = drawingDocument.date,
                 Time = drawingDocument.time,
+                ProductType = drawingDocument.product_type,
+                ProductName = drawingDocument.product_name,
+                Comment = drawingDocument.comment,
+                CommentPros = drawingDocument.comment_pros,
+                CommentCons = drawingDocument.comment_cons,
                 UrlBase = _urlBase
             };
         }
@@ -45,7 +50,12 @@ namespace MRA.Services.Firebase.Converters
                 title = drawing.Title,
                 date = drawing.Date,
                 time = drawing.Time,
-                name = drawing.Name
+                name = drawing.Name,
+                product_type = drawing.ProductType,
+                product_name = drawing.ProductName,
+                comment = drawing.Comment,
+                comment_cons = drawing.CommentCons,
+                comment_pros = drawing.CommentPros
             };
         }
     }

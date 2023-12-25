@@ -1,5 +1,9 @@
 ﻿/* variables.css */
 
 :root {
+    --mr-background-color: #191919;
     --mr-color-box-shadow: #c6b896;
+    --mr-chat-color: rgb(214 125 225);
+    --mr-chat-color-likes: rgb(0 167 68);
+    --mr-chat-color-dislikes: #f25252;
 }

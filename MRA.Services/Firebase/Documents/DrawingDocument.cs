@@ -30,5 +30,20 @@ namespace MRA.Services.Firebase.Documents
 
         [FirestoreProperty]
         public string time { get; set; }
+
+        [FirestoreProperty]
+        public string product_type { get; set; }
+
+        [FirestoreProperty]
+        public string product_name { get; set; }
+
+        [FirestoreProperty]
+        public string comment { get; set; }
+
+        [FirestoreProperty]
+        public string comment_pros { get; set; }
+
+        [FirestoreProperty]
+        public string comment_cons { get; set; }
     }
 }

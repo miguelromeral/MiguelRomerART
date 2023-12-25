@@ -32,11 +32,58 @@
         </div>
         <div class="col-sm-12 col-md-6">
             <div class="mr-details-container">
+
+                <div class="mr-chat-container">
+                    @if (!String.IsNullOrEmpty(drawing.Comment))
+                    {
+                        <div class="mr-chat-row">
+                            <div class="mr-chat-message-container">
+                                <div class="mr-chat-message last">
+                                        @Html.Raw(drawing.Comment)
+                                </div>
+                            </div>
+                            <div class="mr-chat-image">
+                                <img src="~/assets/images/miguel.jpeg" class="mr-chat-image-miguel" />
+                            </div>
+                        </div>
+                    }
+                    <div class="mr-chat-row">
+                        <div class="mr-chat-message-container">
+                            @if (!String.IsNullOrEmpty(Model.Drawing.CommentCons))
+                            {
+                                <div class="mr-chat-message likes">
+                                        <ul>
+                                            @foreach (var comment in Model.Drawing.ListCommentPros)
+                                            {
+                                                <li>@Html.Raw(comment)</li>
+                                            }
+                                        </ul>
+                                </div>
+                            }
+                            @if (!String.IsNullOrEmpty(Model.Drawing.CommentCons))
+                            {
+                                <div class="mr-chat-message dislikes">
+                                        <ul>
+                                            @foreach (var comment in Model.Drawing.ListCommentCons)
+                                            {
+                                                <li>@comment</li>
+                                            }
+
+                                        </ul>
+                                </div>
+                            }
+                        </div>
+                        <div class="mr-chat-image">
+                            @* <img src="~/assets/images/miguel.jpeg" class="mr-chat-image-miguel" /> *@
+                        </div>
+                    </div>
+                </div>
+
                 <div class="mr-details-section">
                     <span class="mr-details-section-title">
                         📅 Date
                     </span>
-                    <span class="mr-details-section-content">
+                    <span class="mr-details-section-content capitalize">
                         @(String.IsNullOrEmpty(Model.Drawing.Date) ? "No Date Known" : Model.Drawing.FormattedDate)
                     </span>
                 </div>
@@ -44,15 +91,13 @@
                     <span class="mr-details-section-title">
                         ⏱ Time (estimated)
                     </span>
-                    <span class="mr-details-section-content">
+                    <span class="mr-details-section-content capitalize">
                         @(String.IsNullOrEmpty(Model.Drawing.Time) ? "No Time Known" : Model.Drawing.Time)
                     </span>
                 </div>
             </div>
         </div>
     </div>
-
-
 
 }
 else
