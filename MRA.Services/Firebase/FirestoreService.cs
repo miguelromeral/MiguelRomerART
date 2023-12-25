@@ -4,7 +4,9 @@ using MRA.Services.Firebase.Converters;
 using MRA.Services.Firebase.Documents;
 using MRA.Services.Firebase.Interfaces;
 using MRA.Services.Firebase.Models;
+using MRA.Web.Models.Art;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -44,14 +46,22 @@ namespace MRA.Services.Firebase
             return documents.Select(_converter.ConvertToModel).ToList();
         }
 
-        public async Task<List<Drawing>> Filter(string type)
+        public async Task<List<Drawing>> Filter(FilterDrawingModel filter)
         {
             try
             {
-                var collection = _firestoreDb.Collection(_collectionName);
+                Query query = _firestoreDb.Collection(_collectionName);
 
-                var documents = (await collection.WhereEqualTo("type", type).OrderByDescending("date").GetSnapshotAsync())
-                    .Documents.Select(s => s.ConvertTo<DrawingDocument>()).ToList();
+                if (!String.IsNullOrEmpty(filter.Type) && !filter.Type.Equals("all"))
+                {
+                    query = query.WhereEqualTo("type", filter.Type);
+                }
+                if (!String.IsNullOrEmpty(filter.Textquery))
+                {
+                    query = query.WhereArrayContains("name", filter.Textquery);
+                }
+
+                var documents = (await query.GetSnapshotAsync()).Documents.Select(s => s.ConvertTo<DrawingDocument>()).ToList();
 
                 return documents.Select(_converter.ConvertToModel).ToList();
             }catch(Exception ex)

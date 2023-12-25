@@ -33,14 +33,7 @@ namespace MRA.Services
         public async Task<List<Drawing>> FilterDrawings(FilterDrawingModel filter)
         {
             List<Drawing> drawings = new List<Drawing>();
-            if (filter.Type.Equals("all"))
-            {
-                drawings = await GetAllDrawings();
-            }
-            else
-            {
-                drawings = await _firestoreService.Filter(filter.Type);
-            }
+            drawings = await _firestoreService.Filter(filter);
 
             SetBlobUrl(ref drawings);
 

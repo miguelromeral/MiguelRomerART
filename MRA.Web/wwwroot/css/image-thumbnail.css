@@ -98,12 +98,16 @@ img.mr-img-full {
     pointer-events: none;
 }
 
-.mr-details-container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 20px;
+.mr-img-full-container:hover .mr-badges-info {
+    opacity: 0;
 }
+
+    .mr-details-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+    }
 
 .mr-details-section {
     display: flex;
@@ -225,4 +229,27 @@ img.mr-chat-image-miguel {
     padding: 2px;
     user-select: none;
     pointer-events: none;
+}
+
+#iFilterText {
+    width: 200px;
+}
+
+.mr-badges-info {
+    position: absolute;
+    bottom: 0px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    opacity: 1;
+    transition: 0.5s ease-in-out;
+}
+
+.mr-badges-info-item {
+    background-color: var(--mr-chat-color);
+    border-radius: 20px;
+    padding: 0px 10px;
+    margin: 4px;
+    font-size: small;
+    color: black;
 }

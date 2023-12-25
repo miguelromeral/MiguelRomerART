@@ -4,5 +4,7 @@
     {
         public string Type { get; set; }
         public string Sortby { get; set; }
+
+        public string Textquery { get; set; }
     }
 }

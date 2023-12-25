@@ -62,7 +62,7 @@ namespace MRA.Services.Firebase.Models
                 DateTime date = DateTime.ParseExact(Date, "yyyy/MM/dd", CultureInfo.InvariantCulture);
                 //CultureInfo currentCulture = CultureInfo.CurrentCulture;
                 var cultureInfo = CultureInfo.GetCultureInfo("en-US");
-                return date.ToString("D", cultureInfo);
+                return date.ToString("dd MMMM yyyy", cultureInfo);
             }
         }
     }

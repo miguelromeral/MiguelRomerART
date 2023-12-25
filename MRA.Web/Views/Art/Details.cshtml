@@ -27,8 +27,23 @@
 
             <div class="mr-img-full-container">
                 <img src="@Model.Drawing.Url" class="mr-img-full rounded">
-            </div>
 
+                <div class="mr-badges-info">
+                    @if (!String.IsNullOrEmpty(Model.Drawing.Date))
+                    {
+                        <div class="mr-badges-info-item">
+                            📅 @Model.Drawing.FormattedDate
+                        </div>
+                    }
+                    @if (!String.IsNullOrEmpty(Model.Drawing.Time))
+                    {
+                        <div class="mr-badges-info-item">
+                            ⏱ @Model.Drawing.Time
+                        </div>
+                    }
+                </div>
+                
+            </div>
         </div>
         <div class="col-sm-12 col-md-6">
             <div class="mr-details-container">

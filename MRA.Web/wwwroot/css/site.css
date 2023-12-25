@@ -23,6 +23,7 @@ body {
 .mr-filter-container {
     display: inline-flex;
     width: fit-content;
+    gap: 5px;
 }
 
 .mr-sort-filter-container {
