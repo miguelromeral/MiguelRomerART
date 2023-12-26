@@ -43,6 +43,12 @@ namespace MRA.Web.Controllers
             return await _drawingService.FilterDrawings(filters);
         }
 
+        [HttpPost]
+        public async Task Cheer(string id)
+        {
+            await _drawingService.UpdateLikes(id);
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

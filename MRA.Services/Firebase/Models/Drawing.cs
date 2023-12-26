@@ -26,6 +26,7 @@ namespace MRA.Services.Firebase.Models
         public string Comment { get; set; }
         public string CommentPros { get; set; }
         public long Views { get; set; }
+        public long Likes { get; set; }
 
         public List<string> ListCommentPros
         {

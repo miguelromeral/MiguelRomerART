@@ -56,5 +56,6 @@ namespace MRA.Services
         }
 
         public async Task<Drawing> FindDrawingById(string documentId) => await _firestoreService.FindDrawingById(documentId);
+        public async Task UpdateLikes(string documentId) => await _firestoreService.UpdateLikes(documentId);
     }
 }

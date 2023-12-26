@@ -1,4 +1,5 @@
-﻿
+﻿@import 'variables.css';
+
 // https://xsgames.co/animatiss/
 
 .slide-right {
@@ -14,5 +15,67 @@
     100% {
         transform: translateX(0);
         opacity: 1;
+    }
+}
+
+.like-semaphore {
+    animation: like-semaphore 3s ease-in-out infinite;
+}
+
+@keyframes like-semaphore {
+    0% {
+        background-color: var(--mr-color-red);
+    }
+
+    50% {
+        background-color: var(--mr-color-red-light);
+    }
+
+    100% {
+        background-color: var(--mr-color-red);
+    }
+}
+
+.slide-up {
+    animation: slide-up 0.5s ease-in-out;
+}
+
+@keyframes slide-up {
+    0% {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+
+
+
+.heart-rain {
+    overflow: hidden;
+    position: relative;
+    font-family: "Poppins",sans-serif;
+}
+
+.fa-heart {
+    color: white;
+    font-size: 15px;
+    position: absolute;
+    animation: heartMove linear 1;
+    top: -10vh;
+    z-index: 0;
+}
+
+@keyframes heartMove {
+    0% {
+        transform: translateY(-10vh);
+    }
+
+    100% {
+        transform: translateY(110vh);
     }
 }

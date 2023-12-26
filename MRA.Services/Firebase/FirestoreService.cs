@@ -128,6 +128,40 @@ namespace MRA.Services.Firebase
             });
         }
 
+        public async Task UpdateLikes(string documentId)
+        {
+            // Realiza la transacción para actualizar la propiedad "views"
+            await _firestoreDb.RunTransactionAsync(async transaction =>
+            {
+                try
+                {
+                    DocumentReference docRef = _firestoreDb.Collection(_collectionName).Document(documentId);
+
+                    // Obtiene el documento actual
+                    DocumentSnapshot snapshot = await transaction.GetSnapshotAsync(docRef);
+
+
+                    if (snapshot.ContainsField("likes"))
+                    {
+                        long currentViews = snapshot.GetValue<long>("likes");
+                        long newViews = currentViews + 1;
+
+                        transaction.Update(docRef, "likes", newViews);
+                    }
+                    else
+                    {
+                        // Si no existe, crea la propiedad "views" con el valor inicial de 1
+                        transaction.Set(docRef, new { likes = 1 }, SetOptions.MergeAll);
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("Error when updating views for document '" + documentId + "': " + ex.Message);
+                }
+            });
+        }
+
         public async Task AddAsync(Drawing document)
         {
             var collection = _firestoreDb.Collection(_collectionName);

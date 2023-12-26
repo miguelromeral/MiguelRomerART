@@ -25,24 +25,51 @@
     <div class="row">
         <div class="col-sm-12 col-md-6">
 
-            <div class="mr-img-full-container">
-                <img src="@Model.Drawing.Url" class="mr-img-full rounded">
+            <div class="mr-first-column-image">
+                <div class="mr-img-full-container heart-rain" ondblclick="cheerDrawing()">
+                    <img src="@Model.Drawing.Url" class="mr-img-full rounded">
 
-                <div class="mr-badges-info">
-                    @if (!String.IsNullOrEmpty(Model.Drawing.Date))
-                    {
-                        <div class="mr-badges-info-item">
-                            📅 @Model.Drawing.FormattedDate
-                        </div>
-                    }
-                    @if (!String.IsNullOrEmpty(Model.Drawing.Time))
-                    {
-                        <div class="mr-badges-info-item">
-                            ⏱ @Model.Drawing.Time
-                        </div>
-                    }
+                    <div class="mr-badges-info">
+                        @if (!String.IsNullOrEmpty(Model.Drawing.Date))
+                        {
+                            <div class="mr-badges-info-item">
+                                📅 @Model.Drawing.FormattedDate
+                            </div>
+                        }
+                        @if (!String.IsNullOrEmpty(Model.Drawing.Time))
+                        {
+                            <div class="mr-badges-info-item">
+                                ⏱ @Model.Drawing.Time
+                            </div>
+                        }
+                    </div>
+
                 </div>
-                
+
+                <div class="mr-stats-container">
+                    <div class="mr-stats-item" title="Views">
+                        <i class="bi bi-eye"></i>
+                        <span>@(drawing.Views + 1)</span>
+                    </div>
+                    <div class="mr-stats-item likes" title="Cheers">
+                        <i class="bi bi-heart"></i>
+                        <span id="spLikesCounter">@(drawing.Likes)</span>
+                    </div>
+                </div>
+
+                <form id="cheerForm" asp-action="Cheer" asp-controller="Art"
+                      data-ajax="true" data-ajax-method="POST"
+                      data-ajax-begin="onBeginCheer" data-ajax-failure="OnFailureCheer"
+                      data-ajax-success="onSuccessCheer" data-ajax-complete="onCompleteCheer">
+
+                    <div class="mr-like-container">                          
+                          <input type="hidden" name="id" value="@drawing.Id" />
+
+                        <button id="btnCheer" type="button" class="btn btn-danger mr-like-button like-semaphore" onclick="cheerDrawing()">
+                            <i id="iCheerIcon" class="bi bi-heart"></i> CHEER!
+                        </button>
+                    </div>
+                 </form>
             </div>
         </div>
         <div class="col-sm-12 col-md-6">
@@ -94,15 +121,7 @@
                     </div>
                 </div>
                 
-                <div class="mr-details-section">
-                    <span class="mr-details-section-title">
-                        <i class="bi bi-eye"></i> Views
-                    </span>
-                    <span class="mr-details-section-content capitalize">
-                        @(Model.Drawing.Views + 1)
-                    </span>
-                </div>
-                <div class="mr-details-section">
+                @* <div class="mr-details-section">
                     <span class="mr-details-section-title">
                         📅 Date
                     </span>
@@ -117,7 +136,7 @@
                     <span class="mr-details-section-content capitalize">
                         @(String.IsNullOrEmpty(Model.Drawing.Time) ? "No Time Known" : Model.Drawing.Time)
                     </span>
-                </div>
+                </div> *@
             </div>
         </div>
     </div>
@@ -126,4 +145,9 @@
 else
 {
     <h6>Not Found</h6>
+}
+
+
+@section Scripts {
+    <script src="~/js/art-gallery.js"></script>
 }

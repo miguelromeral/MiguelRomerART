@@ -4,7 +4,9 @@ var ALERT_FILTER_FORM_ID = "formFilterAlert";
 var LOADING_ICON_ART_GALLERY = "artGalleryLoader";
 var DIV_ART_GALLERY = "artGallery";
 
+var CHEER_FORM_ID = "cheerForm";
 
+var timeMsDelayLike = 1000;
 function sendFormFilterGallery() {
     $("#" + FILTER_FORM_ID).submit();
 }
@@ -61,3 +63,61 @@ function sortDivCollection(orderedCollection) {
     divsArray.forEach(div => container.appendChild(div));
 
 }
+
+
+function cheerDrawing() {
+    console.log("Cheering drawing!");
+    $("#" + CHEER_FORM_ID).submit();
+    $("#btnCheer").attr("disabled", true);
+    $("#iCheerIcon").addClass("bi-heart-fill");
+    $("#iCheerIcon").removeClass("bi-heart");
+    showHearts();
+}
+
+function onBeginCheer() {
+
+}
+function OnFailureCheer() {
+
+}
+function onSuccessCheer() {
+    var stringCounter = $("#spLikesCounter").text();
+    var counter = parseInt(stringCounter);
+    counter++;
+    $("#spLikesCounter").text(counter);
+}
+function onCompleteCheer() {
+    setTimeout(function () {
+        $("#btnCheer").attr("disabled", false);
+        console.log("Button enabled!");
+    }, timeMsDelayLike);
+}
+
+
+
+
+function createHeart() {
+    const body = document.querySelector(".heart-rain");
+    const heart = document.createElement("div");
+    heart.className = "fas fa-heart";
+    heart.style.left = (Math.random() * 100) + "vw";
+    heart.style.animationDuration = (Math.random() * 3) + 2 + "s"
+    body.appendChild(heart);
+}
+
+
+function showHearts() {
+    var i1 = setInterval(createHeart, 0);
+    var i2 = setInterval(function name(params) {
+        var heartArr = document.querySelectorAll(".fa-heart")
+        if (heartArr.length > 200) {
+            heartArr[0].remove()
+        }
+    }, 100)
+
+    setTimeout(() => {
+        clearInterval(i1);
+        clearInterval(i2);
+    }, timeMsDelayLike);
+
+}   
