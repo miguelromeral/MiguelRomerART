@@ -8,7 +8,7 @@
 }
 
 
-<h1>@(drawing?.Title ?? "Details")</h1>
+<h1 class="mr-image-page-title">@(drawing?.Title ?? "Details")</h1>
 
 
 @if (drawing != null)
@@ -22,7 +22,7 @@
                 @(Model.Drawing.IsTraditional ? "Traditional" : "Digital")
             </span>
         </span>
-        
+
     </div>
     <div class="row">
         <div class="col-sm-12 col-md-6">
@@ -30,21 +30,21 @@
             <div class="mr-first-column-image">
                 <div class="mr-img-full-container heart-rain" ondblclick="cheerDrawing()">
                     <img src="@Model.Drawing.Url" class="mr-img-full rounded">
-
-                    <div class="mr-badges-info">
-                        @if (!String.IsNullOrEmpty(Model.Drawing.Date))
-                        {
-                            <div class="mr-badges-info-item">
-                                📅 @Model.Drawing.FormattedDate
-                            </div>
-                        }
-                        @if (!String.IsNullOrEmpty(Model.Drawing.Time))
-                        {
-                            <div class="mr-badges-info-item">
-                                ⏱ @Model.Drawing.Time
-                            </div>
-                        }
-                    </div>
+                    @*
+                <div class="mr-badges-info">
+                @if (!String.IsNullOrEmpty(Model.Drawing.Date))
+                {
+                <div class="mr-badges-info-item">
+                📅 @Model.Drawing.FormattedDate
+                </div>
+                }
+                @if (!String.IsNullOrEmpty(Model.Drawing.Time))
+                {
+                <div class="mr-badges-info-item">
+                ⏱ @Model.Drawing.Time
+                </div>
+                }
+                </div> *@
 
                 </div>
 
@@ -77,71 +77,109 @@
             </div>
         </div>
         <div class="col-sm-12 col-md-6">
-            <div class="mr-details-container">
+            <div class="mr-social-container">
 
                 <div class="mr-chat-container">
-                    @if (!String.IsNullOrEmpty(drawing.Comment))
-                    {
-                        <div class="mr-chat-row">
-                            <div class="mr-chat-message-container">
-                                <div class="mr-chat-message last">
-                                        @Html.Raw(drawing.Comment)
+                    @{
+                        var comments = drawing.ListComments;
+                        for (int count = 0; count < comments.Count; count++)
+                        {
+                            var last = count + 1 == comments.Count;
+                            <div class="mr-chat-row">
+                                <div class="mr-chat-message-container">
+                                    <div class="mr-chat-message @(last ? "last" : "")">
+                                        @Html.Raw(comments[count])
+                                    </div>
+                                </div>
+                                <div class="mr-chat-image">
+                                    @if (last)
+                                    {
+                                        <img src="~/assets/images/miguel.jpeg" class="mr-chat-image-miguel" />
+                                    }
                                 </div>
                             </div>
-                            <div class="mr-chat-image">
-                                <img src="~/assets/images/miguel.jpeg" class="mr-chat-image-miguel" />
+                        }
+                    }
+                    @if (!String.IsNullOrEmpty(drawing.CommentPros))
+                    {
+                        <div class="mr-chat-row likes">
+                            <div class="mr-chat-message-container">
+                                @foreach (var comment in drawing.ListCommentPros)
+                                {
+                                    <div class="mr-chat-message">
+                                        <span>@Html.Raw(comment)</span>
+                                    </div>
+                                }
+                            </div>
+
+                            <div class="mr-chat-image" title="Nice Details">
+                                <i class="bi bi-star"></i>
                             </div>
                         </div>
                     }
-                    <div class="mr-chat-row">
-                        <div class="mr-chat-message-container">
-                            @if (!String.IsNullOrEmpty(Model.Drawing.CommentCons))
-                            {
-                                <div class="mr-chat-message likes">
-                                        <ul>
-                                            @foreach (var comment in Model.Drawing.ListCommentPros)
-                                            {
-                                                <li>@Html.Raw(comment)</li>
-                                            }
-                                        </ul>
-                                </div>
-                            }
-                            @if (!String.IsNullOrEmpty(Model.Drawing.CommentCons))
-                            {
-                                <div class="mr-chat-message dislikes">
-                                        <ul>
-                                            @foreach (var comment in Model.Drawing.ListCommentCons)
-                                            {
-                                                <li>@comment</li>
-                                            }
 
-                                        </ul>
-                                </div>
-                            }
+                    @if (!String.IsNullOrEmpty(drawing.CommentCons))
+                    {
+                        <div class="mr-chat-row dislikes">
+                            <div class="mr-chat-message-container">
+                                @foreach (var comment in drawing.ListCommentCons)
+                                {
+                                    <div class="mr-chat-message">
+                                        <span>@comment</span>
+                                    </div>
+                                }
+                            </div>
+                            <div class="mr-chat-image" title="Flaws">
+                                <i class="bi bi-hand-thumbs-down"></i>
+                            </div>
                         </div>
-                        <div class="mr-chat-image">
-                            @* <img src="~/assets/images/miguel.jpeg" class="mr-chat-image-miguel" /> *@
-                        </div>
-                    </div>
+                    }
                 </div>
-                
-                @* <div class="mr-details-section">
-                    <span class="mr-details-section-title">
-                        📅 Date
-                    </span>
-                    <span class="mr-details-section-content capitalize">
-                        @(String.IsNullOrEmpty(Model.Drawing.Date) ? "No Date Known" : Model.Drawing.FormattedDate)
-                    </span>
-                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 col-md-12 mr-details-container">
+            <h4>Details</h4>
+
+            <div class="mr-details-section">
+                <span class="mr-details-section-title">
+                    📅 Date
+                </span>
+                <span class="mr-details-section-content capitalize">
+                    @(String.IsNullOrEmpty(Model.Drawing.Date) ? "No Date Known" : Model.Drawing.FormattedDate)
+                </span>
+            </div>
+            <div class="mr-details-section">
+                <span class="mr-details-section-title">
+                    ⏱ Time (estimated)
+                </span>
+                <span class="mr-details-section-content capitalize">
+                    @(String.IsNullOrEmpty(Model.Drawing.Time) ? "No Time Known" : Model.Drawing.Time)
+                </span>
+            </div>
+            @if (!String.IsNullOrEmpty(drawing.ProductType) && !String.IsNullOrEmpty(drawing.ProductType))
+            {
                 <div class="mr-details-section">
                     <span class="mr-details-section-title">
-                        ⏱ Time (estimated)
+                        @switch (drawing.ProductType)
+                        {
+                            case "singer":
+                                <span>💽 Singer</span>
+                                break;
+                            case "videogame":
+                                <span>🎮 Videogame</span>
+                                break;
+                            default:
+                                <span>Product</span>
+                                break;
+                        }
                     </span>
                     <span class="mr-details-section-content capitalize">
-                        @(String.IsNullOrEmpty(Model.Drawing.Time) ? "No Time Known" : Model.Drawing.Time)
+                        @(drawing.ProductName)
                     </span>
-                </div> *@
-            </div>
+                </div>
+            }
         </div>
     </div>
 

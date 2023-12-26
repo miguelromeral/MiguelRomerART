@@ -28,6 +28,17 @@ namespace MRA.Services.Firebase.Models
         public long Views { get; set; }
         public long Likes { get; set; }
 
+        public List<string> ListComments
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(Comment))
+                    return new List<string>();
+                else
+                    return Comment.Split(SEPARATOR_COMMENTS).ToList();
+            }
+        }
+
         public List<string> ListCommentPros
         {
             get

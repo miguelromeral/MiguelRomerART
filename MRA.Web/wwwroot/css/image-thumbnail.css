@@ -11,8 +11,8 @@
 
 @media screen and (max-width: 600px) {
     .mr-img-thumbnail-container {
-        width: 15vh !important;
-        height: 15vh !important;
+        width: 12vh !important;
+        height: 12vh !important;
     }
 }
 
@@ -69,8 +69,15 @@ img.mr-image-thumbnail {
     color: white;
 }
 
+.mr-image-page-title {
+    color: var(--mr-chat-color) !important;
+}
+
 .mr-img-full-container {
     position: relative;
+    border: 2px solid var(--mr-chat-color);
+    border-radius: 10px;
+    padding: 3px;
 }
 
 .mr-img-full-container::after {
@@ -100,18 +107,30 @@ img.mr-img-full {
     opacity: 0;
 }
 
-    .mr-details-container {
+    .mr-social-container {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
         gap: 20px;
     }
 
-.mr-details-section {
+.mr-details-container {
+    background-color: #2a202b;
+    border-radius: 10px;
+    padding: 10px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    gap: 10px;
+    margin: 10px 0px;
 }
+
+
+        .mr-details-section {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
 
 .mr-details-section-title {
     font-weight: 600;
@@ -152,7 +171,6 @@ img.mr-img-full {
     flex-direction: column;
     align-items: flex-end;
     margin-right: 10px;
-    margin-bottom: 15px;
     width: -webkit-fill-available;
 }
 
@@ -169,17 +187,26 @@ img.mr-img-full {
     width: 100%;
 }
 
-.mr-chat-message.likes {
+
+.mr-chat-row.likes .mr-chat-message {
     background-color: transparent;
     border: 2px solid var(--mr-chat-color-likes);
     color: var(--mr-chat-color-likes);
 }
 
-    .mr-chat-message.dislikes {
-        background-color: transparent;
-        border: 2px solid var(--mr-chat-color-dislikes);
-        color: var(--mr-chat-color-dislikes);
-    }
+.mr-chat-row.likes {
+    color: var(--mr-chat-color-likes);
+}
+
+
+.mr-chat-row.dislikes .mr-chat-message {
+    background-color: transparent;
+    border: 2px solid var(--mr-chat-color-dislikes);
+    color: var(--mr-chat-color-dislikes);
+}
+.mr-chat-row.dislikes {
+    color: var(--mr-chat-color-dislikes);
+}
 
 
 .mr-chat-message.last:before {
