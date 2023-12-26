@@ -288,6 +288,14 @@ img.mr-chat-image-miguel {
     flex-direction: row;
     justify-content: space-around;
     width: 100%;
+    align-items: center;
+}
+
+.mr-stats-item {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 5px;
 }
 
 .mr-stats-item.likes {
@@ -296,3 +304,7 @@ img.mr-chat-image-miguel {
 
 
 
+
+#divContainerLikes {
+    display: inline-flex;
+}

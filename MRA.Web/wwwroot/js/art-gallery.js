@@ -81,10 +81,20 @@ function OnFailureCheer() {
 
 }
 function onSuccessCheer() {
-    var stringCounter = $("#spLikesCounter").text();
-    var counter = parseInt(stringCounter);
-    counter++;
-    $("#spLikesCounter").text(counter);
+    var childId = "spLikesCounter";
+    var numberElement = document.getElementById(childId);
+    var newNumber = parseInt(numberElement.textContent) + 1;
+
+    // Ocultar el número actual
+    document.getElementById("divContainerLikes").classList.remove('bounce-bottom');
+
+    // Configurar el nuevo número después de un breve tiempo
+    setTimeout(function () {
+        numberElement.textContent = newNumber;
+
+        // Mostrar el nuevo número
+        document.getElementById("divContainerLikes").classList.add('bounce-bottom');
+    }, 500);
 }
 function onCompleteCheer() {
     setTimeout(function () {
@@ -101,7 +111,9 @@ function createHeart() {
     const heart = document.createElement("div");
     heart.className = "fas fa-heart";
     heart.style.left = (Math.random() * 100) + "vw";
+    heart.style.color = generateRedTone();
     heart.style.animationDuration = (Math.random() * 3) + 2 + "s"
+    heart.style.fontSize = generateHeartSize();
     body.appendChild(heart);
 }
 
@@ -121,3 +133,21 @@ function showHearts() {
     }, timeMsDelayLike);
 
 }   
+
+function generateRedTone() {
+    // Genera un valor aleatorio para la componente roja (R)
+    var componenteRoja = Math.floor(Math.random() * 192 + 64);
+
+    // Establece las componentes verde (G) y azul (B) en cero
+    var componenteVerde = 0;
+    var componenteAzul = 0;
+
+    return 'rgb(' + componenteRoja + ',' + componenteVerde + ',' + componenteAzul + ')';
+}
+
+function generateHeartSize() {
+    // Genera un valor aleatorio para la componente roja (R)
+    var pixels = Math.floor(Math.random() * 20 + 10);
+    
+    return pixels + "px";
+}
