@@ -8,7 +8,7 @@
 }
 
 
-<h1>@(drawing.Title ?? "Details")</h1>
+<h1>@(drawing?.Title ?? "Details")</h1>
 
 
 @if (drawing != null)
@@ -93,7 +93,15 @@
                         </div>
                     </div>
                 </div>
-
+                
+                <div class="mr-details-section">
+                    <span class="mr-details-section-title">
+                        <i class="bi bi-eye"></i> Views
+                    </span>
+                    <span class="mr-details-section-content capitalize">
+                        @(Model.Drawing.Views + 1)
+                    </span>
+                </div>
                 <div class="mr-details-section">
                     <span class="mr-details-section-title">
                         📅 Date

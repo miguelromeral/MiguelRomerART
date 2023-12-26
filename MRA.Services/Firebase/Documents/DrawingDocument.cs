@@ -45,5 +45,8 @@ namespace MRA.Services.Firebase.Documents
 
         [FirestoreProperty]
         public string comment_cons { get; set; }
+
+        [FirestoreProperty]
+        public long views { get; set; }
     }
 }

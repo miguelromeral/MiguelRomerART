@@ -36,6 +36,7 @@ namespace MRA.Services.Firebase.Converters
                 Comment = drawingDocument.comment,
                 CommentPros = drawingDocument.comment_pros,
                 CommentCons = drawingDocument.comment_cons,
+                Views = drawingDocument.views,
                 UrlBase = _urlBase
             };
         }
@@ -55,7 +56,8 @@ namespace MRA.Services.Firebase.Converters
                 product_name = drawing.ProductName,
                 comment = drawing.Comment,
                 comment_cons = drawing.CommentCons,
-                comment_pros = drawing.CommentPros
+                comment_pros = drawing.CommentPros,
+                views = drawing.Views
             };
         }
     }

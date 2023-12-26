@@ -81,6 +81,7 @@ namespace MRA.Services.Firebase
 
                 if (snapshot.Exists)
                 {
+                    await UpdateViews(documentId);
                     return _converter.ConvertToModel(snapshot.ConvertTo<DrawingDocument>());
                 }
                  
@@ -90,6 +91,41 @@ namespace MRA.Services.Firebase
                 Debug.WriteLine("Exception when getting document '" + documentId + "': " + ex.Message);
             }
             return null;
+        }
+
+        public async Task UpdateViews(string documentId)
+        {
+            // Realiza la transacción para actualizar la propiedad "views"
+            await _firestoreDb.RunTransactionAsync(async transaction =>
+            {
+                try
+                {
+                    DocumentReference docRef = _firestoreDb.Collection(_collectionName).Document(documentId);
+
+                    // Obtiene el documento actual
+                    DocumentSnapshot snapshot = await transaction.GetSnapshotAsync(docRef);
+
+
+                    if (snapshot.ContainsField("views"))
+                    {
+                        // Si existe, obtiene el valor actual de "views" y le suma uno
+                        long currentViews = snapshot.GetValue<long>("views");
+                        long newViews = currentViews + 1;
+
+                        // Actualiza la propiedad "views" en el documento
+                        transaction.Update(docRef, "views", newViews);
+                    }
+                    else
+                    {
+                        // Si no existe, crea la propiedad "views" con el valor inicial de 1
+                        transaction.Set(docRef, new { views = 1 }, SetOptions.MergeAll);
+                    }
+
+                }catch(Exception ex)
+                {
+                    Debug.WriteLine("Error when updating views for document '" + documentId + "': " + ex.Message);
+                }
+            });
         }
 
         public async Task AddAsync(Drawing document)
