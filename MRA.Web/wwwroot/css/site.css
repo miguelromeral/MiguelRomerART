@@ -79,3 +79,7 @@ span.mr-loader-subtitle{
 
 .mr-custom-select.filters {
 }
+
+.hide-on-load{
+    opacity: 0 !important;
+}

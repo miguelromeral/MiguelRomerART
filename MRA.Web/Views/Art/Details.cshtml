@@ -16,14 +16,9 @@
     }
 
     <div class="row">
-        <span>
-            <h3>
-                @Model.Drawing.Name
-            </h3>
-            <span class="badge rounded-pill @(Model.Drawing.IsTraditional ? "bg-secondary" : "bg-dark")">
-                @(Model.Drawing.IsTraditional ? "Traditional" : "Digital")
-            </span>
-        </span>
+        <h3>
+            @Model.Drawing.Name
+        </h3>
 
     </div>
     <div class="row">
@@ -31,7 +26,7 @@
 
             <div class="mr-first-column-image">
                 <div class="mr-img-full-container heart-rain" ondblclick="cheerDrawing()">
-                    <img src="@Model.Drawing.Url" class="mr-img-full rounded">
+                    <img id="imgFull" src="@Model.Drawing.Url" class="mr-img-full rounded">
                     @*
                 <div class="mr-badges-info">
                 @if (!String.IsNullOrEmpty(Model.Drawing.Date))
@@ -88,7 +83,7 @@
                         {
                             var last = count + 1 == comments.Count;
                             <div class="mr-chat-row">
-                                <div class="mr-chat-message-container">
+                                <div class="mr-chat-message-container slide-top">
                                     <div class="mr-chat-message @(last ? "last" : "")">
                                         @Html.Raw(comments[count])
                                     </div>
@@ -105,7 +100,7 @@
                     @if (!String.IsNullOrEmpty(drawing.CommentPros))
                     {
                         <div class="mr-chat-row likes">
-                            <div class="mr-chat-message-container">
+                            <div class="mr-chat-message-container slide-top delay1s">
                                 @foreach (var comment in drawing.ListCommentPros)
                                 {
                                     <div class="mr-chat-message">
@@ -123,7 +118,7 @@
                     @if (!String.IsNullOrEmpty(drawing.CommentCons))
                     {
                         <div class="mr-chat-row dislikes">
-                            <div class="mr-chat-message-container">
+                            <div class="mr-chat-message-container slide-top delay2s">
                                 @foreach (var comment in drawing.ListCommentCons)
                                 {
                                     <div class="mr-chat-message">
@@ -140,50 +135,59 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-sm-12 col-md-12 mr-details-container">
-            <h4>Details</h4>
+   <div class="row mr-details-container mt-2">
 
-            <div class="mr-details-section">
-                <span class="mr-details-section-title">
-                    📅 Date
-                </span>
-                <span class="mr-details-section-content capitalize">
-                    @(String.IsNullOrEmpty(Model.Drawing.Date) ? "No Date Known" : Model.Drawing.FormattedDate)
-                </span>
-            </div>
-            <div class="mr-details-section">
-                <span class="mr-details-section-title">
-                    ⏱ Time (estimated)
-                </span>
-                <span class="mr-details-section-content capitalize">
-                    @(String.IsNullOrEmpty(Model.Drawing.Time) ? "No Time Known" : Model.Drawing.Time)
-                </span>
-            </div>
-            @if (drawing.ProductType > 0 && !String.IsNullOrEmpty(drawing.ProductName))
-            {
-                <div class="mr-details-section">
-                    <span class="mr-details-section-title">
-                        @switch (drawing.ProductType)
-                        {
-                            case 1:
-                                <span>🎮 Videogame</span>
-                                break;
-                            case 2:
-                                <span>💽 Singer</span>
-                                break;
-                            default:
-                                <span>Product</span>
-                                break;
-                        }
-                    </span>
-                    <span class="mr-details-section-content capitalize">
-                        @(drawing.ProductName)
-                    </span>
-                </div>
-            }
-        </div>
+    <div class="col-sm-12 col-md-12 mb-2">
+        <h4>Details</h4>
     </div>
+
+    <div class="col-sm-12 col-md-6 mr-details-section">
+        <span class="mr-details-section-title">
+            📅 Date
+        </span>
+        <span class="mr-details-section-content capitalize">
+                @(String.IsNullOrEmpty(Model.Drawing.Date) ? "No Date Known" : Model.Drawing.FormattedDate)
+        </span>
+    </div>
+    <div class="col-sm-12 col-md-6 mr-details-section">
+        <span class="mr-details-section-title">
+            ⏱ Time (estimated)
+        </span>
+        <span class="mr-details-section-content capitalize">
+                @(String.IsNullOrEmpty(Model.Drawing.Time) ? "No Time Known" : Model.Drawing.Time)
+        </span>
+    </div>
+    <div class="col-sm-12 col-md-6 mr-details-section">
+        <span class="mr-details-section-title">
+            🖌 Type
+        </span>
+        <span class="mr-details-section-content capitalize">
+                @drawing.TypeName
+        </span>
+    </div>
+        @if (drawing.ProductType > 0 && !String.IsNullOrEmpty(drawing.ProductName))
+        {
+        <div class="col-sm-12 col-md-6 mr-details-section">
+            <span class="mr-details-section-title">
+                    @switch (drawing.ProductType)
+                    {
+                        case 1:
+                        <span>🎮 Videogame</span>
+                            break;
+                        case 2:
+                        <span>💽 Singer</span>
+                            break;
+                        default:
+                        <span>Product</span>
+                            break;
+                    }
+            </span>
+            <span class="col-sm-12 col-md-6 mr-details-section-content capitalize">
+                    @(drawing.ProductName)
+            </span>
+        </div>
+        }
+        </div>
 
 }
 else

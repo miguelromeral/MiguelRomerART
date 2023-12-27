@@ -118,12 +118,17 @@ img.mr-img-full {
     background-color: #2a202b;
     border-radius: 10px;
     padding: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-    margin: 10px 0px;
+    /* display: flex; */
+    /* flex-direction: column; */
+    /* align-items: flex-start; */
+    /* gap: 10px; */
+    /* margin: 10px 0px; */
 }
+
+    .mr-details-container > div {
+        padding: 10px;
+    }
+
 
 
 .mr-details-section {
@@ -172,6 +177,7 @@ img.mr-img-full {
     align-items: flex-end;
     margin-right: 10px;
     width: -webkit-fill-available;
+    padding-right: 10px;
 }
 
 .mr-chat-message {
