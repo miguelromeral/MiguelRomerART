@@ -2,7 +2,10 @@
 @model ImageThumbnailModel
 
 
-<a data-drawingId="@Model.Drawing.Id" class="mr-img-thumbnail mr-img-thumbnail-container rounded slide-right @(Model.Drawing.Favorite ? "favorite" : "")" href="@Url.Action("Details", "Art", new { id = Model.Drawing.Id })">
+<div class="cuadrado  @(Model.Drawing.Favorite ? "favorite" : "")">
+    <div class="contenido">
+
+<a data-drawingId="@Model.Drawing.Id" class="mr-img-thumbnail mr-img-thumbnail-container slide-right" href="@Url.Action("Details", "Art", new { id = Model.Drawing.Id })">
     <img src="@Model.Drawing.Url" class="mr-image-thumbnail">
 
 
@@ -30,3 +33,5 @@
     }
 
 </a>
+</div>
+</div>

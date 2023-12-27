@@ -85,10 +85,13 @@
         </div>
         <div id="artGallery" class="mr-img-gallery">
 
-            @foreach (var drawing in Model.Drawings)
-            {
-                await Html.RenderPartialAsync("Images/_ImageThumbnail", new ImageThumbnailModel(drawing));
-            }
+
+                    @foreach (var drawing in Model.Drawings)
+                    {
+                        await Html.RenderPartialAsync("Images/_ImageThumbnail", new ImageThumbnailModel(drawing));
+                    }
+
+
         </div>
         <div id="divNoResults" style="display: @(Model.Drawings.Count > 0 ? "none" : "block");">
             <span>
