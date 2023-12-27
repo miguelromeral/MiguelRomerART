@@ -21,6 +21,12 @@ namespace MRA.Services.Firebase.Models
                 {4, "Markers"},
             };
 
+        public static Dictionary<int, string> DRAWING_PRODUCT_TYPES = new Dictionary<int, string>()
+            {
+                {1, "Videogame"},
+                {2, "Actor/Actress"},
+            };
+
         public string Id { get; set; }
         public string Path { get; set; }
         public string UrlBase { get; set; }
@@ -30,7 +36,8 @@ namespace MRA.Services.Firebase.Models
         public string Title { get; set; }
         public string Date { get; set; }
         public string Time { get; set; }
-        public string ProductType { get; set; }
+        public int ProductType { get; set; }
+        public string ProductTypeName { get { return DRAWING_PRODUCT_TYPES[ProductType]; } }
         public string ProductName { get; set; }
         public string Comment { get; set; }
         public string CommentPros { get; set; }

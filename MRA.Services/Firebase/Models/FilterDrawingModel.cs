@@ -3,6 +3,7 @@
     public class FilterDrawingModel
     {
         public int Type { get; set; }
+        public int ProductType { get; set; }
         public string Sortby { get; set; }
 
         public string Textquery { get; set; }

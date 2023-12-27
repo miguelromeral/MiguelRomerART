@@ -160,17 +160,17 @@
                     @(String.IsNullOrEmpty(Model.Drawing.Time) ? "No Time Known" : Model.Drawing.Time)
                 </span>
             </div>
-            @if (!String.IsNullOrEmpty(drawing.ProductType) && !String.IsNullOrEmpty(drawing.ProductType))
+            @if (drawing.ProductType > 0 && !String.IsNullOrEmpty(drawing.ProductName))
             {
                 <div class="mr-details-section">
                     <span class="mr-details-section-title">
                         @switch (drawing.ProductType)
                         {
-                            case "singer":
-                                <span>💽 Singer</span>
-                                break;
-                            case "videogame":
+                            case 1:
                                 <span>🎮 Videogame</span>
+                                break;
+                            case 2:
+                                <span>💽 Singer</span>
                                 break;
                             default:
                                 <span>Product</span>

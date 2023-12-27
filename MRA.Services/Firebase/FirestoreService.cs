@@ -57,6 +57,10 @@ namespace MRA.Services.Firebase
                 {
                     query = query.WhereEqualTo("type", filter.Type);
                 }
+                if (filter.ProductType > 0)
+                {
+                    query = query.WhereEqualTo("product_type", filter.ProductType);
+                }
                 if (!String.IsNullOrEmpty(filter.Textquery))
                 {
                     query = query.WhereArrayContains("name", filter.Textquery);

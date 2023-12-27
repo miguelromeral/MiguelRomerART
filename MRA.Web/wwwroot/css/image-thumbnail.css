@@ -342,3 +342,13 @@ img.mr-chat-image-miguel {
 #divContainerLikes {
     display: inline-flex;
 }
+
+#divNoResults {
+    display: flex;
+    min-height: 100px;
+    align-items: center;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 10px;
+    margin-top: 50px;
+}

@@ -38,7 +38,7 @@ body {
     align-items: flex-end;
 }
 
-.mr-sort-filter-container .mr-sort-filter span {
+.mr-sort-filter-container .mr-sort-filter span, span.mr-suboption-filter {
     font-size: small;
     color: grey;
 }
@@ -69,4 +69,13 @@ img.mr-loading-icon-pacman {
 }
 span.mr-loader-subtitle{
     font-style: italic;
+}
+
+.mr-custom-select {
+    background-color: var(--mr-chat-color-secondary);
+    border: 1px solid var(--mr-chat-color);
+    color: white;
+}
+
+.mr-custom-select.filters {
 }

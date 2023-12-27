@@ -32,7 +32,7 @@ namespace MRA.Services.Firebase.Documents
         public string time { get; set; }
 
         [FirestoreProperty]
-        public string product_type { get; set; }
+        public int product_type { get; set; }
 
         [FirestoreProperty]
         public string product_name { get; set; }

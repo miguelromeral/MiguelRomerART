@@ -31,6 +31,12 @@ function onSuccessFilter(data) {
             $(img).hide();
         }
     });
+
+    if (data.length > 0) {
+        $("#divNoResults").hide();
+    } else {
+        $("#divNoResults").show();
+    }
 }
 
 function onFailureFilter() {
