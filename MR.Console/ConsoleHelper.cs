@@ -63,6 +63,27 @@ namespace MR.Console
             }
         }
 
+
+        internal bool FillBoolValue(bool isNew, bool previous, string field)
+        {
+            ShowMessage(isNew, previous.ToString(), field);
+            System.Console.WriteLine($"  [Type 'Y' or 'y' to set the value to 'True']");
+
+            var input = System.Console.ReadLine();
+
+            if (!isNew && input.Equals(ConsoleHelper.SAME_VALUE))
+            {
+                System.Console.WriteLine(" * Value set: " + previous.ToString());
+                return previous;
+            }
+            else
+            {
+                var value = input.ToLower().Equals("y");
+                System.Console.WriteLine(" * Value set: " + value.ToString());
+                return value;
+            }
+        }
+
         internal string FillStringValue(bool isNew, string previous, string field)
         {
             ShowMessage(isNew, previous, field);

@@ -26,24 +26,9 @@
         <div class="col-sm-12 col-md-6">
 
             <div class="mr-first-column-image">
-                <div class="mr-img-full-container heart-rain" ondblclick="cheerDrawing()">
+                <div class="mr-img-full-container heart-rain @(drawing.Favorite ? "favorite" : "")" ondblclick="cheerDrawing()">
                     <img id="imgFull" src="@Model.Drawing.Url" class="mr-img-full rounded">
-                    @*
-                <div class="mr-badges-info">
-                @if (!String.IsNullOrEmpty(Model.Drawing.Date))
-                {
-                <div class="mr-badges-info-item">
-                📅 @Model.Drawing.FormattedDate
-                </div>
-                }
-                @if (!String.IsNullOrEmpty(Model.Drawing.Time))
-                {
-                <div class="mr-badges-info-item">
-                ⏱ @Model.Drawing.Time
-                </div>
-                }
-                </div> *@
-
+                    <i id="iFavoriteIcon" class="bi bi-star-fill" title="One of my favorites drawings."></i>
                 </div>
 
                 <div class="mr-stats-container">

@@ -53,6 +53,10 @@ namespace MRA.Services.Firebase
             {
                 Query query = _firestoreDb.Collection(_collectionName);
 
+                if (filter.Favorites)
+                {
+                    query = query.WhereEqualTo("favorite", true);
+                }
                 if (filter.Type > 0)
                 {
                     query = query.WhereEqualTo("type", filter.Type);
@@ -65,6 +69,7 @@ namespace MRA.Services.Firebase
                 {
                     query = query.WhereArrayContains("name", filter.Textquery);
                 }
+                
 
                 var documents = (await query.GetSnapshotAsync()).Documents.Select(s => s.ConvertTo<DrawingDocument>()).ToList();
 

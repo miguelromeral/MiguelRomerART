@@ -39,7 +39,8 @@ namespace MRA.Services.Firebase.Converters
                 Views = drawingDocument.views,
                 Likes = drawingDocument.likes,
                 ModelName = drawingDocument.model_name,
-                UrlBase = _urlBase
+                UrlBase = _urlBase,
+                Favorite = drawingDocument.favorite
             };
         }
 
@@ -61,7 +62,8 @@ namespace MRA.Services.Firebase.Converters
                 comment_pros = drawing.CommentPros,
                 views = drawing.Views,
                 likes = drawing.Likes,
-                model_name = drawing.ModelName
+                model_name = drawing.ModelName,
+                favorite = drawing.Favorite
             };
         }
     }

@@ -54,5 +54,8 @@ namespace MRA.Services.Firebase.Documents
 
         [FirestoreProperty]
         public long likes { get; set; }
+
+        [FirestoreProperty]
+        public bool favorite { get; set; }
     }
 }

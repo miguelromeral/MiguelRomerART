@@ -52,9 +52,10 @@ else
     drawing = await firebaseService.FindDrawingById(drawing.Id);
 }
 
+drawing.Favorite = helper.FillBoolValue(isNew, drawing.Favorite, "Favorite");
 drawing.Path = helper.FillStringValue(isNew, drawing.Path, "Path");
 drawing.Name = helper.FillStringValue(isNew, drawing.Name, "Character's Name");
-drawing.ModelName = helper.FillStringValue(isNew, drawing.Name, "Model's Name");
+drawing.ModelName = helper.FillStringValue(isNew, drawing.ModelName, "Model's Name");
 drawing.Title = helper.FillStringValue(isNew, drawing.Title, "Drawing's Title");
 drawing.Type = helper.FillIntValue(isNew, drawing.Type, "Type", Drawing.DRAWING_TYPES);
 drawing.Date = helper.FillStringValue(isNew, drawing.Date, "Date (YYYY/MM/DD)");
@@ -64,6 +65,7 @@ drawing.ProductName = helper.FillStringValue(isNew, drawing.ProductName, "Produc
 drawing.Comment = helper.FillStringValue(isNew, drawing.Comment, "Comments (Type '"+Drawing.SEPARATOR_COMMENTS+"' to separate many comments.)");
 drawing.CommentPros = helper.FillStringValue(isNew, drawing.CommentPros, "Comments Pros (Type '"+Drawing.SEPARATOR_COMMENTS+ "' to separate many comments.)");
 drawing.CommentCons = helper.FillStringValue(isNew, drawing.CommentCons, "Comments Cons (Type '"+Drawing.SEPARATOR_COMMENTS+ "' to separate many comments.)");
+
 
 Console.WriteLine("-----------------------------");
 Console.WriteLine("Everything's set and ready to go. Are you sure?");

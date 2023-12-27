@@ -7,5 +7,6 @@
         public string Sortby { get; set; }
 
         public string Textquery { get; set; }
+        public bool Favorites { get; set; }
     }
 }

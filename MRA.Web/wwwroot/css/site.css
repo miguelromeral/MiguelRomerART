@@ -24,6 +24,11 @@ body {
     display: inline-flex;
     width: fit-content;
     gap: 5px;
+    align-items: center;
+}
+
+.mr-choice-filter {
+    color: var(--mr-color-gold);
 }
 
 .mr-sort-filter-container {

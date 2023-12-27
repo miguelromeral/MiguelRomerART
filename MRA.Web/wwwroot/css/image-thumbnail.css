@@ -28,6 +28,12 @@
     margin: 5px;
 }
 
+    .mr-img-thumbnail-container.favorite {
+        border: 2px solid var(--mr-color-gold);
+        padding: 4px;
+    }
+
+
 .mr-img-thumbnail-container img {
     transition: opacity 0.3s ease-in-out;
     object-fit: contain;
@@ -35,6 +41,10 @@
     height: auto;
     display: block;
 }
+
+    .mr-img-thumbnail-container.favorite .mr-img-thumbnail-title {
+        color: var(--mr-color-gold) !important;
+    }
 
 
 .mr-img-thumbnail-title {
@@ -86,6 +96,23 @@ img.mr-image-thumbnail {
     padding: 5px;
 }
 
+.mr-img-full-container.favorite {
+    border-color: var(--mr-color-gold);
+}
+
+#iFavoriteIcon {
+    display: none;
+}
+
+.mr-img-full-container.favorite #iFavoriteIcon {
+    position: absolute;
+    display: block;
+    top: 5px;
+    right: 5px;
+    color: var(--mr-color-gold);
+    text-shadow: 0px 0px 10px var(--mr-color-gold);
+}
+
 .mr-img-full-container::after {
     content: "MiguelRomeral";
     position: absolute;
@@ -99,7 +126,7 @@ img.mr-image-thumbnail {
     justify-content: center;
     color: rgba(255, 255, 255, 0.5);
     text-shadow: 0px 0px 5px #ffffff85;
-    }
+}
 
 
 img.mr-img-full {
