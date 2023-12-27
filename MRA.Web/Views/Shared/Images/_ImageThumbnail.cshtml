@@ -2,36 +2,36 @@
 @model ImageThumbnailModel
 
 
-<div class="cuadrado  @(Model.Drawing.Favorite ? "favorite" : "")">
+<div data-drawingId="@Model.Drawing.Id" class="mr-img-thumbnail  cuadrado @(Model.Drawing.Favorite ? "favorite" : "")">
     <div class="contenido">
 
-<a data-drawingId="@Model.Drawing.Id" class="mr-img-thumbnail mr-img-thumbnail-container slide-right" href="@Url.Action("Details", "Art", new { id = Model.Drawing.Id })">
-    <img src="@Model.Drawing.Url" class="mr-image-thumbnail">
+        <a class="mr-img-thumbnail-container slide-right" href="@Url.Action("Details", "Art", new { id = Model.Drawing.Id })">
+            <img src="@Model.Drawing.Url">
 
 
 
 
-    @if (!String.IsNullOrEmpty(Model.Drawing.Name) && !String.IsNullOrEmpty(Model.Drawing.ModelName))
-    {
+            @if (!String.IsNullOrEmpty(Model.Drawing.Name) && !String.IsNullOrEmpty(Model.Drawing.ModelName))
+            {
 
-        <span class="mr-img-thumbnail-title">
-            <span>
-                @Model.Drawing.Name
-            </span>
-            <span class="mr-img-thumbnail-subtitle">by @Model.Drawing.ModelName</span>
-        </span>
-    }
-    else if (!String.IsNullOrEmpty(Model.Drawing.Name))
-    {
-        <span class="mr-img-thumbnail-title">@Model.Drawing.Name</span>
-    }
-    else if (!String.IsNullOrEmpty(Model.Drawing.ModelName))
-    {
-        <span class="mr-img-thumbnail-title">
-            <span class="mr-img-thumbnail-subtitle">@Model.Drawing.ModelName</span>
-        </span>
-    }
+                <span class="mr-img-thumbnail-title">
+                    <span>
+                        @Model.Drawing.Name
+                    </span>
+                    <span class="mr-img-thumbnail-subtitle">by @Model.Drawing.ModelName</span>
+                </span>
+            }
+            else if (!String.IsNullOrEmpty(Model.Drawing.Name))
+            {
+                <span class="mr-img-thumbnail-title">@Model.Drawing.Name</span>
+            }
+            else if (!String.IsNullOrEmpty(Model.Drawing.ModelName))
+            {
+                <span class="mr-img-thumbnail-title">
+                    <span class="mr-img-thumbnail-subtitle">@Model.Drawing.ModelName</span>
+                </span>
+            }
 
-</a>
-</div>
+        </a>
+    </div>
 </div>
