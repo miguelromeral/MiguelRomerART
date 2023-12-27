@@ -17,7 +17,7 @@ namespace MRA.Services.Firebase.Documents
         public string path { get; set; }
 
         [FirestoreProperty]
-        public string type { get; set; }
+        public int type { get; set; }
 
         [FirestoreProperty]
         public string name { get; set; }

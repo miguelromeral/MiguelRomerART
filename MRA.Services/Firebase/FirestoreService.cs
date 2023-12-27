@@ -1,4 +1,5 @@
 ﻿using Google.Cloud.Firestore;
+using Google.Type;
 using Microsoft.Extensions.Configuration;
 using MRA.Services.Firebase.Converters;
 using MRA.Services.Firebase.Documents;
@@ -22,11 +23,11 @@ namespace MRA.Services.Firebase
         private readonly string _collectionName;
         private readonly DrawingFirebaseConverter _converter;
 
-        public FirestoreService(IConfiguration configuration, FirestoreDb firestoreDb)
+        public FirestoreService(string collectionName, string urlBase, FirestoreDb firestoreDb)
         {
             _firestoreDb = firestoreDb;
-            _collectionName = configuration.GetValue<string>("Firebase:Collection");
-            _urlBase = configuration.GetValue<string>("AzureStorage:BlobPath");
+            _collectionName = collectionName;
+            _urlBase = urlBase;
             _converter = new DrawingFirebaseConverter(_urlBase);
         }
 
@@ -52,7 +53,7 @@ namespace MRA.Services.Firebase
             {
                 Query query = _firestoreDb.Collection(_collectionName);
 
-                if (!String.IsNullOrEmpty(filter.Type) && !filter.Type.Equals("all"))
+                if (filter.Type > 0)
                 {
                     query = query.WhereEqualTo("type", filter.Type);
                 }
@@ -167,7 +168,11 @@ namespace MRA.Services.Firebase
             var collection = _firestoreDb.Collection(_collectionName);
             var drawingDocument = _converter.ConvertToDocument(document);
 
-            await collection.AddAsync(drawingDocument);
+            // Obtiene una referencia al documento específico en la colección
+            DocumentReference docRef = collection.Document(document.Id);
+
+            // Inserta o actualiza el documento con los datos especificados
+            await docRef.SetAsync(drawingDocument);
         }
     }
 }

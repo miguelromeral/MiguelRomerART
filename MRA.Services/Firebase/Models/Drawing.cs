@@ -13,10 +13,19 @@ namespace MRA.Services.Firebase.Models
     {
         public static string SEPARATOR_COMMENTS = "#";
 
+        public static Dictionary<int, string> DRAWING_TYPES = new Dictionary<int, string>()
+            {
+                {1, "Traditional"},
+                {2, "Digital"},
+                {3, "Quick Sketch"},
+                {4, "Markers"},
+            };
+
         public string Id { get; set; }
         public string Path { get; set; }
         public string UrlBase { get; set; }
-        public string Type { get; set; }
+        public int Type { get; set; }
+        public string TypeName { get { return DRAWING_TYPES[Type]; } }
         public string Name { get; set; }
         public string Title { get; set; }
         public string Date { get; set; }
@@ -63,7 +72,7 @@ namespace MRA.Services.Firebase.Models
         }
 
         public string Url { get { return UrlBase + Path; } }
-        public bool IsTraditional { get { return Type.Equals("traditional"); } }
+        public bool IsTraditional { get { return Type == 1; } }
 
         public string FormattedDate
         {
