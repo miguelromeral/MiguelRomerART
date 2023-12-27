@@ -23,7 +23,7 @@ namespace MR.Console
                 System.Console.WriteLine("  [Type '" + SAME_VALUE + "' to keep previous]");
             }
         }
-
+         
         internal string ReadValue(bool isNew, string previous)
         {
             var input = System.Console.ReadLine();

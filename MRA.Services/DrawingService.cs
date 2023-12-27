@@ -42,6 +42,12 @@ namespace MRA.Services
                 case "date-asc": 
                     drawings = drawings.OrderBy(x => x.Date).ToList();
                     break;
+                case "name-asc":
+                    drawings = drawings.OrderBy(x => x.Name).ToList();
+                    break;
+                case "name-desc":
+                    drawings = drawings.OrderByDescending(x => x.Name).ToList();
+                    break;
                 default:
                     drawings = drawings.OrderByDescending(x => x.Date).ToList();
                     break;

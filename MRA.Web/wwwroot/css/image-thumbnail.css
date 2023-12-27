@@ -11,8 +11,8 @@
 
 @media screen and (max-width: 600px) {
     .mr-img-thumbnail-container {
-        width: 12vh !important;
-        height: 12vh !important;
+        width: 14vh !important;
+        height: 14vh !important;
     }
 }
 

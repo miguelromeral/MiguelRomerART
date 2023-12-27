@@ -8,11 +8,13 @@
 }
 
 
-<h1 class="mr-image-page-title">@(drawing?.Title ?? "Details")</h1>
-
-
 @if (drawing != null)
 {
+    if (!String.IsNullOrEmpty(drawing.Title))
+    {
+        <h1 class="mr-image-page-title">@drawing.Title</h1>
+    }
+
     <div class="row">
         <span>
             <h3>

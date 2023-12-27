@@ -28,6 +28,8 @@
                         data-bs-theme="dark">
                     <option value="date-desc">Newest</option>
                     <option value="date-asc">Oldest</option>
+                    <option value="name-asc">By Name (ascending)</option>
+                    <option value="name-desc">By Name (descending)</option>
                 </select>
             </div>
         </div>
@@ -40,8 +42,12 @@
 
             <select class="form-select form-select-sm" name="Type" aria-label="Default select example" data-bs-theme="dark" onchange="sendFormFilterGallery()">
                 <option value="0" selected>🖌 Type</option>
-                <option value="1">Traditional</option>
-                <option value="2">Digital</option>
+
+                @foreach(var type in MRA.Services.Firebase.Models.Drawing.DRAWING_TYPES)
+                {
+                    <option value="@(type.Key)">@(type.Value)</option>
+                    
+                }
             </select>
 
             @* <div>
