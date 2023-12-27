@@ -16,9 +16,10 @@
     }
 
     <div class="row">
-        <h3>
+        <h3 class="mr-image-detail-title">
             @Model.Drawing.Name
         </h3>
+        <h5 class="mr-image-detail-subtitle">@Model.Drawing.ModelName</h5>
 
     </div>
     <div class="row">
@@ -151,7 +152,7 @@
     </div>
     <div class="col-sm-12 col-md-6 mr-details-section">
         <span class="mr-details-section-title">
-            ⏱ Time (estimated)
+            🕓 Time (estimated)
         </span>
         <span class="mr-details-section-content capitalize">
                 @(String.IsNullOrEmpty(Model.Drawing.Time) ? "No Time Known" : Model.Drawing.Time)
@@ -165,6 +166,7 @@
                 @drawing.TypeName
         </span>
     </div>
+
         @if (drawing.ProductType > 0 && !String.IsNullOrEmpty(drawing.ProductName))
         {
         <div class="col-sm-12 col-md-6 mr-details-section">
@@ -175,7 +177,7 @@
                         <span>🎮 Videogame</span>
                             break;
                         case 2:
-                        <span>💽 Singer</span>
+                        <span>🎞 Actor/Actress</span>
                             break;
                         default:
                         <span>Product</span>
@@ -187,14 +189,26 @@
             </span>
         </div>
         }
-        </div>
 
+
+        @if (!String.IsNullOrEmpty(drawing.ModelName))
+        {
+            <div class="col-sm-12 col-md-6 mr-details-section">
+                <span class="mr-details-section-title">
+                    👤 Model
+                </span>
+                <span class="mr-details-section-content capitalize">
+                    @drawing.ModelName
+                </span>
+            </div>
+        }
+
+</div>
 }
 else
 {
     <h6>Not Found</h6>
 }
-
 
 @section Scripts {
     <script src="~/js/art-gallery.js"></script>

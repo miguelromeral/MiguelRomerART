@@ -58,6 +58,7 @@ namespace MR.Console
             else
             {
                 int.TryParse(input, out int numeroEntero);
+                System.Console.WriteLine(" * Value set: " + dictionary[numeroEntero]);
                 return numeroEntero;
             }
         }

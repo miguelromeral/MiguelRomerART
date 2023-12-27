@@ -33,6 +33,7 @@ namespace MRA.Services.Firebase.Models
         public int Type { get; set; }
         public string TypeName { get { return DRAWING_TYPES[Type]; } }
         public string Name { get; set; }
+        public string ModelName { get; set; }
         public string Title { get; set; }
         public string Date { get; set; }
         public string Time { get; set; }

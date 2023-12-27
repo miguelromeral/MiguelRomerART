@@ -54,6 +54,7 @@ else
 
 drawing.Path = helper.FillStringValue(isNew, drawing.Path, "Path");
 drawing.Name = helper.FillStringValue(isNew, drawing.Name, "Character's Name");
+drawing.ModelName = helper.FillStringValue(isNew, drawing.Name, "Model's Name");
 drawing.Title = helper.FillStringValue(isNew, drawing.Title, "Drawing's Title");
 drawing.Type = helper.FillIntValue(isNew, drawing.Type, "Type", Drawing.DRAWING_TYPES);
 drawing.Date = helper.FillStringValue(isNew, drawing.Date, "Date (YYYY/MM/DD)");
