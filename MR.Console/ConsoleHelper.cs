@@ -1,4 +1,5 @@
-﻿using MRA.Services.Firebase.Models;
+﻿using FirebaseAdmin.Messaging;
+using MRA.Services.Firebase.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -6,36 +7,75 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MR.Console
+namespace MR.ConsoleMR
 {
     internal class ConsoleHelper
     {
+
+        private static int PAD_RIGHT = 10;
+
+        internal void ShowMessageInfo(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("INFO: ".PadRight(PAD_RIGHT) + message);
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+
+        internal void ShowMessageWarning(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("WARNING: ".PadRight(PAD_RIGHT) + message);
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+        internal void ShowMessageError(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("DANGER: ".PadRight(PAD_RIGHT) + message);
+            Console.ForegroundColor = ConsoleColor.White;
+        }
 
         internal void ShowMessagePrevious(bool isNew, string previous)
         {
             if (!isNew)
             {
-                System.Console.WriteLine($"  [Default: {previous}][Leave empty to use it]");
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.Write("".PadRight(PAD_RIGHT));
+                Console.Write("[Default: '");
+
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write(previous);
+
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.WriteLine("'][Leave empty to use it]");
+
+                Console.ForegroundColor = ConsoleColor.White;
             }
         }
 
         internal void ShowMessage(bool isNew, string previous, string field)
         {
+            Console.ForegroundColor = ConsoleColor.White;
             System.Console.WriteLine("------------------------------------------------------");
-            System.Console.WriteLine($"** {field}: ");
+            System.Console.WriteLine("INPUT:".PadRight(PAD_RIGHT) + field);
             ShowMessagePrevious(isNew, previous);
         }
-         
+
+        internal string ReadValueFromConsole()
+        {
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write("> ");
+            return Console.ReadLine();
+        }
+
         internal string ReadValue(bool isNew, string previous)
         {
-            var input = System.Console.ReadLine();
+
+            var input = ReadValueFromConsole();
             if (!isNew && String.IsNullOrEmpty(input))
             {
                 input = previous;
             }
-            System.Console.WriteLine("");
-            System.Console.WriteLine($" --> Value set: [{input}]");
-            System.Console.WriteLine("");
+            ShowValueSet(input.ToString());
             return input;
         }
 
@@ -44,7 +84,7 @@ namespace MR.Console
             System.Console.WriteLine("------------------------------------------------------");
             System.Console.WriteLine(field + ":");
 
-            foreach(var type in dictionary)
+            foreach (var type in dictionary)
             {
                 System.Console.WriteLine($" - {type.Key}: {type.Value}");
             }
@@ -55,16 +95,16 @@ namespace MR.Console
                 ShowMessagePrevious(isNew, dictionary[previous].ToString());
             }
 
-            var input = System.Console.ReadLine();
+            var input = ReadValueFromConsole();
             if (!isNew && String.IsNullOrEmpty(input))
             {
-                System.Console.WriteLine(" * Value set: " + dictionary[previous]);
+                ShowValueSet(dictionary[previous]);
                 return previous;
             }
             else
             {
                 int.TryParse(input, out int numeroEntero);
-                System.Console.WriteLine(" * Value set: " + dictionary[numeroEntero]);
+                ShowValueSet(dictionary[numeroEntero]);
                 return numeroEntero;
             }
         }
@@ -73,16 +113,16 @@ namespace MR.Console
         {
             ShowMessage(isNew, previous.ToString(), field);
 
-            var input = System.Console.ReadLine();
+            var input = ReadValueFromConsole();
             if (!isNew && String.IsNullOrEmpty(input))
             {
-                System.Console.WriteLine(" * Value set: " + previous);
+                ShowValueSet(previous.ToString());
                 return previous;
             }
             else
             {
                 int.TryParse(input, out int numeroEntero);
-                System.Console.WriteLine(" * Value set: " + numeroEntero);
+                ShowValueSet(numeroEntero.ToString());
                 return numeroEntero;
             }
         }
@@ -91,13 +131,15 @@ namespace MR.Console
         internal bool FillBoolValue(bool isNew, bool previous, string field)
         {
             ShowMessage(isNew, previous.ToString(), field);
-            System.Console.WriteLine($"  [Type 'Y' or 'y' to set the value to 'True']");
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            System.Console.WriteLine("".PadRight(PAD_RIGHT) + "[Y|y: 'True']");
+            Console.ForegroundColor = ConsoleColor.White;
 
-            var input = System.Console.ReadLine();
+            var input = ReadValueFromConsole();
 
             if (!isNew && String.IsNullOrEmpty(input))
             {
-                System.Console.WriteLine(" * Value set: " + previous.ToString());
+                ShowValueSet(previous.ToString());
                 return previous;
             }
             else
@@ -107,9 +149,20 @@ namespace MR.Console
                 {
                     value = true;
                 }
-                System.Console.WriteLine(" * Value set: " + value.ToString());
+
+                ShowValueSet(value.ToString());
                 return value;
             }
+        }
+
+        internal void ShowValueSet(string value)
+        {
+            Console.WriteLine("");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write("VALUE ".PadRight(PAD_RIGHT));
+            Console.WriteLine((String.IsNullOrEmpty(value) ? "''" : value));
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("");
         }
 
         internal string FillStringValue(bool isNew, string previous, string field)
@@ -120,11 +173,21 @@ namespace MR.Console
 
         internal void PrintPropreties(object obj)
         {
-            foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(obj))
+            // Obtener todas las propiedades
+            PropertyDescriptorCollection propiedades = TypeDescriptor.GetProperties(obj);
+
+            // Ordenar las propiedades por nombre
+            var propiedadesOrdenadas = propiedades.Sort()
+                                                  .Cast<PropertyDescriptor>()
+                                                  .ToList();
+
+            var propiedadesOrdenadas2 = new PropertyDescriptorCollection(propiedadesOrdenadas.ToArray());
+
+            foreach (PropertyDescriptor descriptor in propiedadesOrdenadas2)
             {
                 string name = descriptor.Name;
-                object value = descriptor.GetValue(obj);
-                System.Console.WriteLine("  {0}={1}", name, value);
+                object value = descriptor.GetValue(obj) ?? "";
+                ShowMessageInfo(name.PadRight(20) + " = " + value);
             }
         }
     }

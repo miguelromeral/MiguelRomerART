@@ -114,7 +114,7 @@ namespace MRA.Services.AzureStorage
             string carpeta = Path.GetDirectoryName(rutaImagen);
 
             // Construir la nueva ruta completa para el thumbnail
-            string nuevaRuta = Path.Combine(carpeta, nuevoNombreArchivo);
+            string nuevaRuta = Path.Combine(carpeta, nuevoNombreArchivo).Replace('\\', '/');
 
             return nuevaRuta;
         }
