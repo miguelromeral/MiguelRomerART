@@ -8,12 +8,18 @@ using Google.Apis.Auth.OAuth2;
 using Grpc.Auth;
 using Google.Apis.Storage.v1.Data;
 using Google.Cloud.Firestore.V1;
+using Azure.Storage.Blobs;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
-var azureStorageService = new AzureStorageService(builder.Configuration);
+
+var connectionString = builder.Configuration.GetValue<string>("AzureStorage:ConnectionString");
+var blobStorageContainer = builder.Configuration.GetValue<string>("AzureStorage:BlobStorageContainer");
+var blobURL = builder.Configuration.GetValue<string>("AzureStorage:BlobPath");
+
+var azureStorageService = new AzureStorageService(connectionString, blobStorageContainer, blobURL);
 
 builder.Services.AddSingleton(azureStorageService);
 

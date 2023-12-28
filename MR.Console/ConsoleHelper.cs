@@ -15,14 +15,14 @@ namespace MR.Console
         {
             if (!isNew)
             {
-                System.Console.WriteLine("  [Previous: " + previous + "][Leave empty to use it]");
+                System.Console.WriteLine($"  [Default: {previous}][Leave empty to use it]");
             }
         }
 
         internal void ShowMessage(bool isNew, string previous, string field)
         {
             System.Console.WriteLine("------------------------------------------------------");
-            System.Console.WriteLine(field + ":");
+            System.Console.WriteLine($"** {field}: ");
             ShowMessagePrevious(isNew, previous);
         }
          
@@ -33,7 +33,9 @@ namespace MR.Console
             {
                 input = previous;
             }
-            System.Console.WriteLine(" * Value set: "+input);
+            System.Console.WriteLine("");
+            System.Console.WriteLine($" --> Value set: [{input}]");
+            System.Console.WriteLine("");
             return input;
         }
 

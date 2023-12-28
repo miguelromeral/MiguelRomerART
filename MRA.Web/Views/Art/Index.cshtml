@@ -46,7 +46,7 @@
             <select class="mr-custom-select form-select form-select-sm" name="Type" aria-label="Default select example" data-bs-theme="dark" onchange="sendFormFilterGallery()">
                 <option value="0" selected>🖌 Type</option>
 
-                @foreach(var type in MRA.Services.Firebase.Models.Drawing.DRAWING_TYPES)
+                @foreach(var type in MRA.Services.Firebase.Models.Drawing.DRAWING_TYPES.OrderBy(x => x.Value))
                 {
                     <option value="@(type.Key)">@(type.Value)</option>
                     
@@ -57,10 +57,9 @@
             <select class="mr-custom-select form-select form-select-sm" name="ProductType" aria-label="Default select example" data-bs-theme="dark" onchange="sendFormFilterGallery()">
                 <option value="0" selected>💽 Product</option>
 
-                @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_PRODUCT_TYPES)
+                @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_PRODUCT_TYPES.OrderBy(x => x.Value))
                 {
                     <option value="@(type.Key)">@(type.Value)</option>
-
                 }
             </select>
 

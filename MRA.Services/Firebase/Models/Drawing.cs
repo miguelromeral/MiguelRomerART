@@ -57,7 +57,16 @@ namespace MRA.Services.Firebase.Models
             } 
         }
         public int ProductType { get; set; }
-        public string ProductTypeName { get { return DRAWING_PRODUCT_TYPES[ProductType]; } }
+        public string ProductTypeName { get
+            {
+                try
+                {
+                    return DRAWING_PRODUCT_TYPES[ProductType];
+                }catch(Exception ex)
+                {
+                    return "Others";
+                }
+            } }
         public string ProductName { get; set; }
         public string Comment { get; set; }
         public string CommentPros { get; set; }
