@@ -59,12 +59,13 @@ drawing.ModelName = helper.FillStringValue(isNew, drawing.ModelName, "Model's Na
 drawing.Title = helper.FillStringValue(isNew, drawing.Title, "Drawing's Title");
 drawing.Type = helper.FillIntValue(isNew, drawing.Type, "Type", Drawing.DRAWING_TYPES);
 drawing.Date = helper.FillStringValue(isNew, drawing.Date, "Date (YYYY/MM/DD)");
-drawing.Time = helper.FillStringValue(isNew, drawing.Time, "Time Spent");
+drawing.Time = helper.FillFreeIntValue(isNew, drawing.Time, "Time Spent");
 drawing.ProductType = helper.FillIntValue(isNew, drawing.ProductType, "Product Type", Drawing.DRAWING_PRODUCT_TYPES);
 drawing.ProductName = helper.FillStringValue(isNew, drawing.ProductName, "Product Name");
 drawing.Comment = helper.FillStringValue(isNew, drawing.Comment, "Comments (Type '"+Drawing.SEPARATOR_COMMENTS+"' to separate many comments.)");
 drawing.CommentPros = helper.FillStringValue(isNew, drawing.CommentPros, "Comments Pros (Type '"+Drawing.SEPARATOR_COMMENTS+ "' to separate many comments.)");
 drawing.CommentCons = helper.FillStringValue(isNew, drawing.CommentCons, "Comments Cons (Type '"+Drawing.SEPARATOR_COMMENTS+ "' to separate many comments.)");
+drawing.ReferenceUrl = helper.FillStringValue(isNew, drawing.ReferenceUrl, "Reference Image URL");
 
 
 Console.WriteLine("-----------------------------");

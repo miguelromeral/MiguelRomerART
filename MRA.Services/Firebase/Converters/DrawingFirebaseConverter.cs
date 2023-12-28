@@ -30,7 +30,7 @@ namespace MRA.Services.Firebase.Converters
                 Title = drawingDocument.title,
                 Name = drawingDocument.name,
                 Date = drawingDocument.date,
-                Time = drawingDocument.time,
+                Time = drawingDocument.time ?? 0,
                 ProductType = drawingDocument.product_type,
                 ProductName = drawingDocument.product_name,
                 Comment = drawingDocument.comment,
@@ -40,7 +40,8 @@ namespace MRA.Services.Firebase.Converters
                 Likes = drawingDocument.likes,
                 ModelName = drawingDocument.model_name,
                 UrlBase = _urlBase,
-                Favorite = drawingDocument.favorite
+                Favorite = drawingDocument.favorite,
+                ReferenceUrl = drawingDocument.reference_url
             };
         }
 
@@ -63,7 +64,8 @@ namespace MRA.Services.Firebase.Converters
                 views = drawing.Views,
                 likes = drawing.Likes,
                 model_name = drawing.ModelName,
-                favorite = drawing.Favorite
+                favorite = drawing.Favorite,
+                reference_url = drawing.ReferenceUrl
             };
         }
     }

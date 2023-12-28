@@ -173,6 +173,7 @@ img.mr-img-full {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    margin-bottom: 15px;
 }
 
 .mr-details-section-title {

@@ -4,7 +4,20 @@
 
 @{
     var drawing = Model.Drawing;
-    ViewData["Title"] = drawing?.Title ?? drawing?.Name ?? drawing?.Id ?? "Details";
+    if(!string.IsNullOrEmpty(drawing?.Title))
+    {
+        ViewData["Title"] = drawing?.Title;
+    }
+    else if (!string.IsNullOrEmpty(drawing?.Name))
+    {
+        ViewData["Title"] = drawing?.Name;
+    }
+    else if(!string.IsNullOrEmpty(drawing?.Id)){
+        ViewData["Title"] = drawing?.Id;
+    }else
+    {
+        ViewData["Title"] = "Details";
+    }
 }
 
 
@@ -40,8 +53,8 @@
                         <div class="mr-like-container">
                             <input type="hidden" name="id" value="@drawing.Id" />
 
-                            <button id="btnCheer" type="button" class="btn btn-danger mr-like-button like-semaphore" onclick="cheerDrawing()">
-                                <i id="iCheerIcon" class="bi bi-heart"></i> CHEER!
+                            <button id="btnCheer" type="button" class="btn btn-danger mr-like-button like-semaphore vibrate" onclick="cheerDrawing()">
+                                <i id="iCheerIcon" class="bi bi-heart"></i> SEND KUDOS!
                             </button>
                         </div>
                     </form>
@@ -50,7 +63,7 @@
                         <i class="bi bi-eye"></i>
                         <span>@(drawing.Views + 1)</span>
                     </div>
-                    <div class="mr-stats-item likes" title="Cheers">
+                    <div class="mr-stats-item likes" title="Kudos">
                         <i class="bi bi-heart"></i>
                         <div id="divContainerLikes">
                             <div id="spLikesCounter">@(drawing.Likes)</div>
@@ -62,7 +75,7 @@
         <div class="col-sm-12 col-md-6">
             <div class="mr-social-container">
 
-                <div class="mr-chat-container">
+                <div class="mr-chat-container" style="width: 100%;">
                     @{
                         var comments = drawing.ListComments;
                         for (int count = 0; count < comments.Count; count++)
@@ -121,15 +134,14 @@
             </div>
         </div>
     </div>
-   <div class="row mt-2">
-        <div class="mr-details-container ">
+   <div class="row m-2">
 
 
-    <div class="col-sm-12 col-md-12 mb-2">
+    <div class="col-sm-12 col-sm-12 col-md-12 mb-2 mt-2">
         <h4>Details</h4>
     </div>
 
-    <div class="col-sm-12 col-md-6 mr-details-section">
+    <div class="col-sm-12 col-md-6 col-lg-4 mr-details-section">
         <span class="mr-details-section-title">
             📅 Date
         </span>
@@ -137,15 +149,15 @@
                 @(String.IsNullOrEmpty(Model.Drawing.Date) ? "No Date Known" : Model.Drawing.FormattedDate)
         </span>
     </div>
-    <div class="col-sm-12 col-md-6 mr-details-section">
+    <div class="col-sm-12 col-md-6 col-lg-4 mr-details-section">
         <span class="mr-details-section-title">
             🕓 Time (estimated)
         </span>
         <span class="mr-details-section-content capitalize">
-                @(String.IsNullOrEmpty(Model.Drawing.Time) ? "No Time Known" : Model.Drawing.Time)
+                @Model.Drawing.TimeHuman
         </span>
     </div>
-    <div class="col-sm-12 col-md-6 mr-details-section">
+    <div class="col-sm-12 col-md-6 col-lg-4 mr-details-section">
         <span class="mr-details-section-title">
             🖌 Type
         </span>
@@ -156,7 +168,7 @@
 
         @if (drawing.ProductType > 0 && !String.IsNullOrEmpty(drawing.ProductName))
         {
-        <div class="col-sm-12 col-md-6 mr-details-section">
+        <div class="col-sm-12 col-md-6 col-lg-4 mr-details-section">
             <span class="mr-details-section-title">
                     @switch (drawing.ProductType)
                     {
@@ -171,7 +183,7 @@
                             break;
                     }
             </span>
-            <span class="col-sm-12 col-md-6 mr-details-section-content capitalize">
+            <span class="col-sm-12 col-md-6 col-lg-4 mr-details-section-content capitalize">
                     @(drawing.ProductName)
             </span>
         </div>
@@ -180,7 +192,7 @@
 
         @if (!String.IsNullOrEmpty(drawing.ModelName))
         {
-            <div class="col-sm-12 col-md-6 mr-details-section">
+            <div class="col-sm-12 col-md-6 col-lg-4 mr-details-section">
                 <span class="mr-details-section-title">
                     👤 Model
                 </span>
@@ -189,9 +201,21 @@
                 </span>
             </div>
         }
+
+
+            @if (!String.IsNullOrEmpty(drawing.ReferenceUrl))
+            {
+                <div class="col-sm-12 col-md-6 col-lg-4 mr-details-section">
+                    <span class="mr-details-section-title">
+                        🖼 Reference
+                    </span>
+                    <span class="mr-details-section-content capitalize">
+                        <a href="@(drawing.ReferenceUrl)" target="_blank">Open in new tab</a>
+                    </span>
+                </div>
+            }
         </div>
 
-</div>
 }
 else
 {

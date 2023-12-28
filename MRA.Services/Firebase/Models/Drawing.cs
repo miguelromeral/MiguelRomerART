@@ -36,7 +36,24 @@ namespace MRA.Services.Firebase.Models
         public string ModelName { get; set; }
         public string Title { get; set; }
         public string Date { get; set; }
-        public string Time { get; set; }
+        public int Time { get; set; }
+        public string TimeHuman { get
+            {
+                if (Time > 0)
+                {
+                    int horas = Time / 60;
+                    int minutosRestantes = Time % 60;
+
+                    string resultado = "~ "+(horas > 0 ? horas+"h " : "")+(minutosRestantes > 0 ? minutosRestantes+"min" : "");
+
+                    return resultado;
+                }
+                else
+                {
+                    return "No Time Known";
+                }
+            } 
+        }
         public int ProductType { get; set; }
         public string ProductTypeName { get { return DRAWING_PRODUCT_TYPES[ProductType]; } }
         public string ProductName { get; set; }
@@ -45,6 +62,7 @@ namespace MRA.Services.Firebase.Models
         public long Views { get; set; }
         public long Likes { get; set; }
         public bool Favorite { get; set; }
+        public string ReferenceUrl { get; set; }
 
         public List<string> ListComments
         {

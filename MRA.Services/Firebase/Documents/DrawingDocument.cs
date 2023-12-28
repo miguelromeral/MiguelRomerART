@@ -32,7 +32,7 @@ namespace MRA.Services.Firebase.Documents
         public string date { get; set; }
 
         [FirestoreProperty]
-        public string time { get; set; }
+        public int? time { get; set; }
 
         [FirestoreProperty]
         public int product_type { get; set; }
@@ -57,5 +57,8 @@ namespace MRA.Services.Firebase.Documents
 
         [FirestoreProperty]
         public bool favorite { get; set; }
+
+        [FirestoreProperty]
+        public string reference_url { get; set; }
     }
 }

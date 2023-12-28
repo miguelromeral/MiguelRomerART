@@ -64,6 +64,25 @@ namespace MR.Console
         }
 
 
+        internal int FillFreeIntValue(bool isNew, int previous, string field)
+        {
+            ShowMessage(isNew, previous.ToString(), field);
+
+            var input = System.Console.ReadLine();
+            if (!isNew && input.Equals(ConsoleHelper.SAME_VALUE))
+            {
+                System.Console.WriteLine(" * Value set: " + previous);
+                return previous;
+            }
+            else
+            {
+                int.TryParse(input, out int numeroEntero);
+                System.Console.WriteLine(" * Value set: " + numeroEntero);
+                return numeroEntero;
+            }
+        }
+
+
         internal bool FillBoolValue(bool isNew, bool previous, string field)
         {
             ShowMessage(isNew, previous.ToString(), field);
