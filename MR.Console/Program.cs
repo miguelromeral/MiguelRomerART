@@ -54,6 +54,7 @@ else
 
 drawing.Favorite = helper.FillBoolValue(isNew, drawing.Favorite, "Favorite");
 drawing.Path = helper.FillStringValue(isNew, drawing.Path, "Path");
+drawing.PathThumbnail = helper.FillStringValue(isNew, drawing.PathThumbnail, "Path Thumbnail");
 drawing.Name = helper.FillStringValue(isNew, drawing.Name, "Character's Name");
 drawing.ModelName = helper.FillStringValue(isNew, drawing.ModelName, "Model's Name");
 drawing.Title = helper.FillStringValue(isNew, drawing.Title, "Drawing's Title");

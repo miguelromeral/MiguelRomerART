@@ -29,6 +29,7 @@ namespace MRA.Services.Firebase.Models
 
         public string Id { get; set; }
         public string Path { get; set; }
+        public string PathThumbnail { get; set; }
         public string UrlBase { get; set; }
         public int Type { get; set; }
         public string TypeName { get { return DRAWING_TYPES[Type]; } }
@@ -99,6 +100,7 @@ namespace MRA.Services.Firebase.Models
         }
 
         public string Url { get { return UrlBase + Path; } }
+        public string UrlThumbnail { get { return UrlBase + PathThumbnail; } }
         public bool IsTraditional { get { return Type == 1; } }
 
         public string FormattedDate

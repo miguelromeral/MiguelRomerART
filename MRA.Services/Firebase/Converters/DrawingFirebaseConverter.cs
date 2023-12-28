@@ -41,7 +41,8 @@ namespace MRA.Services.Firebase.Converters
                 ModelName = drawingDocument.model_name,
                 UrlBase = _urlBase,
                 Favorite = drawingDocument.favorite,
-                ReferenceUrl = drawingDocument.reference_url
+                ReferenceUrl = drawingDocument.reference_url,
+                PathThumbnail = drawingDocument.path_thumbnail
             };
         }
 
@@ -65,7 +66,8 @@ namespace MRA.Services.Firebase.Converters
                 likes = drawing.Likes,
                 model_name = drawing.ModelName,
                 favorite = drawing.Favorite,
-                reference_url = drawing.ReferenceUrl
+                reference_url = drawing.ReferenceUrl,
+                path_thumbnail = drawing.PathThumbnail
             };
         }
     }

@@ -6,7 +6,7 @@
     <div class="contenido">
 
         <a class="mr-img-thumbnail-container slide-right" href="@Url.Action("Details", "Art", new { id = Model.Drawing.Id })">
-            <img src="@Model.Drawing.Url">
+            <img src="@(String.IsNullOrEmpty(Model.Drawing.PathThumbnail) ? Model.Drawing.Url: Model.Drawing.UrlThumbnail)">
 
 
 
