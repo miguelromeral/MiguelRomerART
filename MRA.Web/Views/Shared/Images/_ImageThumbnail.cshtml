@@ -2,7 +2,7 @@
 @model ImageThumbnailModel
 
 
-<div data-drawingId="@Model.Drawing.Id" class="mr-img-thumbnail  cuadrado @(Model.Drawing.Favorite ? "favorite" : "")">
+<div data-drawingId="@Model.Drawing.Id" class="mr-img-thumbnail cuadrado @(Model.Drawing.Favorite ? "favorite" : "")">
     <div class="contenido">
 
         <a class="mr-img-thumbnail-container slide-right" href="@Url.Action("Details", "Art", new { id = Model.Drawing.Id })">

@@ -174,21 +174,31 @@ table {
 /* Add your custom styles below this line */
 
 nav {
-    background-color: var(--mr-chat-color);
+    background-color: var(--mr-nav-color);
+    border-bottom: 1px solid var(--mr-chat-color);
 }
 
 nav a, .nav-link {
-    color: black;
+    color: var(--mr-chat-color) !important;
     transition: 0.5s ease-in-out;
 }
 
-    nav a:hover, .nav-link:hover {
-        text-shadow: 0px 0px 12px black;
-        color: white;
-    }
+nav a:hover, .nav-link:hover {
+    text-shadow: 0px 0px 12px black;
+    color: white;
+}
 
-    footer {
-        height: 50px;
-        border-top: 1px solid var(--mr-chat-color);
-        padding-top: 10px;
-    }
+footer {
+    height: 50px;
+    border-top: 1px solid var(--mr-chat-color);
+    padding-top: 10px;
+}
+
+.navbar-brand {
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+/*
+.navbar-light .navbar-nav .nav-link {
+    color: var(--mr-background-color);
+}*/

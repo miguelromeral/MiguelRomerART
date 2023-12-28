@@ -88,3 +88,16 @@ span.mr-loader-subtitle{
 .hide-on-load{
     opacity: 0 !important;
 }
+
+.nav-link{
+    color: var(--mr-background-color) !important;
+}
+
+img.mr-chat-image-miguel.brand {
+    border-color: var(--mr-chat-color);
+    transition: 0.3s;
+}
+
+a:hover > img.mr-chat-image-miguel.brand {
+    border-color: var(--mr-color-gold);
+}
