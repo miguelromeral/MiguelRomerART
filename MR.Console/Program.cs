@@ -18,8 +18,6 @@ var firebaseProjecTId = "romerart-6a6c3";
 var collection = "drawings";
 var urlbase = "https://romerartstorageaccount.blob.core.windows.net/romerartblobcontainer/";
 
-var input = "";
-
 var helper = new ConsoleHelper();
 
 // Inicializa Firestore
@@ -27,29 +25,26 @@ FirestoreDb db = FirestoreDb.Create(firebaseProjecTId);
 
 var firebaseService = new FirestoreService(collection, urlbase, db);
 
-Console.WriteLine("Type the details of you new Drawing to Firestore");
 
-var drawing = new MRA.Services.Firebase.Models.Drawing()
-{
-    Views = 0,
-    Likes = 0,
-    UrlBase = urlbase
-};
+Console.WriteLine("ID of the Drawing you're editing. If it doesn't exist. A new one will be created.");
+var input = Console.ReadLine();
 
-Console.WriteLine("ID of the Drawing you're editing (empty if new):");
-drawing.Id = Console.ReadLine();
+bool isNew = false;
 
-var isNew = String.IsNullOrEmpty(drawing.Id);
 
-if (isNew)
-{
-    Console.WriteLine("ID of your new drawing:");
-    drawing.Id = Console.ReadLine();
-}
-else
-{
-    Console.WriteLine("Looking for drawing with  ID '"+drawing.Id+"'");
-    drawing = await firebaseService.FindDrawingById(drawing.Id);
+Console.WriteLine("Looking for drawing with  ID '" + input + "'");
+Drawing drawing = await firebaseService.FindDrawingById(input);
+
+if(drawing == null) { 
+    Console.WriteLine("No drawing was found with ID '" + input + "'. Proceeding to register a new drawing.");
+    isNew = true;
+    drawing = new MRA.Services.Firebase.Models.Drawing()
+    {
+        Id = input,
+        Views = 0,
+        Likes = 0,
+        UrlBase = urlbase
+    };
 }
 
 drawing.Favorite = helper.FillBoolValue(isNew, drawing.Favorite, "Favorite");

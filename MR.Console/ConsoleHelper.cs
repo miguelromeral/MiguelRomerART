@@ -10,26 +10,31 @@ namespace MR.Console
 {
     internal class ConsoleHelper
     {
-        public static string SAME_VALUE = "s";
+
+        internal void ShowMessagePrevious(bool isNew, string previous)
+        {
+            if (!isNew)
+            {
+                System.Console.WriteLine("  [Previous: " + previous + "][Leave empty to use it]");
+            }
+        }
 
         internal void ShowMessage(bool isNew, string previous, string field)
         {
             System.Console.WriteLine("------------------------------------------------------");
-            System.Console.WriteLine(field+":");
-
-            if (!isNew)
-            {
-                System.Console.WriteLine("  [Previous: "+previous+"]");
-                System.Console.WriteLine("  [Type '" + SAME_VALUE + "' to keep previous]");
-            }
+            System.Console.WriteLine(field + ":");
+            ShowMessagePrevious(isNew, previous);
         }
          
         internal string ReadValue(bool isNew, string previous)
         {
             var input = System.Console.ReadLine();
-            var value = (isNew ? input : (SAME_VALUE.Equals(input) ? previous : input));
-            System.Console.WriteLine(" * Value set: "+value);
-            return value;
+            if (!isNew && String.IsNullOrEmpty(input))
+            {
+                input = previous;
+            }
+            System.Console.WriteLine(" * Value set: "+input);
+            return input;
         }
 
         internal int FillIntValue(bool isNew, int previous, string field, Dictionary<int, string> dictionary)
@@ -45,12 +50,11 @@ namespace MR.Console
             if (!isNew)
             {
                 System.Console.WriteLine("  ");
-                System.Console.WriteLine("  [Previous: " + dictionary[previous] + "]");
-                System.Console.WriteLine("  [Type '" + SAME_VALUE + "' to keep previous]");
+                ShowMessagePrevious(isNew, dictionary[previous].ToString());
             }
 
             var input = System.Console.ReadLine();
-            if (!isNew && input.Equals(ConsoleHelper.SAME_VALUE))
+            if (!isNew && String.IsNullOrEmpty(input))
             {
                 System.Console.WriteLine(" * Value set: " + dictionary[previous]);
                 return previous;
@@ -63,13 +67,12 @@ namespace MR.Console
             }
         }
 
-
         internal int FillFreeIntValue(bool isNew, int previous, string field)
         {
             ShowMessage(isNew, previous.ToString(), field);
 
             var input = System.Console.ReadLine();
-            if (!isNew && input.Equals(ConsoleHelper.SAME_VALUE))
+            if (!isNew && String.IsNullOrEmpty(input))
             {
                 System.Console.WriteLine(" * Value set: " + previous);
                 return previous;
@@ -90,14 +93,18 @@ namespace MR.Console
 
             var input = System.Console.ReadLine();
 
-            if (!isNew && input.Equals(ConsoleHelper.SAME_VALUE))
+            if (!isNew && String.IsNullOrEmpty(input))
             {
                 System.Console.WriteLine(" * Value set: " + previous.ToString());
                 return previous;
             }
             else
             {
-                var value = input.ToLower().Equals("y");
+                bool value = false;
+                if (input.ToLower().Equals("y"))
+                {
+                    value = true;
+                }
                 System.Console.WriteLine(" * Value set: " + value.ToString());
                 return value;
             }

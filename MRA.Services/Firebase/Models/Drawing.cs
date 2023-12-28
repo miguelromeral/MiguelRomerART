@@ -17,7 +17,7 @@ namespace MRA.Services.Firebase.Models
             {
                 {1, "Traditional"},
                 {2, "Digital"},
-                {3, "Quick Sketch"},
+                {3, "Sketch"},
                 {4, "Markers"},
             };
 
@@ -25,6 +25,7 @@ namespace MRA.Services.Firebase.Models
             {
                 {1, "Videogame"},
                 {2, "Actor/Actress"},
+                {3, "Singer"},
             };
 
         public string Id { get; set; }
