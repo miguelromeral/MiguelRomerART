@@ -55,7 +55,7 @@ namespace MR.ConsoleMR
         internal void ShowMessage(bool isNew, string previous, string field)
         {
             Console.ForegroundColor = ConsoleColor.White;
-            System.Console.WriteLine("------------------------------------------------------");
+            ShowMessageInfo("------------------------------------------------------");
             System.Console.WriteLine("INPUT:".PadRight(PAD_RIGHT) + field);
             ShowMessagePrevious(isNew, previous);
         }
@@ -81,12 +81,12 @@ namespace MR.ConsoleMR
 
         internal int FillIntValue(bool isNew, int previous, string field, Dictionary<int, string> dictionary)
         {
-            System.Console.WriteLine("------------------------------------------------------");
-            System.Console.WriteLine(field + ":");
+            ShowMessageInfo("------------------------------------------------------");
+            ShowMessageInfo(field + ":");
 
             foreach (var type in dictionary)
             {
-                System.Console.WriteLine($" - {type.Key}: {type.Value}");
+                ShowMessageInfo(type.Key.ToString().PadRight(5)+"= "+type.Value);
             }
 
             if (!isNew)

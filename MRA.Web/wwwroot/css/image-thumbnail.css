@@ -104,6 +104,8 @@ img.mr-image-thumbnail {
     border: 2px solid var(--mr-chat-color);
     border-radius: 10px;
     padding: 5px;
+    width: -webkit-fill-available;
+    min-height: 250px;
 }
 
 .mr-img-full-container.favorite {
@@ -458,3 +460,39 @@ img.mr-chat-image-miguel {
 .mr-choice-filter input {
     display: none;
 }
+
+
+.mr-error-load-placeholder {
+    transition: 0.2s ease-out;
+    display: none;
+    position: absolute;
+    width: 100%;
+    background-color: black;
+    height: 100%;
+    border-radius: 8px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    color: pink;
+}
+
+.mr-img-full-container .mr-error-load-placeholder {
+    z-index: 1;
+}
+
+    .mr-error-load-placeholder .emoji {
+        font-size: x-large;
+    }
+.mr-error-load-placeholder .subtitle {
+    font-size: small;
+}
+
+    .mr-error-load-placeholder.show {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        align-content: center;
+        flex-direction: column;
+        flex-wrap: wrap;
+    }

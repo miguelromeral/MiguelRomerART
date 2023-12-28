@@ -77,7 +77,7 @@ try
     if (!await azureStorageService.ExistsBlob(drawing.Path))
     {
         helper.ShowMessageWarning($"The path '{drawing.Path}' does not exist in Azure. Do you want to create it?");
-        var upload = helper.FillBoolValue(isNew, (isNew ? true : false), "Upload Blob to Azure");
+        var upload = helper.FillBoolValue(isNew, true, "Upload Blob to Azure");
 
         if (upload)
         {
@@ -93,10 +93,10 @@ try
 
             helper.ShowMessageInfo("We're ready to create this blob. Please, review the data:");
             helper.ShowMessageInfo("*****");
-            helper.ShowMessageInfo($"- Local File Path: {rutaEntrada}");
-            helper.ShowMessageInfo($"- Blob Path: {blobLocation}");
-            helper.ShowMessageInfo($"- Blob Thumbnail Path: {blobLocationThumbnail}");
-            helper.ShowMessageInfo($"- Blob Thumbnail Width: {widthThumbnail}");
+            helper.ShowMessageInfo("Local File Path".PadRight(25)+rutaEntrada);
+            helper.ShowMessageInfo("Blob Path".PadRight(25)+ blobLocation);
+            helper.ShowMessageInfo("Blob Thumbnail Path".PadRight(25)+ blobLocationThumbnail);
+            helper.ShowMessageInfo("Blob Thumbnail Width".PadRight(25)+ widthThumbnail);
             helper.ShowMessageInfo("*****");
 
             var confirm = helper.FillBoolValue(false, false, "Proceed to upload to AZURE?");

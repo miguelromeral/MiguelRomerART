@@ -2,3 +2,13 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
+
+
+
+
+function errorLoadingImage(drawingId) {
+    console.log("Drawing ID not loaded: " + drawingId);
+    var selector = ".mr-error-load-placeholder[data-error-drawing-id='" + drawingId + "']";
+    console.log(selector);
+    $(selector).addClass("show");
+}

@@ -40,7 +40,13 @@
 
             <div class="mr-first-column-image">
                 <div class="mr-img-full-container heart-rain @(drawing.Favorite ? "favorite" : "")" ondblclick="cheerDrawing()">
-                    <img id="imgFull" src="@Model.Drawing.Url" class="mr-img-full rounded">
+                    <img id="imgFull" src="@Model.Drawing.Url" class="mr-img-full rounded" onerror="errorLoadingImage('@Model.Drawing.Id')">
+
+                    <div class="mr-error-load-placeholder" data-error-drawing-id="@Model.Drawing.Id">
+                        <span class="emoji">🙃</span>
+                        <span class="subtitle">Image Not Found</span>
+                    </div>
+
                     <i id="iFavoriteIcon" class="bi bi-star-fill" title="One of my favorites drawings."></i>
                 </div>
 
