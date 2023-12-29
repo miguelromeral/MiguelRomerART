@@ -1,0 +1,257 @@
+﻿/* Title of the Drawing */
+.mr-image-page-title {
+    color: var(--mr-chat-color) !important;
+    font-style: italic;
+}
+
+/* First column, including the image and the likes */
+.mr-first-column-image {
+    
+}
+
+/* Title of the image */
+.mr-image-detail-title {
+    margin-bottom: 0px;
+}
+
+/* Subtitle of the image*/
+.mr-image-detail-subtitle {
+    font-size: var(--mr-font-size-small);
+    color: grey;
+}
+
+/* Full Image container */
+.mr-img-full-container {
+    position: relative;
+    border: var(--mr-border-size) solid var(--mr-chat-color);
+    border-radius: var(--mr-border-radius);
+    padding: var(--mr-padding-btw-border-image);
+    width: -webkit-fill-available;
+    min-height: 100px;
+}
+
+/* If the image is a favorite, change border color */
+.mr-img-full-container.favorite {
+    border-color: var(--mr-color-gold);
+}
+
+/* Favorite Icon */
+#iFavoriteIcon {
+    display: none;
+}
+
+/* Favorite Icon */
+.mr-img-full-container.favorite #iFavoriteIcon {
+    position: absolute;
+    display: block;
+    top: 10px;
+    right: 10px;
+    color: var(--mr-color-gold);
+    text-shadow: 0px 0px 10px var(--mr-color-gold);
+}
+
+/* Watermark */
+.mr-img-full-container::after {
+    content: "MiguelRomeral";
+    position: absolute;
+    top: 10%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.5);
+    text-shadow: 0px 0px 5px #ffffff85;
+}
+
+/* Full resolution image */
+img.mr-img-full {
+    width: 100%;
+    height: auto;
+    user-select: none;
+    pointer-events: none;
+    border-radius: var(--mr-border-radius-image);
+}
+
+/* Placeholder shown before the own image if error */
+.mr-img-full-container .mr-error-load-placeholder {
+    z-index: 1;
+}
+
+
+/* Like button */
+#btnCheer {
+    background-color: var(--mr-color-red);
+    border-radius: 50px;
+    padding: 5px 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: var(--mr-transition-time) ease-in;
+}
+
+/* Like Button disabled */
+#btnCheer:disabled {
+    animation: none;
+    background-color: black;
+}
+
+/* Container of the likes and views */
+.mr-stats-container {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+    align-items: center;
+    margin-top: var(--mr-margin-vertical);
+}
+
+/* Item of the likes or views */
+.mr-stats-item {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: var(--mr-gap-icon-text);
+}
+
+/* Item of the likes */
+.mr-stats-item.likes {
+    color: var(--mr-color-red-light);
+}
+
+/* Container of the like count, for animation purposes*/
+#divContainerLikes {
+    display: inline-flex;
+}
+
+// https://stackoverflow.com/questions/19400183/how-to-style-chat-bubble-in-iphone-classic-style-using-css-only
+
+/* Column that displays the messages */
+.mr-social-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+/* Column that displays the messages */
+div.mr-chat-container {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+}
+
+/* Every row of the chat */
+.mr-chat-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: flex-end;
+    align-items: flex-end;
+    justify-content: space-between;
+}
+
+/* Container for the left part of the message (the text, not including the image) */
+.mr-chat-message-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-right: 10px;
+    width: -webkit-fill-available;
+    padding-right: 10px;
+}
+
+/* Text of the message */
+.mr-chat-message {
+    background: var(--mr-chat-color);
+    font-weight: normal;
+    color: black;
+    border-radius: 20px;
+    padding: 8px 15px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    display: inline-block;
+    position: relative;
+    width: 100%;
+}
+
+/* Space from the last message to line up the image at its right side */
+.mr-chat-message.last {
+    margin-bottom: 20px !important;
+}
+
+
+/* Apex of the last message (colored) */
+.mr-chat-message.last:before {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    bottom: 0;
+    right: -8px;
+    height: 20px;
+    width: 20px;
+    background: var(--mr-chat-color);
+    border-bottom-left-radius: 15px;
+}
+
+/* Apex of the last message (background) */
+.mr-chat-message.last:after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    bottom: 0;
+    right: -10px;
+    width: 10px;
+    height: 20px;
+    background: var(--mr-background-color);
+    border-bottom-left-radius: 10px;
+}
+
+/* Row of pros */
+.mr-chat-row.likes div {
+    color: var(--mr-chat-color-likes);
+}
+
+
+/* Message of pros */
+.mr-chat-row.likes .mr-chat-message {
+    background-color: transparent;
+    border: 2px solid var(--mr-chat-color-likes);
+}
+
+/* Row of cons */
+.mr-chat-row.dislikes div {
+    color: var(--mr-chat-color-dislikes);
+}
+
+/* Message of cons */
+.mr-chat-row.dislikes .mr-chat-message {
+    background-color: transparent;
+    border: 2px solid var(--mr-chat-color-dislikes);
+}
+
+
+/* Each container section of the detail */
+.mr-details-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: var(--mr-margin-vertical);
+}
+
+.mr-details-section-title {
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: smaller;
+}
+
+.mr-details-section-content {
+    font-weight: lighter;
+}
+
+.mr-details-section-content.capitalize {
+    text-transform: capitalize;
+}

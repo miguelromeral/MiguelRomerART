@@ -20,6 +20,12 @@
     }
 }
 
+@section Styles {
+    <link href="~/css/images.css" rel="stylesheet" />
+    <link href="~/css/image-details.css" rel="stylesheet" />
+}
+
+
 
 @if (drawing != null)
 {
@@ -40,7 +46,7 @@
 
             <div class="mr-first-column-image">
                 <div class="mr-img-full-container heart-rain @(drawing.Favorite ? "favorite" : "")" ondblclick="cheerDrawing()">
-                    <img id="imgFull" src="@Model.Drawing.Url" class="mr-img-full rounded" onerror="errorLoadingImage('@Model.Drawing.Id')">
+                    <img id="imgFull" src="@Model.Drawing.Url" class="mr-img-full" onerror="errorLoadingImage('@Model.Drawing.Id')">
 
                     <div class="mr-error-load-placeholder" data-error-drawing-id="@Model.Drawing.Id">
                         <span class="emoji">🙃</span>
@@ -60,7 +66,7 @@
                             <input type="hidden" name="id" value="@drawing.Id" />
 
                             <button id="btnCheer" type="button" class="btn btn-danger mr-like-button like-semaphore vibrate" onclick="cheerDrawing()">
-                                <i id="iCheerIcon" class="bi bi-heart"></i> KUDOS!
+                                <i id="iCheerIcon" class="bi bi-heart"></i> KUDOS !
                             </button>
                         </div>
                     </form>

@@ -9,14 +9,15 @@
     <!-- Bootstrap Font Icon CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
 
-    <link href='https://fonts.googleapis.com/css?family=Kanit' rel='stylesheet'>
+    @* <link href='https://fonts.googleapis.com/css?family=Kanit' rel='stylesheet'> *@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link href="~/css/normalize.css" rel="stylesheet" />
-    <link href="~/css/variables.css rel="stylesheet" />
-    <link href="~/css/image-thumbnail.css" rel="stylesheet" />
-    <link href="~/css/animations.css" rel="stylesheet" />
+    <link href="~/css/normalize.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/variables.css rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/animations.css" rel="stylesheet" asp-append-version="true" />
     <link rel="stylesheet" href="~/MRA.Web.styles.css" asp-append-version="true" />
+    
+    @await RenderSectionAsync("Styles", required: false)
 </head>
 <body class="dark">
     <header>
@@ -47,7 +48,19 @@
 
     <footer>
         <div class="container">
-            &copy; 2023 - MiguelRomeral - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <p>
+                &copy; @DateTime.Now.Year - Developed by <b>
+                    <a style="color: var(--mr-chat-color);"
+                       asp-area="" asp-controller="Home" asp-action="Privacy">MiguelRomeral</a>
+                </b>
+            </p>
+        </div>
+        <div style="display: flex; width: 100%; flex-direction: column; align-items: center;">
+            <p style="display: flex; flex-direction: column; align-items: center; ">
+                Powered by
+                <img title="Azure" src="~/assets/images/azure-white.png" style="width: 40px; height: 40px;" />
+                <img title="Microsoft" src="~/assets/images/micro-white.png" style="width:60px;" />
+            </p>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

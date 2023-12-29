@@ -20,37 +20,16 @@ html {
 
 body {
     margin: 0;
-    /*font-family: 'Josefin Sans', sans-serif;*/
-    font-family: 'Kanit', sans-serif;
+    font-family: 'Josefin Sans', sans-serif;
+    /*font-family: 'Kanit', sans-serif;*/
     background: var(--mr-background-color);
     color: white;
 }
-
-/**
- * Render the 'main' element consistently in IE.
- */
 
 main {
     display: block;
 }
 
-/**
- * Correct the font size and margin on 'h1' elements within 'section' and
- * 'article' contexts in Chrome, Firefox, and Safari.
- */
-
-h1 {
-    font-size: 2em;
-    margin: 0.67em 0;
-}
-
-/* Grouping content
-   ========================================================================== */
-
-/**
- * 1. Add the correct box sizing in Firefox.
- * 2. Show the overflow in Edge and IE.
- */
 
 hr {
     box-sizing: content-box; /* 1 */
@@ -177,7 +156,7 @@ nav {
 
 nav a, .nav-link {
     color: var(--mr-chat-color) !important;
-    transition: 0.5s ease-in-out;
+    transition: var(--mr-transition-time) ease-in-out;
 }
 
 nav a:hover, .nav-link:hover {
@@ -195,7 +174,3 @@ footer {
     padding-top: 0px;
     padding-bottom: 0px;
 }
-/*
-.navbar-light .navbar-nav .nav-link {
-    color: var(--mr-background-color);
-}*/

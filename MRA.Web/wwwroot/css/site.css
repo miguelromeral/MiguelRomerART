@@ -1,13 +1,7 @@
 @import 'variables.css';
 
 html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+  font-size: var(--mr-font-size-default);
 }
 
 html {
@@ -23,7 +17,7 @@ body {
 .mr-filter-container {
     display: inline-flex;
     width: fit-content;
-    gap: 5px;
+    gap: var(--mr-gap-icon-text);
     align-items: center;
 }
 
@@ -50,7 +44,7 @@ body {
 
 .mr-loader-container {
     position: relative;
-    transition: 0.2s ease-in-out;
+    transition: var(--mr-transition-time) ease-in-out;
 }
 
 .mr-loader {
@@ -59,8 +53,6 @@ body {
     display: flex;
     background: #000000d4;
     width: 100%;
-    /* height: 100%; */
-    /* height: 100px; */
     align-content: center;
     flex-direction: column;
     align-items: center;
@@ -95,9 +87,20 @@ span.mr-loader-subtitle{
 
 img.mr-chat-image-miguel.brand {
     border-color: var(--mr-chat-color);
-    transition: 0.3s;
+    transition: var(--mr-transition-time);
 }
 
 a:hover > img.mr-chat-image-miguel.brand {
     border-color: var(--mr-color-gold);
+}
+
+/* Profile Picture */
+img.mr-chat-image-miguel {
+    width: var(--mr-profile-pic-size);
+    height: var(--mr-profile-pic-size);
+    border-radius: 40px;
+    border: var(--mr-border-size) solid var(--mr-chat-color);
+    padding: 2px;
+    user-select: none;
+    pointer-events: none;
 }

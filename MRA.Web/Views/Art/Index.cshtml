@@ -5,6 +5,44 @@
 @{
     ViewData["Title"] = "Art Gallery";
 }
+
+@section Styles {
+    <link href="~/css/images.css" rel="stylesheet" />
+    <link href="~/css/image-thumbnail.css" rel="stylesheet" />
+    <style>
+
+        #divNoResults {
+            display: flex;
+            min-height: 100px;
+            align-items: center;
+            flex-direction: column;
+            justify-content: flex-start;
+            gap: 10px;
+            margin-top: 50px;
+        }
+
+        .choice-label {
+            color: var(--mr-color-gold);
+            background-color: transparent;
+            border: 1px solid var(--mr-color-gold);
+            padding: 0px 10px;
+            border-radius: 20px;
+            transition: var(--mr-transition-time) ease-out;
+            cursor: pointer;
+        }
+
+        .mr-choice-filter:has(input:checked) .choice-label {
+            color: black;
+            background-color: var(--mr-color-gold);
+        }
+
+        .mr-choice-filter input {
+            display: none;
+        }
+
+    </style>
+}
+
 <div>
     <h1>🎨 Art Gallery</h1>
 

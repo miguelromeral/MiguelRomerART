@@ -1,0 +1,36 @@
+﻿
+/* Placeholder when the image couldn't be loaded */
+.mr-error-load-placeholder {
+    transition: 0.2s ease-out;
+    display: none;
+    position: absolute;
+    width: 100%;
+    background-color: black;
+    height: 100%;
+    border-radius: 8px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    color: pink;
+}
+
+/* Emoji of the error placeholder */
+.mr-error-load-placeholder .emoji {
+    font-size: x-large;
+}
+
+/* Text of the error placeholder */
+.mr-error-load-placeholder .subtitle {
+    font-size: small;
+}
+
+/* Show the placeholder when error */
+.mr-error-load-placeholder.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+}

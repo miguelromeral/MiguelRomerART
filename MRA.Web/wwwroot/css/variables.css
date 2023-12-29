@@ -11,4 +11,15 @@
     --mr-color-red-light: #e16767;
     --mr-color-gold: #ffb023;
     --mr-nav-color: rgb(29 11 40);
+    --mr-profile-pic-size: 40px;
+    --mr-margin-vertical: 10px;
+    --mr-border-size: 2px;
+    --mr-border-radius: 12px;
+    --mr-padding-btw-border-image: 6px;
+    --mr-border-radius-image: calc(var(--mr-border-radius) - var(--mr-padding-btw-border-image));
+    --mr-transition-time: 0.4s;
+    --mr-gap-icon-text: 5px;
+    --mr-font-size-large: large;
+    --mr-font-size-default: medium;
+    --mr-font-size-small: small;
 }
