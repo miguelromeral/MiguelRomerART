@@ -32,4 +32,8 @@
     <None Include="wwwroot\assets\Bean Eater-0.3s-200px.svg" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\assets\fonts\" />
+  </ItemGroup>
+
 </Project>

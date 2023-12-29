@@ -97,6 +97,7 @@ img.mr-image-thumbnail {
 
 .mr-image-page-title {
     color: var(--mr-chat-color) !important;
+    font-style: italic;
 }
 
 .mr-img-full-container {
