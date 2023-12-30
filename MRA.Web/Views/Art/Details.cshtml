@@ -42,7 +42,7 @@
 
     </div>
     <div class="row">
-        <div class="col-sm-12 col-md-6 mb-2">
+        <div class="col-sm-12 col-md-6 col-lg-4 mb-2">
 
             <div class="mr-first-column-image">
                 <div class="mr-img-full-container heart-rain @(drawing.Favorite ? "favorite" : "")" ondblclick="cheerDrawing()">
@@ -84,7 +84,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-12 col-md-6">
+        <div class="col-sm-12 col-md-6 col-lg-4">
             <div class="mr-social-container">
 
                 <div class="mr-chat-container" style="width: 100%;">
@@ -111,9 +111,8 @@
                 </div>
             </div>
         </div>
-    </div>
-<div class="row m-2">
-        <div class="col-sm-6 col-md-6">
+
+        <div class="col-sm-12 col-md-12 col-lg-4 mr-row-pros-cons">
             <div class="mr-social-container">
                 <div class="mr-chat-container" style="width: 100%;">
                     @if (!String.IsNullOrEmpty(drawing.CommentPros))
@@ -135,8 +134,7 @@
                     }
                 </div>
             </div>
-        </div>
-        <div class="col-sm-6 col-md-6">
+        
             <div class="mr-social-container">
 
                 <div class="mr-chat-container" style="width: 100%;">

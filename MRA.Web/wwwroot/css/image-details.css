@@ -232,3 +232,26 @@ div.mr-chat-container {
     background-color: transparent;
     border: 2px solid var(--mr-chat-color-dislikes);
 }
+
+@media (min-width: 992px) {
+    .mr-row-pros-cons {
+        flex-direction: column !important;
+        align-content: flex-start !important;
+    }
+        .mr-row-pros-cons > div {
+            flex: 0 !important;
+        }
+}
+
+    @media (min-width: 768px) {
+        .mr-row-pros-cons {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            align-items: flex-start;
+        }
+
+        .mr-row-pros-cons > div {
+            flex: 1;
+        }
+}

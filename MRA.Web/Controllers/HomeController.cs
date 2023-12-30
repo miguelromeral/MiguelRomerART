@@ -29,7 +29,8 @@ namespace MRA.Web.Controllers
 
         public IActionResult About()
         {
-            return View();
+            return RedirectToAction("Index", "Art");
+            //return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
