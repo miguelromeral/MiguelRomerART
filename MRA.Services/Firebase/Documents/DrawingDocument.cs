@@ -63,5 +63,8 @@ namespace MRA.Services.Firebase.Documents
 
         [FirestoreProperty]
         public string reference_url { get; set; }
+        
+        [FirestoreProperty]
+        public int software { get; set; }
     }
 }

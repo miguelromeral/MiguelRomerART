@@ -19,6 +19,7 @@ body {
     width: fit-content;
     gap: var(--mr-gap-icon-text);
     align-items: center;
+    min-width: 400px;
 }
 
 .mr-choice-filter {
@@ -68,10 +69,13 @@ span.mr-loader-subtitle{
     font-style: italic;
 }
 
-.mr-custom-select {
+.mr-custom-select, .mr-custom-btn {
     background-color: var(--mr-chat-color-secondary);
     border: 1px solid var(--mr-chat-color);
     color: white;
+    height: 30px;
+    display: flex;
+    align-items: center;
 }
 
 .mr-custom-select.filters {

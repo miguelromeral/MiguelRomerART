@@ -11,6 +11,10 @@
     <link href="~/css/image-thumbnail.css" rel="stylesheet" />
     <style>
 
+        #spResultsCount {
+            transition: var(--mr-transition-time) ease-in-out;
+        }
+
         #divNoResults {
             display: flex;
             min-height: 100px;
@@ -19,6 +23,10 @@
             justify-content: flex-start;
             gap: 10px;
             margin-top: 50px;
+        }
+
+        #sFilterSoftware {
+            display: none;
         }
 
         .choice-label {
@@ -60,7 +68,7 @@
         <div class="mr-sort-filter-container" data-bs-theme="dark">
             <div class="mr-sort-filter">
                 <span>
-                    Order por...
+                    Ordenar por...
                 </span>
                 <select class="mr-custom-select filters form-select form-select-sm" name="Sortby" aria-label="Default select example" data-bs-theme="dark" onchange="sendFormFilterGallery()"
                         data-bs-theme="dark">
@@ -85,7 +93,11 @@
         </span>
         <div class="mr-filter-container">
 
-            <select class="mr-custom-select form-select form-select-sm" name="Type" data-bs-theme="dark" onchange="sendFormFilterGallery()">
+            <button class="btn btn-dark mr-custom-btn" onclick="resetFilters()">
+                <span><i id="iFavoriteIcon" class="bi bi-trash"></i></span>
+            </button>
+
+            <select id="sFilterType" class="mr-custom-select form-select form-select-sm" name="Type" data-bs-theme="dark" onchange="sendFormFilterGallery()">
                 <option value="0" selected>🖌 Tipo</option>
 
                 @foreach(var type in MRA.Services.Firebase.Models.Drawing.DRAWING_TYPES.OrderBy(x => x.Value))
@@ -96,10 +108,21 @@
             </select>
 
 
-            <select class="mr-custom-select form-select form-select-sm" name="ProductType" data-bs-theme="dark" onchange="sendFormFilterGallery()">
+            <select id="sFilterProduct" class="mr-custom-select form-select form-select-sm" name="ProductType" data-bs-theme="dark" onchange="sendFormFilterGallery()">
                 <option value="0" selected>💽 Producto</option>
 
                 @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_PRODUCT_TYPES.OrderBy(x => x.Value))
+                {
+                    <option value="@(type.Key)">@(type.Value)</option>
+                }
+            </select>
+
+
+            <select id="sFilterSoftware" class="mr-custom-select form-select form-select-sm"
+                name="Software" data-bs-theme="dark" onchange="sendFormFilterGallery()">
+                <option value="0" selected>💻 Software</option>
+
+                @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_SOFTWARE.Where(x => x.Key > 0).OrderBy(x => x.Value))
                 {
                     <option value="@(type.Key)">@(type.Value)</option>
                 }
@@ -120,9 +143,11 @@
 <div class="row mt-2">
 
     <div class="mr-loader-container">
-        <span class="mr-suboption-filter">
-            <span id="spResultsCount">@Model.Drawings.Count</span> imágenes.
-        </span>
+        <div id="divImageCounter" class="slide-right">
+            <span class="mr-suboption-filter">
+                <span id="spResultsCount">@Model.Drawings.Count</span> imágenes.
+            </span>
+        </div>
         <div id="artGalleryLoader" class="mr-loader" style="display: none;">
             <img src="~/assets/bean eater-0.3s-200px.svg" class="mr-loading-icon-pacman" />
             <span class="mr-loader-subtitle">Filtrando imágenes. Por favor, espere.</span>

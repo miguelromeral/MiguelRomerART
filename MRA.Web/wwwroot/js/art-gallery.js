@@ -8,7 +8,23 @@ var CHEER_FORM_ID = "cheerForm";
 
 var timeMsDelayLike = 1000;
 function sendFormFilterGallery() {
+    var type = $("#sFilterType").val();
+    // If Digital, show filter
+    if (type == 2) {
+        $("#sFilterSoftware").show();
+    } else {
+        $("#sFilterSoftware").hide();
+        $("#sFilterSoftware").val(0);
+    }
+
     $("#" + FILTER_FORM_ID).submit();
+}
+
+function resetFilters() {
+    var type = $("#sFilterType").val(0);
+    var type = $("#sFilterProduct").val(0);
+    var type = $("#sFilterSoftware").val(0);
+    sendFormFilterGallery();
 }
 
 function onBeginFilter() {

@@ -65,11 +65,15 @@ namespace MRA.Services.Firebase
                 {
                     query = query.WhereEqualTo("product_type", filter.ProductType);
                 }
+                if (filter.Software > 0)
+                {
+                    query = query.WhereEqualTo("software", filter.Software);
+                }
                 if (!String.IsNullOrEmpty(filter.Textquery))
                 {
                     query = query.WhereArrayContains("name", filter.Textquery);
                 }
-                
+
 
                 var documents = (await query.GetSnapshotAsync()).Documents.Select(s => s.ConvertTo<DrawingDocument>()).ToList();
 

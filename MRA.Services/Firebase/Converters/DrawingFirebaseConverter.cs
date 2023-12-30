@@ -42,7 +42,8 @@ namespace MRA.Services.Firebase.Converters
                 UrlBase = _urlBase,
                 Favorite = drawingDocument.favorite,
                 ReferenceUrl = drawingDocument.reference_url,
-                PathThumbnail = drawingDocument.path_thumbnail
+                PathThumbnail = drawingDocument.path_thumbnail,
+                Software = drawingDocument.software
             };
         }
 
@@ -67,7 +68,8 @@ namespace MRA.Services.Firebase.Converters
                 model_name = drawing.ModelName,
                 favorite = drawing.Favorite,
                 reference_url = drawing.ReferenceUrl,
-                path_thumbnail = drawing.PathThumbnail
+                path_thumbnail = drawing.PathThumbnail,
+                software = drawing.Software
             };
         }
     }

@@ -126,10 +126,10 @@
 }
 
 
-.mr-img-thumbnail-container:hover .mr-img-thumbnail-stats 
-{    
+.mr-img-thumbnail-container:hover .mr-img-thumbnail-stats {
     z-index: 2;
     opacity: 1;
+    text-shadow: 0 0 4px black;
 }
 
 mr-img-thumbnail-stats-item

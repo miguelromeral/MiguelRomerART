@@ -133,6 +133,14 @@ try
     drawing.ModelName = helper.FillStringValue(isNew, drawing?.ModelName ?? "", "Model's Name");
     drawing.Title = helper.FillStringValue(isNew, drawing?.Title ?? "", "Drawing's Title");
     drawing.Type = helper.FillIntValue(isNew, drawing.Type, "Type", Drawing.DRAWING_TYPES);
+    if(drawing.Type == 2)
+    {
+        drawing.Software = helper.FillIntValue(isNew, drawing.Software, "Software Used", Drawing.DRAWING_SOFTWARE);
+    }
+    else
+    {
+        drawing.Software = 0;
+    }
     drawing.Date = helper.FillStringValue(isNew, drawing?.Date ?? "", "Date (YYYY/MM/DD)");
     drawing.Time = helper.FillFreeIntValue(isNew, drawing.Time, "Time Spent");
     drawing.ProductType = helper.FillIntValue(isNew, drawing.ProductType, "Product Type", Drawing.DRAWING_PRODUCT_TYPES);

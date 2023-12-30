@@ -28,6 +28,14 @@ namespace MRA.Services.Firebase.Models
                 {3, "Cantante"},
             };
 
+        public static Dictionary<int, string> DRAWING_SOFTWARE = new Dictionary<int, string>()
+            {
+                {0, "Ninguno"},
+                {1, "Medibang Paint"},
+                {2, "Clip Studio Paint"},
+                {3, "Adobe Photoshop"},
+            };
+
         public string Id { get; set; }
         public string Path { get; set; }
         public string PathThumbnail { get; set; }
@@ -38,6 +46,21 @@ namespace MRA.Services.Firebase.Models
         public string ModelName { get; set; }
         public string Title { get; set; }
         public string Date { get; set; }
+        public int Software { get; set; }
+        public string SoftwareName
+        {
+            get
+            {
+                try
+                {
+                    return DRAWING_SOFTWARE[Software];
+                }
+                catch (Exception ex)
+                {
+                    return "Ninguno";
+                }
+            }
+        }
         public int Time { get; set; }
         public string TimeHuman { get
             {

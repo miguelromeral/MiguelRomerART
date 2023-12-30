@@ -108,6 +108,14 @@
                             </div>
                         }
                     }
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="row m-2">
+        <div class="col-sm-6 col-md-6">
+            <div class="mr-social-container">
+                <div class="mr-chat-container" style="width: 100%;">
                     @if (!String.IsNullOrEmpty(drawing.CommentPros))
                     {
                         <div class="mr-chat-row likes">
@@ -125,7 +133,13 @@
                             </div>
                         </div>
                     }
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6">
+            <div class="mr-social-container">
 
+                <div class="mr-chat-container" style="width: 100%;">
                     @if (!String.IsNullOrEmpty(drawing.CommentCons))
                     {
                         <div class="mr-chat-row dislikes">
@@ -145,7 +159,7 @@
                 </div>
             </div>
         </div>
-    </div>
+</div>
    <div class="row m-2">
 
 
@@ -177,6 +191,19 @@
                 @drawing.TypeName
         </span>
     </div>
+
+
+        @if (drawing.Software > 0)
+        {
+            <div class="col-sm-12 col-md-6 col-lg-4 mr-details-section">
+                <span class="mr-details-section-title">
+                    💻 Software
+                </span>
+                <span class="mr-details-section-content capitalize">
+                    @drawing.SoftwareName
+                </span>
+            </div>
+        }
 
         @if (drawing.ProductType > 0 && !String.IsNullOrEmpty(drawing.ProductName))
         {
@@ -216,6 +243,8 @@
                 </span>
             </div>
         }
+
+
 
 
             @if (!String.IsNullOrEmpty(drawing.ReferenceUrl))
