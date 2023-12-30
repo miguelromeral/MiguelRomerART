@@ -19,7 +19,13 @@ body {
     width: fit-content;
     gap: var(--mr-gap-icon-text);
     align-items: center;
-    min-width: 400px;
+    flex-wrap: wrap;
+    flex-direction: row;
+    width: 100%;
+}
+
+.mr-filter-item {
+    width: 200px;
 }
 
 .mr-choice-filter {

@@ -97,7 +97,7 @@
                 <span><i id="iFavoriteIcon" class="bi bi-trash"></i></span>
             </button>
 
-            <select id="sFilterType" class="mr-custom-select form-select form-select-sm" name="Type" data-bs-theme="dark" onchange="sendFormFilterGallery()">
+            <select id="sFilterType" class="mr-custom-select form-select form-select-sm mr-filter-item" name="Type" data-bs-theme="dark" onchange="sendFormFilterGallery()">
                 <option value="0" selected>🖌 Tipo</option>
 
                 @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_TYPES.Where(x => x.Key > 0).OrderBy(x => x.Value))
@@ -108,7 +108,7 @@
             </select>
 
 
-            <select id="sFilterProduct" class="mr-custom-select form-select form-select-sm" name="ProductType" data-bs-theme="dark" onchange="sendFormFilterGallery()">
+            <select id="sFilterProduct" class="mr-custom-select form-select form-select-sm mr-filter-item" name="ProductType" data-bs-theme="dark" onchange="sendFormFilterGallery()">
                 <option value="0" selected>💽 Producto</option>
 
                 @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_PRODUCT_TYPES.Where(x => x.Key > 0).OrderBy(x => x.Value))
@@ -118,7 +118,7 @@
             </select>
 
 
-            <select id="sFilterSoftware" class="mr-custom-select form-select form-select-sm"
+            <select id="sFilterSoftware" class="mr-custom-select form-select form-select-sm mr-filter-item"
                 name="Software" data-bs-theme="dark" onchange="sendFormFilterGallery()">
                 <option value="0" selected>💻 Software</option>
 
@@ -129,7 +129,7 @@
             </select>
 
 
-            <select id="sFilterPaper" class="mr-custom-select form-select form-select-sm"
+            <select id="sFilterPaper" class="mr-custom-select form-select form-select-sm mr-filter-item"
                     name="Paper" data-bs-theme="dark" onchange="sendFormFilterGallery()">
                 <option value="0" selected>📄 Tamaño</option>
 
@@ -139,7 +139,7 @@
                 }
             </select>
 
-            <div class="mr-choice-filter">
+            <div class="mr-choice-filter mr-filter-item">
                 <label class="form-check-label choice-label" for="flexSwitchCheckChecked">Favoritos</label>
                 <input class="form-check-input" name="Favorites" type="checkbox" role="switch" value="true" id="flexSwitchCheckChecked" onchange="sendFormFilterGallery()">
             </div>
