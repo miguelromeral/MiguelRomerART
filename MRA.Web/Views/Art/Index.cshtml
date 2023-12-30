@@ -25,9 +25,9 @@
             margin-top: 50px;
         }
 
-        #sFilterSoftware {
+        /* #sFilterSoftware, #sFilterPaper {
             display: none;
-        }
+        } */
 
         .choice-label {
             color: var(--mr-color-gold);
@@ -100,7 +100,7 @@
             <select id="sFilterType" class="mr-custom-select form-select form-select-sm" name="Type" data-bs-theme="dark" onchange="sendFormFilterGallery()">
                 <option value="0" selected>🖌 Tipo</option>
 
-                @foreach(var type in MRA.Services.Firebase.Models.Drawing.DRAWING_TYPES.OrderBy(x => x.Value))
+                @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_TYPES.Where(x => x.Key > 0).OrderBy(x => x.Value))
                 {
                     <option value="@(type.Key)">@(type.Value)</option>
                     
@@ -111,7 +111,7 @@
             <select id="sFilterProduct" class="mr-custom-select form-select form-select-sm" name="ProductType" data-bs-theme="dark" onchange="sendFormFilterGallery()">
                 <option value="0" selected>💽 Producto</option>
 
-                @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_PRODUCT_TYPES.OrderBy(x => x.Value))
+                @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_PRODUCT_TYPES.Where(x => x.Key > 0).OrderBy(x => x.Value))
                 {
                     <option value="@(type.Key)">@(type.Value)</option>
                 }
@@ -128,8 +128,19 @@
                 }
             </select>
 
+
+            <select id="sFilterPaper" class="mr-custom-select form-select form-select-sm"
+                    name="Paper" data-bs-theme="dark" onchange="sendFormFilterGallery()">
+                <option value="0" selected>📄 Tamaño</option>
+
+                @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_PAPER_SIZE.Where(x => x.Key > 0).OrderBy(x => x.Value))
+                {
+                    <option value="@(type.Key)">@(type.Value)</option>
+                }
+            </select>
+
             <div class="mr-choice-filter">
-                <label class="form-check-label choice-label" for="flexSwitchCheckChecked">Selección</label>
+                <label class="form-check-label choice-label" for="flexSwitchCheckChecked">Favoritos</label>
                 <input class="form-check-input" name="Favorites" type="checkbox" role="switch" value="true" id="flexSwitchCheckChecked" onchange="sendFormFilterGallery()">
             </div>
 

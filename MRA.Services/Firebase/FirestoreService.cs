@@ -69,6 +69,10 @@ namespace MRA.Services.Firebase
                 {
                     query = query.WhereEqualTo("software", filter.Software);
                 }
+                if (filter.Paper > 0)
+                {
+                    query = query.WhereEqualTo("paper", filter.Paper);
+                }
                 if (!String.IsNullOrEmpty(filter.Textquery))
                 {
                     query = query.WhereArrayContains("name", filter.Textquery);

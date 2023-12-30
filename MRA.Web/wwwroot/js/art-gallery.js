@@ -9,12 +9,21 @@ var CHEER_FORM_ID = "cheerForm";
 var timeMsDelayLike = 1000;
 function sendFormFilterGallery() {
     var type = $("#sFilterType").val();
+
     // If Digital, show filter
-    if (type == 2) {
+    if (type == 0) {
+        $("#sFilterSoftware").show();
+        $("#sFilterPaper").show();
+    } else if (type == 2) {
+        $("#sFilterPaper").hide();
+        $("#sFilterPaper").val(0);
+
         $("#sFilterSoftware").show();
     } else {
         $("#sFilterSoftware").hide();
         $("#sFilterSoftware").val(0);
+
+        $("#sFilterPaper").show();
     }
 
     $("#" + FILTER_FORM_ID).submit();
@@ -24,6 +33,7 @@ function resetFilters() {
     var type = $("#sFilterType").val(0);
     var type = $("#sFilterProduct").val(0);
     var type = $("#sFilterSoftware").val(0);
+    var type = $("#sFilterPaper").val(0);
     sendFormFilterGallery();
 }
 

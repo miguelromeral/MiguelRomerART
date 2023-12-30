@@ -76,6 +76,13 @@ span.mr-loader-subtitle{
     height: 30px;
     display: flex;
     align-items: center;
+    transition: var(--mr-transition-time) ease-in-out;
+    cursor: pointer;
+}
+
+
+.mr-custom-select:hover, .mr-custom-btn:hover {
+    background-color: var(--mr-chat-color);
 }
 
 .mr-custom-select.filters {

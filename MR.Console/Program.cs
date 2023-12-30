@@ -135,11 +135,13 @@ try
     drawing.Type = helper.FillIntValue(isNew, drawing.Type, "Type", Drawing.DRAWING_TYPES);
     if(drawing.Type == 2)
     {
+        drawing.Paper = 0;
         drawing.Software = helper.FillIntValue(isNew, drawing.Software, "Software Used", Drawing.DRAWING_SOFTWARE);
     }
     else
     {
         drawing.Software = 0;
+        drawing.Paper = helper.FillIntValue(isNew, drawing.Paper, "Paper Size", Drawing.DRAWING_PAPER_SIZE);
     }
     drawing.Date = helper.FillStringValue(isNew, drawing?.Date ?? "", "Date (YYYY/MM/DD)");
     drawing.Time = helper.FillFreeIntValue(isNew, drawing.Time, "Time Spent");

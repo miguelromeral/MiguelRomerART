@@ -56,7 +56,7 @@ namespace MR.ConsoleMR
         {
             Console.ForegroundColor = ConsoleColor.White;
             ShowMessageInfo("------------------------------------------------------");
-            System.Console.WriteLine("INPUT:".PadRight(PAD_RIGHT) + field);
+            System.Console.WriteLine("INPUT:".PadRight(PAD_RIGHT) + field.ToUpper());
             ShowMessagePrevious(isNew, previous);
         }
 
@@ -82,7 +82,7 @@ namespace MR.ConsoleMR
         internal int FillIntValue(bool isNew, int previous, string field, Dictionary<int, string> dictionary)
         {
             ShowMessageInfo("------------------------------------------------------");
-            ShowMessageInfo(field + ":");
+            ShowMessageInfo(field.ToUpper() + ":");
 
             foreach (var type in dictionary)
             {

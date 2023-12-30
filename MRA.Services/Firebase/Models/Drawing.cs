@@ -23,6 +23,7 @@ namespace MRA.Services.Firebase.Models
 
         public static Dictionary<int, string> DRAWING_PRODUCT_TYPES = new Dictionary<int, string>()
             {
+                {0, "Otros"},
                 {1, "Videojuego"},
                 {2, "Actor/Actriz"},
                 {3, "Cantante"},
@@ -34,6 +35,14 @@ namespace MRA.Services.Firebase.Models
                 {1, "Medibang Paint"},
                 {2, "Clip Studio Paint"},
                 {3, "Adobe Photoshop"},
+            };
+
+        public static Dictionary<int, string> DRAWING_PAPER_SIZE = new Dictionary<int, string>()
+            {
+                {0, "Desconocido"},
+                {4, "A4"},
+                {5, "A5"},
+                {6, "A6"},
             };
 
         public string Id { get; set; }
@@ -58,6 +67,21 @@ namespace MRA.Services.Firebase.Models
                 catch (Exception ex)
                 {
                     return "Ninguno";
+                }
+            }
+        }
+        public int Paper { get; set; }
+        public string PaperHuman
+        {
+            get
+            {
+                try
+                {
+                    return DRAWING_PAPER_SIZE[Paper];
+                }
+                catch (Exception ex)
+                {
+                    return "Otro";
                 }
             }
         }

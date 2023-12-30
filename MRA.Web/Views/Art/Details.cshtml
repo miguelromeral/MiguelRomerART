@@ -205,6 +205,19 @@
             </div>
         }
 
+        @if (drawing.Paper > 0)
+        {
+            <div class="col-sm-12 col-md-6 col-lg-4 mr-details-section">
+                <span class="mr-details-section-title">
+                    📄 Tamaño de Papel
+                </span>
+                <span class="mr-details-section-content capitalize">
+                    @drawing.PaperHuman
+                </span>
+            </div>
+        }
+
+
         @if (drawing.ProductType > 0 && !String.IsNullOrEmpty(drawing.ProductName))
         {
         <div class="col-sm-12 col-md-6 col-lg-4 mr-details-section">

@@ -43,7 +43,8 @@ namespace MRA.Services.Firebase.Converters
                 Favorite = drawingDocument.favorite,
                 ReferenceUrl = drawingDocument.reference_url,
                 PathThumbnail = drawingDocument.path_thumbnail,
-                Software = drawingDocument.software
+                Software = drawingDocument.software,
+                Paper = drawingDocument.paper
             };
         }
 
@@ -69,7 +70,8 @@ namespace MRA.Services.Firebase.Converters
                 favorite = drawing.Favorite,
                 reference_url = drawing.ReferenceUrl,
                 path_thumbnail = drawing.PathThumbnail,
-                software = drawing.Software
+                software = drawing.Software,
+                paper = drawing.Paper
             };
         }
     }
