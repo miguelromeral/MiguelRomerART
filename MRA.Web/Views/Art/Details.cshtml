@@ -66,7 +66,7 @@
                             <input type="hidden" name="id" value="@drawing.Id" />
 
                             <button id="btnCheer" type="button" class="btn btn-danger mr-like-button like-semaphore vibrate" onclick="cheerDrawing()">
-                                <i id="iCheerIcon" class="bi bi-heart"></i> KUDOS !
+                                <i id="iCheerIcon" class="bi bi-heart"></i> ¡ KUDOS !
                             </button>
                         </div>
                     </form>
@@ -150,12 +150,12 @@
 
 
     <div class="col-sm-12 col-sm-12 col-md-12 mb-2 mt-2">
-        <h4>Details</h4>
+        <h4>Detalles</h4>
     </div>
 
     <div class="col-sm-12 col-md-6 col-lg-4 mr-details-section">
         <span class="mr-details-section-title">
-            📅 Date
+            📅 Fecha
         </span>
         <span class="mr-details-section-content capitalize">
                 @(String.IsNullOrEmpty(Model.Drawing.Date) ? "No Date Known" : Model.Drawing.FormattedDate)
@@ -163,7 +163,7 @@
     </div>
     <div class="col-sm-12 col-md-6 col-lg-4 mr-details-section">
         <span class="mr-details-section-title">
-            🕓 Time (estimated)
+            🕓 Tiempo (estimado)
         </span>
         <span class="mr-details-section-content capitalize">
                 @Model.Drawing.TimeHuman
@@ -171,7 +171,7 @@
     </div>
     <div class="col-sm-12 col-md-6 col-lg-4 mr-details-section">
         <span class="mr-details-section-title">
-            🖌 Type
+            🖌 Tipo
         </span>
         <span class="mr-details-section-content capitalize">
                 @drawing.TypeName
@@ -185,13 +185,16 @@
                     @switch (drawing.ProductType)
                     {
                         case 1:
-                        <span>🎮 Videogame</span>
+                        <span>🎮 Videojuego</span>
                             break;
                         case 2:
-                        <span>🎞 Actor/Actress</span>
+                        <span>🎞 Actor/Actriz</span>
+                            break;
+                        case 3:
+                            <span>🎙 Cantante</span>
                             break;
                         default:
-                        <span>Product</span>
+                        <span>Producto</span>
                             break;
                     }
             </span>
@@ -206,7 +209,7 @@
         {
             <div class="col-sm-12 col-md-6 col-lg-4 mr-details-section">
                 <span class="mr-details-section-title">
-                    👤 Model
+                    👤 Modelo
                 </span>
                 <span class="mr-details-section-content capitalize">
                     @drawing.ModelName
@@ -219,10 +222,10 @@
             {
                 <div class="col-sm-12 col-md-6 col-lg-4 mr-details-section">
                     <span class="mr-details-section-title">
-                        🖼 Reference
+                        🖼 Referencia
                     </span>
                     <span class="mr-details-section-content capitalize">
-                        <a href="@(drawing.ReferenceUrl)" target="_blank">Open in new tab</a>
+                        <a href="@(drawing.ReferenceUrl)" target="_blank">Abrir en nueva pestaña</a>
                     </span>
                 </div>
             }

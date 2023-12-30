@@ -10,7 +10,7 @@
 
             <div class="mr-error-load-placeholder" data-error-drawing-id="@Model.Drawing.Id">
                 <span class="emoji">🙃</span>
-                <span class="subtitle">Image Not Found</span>
+                <span class="subtitle">Imagen No Encontrada</span>
             </div>
 
 
@@ -21,7 +21,7 @@
                     <span>
                         @Model.Drawing.Name
                     </span>
-                    <span class="mr-img-thumbnail-subtitle">by @Model.Drawing.ModelName</span>
+                    <span class="mr-img-thumbnail-subtitle"><span style="font-size: x-small">por</span> @Model.Drawing.ModelName</span>
                 </span>
             }
             else if (!String.IsNullOrEmpty(Model.Drawing.Name))

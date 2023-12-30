@@ -161,7 +161,7 @@ nav a, .nav-link {
 
 nav a:hover, .nav-link:hover {
     text-shadow: 0px 0px 12px black;
-    color: white;
+    color: var(--mr-color-gold) !important;
 }
 
 footer {

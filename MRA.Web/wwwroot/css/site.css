@@ -104,3 +104,26 @@ img.mr-chat-image-miguel {
     user-select: none;
     pointer-events: none;
 }
+
+
+/* Each container section of the detail */
+.mr-details-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: var(--mr-margin-vertical);
+}
+
+.mr-details-section-title {
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: smaller;
+}
+
+.mr-details-section-content {
+    font-weight: lighter;
+}
+
+    .mr-details-section-content.capitalize {
+        text-transform: capitalize;
+    }

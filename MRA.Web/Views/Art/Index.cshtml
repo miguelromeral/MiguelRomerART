@@ -3,7 +3,7 @@
 @model IndexModel
 
 @{
-    ViewData["Title"] = "Art Gallery";
+    ViewData["Title"] = "Galería";
 }
 
 @section Styles {
@@ -43,11 +43,11 @@
     </style>
 }
 
-<div>
-    <h1>🎨 Art Gallery</h1>
 
+<div>
+    <h1>🎨 Galería</h1>
     <p>
-        Here there are some of my public drawings. <strong>Click any of them to see details</strong>.
+        Aquí están algunos de mis dibujos e ilustraciones públicas. <strong>Pulsa en cualquiera de ellos para ver los detalles</strong>.
     </p>
 </div>
 
@@ -60,14 +60,14 @@
         <div class="mr-sort-filter-container" data-bs-theme="dark">
             <div class="mr-sort-filter">
                 <span>
-                    Sort by...
+                    Order por...
                 </span>
                 <select class="mr-custom-select filters form-select form-select-sm" name="Sortby" aria-label="Default select example" data-bs-theme="dark" onchange="sendFormFilterGallery()"
                         data-bs-theme="dark">
-                    <option value="date-desc">Newest</option>
-                    <option value="date-asc">Oldest</option>
-                    <option value="name-asc">Name (ascending)</option>
-                    <option value="name-desc">Name (descending)</option>
+                    <option value="date-desc">Nuevos Primero</option>
+                    <option value="date-asc">Viejos Primero</option>
+                    <option value="name-asc">Nombre (Ascendente)</option>
+                    <option value="name-desc">Nombre (Descendente)</option>
                 </select>
             </div>
         </div>
@@ -77,12 +77,12 @@
         <div id="formFilterAlert" class="alert alert-danger" style="display: none;" role="alert"></div>
 
         <span class="mr-suboption-filter">
-            Filter by...
+            Filtrar por...
         </span>
         <div class="mr-filter-container">
 
-            <select class="mr-custom-select form-select form-select-sm" name="Type" aria-label="Default select example" data-bs-theme="dark" onchange="sendFormFilterGallery()">
-                <option value="0" selected>🖌 Type</option>
+            <select class="mr-custom-select form-select form-select-sm" name="Type" data-bs-theme="dark" onchange="sendFormFilterGallery()">
+                <option value="0" selected>🖌 Tipo</option>
 
                 @foreach(var type in MRA.Services.Firebase.Models.Drawing.DRAWING_TYPES.OrderBy(x => x.Value))
                 {
@@ -92,8 +92,8 @@
             </select>
 
 
-            <select class="mr-custom-select form-select form-select-sm" name="ProductType" aria-label="Default select example" data-bs-theme="dark" onchange="sendFormFilterGallery()">
-                <option value="0" selected>💽 Product</option>
+            <select class="mr-custom-select form-select form-select-sm" name="ProductType" data-bs-theme="dark" onchange="sendFormFilterGallery()">
+                <option value="0" selected>💽 Producto</option>
 
                 @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_PRODUCT_TYPES.OrderBy(x => x.Value))
                 {
@@ -102,7 +102,7 @@
             </select>
 
             <div class="mr-choice-filter">
-                <label class="form-check-label choice-label" for="flexSwitchCheckChecked">Choice</label>
+                <label class="form-check-label choice-label" for="flexSwitchCheckChecked">Selección</label>
                 <input class="form-check-input" name="Favorites" type="checkbox" role="switch" value="true" id="flexSwitchCheckChecked" onchange="sendFormFilterGallery()">
             </div>
 
@@ -118,7 +118,7 @@
     <div class="mr-loader-container">
         <div id="artGalleryLoader" class="mr-loader" style="display: none;">
             <img src="~/assets/bean eater-0.3s-200px.svg" class="mr-loading-icon-pacman" />
-            <span class="mr-loader-subtitle">Filtering images. Please, wait.</span>
+            <span class="mr-loader-subtitle">Filtrando imágenes. Por favor, espere.</span>
         </div>
         <div id="artGallery" class="mr-img-gallery">
 
@@ -132,13 +132,13 @@
         </div>
         <div id="divNoResults" style="display: @(Model.Drawings.Count > 0 ? "none" : "block");">
             <span>
-                Nothing found here..!
+                ¡Nada por aquí..!
             </span>
             <h2>
                 😔
             </h2>
             <span>
-                Try again by filtering by other criteria.
+                Vuelve a intentarlo utilizando otros filtros.
             </span>
         </div>
     </div>

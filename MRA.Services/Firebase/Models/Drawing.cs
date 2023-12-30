@@ -15,17 +15,17 @@ namespace MRA.Services.Firebase.Models
 
         public static Dictionary<int, string> DRAWING_TYPES = new Dictionary<int, string>()
             {
-                {1, "Traditional"},
+                {1, "Tradicional"},
                 {2, "Digital"},
                 {3, "Sketch"},
-                {4, "Markers"},
+                {4, "Marcadores"},
             };
 
         public static Dictionary<int, string> DRAWING_PRODUCT_TYPES = new Dictionary<int, string>()
             {
-                {1, "Videogame"},
-                {2, "Actor/Actress"},
-                {3, "Singer"},
+                {1, "Videojuego"},
+                {2, "Actor/Actriz"},
+                {3, "Cantante"},
             };
 
         public string Id { get; set; }
@@ -52,7 +52,7 @@ namespace MRA.Services.Firebase.Models
                 }
                 else
                 {
-                    return "No Time Known";
+                    return "Sin Estimación";
                 }
             } 
         }
@@ -64,7 +64,7 @@ namespace MRA.Services.Firebase.Models
                     return DRAWING_PRODUCT_TYPES[ProductType];
                 }catch(Exception ex)
                 {
-                    return "Others";
+                    return "Otros";
                 }
             } }
         public string ProductName { get; set; }
@@ -122,7 +122,7 @@ namespace MRA.Services.Firebase.Models
 
                 DateTime date = DateTime.ParseExact(Date, "yyyy/MM/dd", CultureInfo.InvariantCulture);
                 //CultureInfo currentCulture = CultureInfo.CurrentCulture;
-                var cultureInfo = CultureInfo.GetCultureInfo("en-US");
+                var cultureInfo = CultureInfo.GetCultureInfo("es-ES");
                 return date.ToString("dd MMMM yyyy", cultureInfo);
             }
         }
