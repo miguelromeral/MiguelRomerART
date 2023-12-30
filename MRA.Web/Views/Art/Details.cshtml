@@ -35,10 +35,27 @@
     }
 
     <div class="row">
-        <h3 class="mr-image-detail-title">
-            @Model.Drawing.Name
-        </h3>
-        <h5 class="mr-image-detail-subtitle">@Model.Drawing.ModelName</h5>
+
+        @if (!String.IsNullOrEmpty(Model.Drawing.Name) && !String.IsNullOrEmpty(Model.Drawing.ModelName))
+        {
+            <h3 class="mr-image-detail-title">
+                @Model.Drawing.Name
+            </h3>
+            <h5 class="mr-image-detail-subtitle">@Model.Drawing.ModelName</h5>
+        }
+        else if (!String.IsNullOrEmpty(Model.Drawing.Name))
+        {
+            <h3 class="mr-image-detail-title">
+                @Model.Drawing.Name
+            </h3>
+        }
+        else if (!String.IsNullOrEmpty(Model.Drawing.ModelName))
+        {
+            <h3 class="mr-image-detail-title">
+                @Model.Drawing.ModelName
+            </h3>
+        }
+
 
     </div>
     <div class="row">
@@ -102,7 +119,7 @@
                                 <div class="mr-chat-image">
                                     @if (last)
                                     {
-                                        <img src="~/assets/images/miguel.jpeg" class="mr-chat-image-miguel" />
+                                        <img src="~/assets/images/miguel.jpeg" class="mr-chat-image-miguel slide-top" />
                                     }
                                 </div>
                             </div>
@@ -127,7 +144,7 @@
                                 }
                             </div>
 
-                            <div class="mr-chat-image" title="Nice Details">
+                            <div class="mr-chat-image mr-chat-icon" title="Nice Details">
                                 <i class="bi bi-hand-thumbs-up"></i>
                             </div>
                         </div>
@@ -149,7 +166,7 @@
                                     </div>
                                 }
                             </div>
-                            <div class="mr-chat-image" title="Flaws">
+                            <div class="mr-chat-image mr-chat-icon" title="Flaws">
                                 <i class="bi bi-hand-thumbs-down"></i>
                             </div>
                         </div>

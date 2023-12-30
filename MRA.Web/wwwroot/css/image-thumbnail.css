@@ -55,6 +55,7 @@
 .mr-img-thumbnail-subtitle {
     font-size: var(--mr-font-size-small);
     font-style: italic;
+    text-align: center;
 }
 
 /* Image on hover */

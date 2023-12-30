@@ -176,6 +176,7 @@ div.mr-chat-container {
     display: inline-block;
     position: relative;
     width: 100%;
+    transition: var(--mr-transition-time) ease-in-out;
 }
 
 /* Space from the last message to line up the image at its right side */
@@ -183,6 +184,9 @@ div.mr-chat-container {
     margin-bottom: 20px !important;
 }
 
+.mr-chat-icon {
+    margin-right: 10px;
+}
 
 /* Apex of the last message (colored) */
 .mr-chat-message.last:before {
@@ -215,6 +219,12 @@ div.mr-chat-container {
     color: var(--mr-chat-color-likes);
 }
 
+/* Row of pros */
+.mr-chat-row.likes .mr-chat-message:hover {
+    background-color: var(--mr-chat-color-likes);
+    color: black;
+}
+
 
 /* Message of pros */
 .mr-chat-row.likes .mr-chat-message {
@@ -231,6 +241,11 @@ div.mr-chat-container {
 .mr-chat-row.dislikes .mr-chat-message {
     background-color: transparent;
     border: 2px solid var(--mr-chat-color-dislikes);
+}
+
+.mr-chat-row.dislikes .mr-chat-message:hover {
+    background-color: var(--mr-chat-color-dislikes);
+    color: black;
 }
 
 @media (min-width: 992px) {
