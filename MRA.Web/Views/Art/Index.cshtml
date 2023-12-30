@@ -68,6 +68,10 @@
                     <option value="date-asc">Viejos Primero</option>
                     <option value="name-asc">Nombre (Ascendente)</option>
                     <option value="name-desc">Nombre (Descendente)</option>
+                    <option value="kudos-desc">Más Kudos</option>
+                    <option value="kudos-asc">Menos Kudos</option>
+                    <option value="views-desc">Más Vistos</option>
+                    <option value="views-asc">Menos Vistos</option>
                 </select>
             </div>
         </div>
@@ -116,6 +120,9 @@
 <div class="row mt-2">
 
     <div class="mr-loader-container">
+        <span class="mr-suboption-filter">
+            <span id="spResultsCount">@Model.Drawings.Count</span> imágenes.
+        </span>
         <div id="artGalleryLoader" class="mr-loader" style="display: none;">
             <img src="~/assets/bean eater-0.3s-200px.svg" class="mr-loading-icon-pacman" />
             <span class="mr-loader-subtitle">Filtrando imágenes. Por favor, espere.</span>

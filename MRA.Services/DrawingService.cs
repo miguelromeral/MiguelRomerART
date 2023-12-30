@@ -48,6 +48,18 @@ namespace MRA.Services
                 case "name-desc":
                     drawings = drawings.OrderByDescending(x => x.Name).ToList();
                     break;
+                case "kudos-asc":
+                    drawings = drawings.OrderBy(x => x.Likes).ToList();
+                    break;
+                case "kudos-desc":
+                    drawings = drawings.OrderByDescending(x => x.Likes).ToList();
+                    break;
+                case "views-asc":
+                    drawings = drawings.OrderBy(x => x.Views).ToList();
+                    break;
+                case "views-desc":
+                    drawings = drawings.OrderByDescending(x => x.Views).ToList();
+                    break;
                 default:
                     drawings = drawings.OrderByDescending(x => x.Date).ToList();
                     break;

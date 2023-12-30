@@ -23,6 +23,7 @@ function onCompleteFilter() {
 
 function onSuccessFilter(data) {
     $("#" + ALERT_FILTER_FORM_ID).hide();
+    $("#spResultsCount").text(data.length);
     sortDivCollection(data);
     $(".mr-img-thumbnail").each((index, img) => {
         if (data.find(d => d.id == $(img).data("drawingid")) != null) {
@@ -40,6 +41,7 @@ function onSuccessFilter(data) {
 }
 
 function onFailureFilter() {
+    $("#spResultsCount").text(0);
     $("#" + ALERT_FILTER_FORM_ID).text("An error happened while filtering data. Please, try again later.");
     $("#" + ALERT_FILTER_FORM_ID).show();
 }
