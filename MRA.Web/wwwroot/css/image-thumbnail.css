@@ -49,7 +49,7 @@
 
 .favorite .mr-img-thumbnail-title {
     background: linear-gradient(160deg, transparent 0%, var(--mr-color-gold) 100%);
-    color: black;
+    color: white;
 }
 
 .mr-img-thumbnail-subtitle {
@@ -69,7 +69,8 @@
 }
 
 .mr-img-thumbnail.favorite .mr-img-thumbnail-container:hover .mr-img-thumbnail-title {
-    color: black;
+    color: white;
+    text-shadow: 0 0 4px black;
 }
 
 /* Each thumbnail. Size: 4xN */
@@ -106,7 +107,7 @@
 }
 
 .favorite .mr-img-thumbnail-title {
-    color: black;
+    color: white;
 }
 
 
@@ -130,7 +131,10 @@
 .mr-img-thumbnail-container:hover .mr-img-thumbnail-stats {
     z-index: 2;
     opacity: 1;
-    text-shadow: 0 0 4px black;
+}
+
+.favorite .mr-img-thumbnail-container:hover .mr-img-thumbnail-stats {
+    text-shadow: 0 0 4px white;
 }
 
 mr-img-thumbnail-stats-item
