@@ -9,6 +9,6 @@ namespace MRA.Web.Models
     {
         public List<Drawing>? Drawings;
 
-        public List<string> ProductNames;
+        public Dictionary<string, int> ProductNameSelect { get; set; }
     }
 }

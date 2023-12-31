@@ -27,7 +27,15 @@ namespace MRA.Web.Controllers
 
             model.Drawings = await _drawingService.GetAllDrawings();
 
-            model.ProductNames = model.Drawings.Select(x => x.ProductName).Distinct().ToList();
+            model.ProductNameSelect = new Dictionary<string, int>();
+
+            foreach (var product in model.Drawings.Select(x => new { x.ProductName, x.ProductType }).Distinct().ToList())
+            {
+                if (!model.ProductNameSelect.ContainsKey(product.ProductName))
+                {
+                    model.ProductNameSelect.Add(product.ProductName, product.ProductType);
+                }
+            }
 
             return View(model);
         }
