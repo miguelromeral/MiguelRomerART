@@ -32,6 +32,7 @@ function sendFormFilterGallery() {
 function resetFilters() {
     var type = $("#sFilterType").val(0);
     var type = $("#sFilterProduct").val(0);
+    var type = $("#sFilterProductName").val("");
     var type = $("#sFilterSoftware").val(0);
     var type = $("#sFilterPaper").val(0);
     sendFormFilterGallery();
@@ -50,6 +51,14 @@ function onCompleteFilter() {
 function onSuccessFilter(data) {
     $("#" + ALERT_FILTER_FORM_ID).hide();
     $("#spResultsCount").text(data.length);
+    if (data.length == 1) {
+        $("#spTextoImagen").show();
+        $("#spTextoImagenes").hide();
+    } else {
+        $("#spTextoImagen").hide();
+        $("#spTextoImagenes").show();
+    }
+
     sortDivCollection(data);
     $(".mr-img-thumbnail").each((index, img) => {
         if (data.find(d => d.id == $(img).data("drawingid")) != null) {

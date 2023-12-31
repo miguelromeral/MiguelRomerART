@@ -8,5 +8,7 @@ namespace MRA.Web.Models
     public class IndexModel : PageModel
     {
         public List<Drawing>? Drawings;
+
+        public List<string> ProductNames;
     }
 }

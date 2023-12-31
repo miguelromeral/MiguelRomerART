@@ -57,6 +57,17 @@ namespace MRA.Services.Firebase
                 {
                     query = query.WhereEqualTo("favorite", true);
                 }
+                if (!String.IsNullOrEmpty(filter.ProductName))
+                {
+                    if (filter.ProductName.Equals("none"))
+                    {
+                        query = query.WhereEqualTo("product_name", "");
+                    }
+                    else
+                    {
+                        query = query.WhereEqualTo("product_name", filter.ProductName);
+                    }
+                }
                 if (filter.Type > 0)
                 {
                     query = query.WhereEqualTo("type", filter.Type);

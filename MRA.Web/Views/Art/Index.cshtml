@@ -98,7 +98,7 @@
             </button>
 
             <select id="sFilterType" class="mr-custom-select form-select form-select-sm mr-filter-item" name="Type" data-bs-theme="dark" onchange="sendFormFilterGallery()">
-                <option value="0" selected>🖌 Tipo</option>
+                <option value="0" selected>🖌 TIPO</option>
 
                 @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_TYPES.Where(x => x.Key > 0).OrderBy(x => x.Value))
                 {
@@ -109,7 +109,7 @@
 
 
             <select id="sFilterProduct" class="mr-custom-select form-select form-select-sm mr-filter-item" name="ProductType" data-bs-theme="dark" onchange="sendFormFilterGallery()">
-                <option value="0" selected>💽 Producto</option>
+                <option value="0" selected>💽 TIPO PRODUCTO</option>
 
                 @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_PRODUCT_TYPES.Where(x => x.Key > 0).OrderBy(x => x.Value))
                 {
@@ -117,10 +117,27 @@
                 }
             </select>
 
+            <select id="sFilterProductName" class="mr-custom-select form-select form-select-sm mr-filter-item"
+                    name="ProductName" data-bs-theme="dark" onchange="sendFormFilterGallery()">
+                <option value="" selected>PRODUCTO</option>
+
+                @foreach (var product in Model.ProductNames.OrderBy(x => x.ToString()))
+                {
+                    if (String.IsNullOrEmpty(product))
+                    {
+                        <option value="none">(Ninguno)</option>
+                    }
+                    else
+                    {
+                        <option value="@(product)">@(product)</option>
+                    }
+                }
+            </select>
+
 
             <select id="sFilterSoftware" class="mr-custom-select form-select form-select-sm mr-filter-item"
                 name="Software" data-bs-theme="dark" onchange="sendFormFilterGallery()">
-                <option value="0" selected>💻 Software</option>
+                <option value="0" selected>💻 SOFTWARE</option>
 
                 @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_SOFTWARE.Where(x => x.Key > 0).OrderBy(x => x.Value))
                 {
@@ -131,7 +148,7 @@
 
             <select id="sFilterPaper" class="mr-custom-select form-select form-select-sm mr-filter-item"
                     name="Paper" data-bs-theme="dark" onchange="sendFormFilterGallery()">
-                <option value="0" selected>📄 Tamaño</option>
+                <option value="0" selected>📄 TAMAÑO</option>
 
                 @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_PAPER_SIZE.Where(x => x.Key > 0).OrderBy(x => x.Value))
                 {
@@ -139,8 +156,10 @@
                 }
             </select>
 
+
+
             <div class="mr-choice-filter mr-filter-item">
-                <label class="form-check-label choice-label" for="flexSwitchCheckChecked">Favoritos</label>
+                <label class="form-check-label choice-label" for="flexSwitchCheckChecked">FAVORITOS</label>
                 <input class="form-check-input" name="Favorites" type="checkbox" role="switch" value="true" id="flexSwitchCheckChecked" onchange="sendFormFilterGallery()">
             </div>
 
@@ -156,7 +175,7 @@
     <div class="mr-loader-container">
         <div id="divImageCounter" class="slide-right">
             <span class="mr-suboption-filter">
-                <span id="spResultsCount">@Model.Drawings.Count</span> imágenes
+                <span id="spResultsCount">@Model.Drawings.Count</span> <span id="spTextoImagenes">imágenes</span><span id="spTextoImagen" style="display: none;">imagen</span>
             </span>
         </div>
         <div id="artGalleryLoader" class="mr-loader" style="display: none;">

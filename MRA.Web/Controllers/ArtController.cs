@@ -27,6 +27,8 @@ namespace MRA.Web.Controllers
 
             model.Drawings = await _drawingService.GetAllDrawings();
 
+            model.ProductNames = model.Drawings.Select(x => x.ProductName).Distinct().ToList();
+
             return View(model);
         }
 
