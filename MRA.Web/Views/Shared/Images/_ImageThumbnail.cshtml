@@ -14,10 +14,14 @@
             </div>
 
 
+            <span class="mr-img-thumbnail-date mr-img-thumbnail-info">
+                @(Model.Drawing.FormattedDateMini)
+            </span>
+
             @if (!String.IsNullOrEmpty(Model.Drawing.Name) && !String.IsNullOrEmpty(Model.Drawing.ModelName))
             {
 
-                <span class="mr-img-thumbnail-title">
+                <span class="mr-img-thumbnail-title mr-img-thumbnail-info">
                     <span>
                         @Model.Drawing.Name
                     </span>
@@ -26,15 +30,15 @@
             }
             else if (!String.IsNullOrEmpty(Model.Drawing.Name))
             {
-                <span class="mr-img-thumbnail-title">@Model.Drawing.Name</span>
+                <span class="mr-img-thumbnail-title mr-img-thumbnail-info">@Model.Drawing.Name</span>
             }
             else if (!String.IsNullOrEmpty(Model.Drawing.ModelName))
             {
 
-                <span class="mr-img-thumbnail-title">@Model.Drawing.ModelName</span>
+                <span class="mr-img-thumbnail-title mr-img-thumbnail-info">@Model.Drawing.ModelName</span>
             }
 
-            <div class="mr-img-thumbnail-stats">
+            <div class="mr-img-thumbnail-stats mr-img-thumbnail-info">
                 <div class="mr-img-thumbnail-stats-item">
                     <i class="bi bi-eye"></i>
                     <span>@Model.Drawing.Views</span>
