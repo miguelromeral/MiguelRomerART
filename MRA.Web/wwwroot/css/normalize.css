@@ -162,7 +162,7 @@ nav a, .nav-link, a {
 }
 
 nav a:hover, .nav-link:hover, a:hover {
-    text-shadow: 0px 0px 12px black;
+    /*text-shadow: 0px 0px 12px black;*/
     color: var(--mr-color-gold) !important;
 }
 

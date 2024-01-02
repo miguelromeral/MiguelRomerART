@@ -98,7 +98,7 @@
             </button>
 
             <select id="sFilterType" class="mr-custom-select form-select form-select-sm mr-filter-item" name="Type" data-bs-theme="dark" onchange="sendFormFilterGallery()">
-                <option value="0" selected>🖌 ESTILOS</option>
+                <option value="0" selected>🖌 ESTILO</option>
 
                 @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_TYPES.Where(x => x.Key > 0).OrderBy(x => x.Value))
                 {
@@ -135,7 +135,7 @@
                                 <option value="@(product.Key)">🎮 @(product.Key)</option>
                                 break;
                             case 2:
-                                <option value="@(product.Key)">🎞 @(product.Key)</option>
+                                <option value="@(product.Key)">🎬 @(product.Key)</option>
                                 break;
                             case 3:
                                 <option value="@(product.Key)">🎙 @(product.Key)</option>
@@ -176,7 +176,7 @@
 
 
             <div class="mr-choice-filter mr-filter-item">
-                <label class="form-check-label choice-label" for="flexSwitchCheckChecked">FAVORITOS</label>
+                <label class="form-check-label choice-label" for="flexSwitchCheckChecked" style="font-weight: bold;">FAVORITOS</label>
                 <input class="form-check-input" name="Favorites" type="checkbox" role="switch" value="true" id="flexSwitchCheckChecked" onchange="sendFormFilterGallery()">
             </div>
 
