@@ -98,7 +98,7 @@
             </button>
 
             <select id="sFilterType" class="mr-custom-select form-select form-select-sm mr-filter-item" name="Type" data-bs-theme="dark" onchange="sendFormFilterGallery()">
-                <option value="0" selected>🖌 TIPO</option>
+                <option value="0" selected>🖌 ESTILOS</option>
 
                 @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_TYPES.Where(x => x.Key > 0).OrderBy(x => x.Value))
                 {
@@ -109,7 +109,7 @@
 
 
             <select id="sFilterProduct" class="mr-custom-select form-select form-select-sm mr-filter-item" name="ProductType" data-bs-theme="dark" onchange="sendFormFilterGallery()">
-                <option value="0" selected>TIPO PRODUCTO</option>
+                <option value="0" selected>TIPO</option>
 
                 @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_PRODUCT_TYPES.Where(x => x.Key > 0).OrderBy(x => x.Value))
                 {

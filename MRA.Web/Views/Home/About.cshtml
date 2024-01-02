@@ -72,7 +72,7 @@
                             int maxHealth = 3315;
                             int health = new Random().Next(minHealth, maxHealth + 1);
 
-                            double porcentaje = (double) health / (double) maxHealth;
+                            double porcentaje = (double)health / (double)maxHealth;
                             int porcentajeEntero = (int)(porcentaje * 100);
                         }
                         <div>
@@ -144,11 +144,11 @@
                     </div>
                 </div>
             </div>
-            
+
         </div>
 
     </div>
-    
+
     <div class="mr-ff-container">
         <div class="ff-hand-container">
             <div class="flicker">
@@ -160,17 +160,17 @@
     <div class="mr-ff-container">
         <div class="mr-references-section row">
 
-        @foreach (var inspiration in Model.Inspirations.OrderBy(x => x.Name))
-        {
-            <div class="ff-hand-container mr-inspiration-item col-sm-5 col-md-4 col-lg-3">
-                <div class="hide-hand" style="left: -22px;">
-                    <img src="~/assets/icons/ff-pointer.png" class="ff-hand-icon" />
-                </div>
+            @foreach (var inspiration in Model.Inspirations.OrderBy(x => x.Name))
+            {
+                <div class="ff-hand-container mr-inspiration-item col-sm-5 col-md-4 col-lg-3">
+                    <div class="hide-hand" style="left: -22px;">
+                        <img src="~/assets/icons/ff-pointer.png" class="ff-hand-icon" />
+                    </div>
                     @{
                         var materia = "";
                         switch (inspiration.Type)
                         {
-                            case 1: 
+                            case 1:
                                 materia = "summon";
                                 break;
                             case 2:
@@ -183,39 +183,356 @@
                                 break;
                         }
                     }
-                <div class="ff-materia @(materia)">
-                </div>
+                    <div class="ff-materia @(materia)">
+                    </div>
 
                     <div class="mr-reference-name-container">
-                <span class="title mr-inspiration-name">@inspiration.Name</span>
-                <div>
-                    <div class="mr-social-links">
+                        <span class="title mr-inspiration-name">@inspiration.Name</span>
                         <div>
-                            @if (!String.IsNullOrEmpty(inspiration.Instagram))
-                            {
-                                <a href="@(inspiration.Instagram)" target="_blank">
-                                    <i class="bi bi-instagram"></i>
-                                </a>
-                            }
+                            <div class="mr-social-links">
+                                <div>
+                                    @if (!String.IsNullOrEmpty(inspiration.Instagram))
+                                    {
+                                        <a href="@(inspiration.Instagram)" target="_blank">
+                                            <i class="bi bi-instagram"></i>
+                                        </a>
+                                    }
+                                </div>
+                                <div>
+                                    @if (!String.IsNullOrEmpty(inspiration.Twitter))
+                                    {
+                                        <a href="@(inspiration.Twitter)" target="_blank">
+                                            <i class="bi bi-twitter-x"></i>
+                                        </a>
+                                    }
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            @if (!String.IsNullOrEmpty(inspiration.Twitter))
-                            {
-                                <a href="@(inspiration.Twitter)" target="_blank">
-                                    <i class="bi bi-twitter-x"></i>
-                                </a>
-                            }
-                        </div>
+
+
                     </div>
-                </div>
-                
-                
+
                 </div>
 
-            </div>
-  
-        }
+            }
         </div>
 
+    </div>
+</div>
+<div class="row mb-2 mt-2">
+
+
+    <div class="col-sm-12 col-sm-12 col-md-12 mb-2 mt-2">
+        <h4>Detalles</h4>
+    </div>
+
+    <div class="col-sm-12 col-md-6 col-lg-4 mr-details-section">
+        <span class="mr-details-section-title">
+            Género
+        </span>
+        <span class="mr-details-section-content capitalize">
+            Hombre
+        </span>
+    </div>
+
+    <div class="col-sm-12 col-md-6 col-lg-4 mr-details-section">
+        <span class="mr-details-section-title">
+            📍 Ubicación
+        </span>
+        <span class="mr-details-section-content capitalize">
+            Madrid, España
+        </span>
+    </div>
+
+    <div class="col-sm-12 col-md-6 col-lg-4 mr-details-section">
+        <span class="mr-details-section-title">
+            💬 Redes Sociales
+        </span>
+        <span class="mr-details-section-content capitalize">
+            <div class="mr-social-links">
+                <div>
+                    <a href="https://www.instagram.com/_miguelromeral/" target="_blank">
+                        <i class="bi bi-instagram"></i>
+                    </a>
+                </div>
+                <div>
+                    <a href="https://twitter.com/MiguelRomeral" target="_blank">
+                        <i class="bi bi-twitter-x"></i>
+                    </a>
+                </div>
+                <div>
+                    <a href="https://open.spotify.com/user/miguelromeral" target="_blank">
+                        <i class="bi bi-spotify"></i>
+                    </a>
+                </div>
+                <div>
+                    <a href="https://www.pinterest.es/miguelromeral15/" target="_blank">
+                        <i class="bi bi-pinterest"></i>
+                    </a>
+                </div>
+                <div>
+                    <a href="https://www.linkedin.com/in/miguelromeral/" target="_blank">
+                        <i class="bi bi-linkedin"></i>
+                    </a>
+                </div>
+                <div>
+                    <a href="https://github.com/miguelromeral/" target="_blank">
+                        <i class="bi bi-github"></i>
+                    </a>
+                </div>
+            </div>
+        </span>
+    </div>
+
+    <div class="col-sm-12 col-md-6 col-lg-4 mr-details-section">
+        <span class="mr-details-section-title">
+            📽 Algunas Películas Favoritas
+        </span>
+        <div class="mr-details-section-content capitalize large">
+            <ul>
+                <li>
+                    El Gato con Botas: El Último Deseo (2022)
+                </li>
+                <li>
+                    Joker (2019)
+                </li>
+                <li>
+                    Green Book (2018)
+                </li>
+                <li>
+                    Spider-Man: Into de Spider-Verse (2018)
+                </li>
+                <li>
+                    Inside Out (2015)
+                </li>
+                <li>
+                    Her (2013)
+                </li>
+                <li>
+                    Rush (2013)
+                </li>
+                <li>
+                    The Intouchables (2011)
+                </li>
+                <li>
+                    Toy Story 3 (2010)
+                </li>
+                <li>
+                    Gran Torino (2008)
+                </li>
+                <li>
+                    The Dark Knight (2008)
+                </li>
+                <li>
+                    V de Vendetta (2005)
+                </li>
+                <li>
+                    Harry Potter y el Prisionero de Azkabán (2003)
+                </li>
+                <li>
+                    Hércules (1997)
+                </li>
+                <li>
+                    El Indomable Will Hunting (1997)
+                </li>
+                <li>
+                    El Rey León (1994)
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-sm-12 col-md-6 col-lg-4 mr-details-section">
+        <span class="mr-details-section-title">
+            📺 Algunas Series Favoritas
+        </span>
+        <div class="mr-details-section-content capitalize large">
+            <ul>
+                <li>
+                    Arcane (2021-)
+                </li>
+                <li>
+                    The Last Of Us (2023-)
+                </li>
+                <li>
+                    Los Simpsons (1989-)
+                </li>
+                <li>
+                    Better Call Saul (2015-2022)
+                </li>
+                <li>
+                    Cortar Por la Línea de Puntos (2021)
+                </li>
+                <li>
+                    MR. ROBOT (2015-2019)
+                </li>
+                <li>
+                    Sherlock (2010-2017)
+                </li>
+                <li>
+                    Cómo Conocí a Vuestra Madre (2005-2014)
+                </li>
+                <li>
+                    The Office (US) (2005-2013)
+                </li>
+                <li>
+                    Breaking Bad (2008-2013)
+                </li>
+                <li>
+                    Los Soprano (1999-2007)
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-sm-12 col-md-6 col-lg-4 mr-details-section">
+        <span class="mr-details-section-title">
+            💽 Algunas Bandas de Música Favoritas
+        </span>
+        <div class="mr-details-section-content capitalize large">
+            <ul>
+                <li>
+                    Aitana Ocaña
+                </li>
+                <li>
+                    Chase & Status
+                </li>
+                <li>
+                    Dua Lipa
+                </li>
+                <li>
+                    Fall Out Boy
+                </li>
+                <li>
+                    Hans Zimmer
+                </li>
+                <li>
+                    Imagine Dragons
+                </li>
+                <li>
+                    Katy Perry
+                </li>
+                <li>
+                    Lena Raine
+                </li>
+                <li>
+                    Mac Quayle
+                </li>
+                <li>
+                    Morat
+                </li>
+                <li>
+                    Nobuo Uematsu
+                </li>
+                <li>
+                    OneRepublic
+                </li>
+                <li>
+                    Queen
+                </li>
+                <li>
+                    Ramin Djawadi
+                </li>
+                <li>
+                    Rise Against
+                </li>
+                <li>
+                    Sia
+                </li>
+            </ul>
+        </div>
+    </div>
+
+
+    <div class="col-sm-12 col-md-6 col-lg-4 mr-details-section">
+        <span class="mr-details-section-title">
+            🎮 Algunos Videojuegos Favoritas
+        </span>
+        <div class="mr-details-section-content capitalize large">
+            <ul>
+                <li>
+                    FINAL FANTASY XVI (2023)
+                </li>
+                <li>
+                    Hi-Fi Rush (2023)
+                </li>
+                <li>
+                    God Of War Ragnarök (2022)
+                </li>
+                <li>
+                    Tunic (2022)
+                </li>
+                <li>
+                    Horizon Forbidden West (2022)
+                </li>
+                <li>
+                    Kena: Bridge of Spirits (2021)
+                </li>
+                <li>
+                    Ratchet & Clank: Rift Apart (2021)
+                </li>
+                <li>
+                    Hades (2020)
+                </li>
+                <li>
+                    Fall Guys: Ultimate Knockout (2020)
+                </li>
+                <li>
+                    Crash Team Racing: Nitro-Fueled (2019)
+                </li>
+                <li>
+                    Celeste (2018)
+                </li>
+                <li>
+                    Cuphead (2017)
+                </li>
+                <li>
+                    Hollow Knight (2017)
+                </li>
+                <li>
+                    Sonic Mania (2016)
+                </li>
+                <li>
+                    Undertale (2015)
+                </li>
+                <li>
+                    The Last Of Us (2013)
+                </li>
+                <li>
+                    Spyro 2: Ripto's Rage! (1999)
+                </li>
+                <li>
+                    Crash Bandicoot 3: Warped (1998)
+                </li>
+                <li>
+                    FINAL FANTASY: VII (1997)
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-sm-12 col-md-6 col-lg-4 mr-details-section">
+        <span class="mr-details-section-title">
+            📕 Algunos Libros Favoritos
+        </span>
+        <div class="mr-details-section-content capitalize large">
+            <ul>
+                <li>
+                    Origen, Dan Brown (2017)
+                </li>
+                <li>
+                    Inferno, Dan Brown (2014)
+                </li>
+                <li>
+                    Hagakure: El camino del Samurái, Yamamoto Tsunetomo (2014)
+                </li>
+                <li>
+                    Canciones para Paula, Blue Jeans (2009)
+                </li>
+                <li>
+                    El sabueso de los Baskerville, Arthur Conan Doyle (1901-1902)
+                </li>
+            </ul>
+        </div>
     </div>
 </div>
