@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MRA.Services;
 using MRA.Services.AzureStorage;
 using MRA.Services.Firebase;
 using MRA.Services.Firebase.Interfaces;
@@ -9,12 +10,13 @@ namespace MRA.Web.Controllers
 {
     public class HomeController : Controller
     {
-
+        private readonly DrawingService _drawingService;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, DrawingService drawingService)
         {
             _logger = logger;
+            _drawingService = drawingService;
         }
 
         public async Task<IActionResult> Index()
@@ -27,10 +29,9 @@ namespace MRA.Web.Controllers
             return View();
         }
 
-        public IActionResult About()
+        public async Task<IActionResult> About()
         {
-            return RedirectToAction("Index", "Art");
-            //return View();
+            return View(new AboutViewModel() { Inspirations = await _drawingService.GetAllInspirations() });
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

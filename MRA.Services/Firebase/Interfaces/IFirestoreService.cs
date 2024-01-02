@@ -11,6 +11,7 @@ namespace MRA.Services.Firebase.Interfaces
     public interface IFirestoreService
     {
         Task<List<Drawing>> GetAll();
+        Task<List<Inspiration>> GetAllInspirations();
         Task<List<Drawing>> Filter(FilterDrawingModel filter);
         Task<Drawing> FindDrawingById(string documentId);
         Task UpdateLikes(string documentId);

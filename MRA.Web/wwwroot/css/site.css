@@ -100,6 +100,7 @@ span.mr-loader-subtitle{
 
 .nav-link{
     color: var(--mr-background-color) !important;
+    font-weight: bold;
 }
 
 img.mr-chat-image-miguel.brand {
@@ -162,4 +163,9 @@ img.mr-chat-image-miguel {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+img {
+    user-select: none;
+    pointer-events: none;
 }

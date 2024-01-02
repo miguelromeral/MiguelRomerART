@@ -23,6 +23,8 @@ namespace MRA.Services.Firebase
         private readonly string _collectionName;
         private readonly DrawingFirebaseConverter _converter;
 
+        private readonly string COLLECTION_INSPIRATION = "inspirations";
+
         public FirestoreService(string collectionName, string urlBase, FirestoreDb firestoreDb)
         {
             _firestoreDb = firestoreDb;
@@ -46,6 +48,28 @@ namespace MRA.Services.Firebase
 
             return documents.Select(_converter.ConvertToModel).ToList();
         }
+
+
+        public async Task<List<Inspiration>> GetAllInspirations()
+        {
+            try
+            {
+                var collection = _firestoreDb.Collection(COLLECTION_INSPIRATION);
+
+                var snapshot = (await collection.GetSnapshotAsync());
+                var documents = snapshot.Documents;
+                var inspdocs = documents.Select(s => s.ConvertTo<InspirationDocument>()).ToList();
+
+                var converter = new InspirationFirebaseConverter();
+
+                return inspdocs.Select(converter.ConvertToModel).ToList();
+            }catch(Exception ex)
+            {
+                Console.WriteLine("Error when getting inspirations: " + ex.Message);
+                return new List<Inspiration>();
+            }
+        }
+
 
         public async Task<List<Drawing>> Filter(FilterDrawingModel filter)
         {

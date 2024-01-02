@@ -1,0 +1,124 @@
+﻿@import 'variables.css';
+
+div.mr-img-container {
+    border: var(--mr-border-size) solid grey;
+    border-radius: var(--mr-border-radius);
+    padding: var(--mr-padding-btw-border-image);
+}
+
+img {
+    border-radius: var(--mr-border-radius-image);
+}
+
+div.mr-img-container .mr-img-title {
+    color: grey;
+    font-size: var(--mr-font-size-small);
+}
+
+.full-width {
+    width: 100%;
+}
+
+div.mr-social-links {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+div.mr-references-section{
+    border-top: var(--mr-border-size) solid var(--mr-chat-color);
+    padding-top: 10px;
+    background: linear-gradient(var(--mr-chat-color-secondary) 0%, transparent 20%);
+}
+
+.mr-inspiration-name {
+    font-size: var(--mr-font-size-large);
+    font-weight: bold;
+}
+
+.mr-ff-container {
+    border: 3px solid white;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #0b0cae, black);
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 14px;
+    font-family: monospace;
+    position: relative;
+}
+
+.mr-ff-container .mr-ff-image img {
+    border-radius: 0px !important;
+    height: 100px;
+}
+
+.mr-ff-stats-basic .mr-ff-stats-item {
+    font-weight: 900;
+}
+
+.mr-ff-stats-basic .mr-ff-stats-item .title {
+    color: #04e5e7;
+}
+
+.mr-ff-stats-basic{
+    padding-left: 10px;
+}
+
+.mr-ff-stats-basic span {
+    padding-right:8px;
+}
+
+.ff-hand-container {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    align-items: center;
+    position: relative;
+}
+
+div:has(> .ff-hand-icon) {
+    position: absolute;
+    left: -32px;
+    top: -2px;
+    opacity: 0;
+}
+
+.ff-hand-container:has(:hover) div:has(> .ff-hand-icon) {
+    /*opacity: 1;*/
+    animation: flicker 0.2s infinite;
+}
+
+.ff-hand-icon {
+    width: 32px;
+}
+
+.ff-progress-container {
+    position: relative;
+}
+
+.ff-progress-container div {
+    height: 2px;
+    position: absolute;
+    width: 80px;
+}
+
+.ff-progress-total {
+    background: black;
+    width: 100%;
+    z-index: 1;
+}
+
+.ff-progress-health {
+    background: linear-gradient(90deg, #0d7ff7, white) !important;
+    z-index: 2;
+}
+
+.ff-progress-magic {
+    background: linear-gradient(90deg, rgb(4 255 130), white);
+    z-index: 2;
+}

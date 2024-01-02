@@ -1,10 +1,150 @@
-﻿
+﻿@model AboutViewModel
+
 @{
     ViewData["Title"] = "Sobre Mí";
 }
 
-<h1>Sobre Mí</h1>
 
+@section Styles {
+    <link href="~/css/about.css" rel="stylesheet" />
+}
+
+
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        <h1>Sobre Mí</h1>
+
+    </div>
+</div>
+
+
+
+@* <div class="mr-img-container">
+    <img src="~/assets/images/miguel_formula1.jpg" class="full-width" />
+    <span class="mr-img-title">
+        En la 'Formula 1: The Exhibition' en Madrid, agosto de 2023
+    </span>
+</div> *@
+<div>
+    <p>
+        ¡Hola! Yo soy Miguel Romeral, desarrollador web y artista aficionado. Te doy las gracias por visitar mi web. Espero que disfrutes del contenido.
+    </p>
+
+    <div class="mr-ff-container">
+        <div class="mr-ff-image">
+            <img src="~/assets/images/miguel.jpeg" />
+        </div>
+        <div class="mr-ff-stats">
+
+            <div class="mr-ff-stats-basic">
+                <span>
+                    Miguel
+                </span>
+                <div class="level">
+                    <div class="ff-hand-container">
+                        <div>
+                            <img src="~/assets/icons/ff-pointer.png" class="ff-hand-icon" />
+                        </div>
+                        <span class="title">LV</span>
+                        @{
+                            DateTime fechaInicial = new DateTime(1996, 1, 12);
+                            DateTime fechaActual = DateTime.Now;
+                            int añosPasados = fechaActual.Year - fechaInicial.Year;
+                            if (fechaActual.Month < fechaInicial.Month || (fechaActual.Month == fechaInicial.Month && fechaActual.Day < fechaInicial.Day))
+                            {
+                                añosPasados--;
+                            }
+                        }
+                        <span class="value">@(añosPasados)</span>
+                    </div>
+                </div>
+                <div class="mr-ff-stats-item level">
+                    <div class="ff-hand-container">
+                        <div>
+                            <img src="~/assets/icons/ff-pointer.png" class="ff-hand-icon" />
+                        </div>
+                        <span class="title">HP</span>
+                        @{
+                            int minHealth = 1000;
+                            int maxHealth = 3315;
+                            int health = new Random().Next(minHealth, maxHealth + 1);
+
+                            double porcentaje = (double) health / (double) maxHealth;
+                            int porcentajeEntero = (int)(porcentaje * 100);
+                        }
+                        <div>
+                            <span class="value">@(health)/@(maxHealth)</span>
+                            <div class="ff-progress-container">
+                                <div class="ff-progress-total"></div>
+                                <div class="ff-progress-health" style="width: @(porcentajeEntero)%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mr-ff-stats-item  magic">
+                    <div class="ff-hand-container">
+                        <div>
+                            <img src="~/assets/icons/ff-pointer.png" class="ff-hand-icon" />
+                        </div>
+                        <span class="title">MP</span>
+                        @{
+                            int minMagic = 10;
+                            int maxMagic = 112;
+                            int magic = new Random().Next(minMagic, maxMagic + 1);
+
+                            double porcentajeMagic = (double)magic / (double)maxMagic;
+                            int porcentajeMagicEntero = (int)(porcentajeMagic * 100);
+                        }
+                        <div>
+                            <span class="value">@(magic)/@(maxMagic)</span>
+                            <div class="ff-progress-container">
+                                <div class="ff-progress-total"></div>
+                                <div class="ff-progress-magic" style="width: @(porcentajeMagicEntero)%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+    </div>
+
+    <p>
+        <h3>
+            Sobre mí
+        </h3>
+        Soy un chico introvertido y sensible. ISTJ.
+    </p>
+
+    <div class="mr-references-section">
+        <h4>Artistas Profesionales de Referencia</h4>
+        @foreach(var inspiration in Model.Inspirations.Where(x => x.Type == 1))
+        {
+            <div>
+                <span class="mr-inspiration-name">@inspiration.Name</span>
+                <div class="mr-social-links">
+                    <div>
+                        @if (!String.IsNullOrEmpty(inspiration.Instagram))
+                        {
+                            <a href="@(inspiration.Instagram)" target="_blank">
+                                <i class="bi bi-instagram"></i>
+                            </a>
+                        }
+                    </div>
+                    <div>
+                        @if (!String.IsNullOrEmpty(inspiration.Twitter))
+                        {
+                            <a href="@(inspiration.Twitter)" target="_blank">
+                                <i class="bi bi-twitter"></i>
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
 
 <div>
     TODO:
@@ -43,15 +183,15 @@
             👨‍🎓 Estudios
         </span>
         <span class="mr-details-section-content">
-            📜 Grado en Ingeniería Informática por la Universidad de Alcalá
+            📜 Grado en Ingeniería Informática
         </span>
     </div>
     <div class="col-sm-12 col-md-6 col-lg-4 mr-details-section">
         <span class="mr-details-section-title">
-            👨‍🎓 escue
+            👨‍🎓 Universidad
         </span>
         <span class="mr-details-section-content">
-            📜 Grado en Ingeniería Informática por la Universidad de Alcalá
+            📜 Universidad de Alcalá
         </span>
     </div>
 </div>

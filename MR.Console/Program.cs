@@ -99,7 +99,7 @@ try
             helper.ShowMessageInfo("Blob Thumbnail Width".PadRight(25)+ widthThumbnail);
             helper.ShowMessageInfo("*****");
 
-            var confirm = helper.FillBoolValue(false, false, "Proceed to upload to AZURE?");
+            var confirm = helper.FillBoolValue(false, true, "Proceed to upload to AZURE?");
 
             if (confirm)
             {

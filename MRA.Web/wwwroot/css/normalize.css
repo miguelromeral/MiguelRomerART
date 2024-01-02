@@ -24,6 +24,7 @@ body {
     /*font-family: 'Kanit', sans-serif;*/
     background: var(--mr-background-color);
     color: white;
+    font-weight: 300;
 }
 
 main {
@@ -154,12 +155,13 @@ nav {
     border-bottom: 1px solid var(--mr-chat-color);
 }
 
-nav a, .nav-link {
+nav a, .nav-link, a {
     color: var(--mr-chat-color) !important;
     transition: var(--mr-transition-time) ease-in-out;
+    font-weight: bold;
 }
 
-nav a:hover, .nav-link:hover {
+nav a:hover, .nav-link:hover, a:hover {
     text-shadow: 0px 0px 12px black;
     color: var(--mr-color-gold) !important;
 }
