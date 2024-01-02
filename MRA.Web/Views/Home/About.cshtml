@@ -27,10 +27,13 @@
 </div> *@
 <div>
     <p>
-        ¡Hola! Yo soy Miguel Romeral, desarrollador web y artista aficionado. Te doy las gracias por visitar mi web. Espero que disfrutes del contenido.
+        ¡Hola! Yo soy Miguel Romeral, desarrollador web y artista aficionado.
     </p>
 
-    <div class="mr-ff-container">
+    <div class="mr-ff-container" style="padding-top: 20px; padding-bottom: 20px;">
+        <div class="mr-ff-container mr-ff-title-corner">
+            Datos Básicos
+        </div>
         <div class="mr-ff-image">
             <img src="~/assets/images/miguel.jpeg" />
         </div>
@@ -42,7 +45,7 @@
                 </span>
                 <div class="level">
                     <div class="ff-hand-container">
-                        <div>
+                        <div class="hide-hand">
                             <img src="~/assets/icons/ff-pointer.png" class="ff-hand-icon" />
                         </div>
                         <span class="title">LV</span>
@@ -60,7 +63,7 @@
                 </div>
                 <div class="mr-ff-stats-item level">
                     <div class="ff-hand-container">
-                        <div>
+                        <div class="hide-hand">
                             <img src="~/assets/icons/ff-pointer.png" class="ff-hand-icon" />
                         </div>
                         <span class="title">HP</span>
@@ -83,7 +86,7 @@
                 </div>
                 <div class="mr-ff-stats-item  magic">
                     <div class="ff-hand-container">
-                        <div>
+                        <div class="hide-hand">
                             <img src="~/assets/icons/ff-pointer.png" class="ff-hand-icon" />
                         </div>
                         <span class="title">MP</span>
@@ -104,95 +107,115 @@
                         </div>
                     </div>
                 </div>
+                <div class="mr-ff-stats-item basic">
+                    <div class="ff-hand-container">
+                        <div class="hide-hand">
+                            <img src="~/assets/icons/ff-pointer.png" class="ff-hand-icon" />
+                        </div>
+                        <span class="title">😳</span>
+                        <span class="value"><a href="https://www.humanmetrics.com/personalidad/istj" target="_blank">ISTJ</a></span>
+                    </div>
+                </div>
+                <div class="mr-ff-stats-item basic">
+                    <div class="ff-hand-container">
+                        <div class="hide-hand">
+                            <img src="~/assets/icons/ff-pointer.png" class="ff-hand-icon" />
+                        </div>
+                        <span class="title">💼</span>
+                        <span class="value">Software Developer</span>
+                    </div>
+                </div>
+                <div class="mr-ff-stats-item basic">
+                    <div class="ff-hand-container">
+                        <div class="hide-hand">
+                            <img src="~/assets/icons/ff-pointer.png" class="ff-hand-icon" />
+                        </div>
+                        <span class="title">📅</span>
+                        <span class="value">Enero de 1996 🐐</span>
+                    </div>
+                </div>
+                <div class="mr-ff-stats-item basic">
+                    <div class="ff-hand-container">
+                        <div class="hide-hand">
+                            <img src="~/assets/icons/ff-pointer.png" class="ff-hand-icon" />
+                        </div>
+                        <span class="title">👨‍🎓</span>
+                        <span class="value">Universidad de Alcalá</span>
+                    </div>
+                </div>
             </div>
             
         </div>
 
     </div>
+    
+    <div class="mr-ff-container">
+        <div class="ff-hand-container">
+            <div class="flicker">
+                <img src="~/assets/icons/ff-pointer.png" class="ff-hand-icon" />
+            </div>
+            <span class="mr-ff-title">Artistas de Referencia</span>
+        </div>
+    </div>
+    <div class="mr-ff-container">
+        <div class="mr-references-section row">
 
-    <p>
-        <h3>
-            Sobre mí
-        </h3>
-        Soy un chico introvertido y sensible. ISTJ.
-    </p>
-
-    <div class="mr-references-section">
-        <h4>Artistas Profesionales de Referencia</h4>
-        @foreach(var inspiration in Model.Inspirations.Where(x => x.Type == 1))
+        @foreach (var inspiration in Model.Inspirations.OrderBy(x => x.Name))
         {
-            <div>
-                <span class="mr-inspiration-name">@inspiration.Name</span>
-                <div class="mr-social-links">
-                    <div>
-                        @if (!String.IsNullOrEmpty(inspiration.Instagram))
+            <div class="ff-hand-container mr-inspiration-item col-sm-5 col-md-4 col-lg-3">
+                <div class="hide-hand" style="left: -22px;">
+                    <img src="~/assets/icons/ff-pointer.png" class="ff-hand-icon" />
+                </div>
+                    @{
+                        var materia = "";
+                        switch (inspiration.Type)
                         {
-                            <a href="@(inspiration.Instagram)" target="_blank">
-                                <i class="bi bi-instagram"></i>
-                            </a>
+                            case 1: 
+                                materia = "summon";
+                                break;
+                            case 2:
+                                materia = "support";
+                                break;
+                            case 3:
+                                materia = "magic";
+                                break;
+                            default:
+                                break;
                         }
-                    </div>
-                    <div>
-                        @if (!String.IsNullOrEmpty(inspiration.Twitter))
-                        {
-                            <a href="@(inspiration.Twitter)" target="_blank">
-                                <i class="bi bi-twitter"></i>
-                            </a>
-                        }
+                    }
+                <div class="ff-materia @(materia)">
+                </div>
+
+                    <div class="mr-reference-name-container">
+                <span class="title mr-inspiration-name">@inspiration.Name</span>
+                <div>
+                    <div class="mr-social-links">
+                        <div>
+                            @if (!String.IsNullOrEmpty(inspiration.Instagram))
+                            {
+                                <a href="@(inspiration.Instagram)" target="_blank">
+                                    <i class="bi bi-instagram"></i>
+                                </a>
+                            }
+                        </div>
+                        <div>
+                            @if (!String.IsNullOrEmpty(inspiration.Twitter))
+                            {
+                                <a href="@(inspiration.Twitter)" target="_blank">
+                                    <i class="bi bi-twitter-x"></i>
+                                </a>
+                            }
+                        </div>
                     </div>
                 </div>
+                
+                
+                </div>
+
             </div>
+  
         }
-    </div>
-</div>
+        </div>
 
-<div>
-    TODO:
-    Artistas Favoritos
-</div>
-
-<div>
-    TODO:
-    Lista de empresas en las que he trabajado (en grande la empresa, en pequeño el proyecto)
-</div>
-
-<div class="row">
-    <div class="col-sm-12">
-        ¡Hola! Soy Miguel Romeral.
     </div>
 </div>
-<div class="row">
-    <div class="col-sm-12 col-md-6 col-lg-4 mr-details-section">
-        <span class="mr-details-section-title">
-            📅 Nacimiento
-        </span>
-        <span class="mr-details-section-content">
-            🐐 Enero de 1996
-        </span>
-    </div>
-    <div class="col-sm-12 col-md-6 col-lg-4 mr-details-section">
-        <span class="mr-details-section-title">
-            💼 Trabajo
-        </span>
-        <span class="mr-details-section-content">
-            💻 Ingeniero de Software. Desarrollador Web
-        </span>
-    </div>
-    <div class="col-sm-12 col-md-6 col-lg-4 mr-details-section">
-        <span class="mr-details-section-title">
-            👨‍🎓 Estudios
-        </span>
-        <span class="mr-details-section-content">
-            📜 Grado en Ingeniería Informática
-        </span>
-    </div>
-    <div class="col-sm-12 col-md-6 col-lg-4 mr-details-section">
-        <span class="mr-details-section-title">
-            👨‍🎓 Universidad
-        </span>
-        <span class="mr-details-section-content">
-            📜 Universidad de Alcalá
-        </span>
-    </div>
-</div>
-
