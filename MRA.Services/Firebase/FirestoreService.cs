@@ -146,6 +146,31 @@ namespace MRA.Services.Firebase
             return null;
         }
 
+        public async Task<Inspiration> FindInspirationById(string documentId)
+        {
+            try
+            {
+                DocumentReference docRef = _firestoreDb.Collection(COLLECTION_INSPIRATION).Document(documentId);
+
+                DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+
+                if (snapshot.Exists)
+                {
+                    await UpdateViews(documentId);
+                    var converter = new InspirationFirebaseConverter();
+                    return converter.ConvertToModel(snapshot.ConvertTo<InspirationDocument>());
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Exception when getting document '" + documentId + "': " + ex.Message);
+            }
+            return null;
+        }
+
+
         public async Task UpdateViews(string documentId)
         {
             // Realiza la transacción para actualizar la propiedad "views"
@@ -219,6 +244,19 @@ namespace MRA.Services.Firebase
         {
             var collection = _firestoreDb.Collection(_collectionName);
             var drawingDocument = _converter.ConvertToDocument(document);
+
+            // Obtiene una referencia al documento específico en la colección
+            DocumentReference docRef = collection.Document(document.Id);
+
+            // Inserta o actualiza el documento con los datos especificados
+            await docRef.SetAsync(drawingDocument);
+        }
+
+
+        public async Task AddAsync(Inspiration document)
+        {
+            var collection = _firestoreDb.Collection(COLLECTION_INSPIRATION);
+            var drawingDocument = new InspirationFirebaseConverter().ConvertToDocument(document);
 
             // Obtiene una referencia al documento específico en la colección
             DocumentReference docRef = collection.Document(document.Id);

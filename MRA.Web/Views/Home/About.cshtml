@@ -149,15 +149,16 @@
 
     </div>
 
-    <div class="mr-ff-container">
+
+    <div class="mr-ff-container mr-ff-container-button" data-bs-toggle="collapse" href="#inspirations" aria-expanded="false" aria-controls="inspirations">
         <div class="ff-hand-container">
-            <div class="flicker">
+            <div id="hiInspirations" class="flicker hiHeader">
                 <img src="~/assets/icons/ff-pointer.png" class="ff-hand-icon" />
             </div>
             <span class="mr-ff-title">Artistas de Referencia</span>
         </div>
     </div>
-    <div class="mr-ff-container">
+    <div class="mr-ff-container collapse" id="inspirations">
         <div class="mr-references-section row">
 
             @foreach (var inspiration in Model.Inspirations.OrderBy(x => x.Name))
@@ -203,6 +204,30 @@
                                     {
                                         <a href="@(inspiration.Twitter)" target="_blank">
                                             <i class="bi bi-twitter-x"></i>
+                                        </a>
+                                    }
+                                </div>
+                                <div>
+                                    @if (!String.IsNullOrEmpty(inspiration.YouTube))
+                                    {
+                                        <a href="@(inspiration.YouTube)" target="_blank">
+                                            <i class="bi bi-youtube"></i>
+                                        </a>
+                                    }
+                                </div>
+                                <div>
+                                    @if (!String.IsNullOrEmpty(inspiration.Twitch))
+                                    {
+                                        <a href="@(inspiration.Twitch)" target="_blank">
+                                            <i class="bi bi-twitch"></i>
+                                        </a>
+                                    }
+                                </div>
+                                <div>
+                                    @if (!String.IsNullOrEmpty(inspiration.Pinterest))
+                                    {
+                                        <a href="@(inspiration.Pinterest)" target="_blank">
+                                            <i class="bi bi-pinterest"></i>
                                         </a>
                                     }
                                 </div>
@@ -300,7 +325,7 @@
                     Green Book (2018)
                 </li>
                 <li>
-                    Spider-Man: Into de Spider-Verse (2018)
+                    Spider-Man: Into The Spider-Verse (2018)
                 </li>
                 <li>
                     Inside Out (2015)

@@ -23,6 +23,13 @@ namespace MRA.Services.Firebase.Documents
         public string twitter { get; set; }
 
         [FirestoreProperty]
+        public string youtube { get; set; }
+        [FirestoreProperty]
+        public string twitch { get; set; }
+        [FirestoreProperty]
+        public string pinterest { get; set; }
+
+        [FirestoreProperty]
         public int type{ get; set; }
     }
 }

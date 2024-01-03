@@ -195,3 +195,15 @@ div.flicker:has(> .ff-hand-icon) {
     flex-wrap: nowrap;
     align-items: flex-start;
 }
+
+.mr-ff-container-button {
+    cursor: pointer;
+}
+
+.hiHeader{
+    display: none;
+}
+
+.mr-ff-container-button:has(+ .mr-ff-container.collapse.show) .hiHeader {
+    display: block;
+}

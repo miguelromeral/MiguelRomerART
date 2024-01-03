@@ -22,6 +22,9 @@ namespace MRA.Services.Firebase.Converters
                 Instagram = drawingDocument.instagram,
                 Type = drawingDocument.type,
                 Twitter = drawingDocument.twitter,
+                YouTube = drawingDocument.youtube,
+                Twitch = drawingDocument.twitch,
+                Pinterest = drawingDocument.pinterest,
             };
         }
 
@@ -34,6 +37,9 @@ namespace MRA.Services.Firebase.Converters
                 instagram = drawing.Instagram,
                 twitter = drawing.Twitter,
                 type = drawing.Type,
+                youtube = drawing.YouTube,
+                twitch = drawing.Twitch,
+                pinterest = drawing.Pinterest,
             };
         }
     }
