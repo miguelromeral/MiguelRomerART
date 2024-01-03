@@ -37,6 +37,16 @@ namespace MRA.Web.Controllers
                 }
             }
 
+            model.ModelNameSelect = new List<string>();
+
+            foreach (var modelName in model.Drawings.Select(x => x.ModelName).Distinct().ToList())
+            {
+                if (!model.ModelNameSelect.Contains(modelName))
+                {
+                    model.ModelNameSelect.Add(modelName);
+                }
+            }
+
             return View(model);
         }
 

@@ -15,7 +15,8 @@ namespace MRA.Services.Firebase.Models
 
         public static Dictionary<int, string> DRAWING_TYPES = new Dictionary<int, string>()
             {
-                {1, "Tradicional"},
+                {0, "Otros"},
+                {1, "Lápices de Grafito"},
                 {2, "Digital"},
                 {3, "Sketch"},
                 {4, "Marcadores"},
@@ -53,7 +54,20 @@ namespace MRA.Services.Firebase.Models
         public string PathThumbnail { get; set; }
         public string UrlBase { get; set; }
         public int Type { get; set; }
-        public string TypeName { get { return DRAWING_TYPES[Type]; } }
+        public string TypeName
+        {
+            get
+            {
+                try
+                {
+                    return DRAWING_TYPES[Type];
+                }
+                catch (Exception ex)
+                {
+                    return "Otros";
+                }
+            }
+        }
         public string Name { get; set; }
         public string ModelName { get; set; }
         public string Title { get; set; }

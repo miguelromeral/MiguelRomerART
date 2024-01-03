@@ -62,7 +62,7 @@
 
 <form id="formFilter" asp-action="Filter" asp-controller="Art"
       data-ajax="true" data-ajax-method="POST"
-      data-ajax-begin="onBeginFilter" data-ajax-failure="OnFailure"
+      data-ajax-begin="onBeginFilter" data-ajax-failure="onFailureFilter"
       data-ajax-success="onSuccessFilter" data-ajax-complete="onCompleteFilter">
     <div class="row">
         <div class="mr-sort-filter-container" data-bs-theme="dark">
@@ -98,9 +98,9 @@
             </button>
 
             <select id="sFilterType" class="mr-custom-select form-select form-select-sm mr-filter-item" name="Type" data-bs-theme="dark" onchange="sendFormFilterGallery()">
-                <option value="0" selected>🖌 ESTILO</option>
+                <option value="-1" selected>🖌 ESTILO</option>
 
-                @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_TYPES.Where(x => x.Key > 0).OrderBy(x => x.Value))
+                @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_TYPES.OrderBy(x => x.Value))
                 {
                     <option value="@(type.Key)">@(type.Value)</option>
                     
@@ -109,9 +109,9 @@
 
 
             <select id="sFilterProduct" class="mr-custom-select form-select form-select-sm mr-filter-item" name="ProductType" data-bs-theme="dark" onchange="sendFormFilterGallery()">
-                <option value="0" selected>TIPO</option>
+                <option value="-1" selected>TIPO</option>
 
-                @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_PRODUCT_TYPES.Where(x => x.Key > 0).OrderBy(x => x.Value))
+                @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_PRODUCT_TYPES.OrderBy(x => x.Value))
                 {
                     <option value="@(type.Key)">@(type.Value)</option>
                 }
@@ -147,6 +147,25 @@
                                 <option value="@(product.Key)">@(product.Key)</option>
                                 break;
                         }
+                    }
+                }
+            </select>
+
+
+            <select id="sFilterModel" class="mr-custom-select form-select form-select-sm mr-filter-item"
+                    name="ModelName" data-bs-theme="dark" onchange="sendFormFilterGallery()">
+
+                <option value="" selected>📸 MODELO</option>
+
+                @foreach (var modelName in Model.ModelNameSelect.OrderBy(x => x.Replace("@", "").ToLower()))
+                {
+                    if (String.IsNullOrEmpty(modelName))
+                    {
+                        <option value="none">(Ninguno)</option>
+                    }
+                    else
+                    {
+                        <option value="@(modelName)">@(modelName)</option>
                     }
                 }
             </select>

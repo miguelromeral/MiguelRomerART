@@ -48,6 +48,7 @@ div.mr-references-section{
     gap: 14px;
     font-family: monospace;
     position: relative;
+    /*font-family: Courier New, Courier, monospace;*/
 }
 
 .mr-ff-container .mr-ff-image img {

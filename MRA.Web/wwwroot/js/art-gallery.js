@@ -30,9 +30,10 @@ function sendFormFilterGallery() {
 }
 
 function resetFilters() {
-    var type = $("#sFilterType").val(0);
-    var type = $("#sFilterProduct").val(0);
+    var type = $("#sFilterType").val(-1);
+    var type = $("#sFilterProduct").val(-1);
     var type = $("#sFilterProductName").val("");
+    var type = $("#sFilterModel").val("");
     var type = $("#sFilterSoftware").val(0);
     var type = $("#sFilterPaper").val(0);
     sendFormFilterGallery();

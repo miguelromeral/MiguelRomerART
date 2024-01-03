@@ -92,11 +92,22 @@ namespace MRA.Services.Firebase
                         query = query.WhereEqualTo("product_name", filter.ProductName);
                     }
                 }
-                if (filter.Type > 0)
+                if (!String.IsNullOrEmpty(filter.ModelName))
+                {
+                    if (filter.ModelName.Equals("none"))
+                    {
+                        query = query.WhereEqualTo("model_name", "");
+                    }
+                    else
+                    {
+                        query = query.WhereEqualTo("model_name", filter.ModelName);
+                    }
+                }
+                if (filter.Type > -1)
                 {
                     query = query.WhereEqualTo("type", filter.Type);
                 }
-                if (filter.ProductType > 0)
+                if (filter.ProductType > -1)
                 {
                     query = query.WhereEqualTo("product_type", filter.ProductType);
                 }

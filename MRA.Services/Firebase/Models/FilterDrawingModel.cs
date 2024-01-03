@@ -5,6 +5,7 @@
         public int Type { get; set; }
         public int ProductType { get; set; }
         public string ProductName { get; set; }
+        public string ModelName { get; set; }
         public int Software { get; set; }
         public int Paper { get; set; }
         public string Sortby { get; set; }
