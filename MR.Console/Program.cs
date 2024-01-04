@@ -46,6 +46,7 @@ try
         {
             {0, "Dibujo"},
             {1, "Inspiracion"},
+            {2, "Colección"},
         };
 
     var opcion = helper.FillIntValue(false, 0, "Type of Record", TIPOS_FIRESTORE);
@@ -204,7 +205,7 @@ try
 
             if (inspiration == null)
             {
-                helper.ShowMessageWarning("No inspiration was found with ID '" + input + "'. Proceeding to register a new drawing.");
+                helper.ShowMessageWarning("No inspiration was found with ID '" + input + "'. Proceeding to register a new inspiration.");
 
                 isNew = true;
                 inspiration = new MRA.Services.Firebase.Models.Inspiration()
@@ -249,6 +250,87 @@ try
 
 
             helper.ShowMessageInfo("Inserted inspiration with ID '" + inspiration.Id + "' into Firestore.");
+            break;
+        case 2:
+            while (String.IsNullOrEmpty(input))
+            {
+                input = helper.FillStringValue(false, "", "ID of the Collection you're editing. If it doesn't exist. A new one will be created.");
+            }
+
+            isNew = false;
+
+            helper.ShowMessageInfo("Looking for collection with  ID '" + input + "'");
+            Collection col = await firebaseService.FindCollectionById(input);
+
+            if (col == null)
+            {
+                helper.ShowMessageWarning("No collection was found with ID '" + input + "'. Proceeding to register a new collection.");
+
+                isNew = true;
+                col = new MRA.Services.Firebase.Models.Collection()
+                {
+                    Id = input,
+                    DrawingsReferences = new List<DocumentReference>()
+                };
+            }
+            else
+            {
+                helper.ShowMessageWarning("FOUND collection with ID '" + input + "'. Now edit the fields you want.");
+
+            }
+
+            col.Name = helper.FillStringValue(isNew, col.Name ?? "", "Name");
+            col.Description = helper.FillStringValue(isNew, col.Description, "Description");
+
+            var usedReferences = new DocumentReference[col.DrawingsReferences.Count];
+            col.DrawingsReferences.CopyTo(usedReferences);
+
+            foreach(var reference in usedReferences)
+            {
+                if(helper.FillBoolValue(isNew, true, $"Keep '{reference.Id}'"))
+                {
+                    helper.ShowMessageInfo("Keeping " + reference.Id);
+                }
+                else
+                {
+                    col.DrawingsReferences.Remove(reference);
+                }
+            }
+            input = "";
+            do
+            {
+                input = helper.FillStringValue(true, "", "New reference [empty if exit]:");
+                if (!String.IsNullOrEmpty(input))
+                {
+                    var tmp = db.Document(collection+"/" +input);
+                    col.DrawingsReferences.Add(tmp);
+                }
+            } while (!String.IsNullOrEmpty(input));
+
+
+            helper.ShowMessageInfo("Everything's set and ready to go. Are you sure?");
+            helper.PrintPropreties(col);
+            helper.ShowMessageInfo("Press 'Enter' to continue.");
+            Console.ReadLine();
+
+            if (isNew)
+            {
+
+                helper.ShowMessageInfo("Inserting NEW collection to Firestore.");
+            }
+            else
+            {
+
+                helper.ShowMessageInfo("UPDATING the collection to Firestore");
+            }
+
+
+            helper.ShowMessageInfo("Please wait...");
+
+            await firebaseService.AddAsync(col);
+
+
+            helper.ShowMessageInfo("Inserted collection with ID '" + col.Id + "' into Firestore.");
             break;
         default:
             break;

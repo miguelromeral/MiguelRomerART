@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Google.Cloud.Firestore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,5 +16,14 @@ namespace MRA.Services.Firebase.Models
         public string Description { get; set; }
 
         public List<Drawing> Drawings { get; set; }
+        public List<DocumentReference> DrawingsReferences { get; set; }
+
+        public string TextDrawingsReferences
+        {
+            get
+            {
+                return Environment.NewLine + String.Join(", "+ Environment.NewLine, DrawingsReferences.Select(x => "* "+x.Parent + "/" + x.Id).ToList());
+            }
+        }
     }
 }

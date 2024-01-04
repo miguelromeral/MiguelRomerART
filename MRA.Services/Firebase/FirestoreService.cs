@@ -88,7 +88,8 @@ namespace MRA.Services.Firebase
                         Id = collection.Id,
                         Name = collection.name,
                         Description = collection.description,
-                        Drawings = new List<Drawing>()
+                        Drawings = new List<Drawing>(),
+                        DrawingsReferences = collection.drawings
                     };
 
                     var documentosReferenciados = new List<DrawingDocument>();
@@ -212,9 +213,31 @@ namespace MRA.Services.Firebase
 
                 if (snapshot.Exists)
                 {
-                    await UpdateViews(documentId);
                     var converter = new InspirationFirebaseConverter();
                     return converter.ConvertToModel(snapshot.ConvertTo<InspirationDocument>());
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Exception when getting document '" + documentId + "': " + ex.Message);
+            }
+            return null;
+        }
+
+        public async Task<Collection> FindCollectionById(string documentId)
+        {
+            try
+            {
+                DocumentReference docRef = _firestoreDb.Collection(COLLECTION_COLLECTIONS).Document(documentId);
+
+                DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+
+                if (snapshot.Exists)
+                {
+                    var converter = new CollectionFirebaseConverter();
+                    return converter.ConvertToModel(snapshot.ConvertTo<CollectionDocument>());
                 }
 
                 return null;
@@ -300,6 +323,19 @@ namespace MRA.Services.Firebase
         {
             var collection = _firestoreDb.Collection(_collectionName);
             var drawingDocument = _converter.ConvertToDocument(document);
+
+            // Obtiene una referencia al documento específico en la colección
+            DocumentReference docRef = collection.Document(document.Id);
+
+            // Inserta o actualiza el documento con los datos especificados
+            await docRef.SetAsync(drawingDocument);
+        }
+
+
+        public async Task AddAsync(Collection document)
+        {
+            var collection = _firestoreDb.Collection(COLLECTION_COLLECTIONS);
+            var drawingDocument = new CollectionFirebaseConverter().ConvertToDocument(document);
 
             // Obtiene una referencia al documento específico en la colección
             DocumentReference docRef = collection.Document(document.Id);
