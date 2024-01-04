@@ -4,6 +4,7 @@ using MRA.Services.AzureStorage;
 using MRA.Services.Firebase;
 using MRA.Services.Firebase.Interfaces;
 using MRA.Web.Models;
+using MRA.Web.Models.Home;
 using System.Diagnostics;
 
 namespace MRA.Web.Controllers
@@ -21,7 +22,12 @@ namespace MRA.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return RedirectToAction("Index", "Art");
+            var model = new IndexViewModel()
+            {
+                Collections = await _drawingService.GetAllCollections()
+            };
+
+            return View(model);
         }
 
         public IActionResult Privacy()

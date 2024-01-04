@@ -24,6 +24,7 @@ namespace MRA.Services.Firebase
         private readonly DrawingFirebaseConverter _converter;
 
         private readonly string COLLECTION_INSPIRATION = "inspirations";
+        private readonly string COLLECTION_COLLECTIONS = "collections";
 
         public FirestoreService(string collectionName, string urlBase, FirestoreDb firestoreDb)
         {
@@ -71,6 +72,46 @@ namespace MRA.Services.Firebase
         }
 
 
+        public async Task<List<Collection>> GetAllCollections()
+        {
+            try
+            {
+                var snapshot = (await _firestoreDb.Collection(COLLECTION_COLLECTIONS).GetSnapshotAsync());
+                var collections = snapshot.Documents;
+                var collectionDocs = collections.Select(s => s.ConvertTo<CollectionDocument>()).ToList();
+                var listCollections = new List<Collection>();
+
+                foreach(var collection in collectionDocs)
+                {
+                    var c = new Collection()
+                    {
+                        Id = collection.Id,
+                        Name = collection.name,
+                        Description = collection.description,
+                        Drawings = new List<Drawing>()
+                    };
+
+                    var documentosReferenciados = new List<DrawingDocument>();
+                    foreach(var reference in collection.drawings)
+                    {
+                        var documentoReferenciadoSnapshot = await reference.GetSnapshotAsync();
+                        if (documentoReferenciadoSnapshot.Exists)
+                        {
+                            c.Drawings.Add(_converter.ConvertToModel(documentoReferenciadoSnapshot.ConvertTo<DrawingDocument>()));
+                        }
+                    }
+
+                    listCollections.Add(c);
+                }
+                return listCollections;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error when getting collections: " + ex.Message);
+                return new List<Collection>();
+            }
+        }
+
         public async Task<List<Drawing>> Filter(FilterDrawingModel filter)
         {
             try
@@ -80,6 +121,10 @@ namespace MRA.Services.Firebase
                 if (filter.Favorites)
                 {
                     query = query.WhereEqualTo("favorite", true);
+                }
+                if (!String.IsNullOrEmpty(filter.Collection))
+                {
+                    query = query.WhereArrayContains("collection", filter.Collection);
                 }
                 if (!String.IsNullOrEmpty(filter.ProductName))
                 {

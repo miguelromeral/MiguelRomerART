@@ -44,7 +44,8 @@ namespace MRA.Services.Firebase.Converters
                 ReferenceUrl = drawingDocument.reference_url,
                 PathThumbnail = drawingDocument.path_thumbnail,
                 Software = drawingDocument.software,
-                Paper = drawingDocument.paper
+                Paper = drawingDocument.paper,
+                Collections = drawingDocument.collections ?? new List<string>()
             };
         }
 
@@ -71,7 +72,8 @@ namespace MRA.Services.Firebase.Converters
                 reference_url = drawing.ReferenceUrl,
                 path_thumbnail = drawing.PathThumbnail,
                 software = drawing.Software,
-                paper = drawing.Paper
+                paper = drawing.Paper,
+                collections = drawing.Collections ?? new List<string>()
             };
         }
     }

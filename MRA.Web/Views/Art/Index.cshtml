@@ -99,56 +99,50 @@
 
             <select id="sFilterType" class="mr-custom-select form-select form-select-sm mr-filter-item" name="Type" data-bs-theme="dark" onchange="sendFormFilterGallery()">
                 <option value="-1" selected>🖌 ESTILO</option>
-
-                @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_TYPES.OrderBy(x => x.Value))
+                @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_TYPES.Where(x => x.Key > 0).OrderBy(x => x.Value))
                 {
                     <option value="@(type.Key)">@(type.Value)</option>
-                    
                 }
+                <option value="0">(Otros)</option>
             </select>
 
 
             <select id="sFilterProduct" class="mr-custom-select form-select form-select-sm mr-filter-item" name="ProductType" data-bs-theme="dark" onchange="sendFormFilterGallery()">
                 <option value="-1" selected>TIPO</option>
-
-                @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_PRODUCT_TYPES.OrderBy(x => x.Value))
+                @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_PRODUCT_TYPES.Where(x => x.Key > 0).OrderBy(x => x.Value))
                 {
                     <option value="@(type.Key)">@(type.Value)</option>
                 }
+                <option value="0">(Otro)</option>
             </select>
 
             <select id="sFilterProductName" class="mr-custom-select form-select form-select-sm mr-filter-item"
                     name="ProductName" data-bs-theme="dark" onchange="sendFormFilterGallery()">
                 <option value="" selected>PRODUCTO</option>
 
-                @foreach (var product in Model.ProductNameSelect.OrderBy(x => x.Key.ToString()))
+                @foreach (var product in Model.ProductNameSelect.Where(x => !String.IsNullOrEmpty(x.Key)).OrderBy(x => x.Key.ToString()))
                 {
-                    if (String.IsNullOrEmpty(product.Key))
+                    switch (product.Value)
                     {
-                        <option value="none">(Ninguno)</option>
-                    }
-                    else
-                    {
-                        switch (product.Value)
-                        {
-                            case 1:
-                                <option value="@(product.Key)">🎮 @(product.Key)</option>
-                                break;
-                            case 2:
-                                <option value="@(product.Key)">🎬 @(product.Key)</option>
-                                break;
-                            case 3:
-                                <option value="@(product.Key)">🎙 @(product.Key)</option>
-                                break;
-                            case 4:
-                                <option value="@(product.Key)">⚽ @(product.Key)</option>
-                                break;
-                            default:
-                                <option value="@(product.Key)">@(product.Key)</option>
-                                break;
-                        }
+                        case 1:
+                            <option value="@(product.Key)">🎮 @(product.Key)</option>
+                            break;
+                        case 2:
+                            <option value="@(product.Key)">🎬 @(product.Key)</option>
+                            break;
+                        case 3:
+                            <option value="@(product.Key)">🎙 @(product.Key)</option>
+                            break;
+                        case 4:
+                            <option value="@(product.Key)">⚽ @(product.Key)</option>
+                            break;
+                        default:
+                            <option value="@(product.Key)">@(product.Key)</option>
+                            break;
                     }
                 }
+                <option value="none">(Ninguno)</option>
+
             </select>
 
 
@@ -157,17 +151,11 @@
 
                 <option value="" selected>📸 MODELO</option>
 
-                @foreach (var modelName in Model.ModelNameSelect.OrderBy(x => x.Replace("@", "").ToLower()))
+                @foreach (var modelName in Model.ModelNameSelect.Where(x => !String.IsNullOrEmpty(x)).OrderBy(x => x.Replace("@", "").ToLower()))
                 {
-                    if (String.IsNullOrEmpty(modelName))
-                    {
-                        <option value="none">(Ninguno)</option>
-                    }
-                    else
-                    {
-                        <option value="@(modelName)">@(modelName)</option>
-                    }
+                    <option value="@(modelName)">@(modelName)</option>
                 }
+                <option value="none">(Ninguno)</option>
             </select>
 
 

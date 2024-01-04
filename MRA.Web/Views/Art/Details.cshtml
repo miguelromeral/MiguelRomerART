@@ -12,6 +12,10 @@
     {
         ViewData["Title"] = drawing?.Name;
     }
+    else if (!string.IsNullOrEmpty(drawing?.ModelName))
+    {
+        ViewData["Title"] = drawing?.ModelName;
+    }
     else if(!string.IsNullOrEmpty(drawing?.Id)){
         ViewData["Title"] = drawing?.Id;
     }else

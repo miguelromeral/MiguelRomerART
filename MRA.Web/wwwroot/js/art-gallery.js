@@ -30,12 +30,13 @@ function sendFormFilterGallery() {
 }
 
 function resetFilters() {
-    var type = $("#sFilterType").val(-1);
-    var type = $("#sFilterProduct").val(-1);
-    var type = $("#sFilterProductName").val("");
-    var type = $("#sFilterModel").val("");
-    var type = $("#sFilterSoftware").val(0);
-    var type = $("#sFilterPaper").val(0);
+    $("#sFilterType").val(-1);
+    $("#sFilterProduct").val(-1);
+    $("#sFilterProductName").val("");
+    $("#sFilterModel").val("");
+    $("#sFilterSoftware").val(0);
+    $("#sFilterPaper").val(0);
+    $("#flexSwitchCheckChecked").attr("checked", false);
     sendFormFilterGallery();
 }
 

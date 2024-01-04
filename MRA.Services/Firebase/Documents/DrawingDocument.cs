@@ -69,5 +69,8 @@ namespace MRA.Services.Firebase.Documents
 
         [FirestoreProperty]
         public int paper { get; set; }
+
+        [FirestoreProperty]
+        public List<string>? collections { get; set; }
     }
 }

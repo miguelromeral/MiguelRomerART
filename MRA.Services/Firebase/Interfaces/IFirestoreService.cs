@@ -12,6 +12,7 @@ namespace MRA.Services.Firebase.Interfaces
     {
         Task<List<Drawing>> GetAll();
         Task<List<Inspiration>> GetAllInspirations();
+        Task<List<Collection>> GetAllCollections();
         Task<List<Drawing>> Filter(FilterDrawingModel filter);
         Task<Drawing> FindDrawingById(string documentId);
         Task UpdateLikes(string documentId);

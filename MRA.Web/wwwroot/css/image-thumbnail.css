@@ -89,6 +89,15 @@
     text-shadow: 0 0 4px black;
 }
 
+.carousel-item .cuadrado {
+    position: relative;
+    border-radius: var(--mr-border-radius) !important;
+    margin: 1%;
+    /* width: 90% !important; */
+    /* padding-bottom: 85% !important; */
+    padding: 33%;
+}
+
 /* Each thumbnail. Size: 4xN */
 .cuadrado {
     width: 23%;
@@ -100,11 +109,35 @@
 
 /* Each thumbnail. Size: 3xN */
 @media screen and (max-width: 600px) {
+    .carousel-item .cuadrado {
+        position: relative;
+        border-radius: var(--mr-border-radius) !important;
+        margin: 1%;
+        /* width: 90% !important; */
+        /* padding-bottom: 85% !important; */
+        padding: 33%;
+    }
+
     .cuadrado {
         width: 31% !important;
         padding-bottom: 31% !important;
         margin: 1%;
     }
+}
+
+
+.carousel-item .contenido {
+    position: absolute;
+    /* top: 0; */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    object-fit: contain;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--mr-border-radius-image);
 }
 
 /* Thumbnail content, square shape */

@@ -32,6 +32,7 @@ namespace MRA.Services
 
 
         public async Task<List<Inspiration>> GetAllInspirations() => await _firestoreService.GetAllInspirations();
+        public async Task<List<Collection>> GetAllCollections() => await _firestoreService.GetAllCollections();
 
         public async Task<List<Drawing>> FilterDrawings(FilterDrawingModel filter)
         {

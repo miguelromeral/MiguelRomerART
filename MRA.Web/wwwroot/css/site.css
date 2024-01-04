@@ -196,3 +196,13 @@ body {
         background: var(--mr-chat-color);
         border-radius: 20px;
     }
+
+
+.dropdown-menu {
+    background-color: var(--mr-background-color);
+    border-color: var(--mr-chat-color);
+}
+
+.dropdown-item:focus, .dropdown-item:hover {
+    background-color: var(--mr-background-color);
+}

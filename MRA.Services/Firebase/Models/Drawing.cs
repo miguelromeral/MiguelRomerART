@@ -31,6 +31,7 @@ namespace MRA.Services.Firebase.Models
                 {2, "Actor/Actriz"},
                 {3, "Cantante"},
                 {4, "Deportista"},
+                {5, "Influencer"},
             };
 
         public static Dictionary<int, string> DRAWING_SOFTWARE = new Dictionary<int, string>()
@@ -174,6 +175,7 @@ namespace MRA.Services.Firebase.Models
         }
 
         public string Url { get { return UrlBase + Path; } }
+        public List<string>? Collections { get; set; }
         public string UrlThumbnail { get { return UrlBase + PathThumbnail; } }
         public bool IsTraditional { get { return Type == 1; } }
 
