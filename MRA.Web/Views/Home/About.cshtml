@@ -139,32 +139,25 @@
         </div>
     </div>
     <div class="mr-ff-container collapse" id="introduction">
-
-        @* <div class="mr-img-container">
-        <img src="~/assets/images/miguel_formula1.jpg" class="full-width" />
-        <span class="mr-img-title">
-        En la 'Formula 1: The Exhibition' en Madrid, agosto de 2023
-        </span>
-        </div> *@
         <div>
             <p>
-                Cuando era un niño me gustaba dibujar esporadicamente. 
-                Igual me pasaba meses sin agarrar un lápiz que me pasaba todo un día sin levantar la cabeza del papel. 
-                Tampoco dibujaba bien, aunque era lo normal con esa irregularidad, 
+                Cuando era un niño me gustaba dibujar esporadicamente.
+                Igual me pasaba meses sin agarrar un lápiz que me pasaba todo un día sin levantar la cabeza del papel.
+                Tampoco dibujaba bien, aunque era lo normal con esa irregularidad,
                 pero recuerdo que me sentía muy bien cuando alzaba la mirada y apreciaba el dibujo que tenía ante mí.
             </p>
             <p>
-                En el instituto me esforzaba bastante por estar a la altura en la asignatura de Dibujo Técnico. 
-                Gracias a profesores como Miguel Ángel Rodriguez o Ángel Bermejo seguí motivado para continuar dibujando en mi carrera. 
+                En el instituto me esforzaba bastante por estar a la altura en la asignatura de Dibujo Técnico.
+                Gracias a profesores como Miguel Ángel Rodriguez o Ángel Bermejo seguí motivado para continuar dibujando en mi carrera.
                 Sin embargo, no pude acceder a la facultad de Arquitectura, pero ello me llevó a elegir la que creo fue la mejor carrera que pude elegir.
             </p>
             <p>
-                Desde pequeño siempre he estado pegado a una consola. 
-                Lo que al principio era superar un par de niveles y celebrar el éxito se convirtió en preguntarme 
-                cómo estaban creados y en apreciar el trabajo que hay detrás de cada obra. 
-                Acceder a la facultad de Ingeniería Informática me permitió interesarme por este mundillo. 
-                Además, siempre estuve obsesionado con el diseño gráfico, los rótulos televisivos y esos detalles, 
-                por lo que cada vez que tenía la oportunidad de encargarme de la presentación de nuestros trabajos 
+                Desde pequeño siempre he estado pegado a una consola.
+                Lo que al principio era superar un par de niveles y celebrar el éxito se convirtió en preguntarme
+                cómo estaban creados y en apreciar el trabajo que hay detrás de cada obra.
+                Acceder a la facultad de Ingeniería Informática me permitió interesarme por este mundillo.
+                Además, siempre estuve obsesionado con el diseño gráfico, los rótulos televisivos y esos detalles,
+                por lo que cada vez que tenía la oportunidad de encargarme de la presentación de nuestros trabajos
                 y webs en la universidad me ofrecía voluntario.
             </p>
         </div>
@@ -271,23 +264,20 @@
         <h4>Detalles</h4>
     </div>
 
-    <div class="col-sm-12 col-md-6 col-lg-4 mr-details-section">
-        <span class="mr-details-section-title">
-            Género
-        </span>
-        <span class="mr-details-section-content capitalize">
-            Hombre
-        </span>
-    </div>
+    @{
 
-    <div class="col-sm-12 col-md-6 col-lg-4 mr-details-section">
-        <span class="mr-details-section-title">
-            📍 Ubicación
-        </span>
-        <span class="mr-details-section-content capitalize">
-            Madrid, España
-        </span>
-    </div>
+        await Html.RenderPartialAsync("_DetailsSection", new DetailsSectionModel()
+            {
+                Title = "Género",
+                RawText = "Hombre"
+            });
+
+        await Html.RenderPartialAsync("_DetailsSection", new DetailsSectionModel()
+            {
+                Title = "📍 Ubicación",
+                RawText = "Madrid, España"
+            });
+    }
 
     <div class="col-sm-12 col-md-6 col-lg-4 mr-details-section">
         <span class="mr-details-section-title">
@@ -329,261 +319,121 @@
         </span>
     </div>
 
-    <div class="col-sm-12 col-md-6 col-lg-4 mr-details-section">
-        <span class="mr-details-section-title">
-            📽 Algunas Películas Favoritas
-        </span>
-        <div class="mr-details-section-content capitalize large">
-            <ul>
-                <li>
-                    El Gato con Botas: El Último Deseo (2022)
-                </li>
-                <li>
-                    Joker (2019)
-                </li>
-                <li>
-                    Green Book (2018)
-                </li>
-                <li>
-                    Spider-Man: Into The Spider-Verse (2018)
-                </li>
-                <li>
-                    Inside Out (2015)
-                </li>
-                <li>
-                    Her (2013)
-                </li>
-                <li>
-                    Rush (2013)
-                </li>
-                <li>
-                    The Intouchables (2011)
-                </li>
-                <li>
-                    Toy Story 3 (2010)
-                </li>
-                <li>
-                    Gran Torino (2008)
-                </li>
-                <li>
-                    The Dark Knight (2008)
-                </li>
-                <li>
-                    V de Vendetta (2005)
-                </li>
-                <li>
-                    Harry Potter y el Prisionero de Azkabán (2003)
-                </li>
-                <li>
-                    Hércules (1997)
-                </li>
-                <li>
-                    El Indomable Will Hunting (1997)
-                </li>
-                <li>
-                    El Rey León (1994)
-                </li>
-            </ul>
-        </div>
-    </div>
+    @{
 
-    <div class="col-sm-12 col-md-6 col-lg-4 mr-details-section">
-        <span class="mr-details-section-title">
-            📺 Algunas Series Favoritas
-        </span>
-        <div class="mr-details-section-content capitalize large">
-            <ul>
-                <li>
-                    Arcane (2021-)
-                </li>
-                <li>
-                    The Last Of Us (2023-)
-                </li>
-                <li>
-                    Los Simpsons (1989-)
-                </li>
-                <li>
-                    Better Call Saul (2015-2022)
-                </li>
-                <li>
-                    Cortar Por la Línea de Puntos (2021)
-                </li>
-                <li>
-                    MR. ROBOT (2015-2019)
-                </li>
-                <li>
-                    Sherlock (2010-2017)
-                </li>
-                <li>
-                    Cómo Conocí a Vuestra Madre (2005-2014)
-                </li>
-                <li>
-                    The Office (US) (2005-2013)
-                </li>
-                <li>
-                    Breaking Bad (2008-2013)
-                </li>
-                <li>
-                    Los Soprano (1999-2007)
-                </li>
-            </ul>
-        </div>
-    </div>
+        await Html.RenderPartialAsync("_DetailsSection", new DetailsSectionModel()
+            {
+                Title = "📽 Algunas Películas Favoritas",
+                Large = true,
+                ListaItems = new List<string>()
+    {
+    "El Gato con Botas: El Último Deseo (2022)",
+    "Joker (2019)",
+    "Green Book (2018)",
+    "Spider-Man: Into The Spider-Verse (2018)",
+    "Inside Out (2015)",
+    "Her (2013)",
+    "Rush (2013)",
+    "The Intouchables (2011)",
+    "Toy Story 3 (2010)",
+    "Gran Torino (2008)",
+    "The Dark Knight (2008)",
+    "V de Vendetta (2005)",
+    "Harry Potter y el Prisionero de Azkabán (2003)",
+    "Hércules (1997)",
+    "El Indomable Will Hunting (1997)",
+    "El Rey León (1994)",
+    }
+            });
 
-    <div class="col-sm-12 col-md-6 col-lg-4 mr-details-section">
-        <span class="mr-details-section-title">
-            💽 Algunas Bandas de Música Favoritas
-        </span>
-        <div class="mr-details-section-content capitalize large">
-            <ul>
-                <li>
-                    Aitana Ocaña
-                </li>
-                <li>
-                    Chase & Status
-                </li>
-                <li>
-                    Dua Lipa
-                </li>
-                <li>
-                    Fall Out Boy
-                </li>
-                <li>
-                    Hans Zimmer
-                </li>
-                <li>
-                    Imagine Dragons
-                </li>
-                <li>
-                    Katy Perry
-                </li>
-                <li>
-                    Lena Raine
-                </li>
-                <li>
-                    Mac Quayle
-                </li>
-                <li>
-                    Morat
-                </li>
-                <li>
-                    Nobuo Uematsu
-                </li>
-                <li>
-                    OneRepublic
-                </li>
-                <li>
-                    Queen
-                </li>
-                <li>
-                    Ramin Djawadi
-                </li>
-                <li>
-                    Rise Against
-                </li>
-                <li>
-                    Sia
-                </li>
-            </ul>
-        </div>
-    </div>
+        await Html.RenderPartialAsync("_DetailsSection", new DetailsSectionModel()
+            {
+                Title = "📺 Algunas Series Favoritas",
+                Large = true,
+                ListaItems = new List<string>()
+    {
+    "The Last Of Us (2023-)",
+    "Arcane (2021-)",
+    "Los Simpsons (1989-)",
+    "Better Call Saul (2015-2022)",
+    "Cortar Por la Línea de Puntos (2021)",
+    "MR. ROBOT (2015-2019)",
+    "Sherlock (2010-2017)",
+    "How I Met Your Mother (2005-2014)",
+    "The Office (US) (2005-2013)",
+    "Breaking Bad (2008-2013)",
+    "Los Soprano (1999-2007)",
+    }
+            });
 
+        await Html.RenderPartialAsync("_DetailsSection", new DetailsSectionModel()
+            {
+                Title = "💽 Algunas Bandas de Música Favoritas",
+                Large = true,
+                ListaItems = new List<string>()
+    {
+    "Aitana Ocaña",
+    "Chase & Status",
+    "Dua Lipa",
+    "Fall Out Boy",
+    "Hans Zimmer",
+    "Imagine Dragons",
+    "Katy Perry",
+    "Lena Raine",
+    "Mac Quayle",
+    "Morat",
+    "Nobuo Uematsu",
+    "OneRepublic",
+    "Queen",
+    "Ramin Djawadi",
+    "Rise Against",
+    "Sia",
+    }
+            });
 
-    <div class="col-sm-12 col-md-6 col-lg-4 mr-details-section">
-        <span class="mr-details-section-title">
-            🎮 Algunos Videojuegos Favoritas
-        </span>
-        <div class="mr-details-section-content capitalize large">
-            <ul>
-                <li>
-                    FINAL FANTASY XVI (2023)
-                </li>
-                <li>
-                    Hi-Fi Rush (2023)
-                </li>
-                <li>
-                    God Of War Ragnarök (2022)
-                </li>
-                <li>
-                    Tunic (2022)
-                </li>
-                <li>
-                    Horizon Forbidden West (2022)
-                </li>
-                <li>
-                    Kena: Bridge of Spirits (2021)
-                </li>
-                <li>
-                    Ratchet & Clank: Rift Apart (2021)
-                </li>
-                <li>
-                    Hades (2020)
-                </li>
-                <li>
-                    Fall Guys: Ultimate Knockout (2020)
-                </li>
-                <li>
-                    Crash Team Racing: Nitro-Fueled (2019)
-                </li>
-                <li>
-                    Celeste (2018)
-                </li>
-                <li>
-                    Cuphead (2017)
-                </li>
-                <li>
-                    Hollow Knight (2017)
-                </li>
-                <li>
-                    Sonic Mania (2016)
-                </li>
-                <li>
-                    Undertale (2015)
-                </li>
-                <li>
-                    The Last Of Us (2013)
-                </li>
-                <li>
-                    Spyro 2: Ripto's Rage! (1999)
-                </li>
-                <li>
-                    Crash Bandicoot 3: Warped (1998)
-                </li>
-                <li>
-                    FINAL FANTASY VII (1997)
-                </li>
-            </ul>
-        </div>
-    </div>
+        await Html.RenderPartialAsync("_DetailsSection", new DetailsSectionModel()
+            {
+                Title = "🎮 Algunos Videojuegos Favoritas",
+                Large = true,
+                ListaItems = new List<string>()
+    {
+    "FINAL FANTASY XVI (2023)",
+    "Hi-Fi Rush (2023)",
+    "God Of War Ragnarök (2022)",
+    "Tunic (2022)",
+    "Horizon Forbidden West (2022)",
+    "Kena: Bridge of Spirits (2021)",
+    "Ratchet & Clank: Rift Apart (2021)",
+    "Hades (2020)",
+    "Fall Guys: Ultimate Knockout (2020)",
+    "Crash Team Racing: Nitro-Fueled (2019)",
+    "Celeste (2018)",
+    "Cuphead (2017)",
+    "Hollow Knight (2017)",
+    "Sonic Mania (2016)",
+    "Undertale (2015)",
+    "The Last Of Us (2013)",
+    "Spyro 2: Ripto's Rage! (1999)",
+    "Crash Bandicoot 3: Warped (1998)",
+    "FINAL FANTASY VII (1997)",
+    }
+            });
 
-    <div class="col-sm-12 col-md-6 col-lg-4 mr-details-section">
-        <span class="mr-details-section-title">
-            📕 Algunos Libros Favoritos
-        </span>
-        <div class="mr-details-section-content capitalize large">
-            <ul>
-                <li>
-                    Origen, Dan Brown (2017)
-                </li>
-                <li>
-                    Inferno, Dan Brown (2014)
-                </li>
-                <li>
-                    You, Caroline Kepnes (2014)
-                </li>
-                <li>
-                    Hagakure: El camino del Samurái, Yamamoto Tsunetomo (2014)
-                </li>
-                <li>
-                    Canciones para Paula, Blue Jeans (2009)
-                </li>
-                <li>
-                    The Perks of Being a Wallflower, Stephen Chbosky (1999)
-                </li>
-                <li>
-                    El sabueso de los Baskerville, Arthur Conan Doyle (1901-1902)
-                </li>
-            </ul>
-        </div>
-    </div>
+        await Html.RenderPartialAsync("_DetailsSection", new DetailsSectionModel()
+            {
+                Title = "📕 Algunos Libros Favoritos",
+                Large = true,
+                ListaItems = new List<string>()
+    {
+    "Origen, Dan Brown (2017)",
+    "Inferno, Dan Brown (2014)",
+    "You, Caroline Kepnes (2014)",
+    "Hagakure: El camino del Samurái, Yamamoto Tsunetomo (2014)",
+    "Canciones para Paula, Blue Jeans (2009)",
+    "El Arte de Conducir Bajo la Lluvia, Garth Stein (2008)",
+    "The Perks of Being a Wallflower, Stephen Chbosky (1999)",
+    "El sabueso de los Baskerville, Arthur Conan Doyle (1901-1902)"
+    }
+            });
+    }
 </div>

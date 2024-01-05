@@ -20,34 +20,33 @@ namespace MRA.Services.Firebase
     {
         private readonly FirestoreDb _firestoreDb;
         private readonly string _urlBase;
-        private readonly string _collectionName;
-        private readonly DrawingFirebaseConverter _converter;
+        private readonly string _collectionNameDrawings;
+        private readonly string _collectionNameInspirations;
+        private readonly string _collectionNameCollections;
+        private readonly DrawingFirebaseConverter _converterDrawing;
+        private readonly InspirationFirebaseConverter _converterInspiration;
+        private readonly CollectionFirebaseConverter _converterCollection;
 
-        private readonly string COLLECTION_INSPIRATION = "inspirations";
-        private readonly string COLLECTION_COLLECTIONS = "collections";
-
-        public FirestoreService(string collectionName, string urlBase, FirestoreDb firestoreDb)
+        public FirestoreService(string collectionNameDrawing, string collectionNameInspirations, string collectionNameCollections,
+            string urlBase, FirestoreDb firestoreDb)
         {
             _firestoreDb = firestoreDb;
-            _collectionName = collectionName;
+            _collectionNameDrawings = collectionNameDrawing;
+            _collectionNameInspirations = collectionNameInspirations;
+            _collectionNameCollections = collectionNameCollections;
             _urlBase = urlBase;
-            _converter = new DrawingFirebaseConverter(_urlBase);
+            _converterDrawing = new DrawingFirebaseConverter(_urlBase);
+            _converterInspiration = new InspirationFirebaseConverter();
+            _converterCollection = new CollectionFirebaseConverter();
         }
 
         public async Task<List<Drawing>> GetAll()
         {
-            var collection = _firestoreDb.Collection(_collectionName);
-            //var snapshot = await collection.OrderByDescending("date").OrderBy(FieldPath.DocumentId).GetSnapshotAsync();
-            
-            var documents = (await collection/*.WhereEqualTo("type", "traditional")*/.OrderByDescending("date").GetSnapshotAsync())
+            var collection = _firestoreDb.Collection(_collectionNameDrawings);
+            var documents = (await collection.OrderByDescending("date").GetSnapshotAsync())
                 .Documents.Select(s => s.ConvertTo<DrawingDocument>()).ToList();
 
-            //var documentsNoDate = (await collection.Where(new  WhereLessThan("date", DateTime.MinValue).GetSnapshotAsync())
-            //    .Documents.Select(s => s.ConvertTo<DrawingDocument>()).ToList();
-
-            //documents.AddRange(documentsNoDate);
-
-            return documents.Select(_converter.ConvertToModel).ToList();
+            return documents.Select(_converterDrawing.ConvertToModel).ToList();
         }
 
 
@@ -55,15 +54,12 @@ namespace MRA.Services.Firebase
         {
             try
             {
-                var collection = _firestoreDb.Collection(COLLECTION_INSPIRATION);
+                var collection = _firestoreDb.Collection(_collectionNameInspirations);
 
                 var snapshot = (await collection.GetSnapshotAsync());
-                var documents = snapshot.Documents;
-                var inspdocs = documents.Select(s => s.ConvertTo<InspirationDocument>()).ToList();
+                var inspdocs = snapshot.Documents.Select(s => s.ConvertTo<InspirationDocument>()).ToList();
 
-                var converter = new InspirationFirebaseConverter();
-
-                return inspdocs.Select(converter.ConvertToModel).ToList();
+                return inspdocs.Select(_converterInspiration.ConvertToModel).ToList();
             }catch(Exception ex)
             {
                 Console.WriteLine("Error when getting inspirations: " + ex.Message);
@@ -76,7 +72,7 @@ namespace MRA.Services.Firebase
         {
             try
             {
-                var snapshot = (await _firestoreDb.Collection(COLLECTION_COLLECTIONS).GetSnapshotAsync());
+                var snapshot = (await _firestoreDb.Collection(_collectionNameCollections).GetSnapshotAsync());
                 var collections = snapshot.Documents;
                 var collectionDocs = collections.Select(s => s.ConvertTo<CollectionDocument>()).ToList();
                 var listCollections = new List<Collection>();
@@ -98,7 +94,7 @@ namespace MRA.Services.Firebase
                         var documentoReferenciadoSnapshot = await reference.GetSnapshotAsync();
                         if (documentoReferenciadoSnapshot.Exists)
                         {
-                            c.Drawings.Add(_converter.ConvertToModel(documentoReferenciadoSnapshot.ConvertTo<DrawingDocument>()));
+                            c.Drawings.Add(_converterDrawing.ConvertToModel(documentoReferenciadoSnapshot.ConvertTo<DrawingDocument>()));
                         }
                     }
 
@@ -117,7 +113,7 @@ namespace MRA.Services.Firebase
         {
             try
             {
-                Query query = _firestoreDb.Collection(_collectionName);
+                Query query = _firestoreDb.Collection(_collectionNameDrawings);
 
                 if (filter.Favorites)
                 {
@@ -173,7 +169,7 @@ namespace MRA.Services.Firebase
 
                 var documents = (await query.GetSnapshotAsync()).Documents.Select(s => s.ConvertTo<DrawingDocument>()).ToList();
 
-                return documents.Select(_converter.ConvertToModel).ToList();
+                return documents.Select(_converterDrawing.ConvertToModel).ToList();
             }catch(Exception ex)
             {
                 Debug.WriteLine("Error when filtering documents: " + ex.Message);
@@ -185,14 +181,14 @@ namespace MRA.Services.Firebase
         {
             try
             {
-                DocumentReference docRef = _firestoreDb.Collection(_collectionName).Document(documentId);
+                DocumentReference docRef = _firestoreDb.Collection(_collectionNameDrawings).Document(documentId);
 
                 DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
 
                 if (snapshot.Exists)
                 {
                     await UpdateViews(documentId);
-                    return _converter.ConvertToModel(snapshot.ConvertTo<DrawingDocument>());
+                    return _converterDrawing.ConvertToModel(snapshot.ConvertTo<DrawingDocument>());
                 }
                  
                 return null;
@@ -207,7 +203,7 @@ namespace MRA.Services.Firebase
         {
             try
             {
-                DocumentReference docRef = _firestoreDb.Collection(COLLECTION_INSPIRATION).Document(documentId);
+                DocumentReference docRef = _firestoreDb.Collection(_collectionNameInspirations).Document(documentId);
 
                 DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
 
@@ -230,7 +226,7 @@ namespace MRA.Services.Firebase
         {
             try
             {
-                DocumentReference docRef = _firestoreDb.Collection(COLLECTION_COLLECTIONS).Document(documentId);
+                DocumentReference docRef = _firestoreDb.Collection(_collectionNameCollections).Document(documentId);
 
                 DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
 
@@ -257,7 +253,7 @@ namespace MRA.Services.Firebase
             {
                 try
                 {
-                    DocumentReference docRef = _firestoreDb.Collection(_collectionName).Document(documentId);
+                    DocumentReference docRef = _firestoreDb.Collection(_collectionNameDrawings).Document(documentId);
 
                     // Obtiene el documento actual
                     DocumentSnapshot snapshot = await transaction.GetSnapshotAsync(docRef);
@@ -292,7 +288,7 @@ namespace MRA.Services.Firebase
             {
                 try
                 {
-                    DocumentReference docRef = _firestoreDb.Collection(_collectionName).Document(documentId);
+                    DocumentReference docRef = _firestoreDb.Collection(_collectionNameDrawings).Document(documentId);
 
                     // Obtiene el documento actual
                     DocumentSnapshot snapshot = await transaction.GetSnapshotAsync(docRef);
@@ -321,8 +317,8 @@ namespace MRA.Services.Firebase
 
         public async Task AddAsync(Drawing document)
         {
-            var collection = _firestoreDb.Collection(_collectionName);
-            var drawingDocument = _converter.ConvertToDocument(document);
+            var collection = _firestoreDb.Collection(_collectionNameDrawings);
+            var drawingDocument = _converterDrawing.ConvertToDocument(document);
 
             // Obtiene una referencia al documento específico en la colección
             DocumentReference docRef = collection.Document(document.Id);
@@ -334,8 +330,8 @@ namespace MRA.Services.Firebase
 
         public async Task AddAsync(Collection document)
         {
-            var collection = _firestoreDb.Collection(COLLECTION_COLLECTIONS);
-            var drawingDocument = new CollectionFirebaseConverter().ConvertToDocument(document);
+            var collection = _firestoreDb.Collection(_collectionNameCollections);
+            var drawingDocument = _converterCollection.ConvertToDocument(document);
 
             // Obtiene una referencia al documento específico en la colección
             DocumentReference docRef = collection.Document(document.Id);
@@ -347,8 +343,8 @@ namespace MRA.Services.Firebase
 
         public async Task AddAsync(Inspiration document)
         {
-            var collection = _firestoreDb.Collection(COLLECTION_INSPIRATION);
-            var drawingDocument = new InspirationFirebaseConverter().ConvertToDocument(document);
+            var collection = _firestoreDb.Collection(_collectionNameInspirations);
+            var drawingDocument = _converterInspiration.ConvertToDocument(document);
 
             // Obtiene una referencia al documento específico en la colección
             DocumentReference docRef = collection.Document(document.Id);

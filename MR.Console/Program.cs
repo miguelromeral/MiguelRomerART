@@ -21,14 +21,16 @@ try
     Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @".\Credentials\romerart-6a6c3-firebase-adminsdk-4yop5-839e7a0035.json");
 
     var firebaseProjecTId = "romerart-6a6c3";
-    var collection = "drawings";
+    var collectionNameDrawings = "drawings";
+    var collectionNameInspirations = "inspirations";
+    var collectionNameCollections = "collections";
     var urlbase = "https://romerartstorageaccount.blob.core.windows.net/romerartblobcontainer/";
 
 
     // Inicializa Firestore
     FirestoreDb db = FirestoreDb.Create(firebaseProjecTId);
 
-    var firebaseService = new FirestoreService(collection, urlbase, db);
+    var firebaseService = new FirestoreService(collectionNameDrawings, collectionNameInspirations, collectionNameCollections, urlbase, db);
 
     helper.ShowMessageInfo("Setting up AZURE STORAGE ACCOUNT.");
 
@@ -102,7 +104,7 @@ try
                     {
                         rutaEntrada = helper.FillStringValue(false, "", "Local path of the image");
                         blobLocationThumbnail = azureStorageService.CrearThumbnailName(blobLocation);
-                        widthThumbnail = helper.FillFreeIntValue(true, 300, "Thumbnail Width");
+                        widthThumbnail = helper.FillFreeIntValue(false, 350, "Thumbnail Width");
                     }
 
                     helper.ShowMessageInfo("We're ready to create this blob. Please, review the data:");
@@ -302,7 +304,7 @@ try
                 input = helper.FillStringValue(true, "", "New reference [empty if exit]:");
                 if (!String.IsNullOrEmpty(input))
                 {
-                    var tmp = db.Document(collection+"/" +input);
+                    var tmp = db.Document(collectionNameDrawings+"/" +input);
                     col.DrawingsReferences.Add(tmp);
                 }
             } while (!String.IsNullOrEmpty(input));

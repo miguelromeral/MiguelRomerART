@@ -1,0 +1,27 @@
+﻿@model DetailsSectionModel
+
+
+<div class="col-sm-12 col-md-6 col-lg-4 mr-details-section">
+    <span class="mr-details-section-title">
+        @Model.Title
+    </span>
+    <div class="mr-details-section-content capitalize @(Model.Large ? "large" : "")">
+        @if(Model.ListaItems.Count > 0)
+        {
+            <ul>
+                @foreach(var item in Model.ListaItems)
+                {
+                    <li>
+                        @item
+                    </li>
+                }
+            </ul>
+        }
+        @if(!String.IsNullOrEmpty(Model.RawText))
+        {
+            <div>
+                @Html.Raw(Model.RawText)
+            </div>
+        }
+    </div>
+</div>
