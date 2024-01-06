@@ -206,5 +206,23 @@ namespace MRA.Services.Firebase.Models
                 return date.ToString("MMMM yy", cultureInfo);
             }
         }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append(Id);
+
+            if (!String.IsNullOrEmpty(Name))
+            {
+                sb.Append($" ({Name})");
+            }
+            if (!String.IsNullOrEmpty(ModelName))
+            {
+                sb.Append($" [{ModelName}]");
+            }
+
+            return sb.ToString();
+        }
     }
 }

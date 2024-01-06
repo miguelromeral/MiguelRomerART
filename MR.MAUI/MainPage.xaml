@@ -7,39 +7,55 @@
             Padding="30,0"
             Spacing="25">
 
+          
 
 
 
+            <StackLayout Orientation="Vertical" Margin="0,0,0,10">
+                <Picker Title="Crear o Editar" x:Name="cbSelectOperation"
+                        ItemsSource="{Binding SelectAdd}" SelectedIndexChanged="cbSelectOperation_SelectedIndexChanged"/>
 
-            <StackLayout Orientation="Horizontal" Margin="0,0,0,10">
-
-                <StackLayout Orientation="Vertical" Margin="0,0,0,10">
-                    <Label Text="Imagen" VerticalOptions="CenterAndExpand" />
-                    <Image
-                        x:Name="imageDrawing"
-                        HeightRequest="500"
-                        Aspect="AspectFit" />
-                </StackLayout>
-
-
-                <StackLayout Orientation="Vertical" Margin="0,0,0,10">
-                    <Label Text="Miniatura" VerticalOptions="CenterAndExpand" />
-                    <Image
-                        x:Name="imageDrawingThumbnail"
-                        HeightRequest="350"
-                        Aspect="AspectFit" />
-                </StackLayout>
             </StackLayout>
-
-            <VerticalStackLayout>
+            
+            <VerticalStackLayout x:Name="layoutAddDrawing">
                 <Label Text="Busca por ID del dibujo" />
-                <Entry x:Name="tbDrawingId" Placeholder="Drawing ID" />
+                <Entry x:Name="tbDrawingId" Placeholder="Drawing ID" Unfocused="tbDrawingId_Unfocused" />
                 <Button Text="BUSCAR" Clicked="OnFindDrawingId" />
             </VerticalStackLayout>
-            
+
+            <StackLayout x:Name="layoutEditDrawing" Orientation="Vertical" Margin="0,0,0,10">
+                <Picker Title="ID del Dibujo a Editar" x:Name="cbDrawingId"
+                        SelectedIndexChanged="cbDrawingId_SelectedIndexChanged"/>
+            </StackLayout>
+            <Grid Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Primera imagen -->
+                <StackLayout Grid.Column="0" Orientation="Vertical" Margin="0,0,0,10">
+                    <Label Text="Imagen" VerticalOptions="CenterAndExpand" HorizontalTextAlignment="Center" />
+                    <Image
+            x:Name="imageDrawing"
+            MaximumHeightRequest="500"
+            Aspect="AspectFit" />
+                </StackLayout>
+
+                <!-- Segunda imagen -->
+                <StackLayout Grid.Column="1" Orientation="Vertical" Margin="0,0,0,10">
+                    <Label Text="Miniatura" VerticalOptions="CenterAndExpand" HorizontalTextAlignment="Center" />
+                    <Image
+            x:Name="imageDrawingThumbnail"
+            MaximumHeightRequest="350"
+            Aspect="AspectFit" />
+                </StackLayout>
+            </Grid>
+
+
             <StackLayout Orientation="Vertical" Margin="0,0,0,10">
                 <Label Text="Favorito" VerticalOptions="CenterAndExpand" />
-                <Switch x:Name="sDrawingFavorite"/>
+                <Switch x:Name="sDrawingFavorite" IsToggled="{Binding drawing.Favorite}" />
             </StackLayout>
 
             <StackLayout Orientation="Vertical" Margin="0,0,0,10">
@@ -114,27 +130,35 @@
             </StackLayout>
 
             <StackLayout Orientation="Vertical" Margin="0,0,0,10">
-                <Label Text="TODO: Comentarios" VerticalOptions="CenterAndExpand" />
+                <Label Text="Comentarios del Artista" VerticalOptions="CenterAndExpand" />
+                <StackLayout Orientation="Vertical" Margin="0,0,0,10" x:Name="slDrawingComments">
+                </StackLayout>
+                <Button Text="+ Comentario" Clicked="OnAddComentario" />
+            </StackLayout>
+            <StackLayout Orientation="Vertical" Margin="0,0,0,10">
+                <Label Text="Comentarios Positivos" VerticalOptions="CenterAndExpand" />
+                <StackLayout Orientation="Vertical" Margin="0,0,0,10" x:Name="slDrawingCommentsPros">
+                </StackLayout>
+                <Button Text="+ Positivo" Clicked="OnAddComentarioPros" />
+            </StackLayout>
+            <StackLayout Orientation="Vertical" Margin="0,0,0,10">
+                <Label Text="Comentarios Negativos" VerticalOptions="CenterAndExpand" />
+                <StackLayout Orientation="Vertical" Margin="0,0,0,10" x:Name="slDrawingCommentsCons">
+                </StackLayout>
+                <Button Text="+ Negativo" Clicked="OnAddComentarioCons" />
             </StackLayout>
             
-            <StackLayout Orientation="Vertical" Margin="0,0,0,10">
-                <Label Text="TODO: Comentarios Positivos" VerticalOptions="CenterAndExpand" />
-            </StackLayout>
             
-            <StackLayout Orientation="Vertical" Margin="0,0,0,10">
-                <Label Text="TODO: Comentarios Negativos" VerticalOptions="CenterAndExpand" />
-            </StackLayout>
-
             <StackLayout Orientation="Vertical" Margin="0,0,0,10">
                 <Label Text="Imagen de Referencia" />
                 <Entry x:Name="tbDrawingReference" 
-                       Text="{Binding drawing.Reference}"
+                       Text="{Binding drawing.ReferenceUrl}"
                        Placeholder="Imagen de Referencia" />
             </StackLayout>
 
 
             <StackLayout Orientation="Vertical" Margin="0,0,0,10">
-                <Button Text="GUARDAR" Clicked="OnSaveDrawing" />
+                <Button x:Name="btnSave" Text="GUARDAR" Clicked="OnSaveDrawing" />
             </StackLayout>
 
         </StackLayout>
