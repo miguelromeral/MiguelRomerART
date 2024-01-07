@@ -36,8 +36,56 @@
                     </StackLayout>
                 </StackLayout>
             </Grid>
-            
-            
+
+            <StackLayout Grid.Column="0" Orientation="Vertical" Margin="0,0,0,10">
+                <Label Text="Ruta De Azure" Style="{StaticResource mrLabelTitle}" />
+
+                <Entry x:Name="tbDrawingAzureUrl"
+           Text="{Binding drawing.Path}" Placeholder="Azure URL"
+               Unfocused="tbDrawingAzureUrl_Unfocused"
+           Style="{StaticResource mrEntry}"/>
+            </StackLayout>
+
+            <StackLayout x:Name="layoutAzureDetails" IsVisible="false" Orientation="Vertical" Margin="0,0,0,10">
+
+                <Grid Margin="0,0,0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackLayout Grid.Column="0" Orientation="Vertical" Margin="0,0,0,10">
+
+                        <Image
+            x:Name="barcodeImage"
+            HeightRequest="500"
+            HorizontalOptions="Center" />
+
+                    </StackLayout>
+
+                    <StackLayout Grid.Column="1" Orientation="Vertical" Margin="0,0,0,10">
+
+                        <Button
+ x:Name="ImageSelect"
+ Text="Seleccionar Imagen"
+ Clicked="SelectBarcode" />
+
+                        <Label Text="Ruta de la Imagen" Style="{StaticResource mrLabelTitle}"/>
+
+                        <Label x:Name="outputText"/>
+
+                        <Label Text="Tamaño de la miniatura" Style="{StaticResource mrLabelTitle}"/>
+
+                        <Entry x:Name="tbAzureThumbnail" Placeholder="Tamaño de la Miniatura" Text="{Binding azureBlobInfo.ThumbnailSize}" 
+                   Style="{StaticResource mrEntry}"/>
+
+                        <Button x:Name="btnAzureUpload" Text="Subir a Azure" Clicked="btnAzureUpload_Clicked" Style="{StaticResource mrButtonAddComment}" />
+
+                    </StackLayout>
+                </Grid>
+
+            </StackLayout>
+
             <Grid Margin="0,0,0,10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -82,56 +130,6 @@
                 </StackLayout>
             </Grid>
 
-
-
-            <StackLayout Grid.Column="0" Orientation="Vertical" Margin="0,0,0,10">
-                <Label Text="Ruta De Azure" Style="{StaticResource mrLabelTitle}" />
-
-                <Entry x:Name="tbDrawingAzureUrl"
-                       Text="{Binding drawing.Path}" Placeholder="Azure URL"
-                           Unfocused="tbDrawingAzureUrl_Unfocused"
-                       Style="{StaticResource mrEntry}"/>
-            </StackLayout>
-
-            <StackLayout x:Name="layoutAzureDetails" IsVisible="false" Orientation="Vertical" Margin="0,0,0,10">
-
-                <Grid Margin="0,0,0,10">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-
-                    <StackLayout Grid.Column="0" Orientation="Vertical" Margin="0,0,0,10">
-
-                        <Image
-                        x:Name="barcodeImage"
-                        HeightRequest="500"
-                        HorizontalOptions="Center" />
-
-                    </StackLayout>
-
-                    <StackLayout Grid.Column="1" Orientation="Vertical" Margin="0,0,0,10">
-
-                        <Button
-             x:Name="ImageSelect"
-             Text="Seleccionar Imagen"
-             Clicked="SelectBarcode" />
-
-                        <Label Text="Ruta de la Imagen" Style="{StaticResource mrLabelTitle}"/>
-                        
-                        <Label x:Name="outputText"/>
-
-                        <Label Text="Tamaño de la miniatura" Style="{StaticResource mrLabelTitle}"/>
-
-                        <Entry x:Name="tbAzureThumbnail" Placeholder="Tamaño de la Miniatura" Text="{Binding azureBlobInfo.ThumbnailSize}" 
-                               Style="{StaticResource mrEntry}"/>
-
-                        <Button x:Name="btnAzureUpload" Text="Subir a Azure" Clicked="btnAzureUpload_Clicked" Style="{StaticResource mrButtonAddComment}" />
-
-                    </StackLayout>
-                </Grid>
-
-            </StackLayout>
 
             <Grid Margin="0,0,0,10">
                 <Grid.ColumnDefinitions>

@@ -55,7 +55,7 @@ namespace MR.MAUI
 
             azureBlobInfo = new AzureBlobInfo()
             {
-                ThumbnailSize = 320
+                ThumbnailSize = 350
             };
 
             LoadDrawingsId();
@@ -428,8 +428,7 @@ namespace MR.MAUI
 
         private async void btnAzureUpload_Clicked(object sender, EventArgs e)
         {
-            //await Task.Run(async () =>
-            //{
+            
                 try
                 {
                     btnAzureUpload.IsEnabled = false;
@@ -440,13 +439,14 @@ namespace MR.MAUI
                     await _drawingService.RedimensionarYGuardarEnAzureStorage(azureBlobInfo.LocalPath, blobLocationThumbnail, azureBlobInfo.ThumbnailSize);
                     DisplayAlert("Blob subido con éxito", $"Blob subido a Azure con éxito.", "Vale");
                     layoutAzureDetails.IsVisible = false;
+                    imageDrawing.Source = drawing.Url;
+                    imageDrawingThumbnail.Source = drawing.UrlThumbnail;
                 }
                 catch (Exception ex)
                 {
                     DisplayAlert("Error al Subir Blob", $"Ha ocurrido un error al guardar el blob en Azure.\n{ex.Message}", "Vale");
                 }
                 btnAzureUpload.IsEnabled = true;
-            //});
         }
 
         private async void tbDrawingAzureUrl_Unfocused(object sender, FocusEventArgs e)
