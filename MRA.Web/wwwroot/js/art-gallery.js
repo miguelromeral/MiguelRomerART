@@ -10,21 +10,21 @@ var timeMsDelayLike = 1000;
 function sendFormFilterGallery() {
     var type = $("#sFilterType").val();
 
-    // If Digital, show filter
-    if (type == 0) {
-        $("#sFilterSoftware").show();
-        $("#sFilterPaper").show();
-    } else if (type == 2) {
-        $("#sFilterPaper").hide();
-        $("#sFilterPaper").val(0);
+    //// If Digital, show filter
+    //if (type == 0) {
+    //    $("#sFilterSoftware").show();
+    //    $("#sFilterPaper").show();
+    //} else if (type == 2) {
+    //    $("#sFilterPaper").hide();
+    //    $("#sFilterPaper").val(0);
 
-        $("#sFilterSoftware").show();
-    } else {
-        $("#sFilterSoftware").hide();
-        $("#sFilterSoftware").val(0);
+    //    $("#sFilterSoftware").show();
+    //} else {
+    //    $("#sFilterSoftware").hide();
+    //    $("#sFilterSoftware").val(0);
 
-        $("#sFilterPaper").show();
-    }
+    //    $("#sFilterPaper").show();
+    //}
 
     $("#" + FILTER_FORM_ID).submit();
 }
@@ -32,6 +32,7 @@ function sendFormFilterGallery() {
 function resetFilters() {
     $("#sFilterType").val(-1);
     $("#sFilterProduct").val(-1);
+    $("#sFilterCharacterName").val("");
     $("#sFilterProductName").val("");
     $("#sFilterModel").val("");
     $("#sFilterSoftware").val(0);

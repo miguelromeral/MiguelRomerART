@@ -10,6 +10,7 @@ namespace MRA.Web.Models
         public List<Drawing>? Drawings;
 
         public Dictionary<string, int> ProductNameSelect { get; set; }
+        public Dictionary<string, int> CharacterNameSelect { get; set; }
         public List<string> ModelNameSelect { get; set; }
     }
 }
