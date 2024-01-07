@@ -6,6 +6,7 @@
         public int ProductType { get; set; }
         public string ProductName { get; set; }
         public string ModelName { get; set; }
+        public string CharacterName { get; set; }
         public string Collection { get; set; }
         public int Software { get; set; }
         public int Paper { get; set; }

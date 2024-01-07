@@ -111,7 +111,7 @@ namespace MRA.Services.Firebase.Models
                     int horas = Time / 60;
                     int minutosRestantes = Time % 60;
 
-                    string resultado = "~ "+(horas > 0 ? horas+"h " : "")+(minutosRestantes > 0 ? minutosRestantes+"min" : "");
+                    string resultado = (horas > 0 ? horas+"h " : "")+(minutosRestantes > 0 ? minutosRestantes+"min" : "");
 
                     return resultado;
                 }

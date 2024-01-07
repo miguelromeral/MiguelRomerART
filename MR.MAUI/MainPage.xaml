@@ -4,8 +4,13 @@
              x:Class="MR.MAUI.MainPage">
     <ScrollView>
         <StackLayout
-            Padding="30,0"
+            Padding="5,0"
             Spacing="25">
+
+
+            <StackLayout Orientation="Vertical" Margin="0,0,0,10">
+                <Button x:Name="btnLimpiar" Text="Limpiar Campos" Clicked="btnLimpiar_Clicked" />
+            </StackLayout>
 
 
             <Grid Margin="0,0,0,10">
@@ -202,7 +207,7 @@
 
                 <StackLayout Grid.Column="1" Orientation="Vertical" Margin="0,0,0,10">
                     <Label Text="Tiempo en minutos" VerticalOptions="CenterAndExpand" Style="{StaticResource mrLabelTitle}"/>
-                    <Entry Placeholder="Tiempo en minutos"
+                    <Entry Placeholder="Tiempo en minutos" x:Name="tbDrawingTime"
                        Text="{Binding drawing.Time}"
                        Keyboard="Numeric" Style="{StaticResource mrEntry}"/>
                 </StackLayout>

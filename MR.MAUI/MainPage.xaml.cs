@@ -43,26 +43,66 @@ namespace MR.MAUI
 
             SelectAdd = new List<string>() { "Crear", "Editar" };
 
-            drawing = new Drawing();
             SelectorTipos = Drawing.DRAWING_TYPES.Select(x => x.Value).ToList();
             SelectorProductTypes = Drawing.DRAWING_PRODUCT_TYPES.Select(x => x.Value).ToList();
             SelectorSoftware = Drawing.DRAWING_SOFTWARE.Select(x => x.Value).ToList();
             SelectorPaperSize = Drawing.DRAWING_PAPER_SIZE.Select(x => x.Value).ToList();
 
-            ListaComentarios = new List<string>();
-            ListaComentariosPros = new List<string>();
-            ListaComentariosCons = new List<string>();
+            LoadDrawingsId();
+            LimpiarDatos();
+        }
+
+        private void btnLimpiar_Clicked(object sender, EventArgs e) => LimpiarDatos();
+
+        private void LimpiarDatos()
+        {
+            cbDrawingId.SelectedIndex = -1;
+            drawing = new Drawing()
+            {
+                UrlBase = _drawingService.GetAzureUrlBase()
+            };
 
             azureBlobInfo = new AzureBlobInfo()
             {
                 ThumbnailSize = 350
             };
 
-            LoadDrawingsId();
+            barcodeImage.Source = "";
+            cbSelectOperation.SelectedIndex = 0;
+
+            tbDrawingId.Text = "";
+
+            imageDrawing.Source = "";
+            imageDrawingThumbnail.Source = "";
+
+            tbDrawingAzureUrl.Text = "";
+            outputText.Text = "";
+            tbDrawingTitle.Text = "";
+            sDrawingFavorite.IsToggled = false;
+            tbDrawingName.Text = "";
+            tbDrawingModelName.Text = "";
+            cbDrawingType.SelectedIndex = 0;
+            cbDrawingSoftware.SelectedIndex = 0;
+            cbDrawingPaperSize.SelectedIndex = 0;
+            tbDrawingTime.Text = "";
+            cbDrawingProductType.SelectedIndex = 0;
+            tbDrawingProductName.Text = "";
+
+
+            ListaComentarios = new List<string>();
+            ReloadComentarios();
+
+            ListaComentariosPros = new List<string>();
+            ReloadComentariosPros();
+
+            ListaComentariosCons = new List<string>();
+            ReloadComentariosCons();
+
+            tbDrawingReference.Text = "";
+
+            btnSave.IsEnabled = true;
 
             BindingContext = this;
-
-            cbSelectOperation.SelectedIndex = 0;
         }
 
         private async void LoadDrawingsId(string id = "")
@@ -128,22 +168,22 @@ namespace MR.MAUI
 
         private void ReloadComentarios()
         {
-            drawing.Comment = string.Join(Drawing.SEPARATOR_COMMENTS, ListaComentarios);
-            ListaComentarios = drawing.ListComments;
+            //drawing.Comment = string.Join(Drawing.SEPARATOR_COMMENTS, ListaComentarios);
+            //ListaComentarios = drawing.ListComments;
             ReloadStackLayout(slDrawingComments, ListaComentarios,
             OnDeleteButtonClicked, comment_Unfocused, "Comentario", 1);
         }
         private void ReloadComentariosPros()
         {
-            drawing.CommentPros = string.Join(Drawing.SEPARATOR_COMMENTS, ListaComentariosPros);
-            ListaComentariosPros = drawing.ListCommentPros;
+            //drawing.CommentPros = string.Join(Drawing.SEPARATOR_COMMENTS, ListaComentariosPros);
+            //ListaComentariosPros = drawing.ListCommentPros;
             ReloadStackLayout(slDrawingCommentsPros, ListaComentariosPros,
             OnDeleteButtonClickedPros, comment_Unfocused_pros, "Comentarios Positivos", 2);
         }
         private void ReloadComentariosCons()
         {
-            drawing.CommentCons = string.Join(Drawing.SEPARATOR_COMMENTS, ListaComentariosCons);
-            ListaComentariosCons = drawing.ListCommentCons;
+            //drawing.CommentCons = string.Join(Drawing.SEPARATOR_COMMENTS, ListaComentariosCons);
+            //ListaComentariosCons = drawing.ListCommentCons;
             ReloadStackLayout(slDrawingCommentsCons, ListaComentariosCons,
             OnDeleteButtonClickedCons, comment_Unfocused_cons, "Comentario Negativos", 3);
         }
@@ -218,17 +258,17 @@ namespace MR.MAUI
 
         private void OnAddComentario(object sender, EventArgs e)
         {
-            ListaComentarios.Add(" ");
+            ListaComentarios.Add(string.Empty);
             ReloadComentarios();
         }
         private void OnAddComentarioPros(object sender, EventArgs e)
         {
-            ListaComentariosPros.Add(" ");
+            ListaComentariosPros.Add(string.Empty);
             ReloadComentariosPros();
         }
         private void OnAddComentarioCons(object sender, EventArgs e)
         {
-            ListaComentariosCons.Add(" ");
+            ListaComentariosCons.Add(string.Empty);
             ReloadComentariosCons();
         }
 
@@ -334,6 +374,7 @@ namespace MR.MAUI
                 if (String.IsNullOrEmpty(drawing.Id))
                 {
                     DisplayAlert("Error al Guardar", $"El dibujo necesita un ID", "Vale");
+                    btnSave.IsEnabled = true;
                     return;
                 }
 
@@ -374,7 +415,7 @@ namespace MR.MAUI
         private void tbDrawingId_Unfocused(object sender, FocusEventArgs e)
         {
             var newValue = ((Entry)sender).Text;
-            if (ListaDrawingsId.Count(x => x.Equals(newValue)) > 0)
+            if (ListaDrawings.Count(x => x.Id.Equals(newValue)) > 0)
             {
                 DisplayAlert("ID Usado", $"Ya existe un dibujo con ID '{newValue}'.\nCambia el ID y vuelve a intentarlo", "Vale");
 
@@ -463,6 +504,7 @@ namespace MR.MAUI
                 layoutAzureDetails.IsVisible = false;
             }
         }
+
     }
 
 }

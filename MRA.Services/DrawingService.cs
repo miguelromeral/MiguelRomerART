@@ -31,6 +31,7 @@ namespace MRA.Services
         }
 
 
+        public string GetAzureUrlBase() => _azureStorageService.BlobURL;
         public async Task<List<Inspiration>> GetAllInspirations() => await _firestoreService.GetAllInspirations();
         public async Task<List<Collection>> GetAllCollections() => await _firestoreService.GetAllCollections();
 

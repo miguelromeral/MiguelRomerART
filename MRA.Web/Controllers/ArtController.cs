@@ -29,7 +29,7 @@ namespace MRA.Web.Controllers
 
             model.ProductNameSelect = new Dictionary<string, int>();
 
-            foreach (var product in model.Drawings.Select(x => new { x.ProductName, x.ProductType }).Distinct().ToList())
+            foreach (var product in model.Drawings.Where(x => !String.IsNullOrEmpty(x.ProductName)).Select(x => new { x.ProductName, x.ProductType }).Distinct().ToList())
             {
                 if (!model.ProductNameSelect.ContainsKey(product.ProductName))
                 {
@@ -40,7 +40,7 @@ namespace MRA.Web.Controllers
 
             model.CharacterNameSelect = new Dictionary<string, int>();
 
-            foreach (var product in model.Drawings.Select(x => new { x.Name, x.ProductType }).Distinct().ToList())
+            foreach (var product in model.Drawings.Where(x => !String.IsNullOrEmpty(x.Name)).Select(x => new { x.Name, x.ProductType }).Distinct().ToList())
             {
                 if (!model.CharacterNameSelect.ContainsKey(product.Name))
                 {
@@ -51,7 +51,7 @@ namespace MRA.Web.Controllers
 
             model.ModelNameSelect = new List<string>();
 
-            foreach (var modelName in model.Drawings.Select(x => x.ModelName).Distinct().ToList())
+            foreach (var modelName in model.Drawings.Where(x => !String.IsNullOrEmpty(x.ModelName)).Select(x => x.ModelName).Distinct().ToList())
             {
                 if (!model.ModelNameSelect.Contains(modelName))
                 {

@@ -134,6 +134,17 @@ namespace MRA.Services.Firebase
                         query = query.WhereEqualTo("product_name", filter.ProductName);
                     }
                 }
+                if (!String.IsNullOrEmpty(filter.CharacterName))
+                {
+                    if (filter.CharacterName.Equals("none"))
+                    {
+                        query = query.WhereEqualTo("name", "");
+                    }
+                    else
+                    {
+                        query = query.WhereEqualTo("name", filter.CharacterName);
+                    }
+                }
                 if (!String.IsNullOrEmpty(filter.ModelName))
                 {
                     if (filter.ModelName.Equals("none"))
