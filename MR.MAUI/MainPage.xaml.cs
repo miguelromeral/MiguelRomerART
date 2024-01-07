@@ -6,6 +6,8 @@ using Plugin.CloudFirestore;
 using Microsoft.Maui.Controls;
 using System.Diagnostics;
 using Google.Protobuf;
+using MRA.Services.AzureStorage;
+using MR.MAUI.Classes;
 
 namespace MR.MAUI
 {
@@ -25,6 +27,7 @@ namespace MR.MAUI
 
         public List<string> ListaDrawingsId { get; set; }
         public List<Drawing> ListaDrawings { get; set; }
+        public AzureBlobInfo azureBlobInfo { get; set; }
 
         public MainPage()
         {
@@ -50,6 +53,11 @@ namespace MR.MAUI
             ListaComentariosPros = new List<string>();
             ListaComentariosCons = new List<string>();
 
+            azureBlobInfo = new AzureBlobInfo()
+            {
+                ThumbnailSize = 320
+            };
+
             LoadDrawingsId();
 
             BindingContext = this;
@@ -64,6 +72,7 @@ namespace MR.MAUI
             cbDrawingId.ItemsSource = ListaDrawingsId;
             if (!String.IsNullOrEmpty(id))
             {
+                cbSelectOperation.SelectedIndex = 1;
                 cbDrawingId.SelectedIndex = ListaDrawings.FindIndex(x => x.Id.Equals(id));
             }
         }
@@ -96,17 +105,19 @@ namespace MR.MAUI
                 // Asignar la fecha al DatePicker
                 dpDrawingDate.Date = selectedDate;
             }
+
             sDrawingFavorite.IsToggled = drawing.Favorite;
             tbDrawingName.Text = drawing?.Name ?? "";
             tbDrawingModelName.Text = drawing?.ModelName ?? "";
             tbDrawingProductName.Text = drawing?.ProductName ?? "";
             tbDrawingReference.Text = drawing?.ReferenceUrl ?? "";
+            tbDrawingAzureUrl.Text = drawing.Path ?? "";
             tbDrawingTitle.Text = drawing?.Title ?? "";
             cbDrawingType.SelectedIndex = drawing.Type;
             cbDrawingSoftware.SelectedIndex = drawing.Software;
             cbDrawingProductType.SelectedIndex = drawing.ProductType;
             cbDrawingPaperSize.SelectedIndex = drawing.Paper;
-
+            
             ListaComentarios = drawing.ListComments;
             ReloadComentarios();
             ListaComentariosPros = drawing.ListCommentPros;
@@ -115,12 +126,27 @@ namespace MR.MAUI
             ReloadComentariosCons();
         }
 
-        private void ReloadComentarios() => ReloadStackLayout(slDrawingComments, ListaComentarios, 
-            OnDeleteButtonClicked, comment_Unfocused, "Comentario");
-        private void ReloadComentariosPros() => ReloadStackLayout(slDrawingCommentsPros, ListaComentariosPros, 
-            OnDeleteButtonClickedPros, comment_Unfocused_pros, "Comentarios Positivos");
-        private void ReloadComentariosCons() => ReloadStackLayout(slDrawingCommentsCons, ListaComentariosCons, 
-            OnDeleteButtonClickedCons, comment_Unfocused_cons, "Comentario Negativos");
+        private void ReloadComentarios()
+        {
+            drawing.Comment = string.Join(Drawing.SEPARATOR_COMMENTS, ListaComentarios);
+            ListaComentarios = drawing.ListComments;
+            ReloadStackLayout(slDrawingComments, ListaComentarios,
+            OnDeleteButtonClicked, comment_Unfocused, "Comentario", 1);
+        }
+        private void ReloadComentariosPros()
+        {
+            drawing.CommentPros = string.Join(Drawing.SEPARATOR_COMMENTS, ListaComentariosPros);
+            ListaComentariosPros = drawing.ListCommentPros;
+            ReloadStackLayout(slDrawingCommentsPros, ListaComentariosPros,
+            OnDeleteButtonClickedPros, comment_Unfocused_pros, "Comentarios Positivos", 2);
+        }
+        private void ReloadComentariosCons()
+        {
+            drawing.CommentCons = string.Join(Drawing.SEPARATOR_COMMENTS, ListaComentariosCons);
+            ListaComentariosCons = drawing.ListCommentCons;
+            ReloadStackLayout(slDrawingCommentsCons, ListaComentariosCons,
+            OnDeleteButtonClickedCons, comment_Unfocused_cons, "Comentario Negativos", 3);
+        }
 
         private void OnDeleteButtonClicked(object sender, EventArgs e)
         {
@@ -158,36 +184,73 @@ namespace MR.MAUI
             return -1;
         }
 
+        private void EntryComments_Unfocused(object sender, CommentEventArgs e)
+        {
+            Editor entry = (Editor) sender;
+            int index = -1;
+            StackLayout layout = slDrawingComments;
+            switch (e.TipoLista)
+            {
+                case 1: 
+                    index = e.Indice;
+                    if (index > -1 && index < slDrawingComments.Children.Count)
+                    {
+                        ListaComentarios[index] = entry.Text;
+                    }
+                    break;
+                case 2:
+                    index = e.Indice;
+                    if (index > -1 && index < slDrawingCommentsPros.Children.Count)
+                    {
+                        ListaComentariosPros[index] = entry.Text;
+                    }
+                    break;
+                case 3:
+                    index = e.Indice;
+                    if (index > -1 && index < slDrawingCommentsCons.Children.Count)
+                    {
+                        ListaComentariosCons[index] = entry.Text;
+                    }
+                    break;
+            }
+        }
+
+
         private void OnAddComentario(object sender, EventArgs e)
         {
-            ListaComentarios.Add("");
+            ListaComentarios.Add(" ");
             ReloadComentarios();
         }
         private void OnAddComentarioPros(object sender, EventArgs e)
         {
-            ListaComentariosPros.Add("");
+            ListaComentariosPros.Add(" ");
             ReloadComentariosPros();
         }
         private void OnAddComentarioCons(object sender, EventArgs e)
         {
-            ListaComentariosCons.Add("");
+            ListaComentariosCons.Add(" ");
             ReloadComentariosCons();
         }
 
         private void ReloadStackLayout(StackLayout layout, List<string> list, EventHandler handler, 
-            EventHandler<FocusEventArgs> handlerUnfocused, string placeholder)
+            EventHandler<FocusEventArgs> handlerUnfocused, string placeholder, int type)
         {
             layout.Children.Clear();
             for (int i = 0; i < list.Count; i++)
             {
                 var comment = list[i];
 
-                var entry = new Entry
+                var entry = new Editor
                 {
                     Text = comment,
-                    Placeholder = placeholder
+                    Placeholder = placeholder,
                 };
-
+                entry.HeightRequest = 5 * entry.FontSize;
+                int currentIteration = i;
+                entry.Unfocused += (s, e) =>
+                {
+                    EntryComments_Unfocused(s, new CommentEventArgs(type, currentIteration));
+                };
                 entry.BindingContext = i;
                 entry.Unfocused += handlerUnfocused;
 
@@ -196,6 +259,8 @@ namespace MR.MAUI
                     Text = "🗑",
                     CommandParameter = i
                 };
+
+                entry.SetDynamicResource(Entry.StyleProperty, "mrEntry");
 
                 button.Clicked += handler;
 
@@ -218,8 +283,10 @@ namespace MR.MAUI
 
         private void OnDateSelected(object sender, DateChangedEventArgs e)
         {
-            drawing.Date = e.NewDate.ToString("yyyy/MM/dd");
+            drawing.Date = ParseDate(e.NewDate);
         }
+
+        private string ParseDate(DateTime date) => date.ToString("yyyy/MM/dd");
 
         private void comment_Unfocused(object sender, FocusEventArgs e)
         {
@@ -264,17 +331,25 @@ namespace MR.MAUI
 
             try
             {
-                if(drawing.Paper > 0)
+                if (String.IsNullOrEmpty(drawing.Id))
+                {
+                    DisplayAlert("Error al Guardar", $"El dibujo necesita un ID", "Vale");
+                    return;
+                }
+
+                if (drawing.Paper > 0)
                 {
                     drawing.Paper += 3;
                 }
+
+                drawing.Date = ParseDate(dpDrawingDate.Date);
 
                 drawing.Comment = string.Join(Drawing.SEPARATOR_COMMENTS, ListaComentarios);
                 drawing.CommentPros = string.Join(Drawing.SEPARATOR_COMMENTS, ListaComentariosPros);
                 drawing.CommentCons = string.Join(Drawing.SEPARATOR_COMMENTS, ListaComentariosCons);
 
                 await _drawingService.AddAsync(drawing);
-                DisplayAlert("Actualziado", $"El dibujo con ID '{drawing.Id}' ha sido guardado con éxito.", "Vale");
+                DisplayAlert("Actualizado", $"El dibujo con ID '{drawing.Id}' ha sido guardado con éxito.", "Vale");
                 LoadDrawingsId(drawing.Id);
             }
             catch (Exception ex)
@@ -302,6 +377,19 @@ namespace MR.MAUI
             if (ListaDrawingsId.Count(x => x.Equals(newValue)) > 0)
             {
                 DisplayAlert("ID Usado", $"Ya existe un dibujo con ID '{newValue}'.\nCambia el ID y vuelve a intentarlo", "Vale");
+
+                //tbDrawingId.StyleClass = new List<string>()
+                //{
+                //    "mrWrongText"
+                //};
+            }
+            else
+            {
+                drawing.Id = newValue;
+                //tbDrawingId.StyleClass = new List<string>()
+                //{
+                //    "mrWrongGood"
+                //};
             }
         }
 
@@ -319,6 +407,60 @@ namespace MR.MAUI
                     layoutAddDrawing.IsVisible = false;
                     layoutEditDrawing.IsVisible = true;
                     break;
+            }
+        }
+
+        private async void SelectBarcode(object sender, EventArgs e)
+        {
+            var images = await FilePicker.Default.PickAsync(new PickOptions
+            {
+                PickerTitle = "Pick Barcode/QR Code Image",
+                FileTypes = FilePickerFileType.Images
+            });
+            if(images != null)
+            {
+                var imageSource = images.FullPath.ToString();
+                azureBlobInfo.LocalPath = imageSource;
+                barcodeImage.Source = imageSource;
+                outputText.Text = imageSource;
+            }
+        }
+
+        private async void btnAzureUpload_Clicked(object sender, EventArgs e)
+        {
+            //await Task.Run(async () =>
+            //{
+                try
+                {
+                    btnAzureUpload.IsEnabled = false;
+                    var blobLocation = tbDrawingAzureUrl.Text;
+                    var blobLocationThumbnail = _drawingService.CrearThumbnailName(blobLocation);
+                    drawing.PathThumbnail = blobLocationThumbnail;
+                    await _drawingService.RedimensionarYGuardarEnAzureStorage(azureBlobInfo.LocalPath, blobLocation, 0);
+                    await _drawingService.RedimensionarYGuardarEnAzureStorage(azureBlobInfo.LocalPath, blobLocationThumbnail, azureBlobInfo.ThumbnailSize);
+                    DisplayAlert("Blob subido con éxito", $"Blob subido a Azure con éxito.", "Vale");
+                    layoutAzureDetails.IsVisible = false;
+                }
+                catch (Exception ex)
+                {
+                    DisplayAlert("Error al Subir Blob", $"Ha ocurrido un error al guardar el blob en Azure.\n{ex.Message}", "Vale");
+                }
+                btnAzureUpload.IsEnabled = true;
+            //});
+        }
+
+        private async void tbDrawingAzureUrl_Unfocused(object sender, FocusEventArgs e)
+        {
+            var path = ((Entry)sender).Text;
+            var existe = await _drawingService.ExistsBlob(path);
+            if (!existe)
+            {
+                DisplayAlert("No Blob Azure", $"La ruta especificada no pertenece a ningún Blob de Azure. Puede crear uno.", "Vale");
+                layoutAzureDetails.IsVisible = true;
+            }
+            else
+            {
+                layoutAzureDetails.IsVisible = false;
             }
         }
     }

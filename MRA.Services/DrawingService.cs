@@ -80,7 +80,13 @@ namespace MRA.Services
         public async Task<Drawing> FindDrawingById(string documentId) => await _firestoreService.FindDrawingById(documentId);
         public async Task UpdateLikes(string documentId) => await _firestoreService.UpdateLikes(documentId);
 
+        public async Task<bool> ExistsBlob(string rutaBlob) => await _azureStorageService.ExistsBlob(rutaBlob);
+
         public async Task<Drawing> AddAsync(Drawing document) => await _firestoreService.AddAsync(document);
 
+        public async Task RedimensionarYGuardarEnAzureStorage(string rutaEntrada, string nombreBlob, int anchoDeseado) =>
+            await _azureStorageService.RedimensionarYGuardarEnAzureStorage(rutaEntrada, nombreBlob, anchoDeseado);
+
+        public string CrearThumbnailName(string rutaImagen) => _azureStorageService.CrearThumbnailName(rutaImagen);
     }
 }

@@ -22,6 +22,7 @@
     <Style TargetType="BoxView">
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Gray950}, Dark={StaticResource Gray200}}" />
     </Style>
+    
 
     <Style TargetType="Button">
         <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}" />
@@ -47,6 +48,32 @@
                 </VisualStateGroup>
             </VisualStateGroupList>
         </Setter>
+    </Style>
+
+
+
+    <Style x:Key="mrEntry" TargetType="Entry">
+        <Setter Property="Margin" Value="10,0,10,0" />
+    </Style>
+
+
+    <Style x:Key="mrLabelTitle" TargetType="Label">
+        <Setter Property="Margin" Value="10,10,10,10" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="FontAttributes" Value="Bold" />
+    </Style>
+
+
+    <Style x:Key="mrButtonAddComment" TargetType="Button">
+        <Setter Property="Margin" Value="10,0,10,0" />
+        <Setter Property="CornerRadius" Value="25" />
+    </Style>
+
+    <Style x:Key="mrWrongText" TargetType="Entry">
+        <Setter Property="TextColor" Value="red" />
+    </Style>
+    <Style x:Key="mrWrongGood" TargetType="Entry">
+        <Setter Property="TextColor" Value="green" />
     </Style>
 
     <Style TargetType="CheckBox">

@@ -10,28 +10,6 @@ using MRA.Services.Firebase.Interfaces;
 
 namespace MR.MAUI
 {
-    public interface IServiceExample
-    {
-        void Hola();
-    }
-
-    public class ServiceExample : IServiceExample
-    {
-        public void Hola()
-        {
-            var tmp = "Hola";
-        }
-    }
-
-    //public class MainViewModel
-    //{
-    //    private readonly IServiceExample _serviceExample;
-
-    //    public MainViewModel(IServiceExample deviceService)
-    //    {
-    //        _serviceExample = deviceService;
-    //    }
-    //}
 
     public static class MauiProgram
     {
@@ -104,8 +82,6 @@ namespace MR.MAUI
             var drawingService = new DrawingService(azureStorageService, firebaseService);
 
             builder.Services.AddSingleton(drawingService);
-
-            builder.Services.AddSingleton<IServiceExample, ServiceExample>();
 
             //// Registra el servicio utilizando un método de fábrica
             //services.AddSingleton<IDra>(sp =>

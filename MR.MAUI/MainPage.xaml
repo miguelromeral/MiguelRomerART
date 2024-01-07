@@ -7,44 +7,53 @@
             Padding="30,0"
             Spacing="25">
 
-          
 
+            <Grid Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="2*" />
+                </Grid.ColumnDefinitions>
 
-
-            <StackLayout Orientation="Vertical" Margin="0,0,0,10">
-                <Picker Title="Crear o Editar" x:Name="cbSelectOperation"
+                <StackLayout Grid.Column="0" Orientation="Vertical" Margin="0,0,0,10">
+                    <Label Text="Operación" Style="{StaticResource mrLabelTitle}"/>
+                    <Picker x:Name="cbSelectOperation"
+                            Style="{StaticResource mrEntry}"
                         ItemsSource="{Binding SelectAdd}" SelectedIndexChanged="cbSelectOperation_SelectedIndexChanged"/>
+                </StackLayout>
 
-            </StackLayout>
+                <StackLayout Grid.Column="1" Orientation="Vertical" Margin="0,0,0,10">
+                    <VerticalStackLayout x:Name="layoutAddDrawing">
+                        <Label Text="ID del Nuevo Dibujo" Style="{StaticResource mrLabelTitle}" />
+                        <Entry x:Name="tbDrawingId" Placeholder="Drawing ID" Unfocused="tbDrawingId_Unfocused" 
+                                Style="{StaticResource mrEntry}"/>
+                    </VerticalStackLayout>
+
+                    <StackLayout x:Name="layoutEditDrawing" Orientation="Vertical" Margin="0,0,0,10" IsVisible="false">
+                        <Label Text="ID del Dibujo a Editar" Style="{StaticResource mrLabelTitle}"/>
+
+                        <Picker x:Name="cbDrawingId" 
+            SelectedIndexChanged="cbDrawingId_SelectedIndexChanged"/>
+                    </StackLayout>
+                </StackLayout>
+            </Grid>
             
-            <VerticalStackLayout x:Name="layoutAddDrawing">
-                <Label Text="Busca por ID del dibujo" />
-                <Entry x:Name="tbDrawingId" Placeholder="Drawing ID" Unfocused="tbDrawingId_Unfocused" />
-                <Button Text="BUSCAR" Clicked="OnFindDrawingId" />
-            </VerticalStackLayout>
-
-            <StackLayout x:Name="layoutEditDrawing" Orientation="Vertical" Margin="0,0,0,10">
-                <Picker Title="ID del Dibujo a Editar" x:Name="cbDrawingId"
-                        SelectedIndexChanged="cbDrawingId_SelectedIndexChanged"/>
-            </StackLayout>
+            
             <Grid Margin="0,0,0,10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <!-- Primera imagen -->
                 <StackLayout Grid.Column="0" Orientation="Vertical" Margin="0,0,0,10">
-                    <Label Text="Imagen" VerticalOptions="CenterAndExpand" HorizontalTextAlignment="Center" />
+                    <Label Text="Imagen" VerticalOptions="CenterAndExpand" HorizontalTextAlignment="Center" Style="{StaticResource mrLabelTitle}" />
                     <Image
             x:Name="imageDrawing"
             MaximumHeightRequest="500"
             Aspect="AspectFit" />
                 </StackLayout>
 
-                <!-- Segunda imagen -->
                 <StackLayout Grid.Column="1" Orientation="Vertical" Margin="0,0,0,10">
-                    <Label Text="Miniatura" VerticalOptions="CenterAndExpand" HorizontalTextAlignment="Center" />
+                    <Label Text="Miniatura" VerticalOptions="CenterAndExpand" HorizontalTextAlignment="Center" Style="{StaticResource mrLabelTitle}"/>
                     <Image
             x:Name="imageDrawingThumbnail"
             MaximumHeightRequest="350"
@@ -53,112 +62,219 @@
             </Grid>
 
 
-            <StackLayout Orientation="Vertical" Margin="0,0,0,10">
-                <Label Text="Favorito" VerticalOptions="CenterAndExpand" />
-                <Switch x:Name="sDrawingFavorite" IsToggled="{Binding drawing.Favorite}" />
+            <Grid Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackLayout Grid.Column="0" Orientation="Vertical" Margin="0,0,0,10">
+                    <Label Text="Título del Dibujo" Style="{StaticResource mrLabelTitle}" />
+                    <Entry x:Name="tbDrawingTitle" 
+                           Text="{Binding drawing.Title}"
+                           Placeholder="Título del Dibujo" 
+                           Style="{StaticResource mrEntry}"/>
+                </StackLayout>
+
+                <StackLayout Grid.Column="1" Orientation="Vertical" Margin="0,0,0,10">
+                    <Label Text="Favorito" VerticalOptions="CenterAndExpand" Style="{StaticResource mrLabelTitle}" />
+                    <Switch x:Name="sDrawingFavorite" IsToggled="{Binding drawing.Favorite}" />
+                </StackLayout>
+            </Grid>
+
+
+
+            <StackLayout Grid.Column="0" Orientation="Vertical" Margin="0,0,0,10">
+                <Label Text="Ruta De Azure" Style="{StaticResource mrLabelTitle}" />
+
+                <Entry x:Name="tbDrawingAzureUrl"
+                       Text="{Binding drawing.Path}" Placeholder="Azure URL"
+                           Unfocused="tbDrawingAzureUrl_Unfocused"
+                       Style="{StaticResource mrEntry}"/>
             </StackLayout>
 
-            <StackLayout Orientation="Vertical" Margin="0,0,0,10">
-                <Label Text="TODO: Ruta en Azure" VerticalOptions="CenterAndExpand" />
+            <StackLayout x:Name="layoutAzureDetails" IsVisible="false" Orientation="Vertical" Margin="0,0,0,10">
+
+                <Grid Margin="0,0,0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackLayout Grid.Column="0" Orientation="Vertical" Margin="0,0,0,10">
+
+                        <Image
+                        x:Name="barcodeImage"
+                        HeightRequest="500"
+                        HorizontalOptions="Center" />
+
+                    </StackLayout>
+
+                    <StackLayout Grid.Column="1" Orientation="Vertical" Margin="0,0,0,10">
+
+                        <Button
+             x:Name="ImageSelect"
+             Text="Seleccionar Imagen"
+             Clicked="SelectBarcode" />
+
+                        <Label Text="Ruta de la Imagen" Style="{StaticResource mrLabelTitle}"/>
+                        
+                        <Label x:Name="outputText"/>
+
+                        <Label Text="Tamaño de la miniatura" Style="{StaticResource mrLabelTitle}"/>
+
+                        <Entry x:Name="tbAzureThumbnail" Placeholder="Tamaño de la Miniatura" Text="{Binding azureBlobInfo.ThumbnailSize}" 
+                               Style="{StaticResource mrEntry}"/>
+
+                        <Button x:Name="btnAzureUpload" Text="Subir a Azure" Clicked="btnAzureUpload_Clicked" Style="{StaticResource mrButtonAddComment}" />
+
+                    </StackLayout>
+                </Grid>
+
             </StackLayout>
 
-            
-            <StackLayout Orientation="Vertical" Margin="0,0,0,10">
-                <Label Text="Nombre del Personaje" />
-                <Entry x:Name="tbDrawingName"
-                       Text="{Binding drawing.Name}"
-                       Placeholder="Nombre del Personaje" />
-            </StackLayout>
+            <Grid Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-            <StackLayout Orientation="Vertical" Margin="0,0,0,10">
-                <Label Text="Nombre del Modelo" />
-                <Entry x:Name="tbDrawingModelName" 
+                <StackLayout Grid.Column="0" Orientation="Vertical" Margin="0,0,0,10">
+                    <Label Text="Nombre del Personaje" Style="{StaticResource mrLabelTitle}"/>
+                    <Entry x:Name="tbDrawingName"
+                            Text="{Binding drawing.Name}"
+                            Placeholder="Nombre del Personaje" 
+                           Style="{StaticResource mrEntry}"/>
+                </StackLayout>
+
+                <StackLayout Grid.Column="1" Orientation="Vertical" Margin="0,0,0,10">
+                    <Label Text="Nombre del Modelo" Style="{StaticResource mrLabelTitle}"/>
+                    <Entry x:Name="tbDrawingModelName" 
                        Text="{Binding drawing.ModelName}"
-                       Placeholder="Nombre del Modelo" />
-            </StackLayout>
+                       Placeholder="Nombre del Modelo" 
+                           Style="{StaticResource mrEntry}"/>
+                </StackLayout>
+            </Grid>
 
-            <StackLayout Orientation="Vertical" Margin="0,0,0,10">
-                <Label Text="Título del Dibujo" />
-                <Entry x:Name="tbDrawingTitle" 
-                       Text="{Binding drawing.Title}"
-                       Placeholder="Título del Dibujo" />
-            </StackLayout>
 
-            <StackLayout Orientation="Vertical" Margin="0,0,0,10">
-                <Picker Title="Tipo de Dibujo" x:Name="cbDrawingType"
+            <Grid Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <StackLayout Grid.Column="0" Orientation="Vertical" Margin="0,0,0,10">
+                    <Label Text="Tipo de Dibujo" Style="{StaticResource mrLabelTitle}"/>
+                    <Picker x:Name="cbDrawingType"
                         ItemsSource="{Binding SelectorTipos}"
-                        SelectedIndex="{Binding drawing.Type}"/>
+                        SelectedIndex="{Binding drawing.Type}"
+                            Style="{StaticResource mrEntry}"/>
+                </StackLayout>
 
-            </StackLayout>
-
-            <StackLayout Orientation="Vertical" Margin="0,0,0,10">
-                <Picker Title="Software" x:Name="cbDrawingSoftware"
+                <StackLayout Grid.Column="1" Orientation="Vertical" Margin="0,0,0,10">
+                    <Label Text="Software" Style="{StaticResource mrLabelTitle}"/>
+                    <Picker x:Name="cbDrawingSoftware"
                         ItemsSource="{Binding SelectorSoftware}"
-                        SelectedIndex="{Binding drawing.Software}"/>
-            </StackLayout>
+                        SelectedIndex="{Binding drawing.Software}"
+                            Style="{StaticResource mrEntry}"/>
+                </StackLayout>
 
-            <StackLayout Orientation="Vertical" Margin="0,0,0,10">
-                <Picker Title="Tamaño del Papel" x:Name="cbDrawingPaperSize"
+                <StackLayout Grid.Column="2" Orientation="Vertical" Margin="0,0,0,10">
+                    <Label Text="Tamaño del Papel" Style="{StaticResource mrLabelTitle}"/>
+                    <Picker x:Name="cbDrawingPaperSize"
                         SelectedIndex="{Binding drawing.Paper}"
-                        ItemsSource="{Binding SelectorPaperSize}" />
-            </StackLayout>
-            
-            <StackLayout Orientation="Vertical" Margin="0,0,0,10">
-                <Label Text="Fecha de Creación" VerticalOptions="CenterAndExpand" />
-                <DatePicker x:Name="dpDrawingDate" DateSelected="OnDateSelected" Format="dd/MM/yyyy" />
-            </StackLayout>
+                        ItemsSource="{Binding SelectorPaperSize}"
+                            Style="{StaticResource mrEntry}"/>
+                </StackLayout>
+            </Grid>
 
-            <StackLayout Orientation="Vertical" Margin="0,0,0,10">
-                <Label Text="Tiempo en minutos" VerticalOptions="CenterAndExpand" />
-                <Entry Placeholder="Tiempo en minutos"
+
+            <Grid Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <StackLayout Grid.Column="0" Orientation="Vertical" Margin="0,0,0,10">
+                    <Label Text="Fecha de Creación" VerticalOptions="CenterAndExpand" Style="{StaticResource mrLabelTitle}" />
+                    <DatePicker x:Name="dpDrawingDate" DateSelected="OnDateSelected" Format="dd/MM/yyyy" 
+                            Style="{StaticResource mrEntry}"/>
+                </StackLayout>
+
+                <StackLayout Grid.Column="1" Orientation="Vertical" Margin="0,0,0,10">
+                    <Label Text="Tiempo en minutos" VerticalOptions="CenterAndExpand" Style="{StaticResource mrLabelTitle}"/>
+                    <Entry Placeholder="Tiempo en minutos"
                        Text="{Binding drawing.Time}"
-                       Keyboard="Numeric" />
-            </StackLayout>
+                       Keyboard="Numeric" Style="{StaticResource mrEntry}"/>
+                </StackLayout>
+            </Grid>
 
-            <StackLayout Orientation="Vertical" Margin="0,0,0,10">
-                <Picker Title="Tipo de Producto" x:Name="cbDrawingProductType"
+
+            <Grid Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <StackLayout Grid.Column="0" Orientation="Vertical" Margin="0,0,0,10">
+                    <Label Text="Tipo de Producto" Style="{StaticResource mrLabelTitle}"/>
+                    <Picker x:Name="cbDrawingProductType"
                         ItemsSource="{Binding SelectorProductTypes}"
-                        SelectedIndex="{Binding drawing.ProductType}"/>
-            </StackLayout>
+                        SelectedIndex="{Binding drawing.ProductType}" Style="{StaticResource mrEntry}"/>
+                </StackLayout>
 
-
-            <StackLayout Orientation="Vertical" Margin="0,0,0,10">
-                <Label Text="Nombre del Producto" />
-                <Entry x:Name="tbDrawingProductName" 
+                <StackLayout Grid.Column="1" Orientation="Vertical" Margin="0,0,0,10">
+                    <Label Text="Nombre del Producto" Style="{StaticResource mrLabelTitle}"/>
+                    <Entry x:Name="tbDrawingProductName" 
                        Text="{Binding drawing.ProductName}"
-                       Placeholder="Nombre del Producto" />
-            </StackLayout>
+                       Placeholder="Nombre del Producto" Style="{StaticResource mrEntry}"/>
+                </StackLayout>
+            </Grid>
+
+
 
             <StackLayout Orientation="Vertical" Margin="0,0,0,10">
-                <Label Text="Comentarios del Artista" VerticalOptions="CenterAndExpand" />
+                <Label Text="Comentarios del Artista" VerticalOptions="CenterAndExpand" Style="{StaticResource mrLabelTitle}" />
                 <StackLayout Orientation="Vertical" Margin="0,0,0,10" x:Name="slDrawingComments">
                 </StackLayout>
-                <Button Text="+ Comentario" Clicked="OnAddComentario" />
+                <Button Text="+ Comentario" Clicked="OnAddComentario" Style="{StaticResource mrButtonAddComment}" />
             </StackLayout>
-            <StackLayout Orientation="Vertical" Margin="0,0,0,10">
-                <Label Text="Comentarios Positivos" VerticalOptions="CenterAndExpand" />
-                <StackLayout Orientation="Vertical" Margin="0,0,0,10" x:Name="slDrawingCommentsPros">
+
+            <Grid Margin="0,0,0,10">
+                
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <StackLayout Grid.Column="0" Orientation="Vertical" Margin="0,0,0,10" VerticalOptions="StartAndExpand">
+                    <Label Text="Comentarios Positivos" VerticalOptions="CenterAndExpand" Style="{StaticResource mrLabelTitle}"/>
+                    <StackLayout Orientation="Vertical" Margin="0,0,0,10" x:Name="slDrawingCommentsPros">
+                    </StackLayout>
+                    <Button Text="+ Positivo" Clicked="OnAddComentarioPros" Style="{StaticResource mrButtonAddComment}" />
                 </StackLayout>
-                <Button Text="+ Positivo" Clicked="OnAddComentarioPros" />
-            </StackLayout>
-            <StackLayout Orientation="Vertical" Margin="0,0,0,10">
-                <Label Text="Comentarios Negativos" VerticalOptions="CenterAndExpand" />
-                <StackLayout Orientation="Vertical" Margin="0,0,0,10" x:Name="slDrawingCommentsCons">
+
+
+                <StackLayout Grid.Column="1" Orientation="Vertical" Margin="0,0,0,10" VerticalOptions="StartAndExpand">
+                    <Label Text="Comentarios Negativos" VerticalOptions="CenterAndExpand" Style="{StaticResource mrLabelTitle}"/>
+                    <StackLayout Orientation="Vertical" Margin="0,0,0,10" x:Name="slDrawingCommentsCons">
+                    </StackLayout>
+                    <Button Text="+ Negativo" Clicked="OnAddComentarioCons" Style="{StaticResource mrButtonAddComment}" />
                 </StackLayout>
-                <Button Text="+ Negativo" Clicked="OnAddComentarioCons" />
-            </StackLayout>
-            
+            </Grid>
+
             
             <StackLayout Orientation="Vertical" Margin="0,0,0,10">
-                <Label Text="Imagen de Referencia" />
+                <Label Text="URL Imagen de Referencia" Style="{StaticResource mrLabelTitle}"/>
                 <Entry x:Name="tbDrawingReference" 
-                       Text="{Binding drawing.ReferenceUrl}"
+                       Text="{Binding drawing.ReferenceUrl}" Style="{StaticResource mrEntry}"
                        Placeholder="Imagen de Referencia" />
             </StackLayout>
 
 
             <StackLayout Orientation="Vertical" Margin="0,0,0,10">
-                <Button x:Name="btnSave" Text="GUARDAR" Clicked="OnSaveDrawing" />
+                <Button x:Name="btnSave" Text="GUARDAR" Clicked="OnSaveDrawing" BackgroundColor="#30cf5a" />
             </StackLayout>
 
         </StackLayout>
