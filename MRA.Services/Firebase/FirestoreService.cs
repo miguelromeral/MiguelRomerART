@@ -324,8 +324,41 @@ namespace MRA.Services.Firebase
             });
         }
 
+        public void SetAutomaticTags(ref Drawing document)
+        {
+            var list = new List<string>();
+            list.AddRange(document.Name.Split(" ").Select(x => x.ToLower()));
+            list.AddRange(document.ModelName.Split(" ").Select(x => x.ToLower()));
+            list.AddRange(document.Title.Split(" ").Select(x => x.ToLower()));
+            if (document.Software > 0)
+            {
+                list.AddRange(document.SoftwareName.Split(" ").Select(x => x.ToLower()));
+            }
+            if (document.Paper > 0)
+            {
+                list.AddRange(document.PaperHuman.Split(" ").Select(x => x.ToLower()));
+            }
+            if (document.Type > 0)
+            {
+                list.AddRange(document.TypeName.Split(" ").Select(x => x.ToLower()));
+            }
+
+            if (document.ProductType > 0)
+            {
+                list.AddRange(document.ProductTypeName.Split(" ").Select(x => x.ToLower()));
+            }
+            list.AddRange(document.ProductName.Split(" ").Select(x => x.ToLower()));
+
+            list = list.Where(x => !String.IsNullOrEmpty(x))
+                .Select(x => x.Replace(":", "").Replace(",", "")).ToList();
+            document.Tags.AddRange(list);
+            document.Tags = document.Tags.Distinct().ToList();
+        }
+
         public async Task<Drawing> AddAsync(Drawing document)
         {
+            SetAutomaticTags(ref document);
+            
             var collection = _firestoreDb.Collection(_collectionNameDrawings);
             var drawingDocument = _converterDrawing.ConvertToDocument(document);
 

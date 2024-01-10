@@ -34,6 +34,7 @@ function resetFilters() {
     $("#sFilterProduct").val(-1);
     $("#sFilterCharacterName").val("");
     $("#sFilterProductName").val("");
+    $("#tbTags").val("");
     $("#sFilterModel").val("");
     $("#sFilterSoftware").val(0);
     $("#sFilterPaper").val(0);

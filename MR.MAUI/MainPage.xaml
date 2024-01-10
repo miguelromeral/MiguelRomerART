@@ -267,12 +267,18 @@
                 </StackLayout>
             </Grid>
 
-            
+
             <StackLayout Orientation="Vertical" Margin="0,0,0,10">
                 <Label Text="URL Imagen de Referencia" Style="{StaticResource mrLabelTitle}"/>
                 <Entry x:Name="tbDrawingReference" 
                        Text="{Binding drawing.ReferenceUrl}" Style="{StaticResource mrEntry}"
                        Placeholder="Imagen de Referencia" />
+            </StackLayout>
+
+            <StackLayout Orientation="Vertical" Margin="0,0,0,10">
+                <Label Text="Etiquetas" Style="{StaticResource mrLabelTitle}"/>
+                <Entry x:Name="tbDrawingTags" Style="{StaticResource mrEntry}"
+                       Placeholder="Etiquetas" />
             </StackLayout>
 
 

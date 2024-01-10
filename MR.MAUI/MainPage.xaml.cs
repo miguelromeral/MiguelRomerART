@@ -75,6 +75,7 @@ namespace MR.MAUI
             imageDrawing.Source = "";
             imageDrawingThumbnail.Source = "";
 
+            tbDrawingTags.Text = "";
             tbDrawingAzureUrl.Text = "";
             outputText.Text = "";
             tbDrawingTitle.Text = "";
@@ -157,6 +158,8 @@ namespace MR.MAUI
             cbDrawingSoftware.SelectedIndex = drawing.Software;
             cbDrawingProductType.SelectedIndex = drawing.ProductType;
             cbDrawingPaperSize.SelectedIndex = drawing.Paper;
+
+            tbDrawingTags.Text = String.Join(" ", drawing.Tags);
             
             ListaComentarios = drawing.ListComments;
             ReloadComentarios();
@@ -384,6 +387,8 @@ namespace MR.MAUI
                 }
 
                 drawing.Date = ParseDate(dpDrawingDate.Date);
+
+                drawing.Tags = tbDrawingTags.Text.Split(" ").ToList();
 
                 drawing.Comment = string.Join(Drawing.SEPARATOR_COMMENTS, ListaComentarios);
                 drawing.CommentPros = string.Join(Drawing.SEPARATOR_COMMENTS, ListaComentariosPros);
