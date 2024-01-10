@@ -198,3 +198,11 @@ function generateHeartSize() {
     
     return pixels + "px";
 }
+
+function capturarEnter(event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        //console.log("Se presionó la tecla Enter (evento prevenido)");
+        sendFormFilterGallery();
+    }
+}

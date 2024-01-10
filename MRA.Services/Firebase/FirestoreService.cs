@@ -120,7 +120,7 @@ namespace MRA.Services.Firebase
                 }
                 if (!String.IsNullOrEmpty(filter.TextQuery))
                 {
-                    query = query.WhereArrayContainsAny("tags", filter.Tags);
+                    query = query.WhereArrayContainsAny("tags", filter.Tags.Where(x => !String.IsNullOrEmpty(x)).ToList());
                 }
                 if (!String.IsNullOrEmpty(filter.Collection))
                 {
@@ -350,7 +350,7 @@ namespace MRA.Services.Firebase
             list.AddRange(document.ProductName.Split(" ").Select(x => x.ToLower()));
 
             list = list.Where(x => !String.IsNullOrEmpty(x))
-                .Select(x => x.Replace(":", "").Replace(",", "")).ToList();
+                .Select(x => x.Replace(":", "").Replace(",", "").Replace("\"", "")).ToList();
             document.Tags.AddRange(list);
             document.Tags = document.Tags.Distinct().ToList();
         }

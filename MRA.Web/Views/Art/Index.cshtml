@@ -97,7 +97,9 @@
                 <span><i id="iFavoriteIcon" class="bi bi-trash"></i></span>
             </button>
 
-            <input id="tbTags" name="TextQuery" class="form-control mr-custom-text mr-filter-item" type="text" placeholder="Buscar por nombre, modelo, producto, etc." onchange="sendFormFilterGallery()">
+            <input id="tbTags" name="TextQuery" class="form-control mr-custom-text mr-filter-item" type="text" placeholder="Buscar por nombre, modelo, producto, etc."
+                onchange="sendFormFilterGallery();"
+                   onkeydown="capturarEnter(event)">
 
 
 
