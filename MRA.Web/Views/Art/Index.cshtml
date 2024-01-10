@@ -97,6 +97,10 @@
                 <span><i id="iFavoriteIcon" class="bi bi-trash"></i></span>
             </button>
 
+            <input id="tbTags" name="TextQuery" class="form-control mr-custom-text mr-filter-item" type="text" placeholder="Buscar por nombre, modelo, producto, etc." onchange="sendFormFilterGallery()">
+
+
+
             <select id="sFilterType" class="mr-custom-select form-select form-select-sm mr-filter-item" name="Type" data-bs-theme="dark" onchange="sendFormFilterGallery()">
                 <option value="-1" selected>🖌 ESTILO</option>
                 @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_TYPES.Where(x => x.Key > 0).OrderBy(x => x.Value))
@@ -211,6 +215,7 @@
             </select>
 
 
+            
 
             <div class="mr-choice-filter mr-filter-item">
                 <label class="form-check-label choice-label" for="flexSwitchCheckChecked" style="font-weight: bold;">FAVORITOS</label>

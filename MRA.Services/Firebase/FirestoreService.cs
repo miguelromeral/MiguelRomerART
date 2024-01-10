@@ -55,7 +55,6 @@ namespace MRA.Services.Firebase
             try
             {
                 var collection = _firestoreDb.Collection(_collectionNameInspirations);
-
                 var snapshot = (await collection.GetSnapshotAsync());
                 var inspdocs = snapshot.Documents.Select(s => s.ConvertTo<InspirationDocument>()).ToList();
 
@@ -119,6 +118,10 @@ namespace MRA.Services.Firebase
                 {
                     query = query.WhereEqualTo("favorite", true);
                 }
+                if (!String.IsNullOrEmpty(filter.TextQuery))
+                {
+                    query = query.WhereArrayContainsAny("tags", filter.Tags);
+                }
                 if (!String.IsNullOrEmpty(filter.Collection))
                 {
                     query = query.WhereArrayContains("collection", filter.Collection);
@@ -172,11 +175,6 @@ namespace MRA.Services.Firebase
                 {
                     query = query.WhereEqualTo("paper", filter.Paper);
                 }
-                if (!String.IsNullOrEmpty(filter.Textquery))
-                {
-                    query = query.WhereArrayContains("name", filter.Textquery);
-                }
-
 
                 var documents = (await query.GetSnapshotAsync()).Documents.Select(s => s.ConvertTo<DrawingDocument>()).ToList();
 

@@ -276,6 +276,12 @@
                         RawText = $"<a href=\"{drawing.ReferenceUrl}\" target=\"_blank\">Abrir en nueva pestaña</a>"
                     });
             }
+
+            await Html.RenderPartialAsync("_DetailsSection", new DetailsSectionModel()
+                {
+                    Title = "🏷 Etiquetas",
+                    RawText = drawing.Tags.Count > 0 ? string.Join(", ",drawing.Tags) : "Todavía no existen etiquetas para este dibujo"
+                });
         }
     </div>
 

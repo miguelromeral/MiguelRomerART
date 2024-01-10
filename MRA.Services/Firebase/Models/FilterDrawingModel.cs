@@ -11,8 +11,8 @@
         public int Software { get; set; }
         public int Paper { get; set; }
         public string Sortby { get; set; }
-
-        public string Textquery { get; set; }
+        public string TextQuery { get; set; }
+        public List<string> Tags { get { return TextQuery.Split(" ").Select(x => x.ToLower()).ToList(); } }
         public bool Favorites { get; set; }
     }
 }

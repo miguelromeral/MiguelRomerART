@@ -55,6 +55,7 @@ namespace MRA.Services.Firebase.Models
         public string PathThumbnail { get; set; }
         public string UrlBase { get; set; }
         public int Type { get; set; }
+        public List<string> Tags { get; set; }
         public string TypeName
         {
             get
@@ -175,7 +176,6 @@ namespace MRA.Services.Firebase.Models
         }
 
         public string Url { get { return UrlBase + Path; } }
-        public List<string>? Collections { get; set; }
         public string UrlThumbnail { get { return UrlBase + PathThumbnail; } }
         public bool IsTraditional { get { return Type == 1; } }
 

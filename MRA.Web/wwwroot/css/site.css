@@ -65,7 +65,7 @@ body {
         z-index: 10000;
         display: flex;
         background: #000000d4;
-        width: 100%;
+        width: 99%;
         align-content: center;
         flex-direction: column;
         align-items: center;
@@ -93,6 +93,13 @@ body {
         cursor: pointer;
     }
 
+
+.mr-custom-text {
+    height: 30px;
+    background-color: var(--mr-background-color-secondary);
+    color: white;
+    border-color: var(--mr-chat-color);
+}
 
         .mr-custom-select:hover, .mr-custom-btn:hover {
             background-color: var(--mr-chat-color);
