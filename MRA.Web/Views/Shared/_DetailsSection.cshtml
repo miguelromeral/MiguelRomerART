@@ -1,11 +1,11 @@
 ﻿@model DetailsSectionModel
 
 
-<div class="col-sm-12 col-md-6 col-lg-4 mr-details-section">
+<div class="@(Model.Tags ? "col-sm-12 col-md-12 col-lg-12" : "col-sm-12 col-md-6 col-lg-4 ") mr-details-section">
     <span class="mr-details-section-title">
         @Model.Title
     </span>
-    <div class="mr-details-section-content capitalize @(Model.Large ? "large" : "")">
+    <div class="mr-details-section-content @(Model.Capitalize ? "capitalize" : "") @(Model.Large ? "large" : "")">
         @if(Model.ListaItems.Count > 0)
         {
             <ul>
@@ -19,9 +19,23 @@
         }
         @if(!String.IsNullOrEmpty(Model.RawText))
         {
-            <div>
-                @Html.Raw(Model.RawText)
-            </div>
+            if (Model.Tags)
+            {
+                <div class="mr-tag-container">
+                    @foreach(var tag in Model.RawText.Split(";"))
+                    {
+                        <span class="mr-tag">
+                            @tag.Replace(" ", "")
+                        </span>
+                    }
+                </div>
+            }
+            else
+            {
+                <div>
+                    @Html.Raw(Model.RawText)
+                </div>
+            }
         }
     </div>
 </div>

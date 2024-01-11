@@ -120,7 +120,7 @@ namespace MRA.Services.Firebase
                 }
                 if (!String.IsNullOrEmpty(filter.TextQuery))
                 {
-                    query = query.WhereArrayContainsAny("tags", filter.Tags.Where(x => !String.IsNullOrEmpty(x)).ToList());
+                    query = query.WhereArrayContainsAny("tags", DeleteAndAdjustTags(filter.Tags));
                 }
                 if (!String.IsNullOrEmpty(filter.Collection))
                 {
@@ -349,10 +349,40 @@ namespace MRA.Services.Firebase
             }
             list.AddRange(document.ProductName.Split(" ").Select(x => x.ToLower()));
 
-            list = list.Where(x => !String.IsNullOrEmpty(x))
-                .Select(x => x.Replace(":", "").Replace(",", "").Replace("\"", "")).ToList();
+            list = DeleteAndAdjustTags(list);
             document.Tags.AddRange(list);
             document.Tags = document.Tags.Distinct().ToList();
+        }
+
+        private List<string> DeleteAndAdjustTags(List<string> tags)
+        {
+            var eliminar = new List<string>()
+            {
+                "a",
+                "un",
+                "unas",
+                "unos",
+                "uno",
+                "de",
+                "el",
+                "la",
+                "los",
+                "los",
+                "les",
+                "the"
+            };
+            return tags.Where(x => !String.IsNullOrEmpty(x) && !eliminar.Contains(x)).Select(x =>
+                x.ToLower()
+                .Replace("á", "a")
+                .Replace("é", "e")
+                .Replace("í", "i")
+                .Replace("ó", "o")
+                .Replace("ú", "u")
+                .Replace(":", "")
+                .Replace(",", "")
+                .Replace("\"", "")
+                .Replace(" ", "")
+            ).Distinct().ToList();
         }
 
         public async Task<Drawing> AddAsync(Drawing document)
