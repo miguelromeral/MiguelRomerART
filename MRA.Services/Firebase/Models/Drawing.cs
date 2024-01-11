@@ -28,7 +28,7 @@ namespace MRA.Services.Firebase.Models
             {
                 {0, "Otros"},
                 {1, "Videojuego"},
-                {2, "Actor/Actriz"},
+                {2, "Actor / Actriz"},
                 {3, "Cantante"},
                 {4, "Deportista"},
                 {5, "Influencer"},

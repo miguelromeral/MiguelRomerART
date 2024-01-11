@@ -283,7 +283,7 @@
                         Title = "🏷 Etiquetas",
                         Tags = true,
                         Capitalize = false,
-                        RawText = string.Join(";",drawing.Tags)
+                        RawText = string.Join(";",drawing.Tags.OrderBy(x => x))
                     });
             }
         }

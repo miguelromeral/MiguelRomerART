@@ -327,9 +327,9 @@ namespace MRA.Services.Firebase
         public void SetAutomaticTags(ref Drawing document)
         {
             var list = new List<string>();
-            list.AddRange(document.Name.Split(" ").Select(x => x.ToLower()));
-            list.AddRange(document.ModelName.Split(" ").Select(x => x.ToLower()));
-            list.AddRange(document.Title.Split(" ").Select(x => x.ToLower()));
+            list.AddRange((document.Name ?? "").Split(" ").Select(x => x.ToLower()));
+            list.AddRange((document.ModelName ?? "").Split(" ").Select(x => x.ToLower()));
+            list.AddRange((document.Title ?? "").Split(" ").Select(x => x.ToLower()));
             if (document.Software > 0)
             {
                 list.AddRange(document.SoftwareName.Split(" ").Select(x => x.ToLower()));
@@ -349,9 +349,8 @@ namespace MRA.Services.Firebase
             }
             list.AddRange(document.ProductName.Split(" ").Select(x => x.ToLower()));
 
-            list = DeleteAndAdjustTags(list);
             document.Tags.AddRange(list);
-            document.Tags = document.Tags.Distinct().ToList();
+            document.Tags = DeleteAndAdjustTags(document.Tags);
         }
 
         private List<string> DeleteAndAdjustTags(List<string> tags)
@@ -371,7 +370,7 @@ namespace MRA.Services.Firebase
                 "les",
                 "the"
             };
-            return tags.Where(x => !String.IsNullOrEmpty(x) && !eliminar.Contains(x)).Select(x =>
+            var processed = tags.Select(x => 
                 x.ToLower()
                 .Replace("á", "a")
                 .Replace("é", "e")
@@ -379,10 +378,42 @@ namespace MRA.Services.Firebase
                 .Replace("ó", "o")
                 .Replace("ú", "u")
                 .Replace(":", "")
+                .Replace(".", "")
                 .Replace(",", "")
+                .Replace("?", "")
+                .Replace("¿", "")
+                .Replace("/", "")
+                .Replace("`", "")
+                .Replace("(", "")
+                .Replace(")", "")
+                .Replace("'", "")
+                .Replace("@", " ")
+                .Replace("#", " ")
+                .Replace("!", "")
+                .Replace("¡", "")
+                .Replace("~", "")
+                .Replace("$", " ")
+                .Replace("%", " ")
+                .Replace("&", " ")
                 .Replace("\"", "")
                 .Replace(" ", "")
-            ).Distinct().ToList();
+                .Replace("_", " ")
+                .Replace("-", " ")
+            );
+
+            var final = new List<string>() { };
+            foreach(var s in processed)
+            {
+                foreach(var s2 in s.Split(" "))
+                {
+                    if (!eliminar.Contains(s2) && !String.IsNullOrEmpty(s2) && !s2.Equals(" "))
+                    {
+                        final.Add(s);
+                    }
+                }
+            }
+
+            return final.Distinct().ToList();
         }
 
         public async Task<Drawing> AddAsync(Drawing document)
