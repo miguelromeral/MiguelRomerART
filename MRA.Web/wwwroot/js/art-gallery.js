@@ -151,8 +151,8 @@ function cheerDrawing(event) {
     element.innerHTML = obtenerMensajeAleatorio();
 
 
-    element.style.left = (event.clientX - 20)+ 'px';
-    element.style.top = (event.clientY) + 'px';
+    element.style.left = (event.pageX - 20)+ 'px';
+    element.style.top = (event.pageY) + 'px';
     element.style.position = 'absolute';
     element.classList.add("mr-thanks-message");
     element.classList.add("dissapear-message-thanks");

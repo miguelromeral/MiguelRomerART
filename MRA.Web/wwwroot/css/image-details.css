@@ -283,7 +283,6 @@ div.mr-chat-container {
     font-size: small;
     background-color: var(--mr-chat-color-secondary);
     padding: 0px 5px;
-    margin: 20px;
     border-radius: var(--mr-border-radius);
 }
 
