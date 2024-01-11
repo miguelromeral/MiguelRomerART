@@ -25,6 +25,9 @@
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
                     <img src="~/assets/images/miguel.jpeg" class="mr-chat-image-miguel brand" />
+                    <div title="Página Web en Desarrollo">
+                        <span style="position: absolute; top: 7px; left: 50px; color: cyan; font-size: xx-small;">DESARROLLO 🛠</span>
+                    </div>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -33,10 +36,13 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">🤩 Colección</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Art" asp-action="Index">🎨 Galería</a>
                         </li>
 
-                        <li class="nav-item dropdown">
+                        @* <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 🎨 Arte
                             </a>
@@ -44,9 +50,9 @@
                                 <li><a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">Colecciones</a></li>
                                 <li><a class="dropdown-item" asp-area="" asp-controller="Art" asp-action="Index">Galería Completa</a></li>
                             </ul>
-                        </li>
+                        </li> *@
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">😳 Sobre Mí</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">👨‍🎨 Sobre Mí</a>
                         </li>
                     </ul>
                 </div>
@@ -69,6 +75,14 @@
             </p>
         </div>
         <div class="mb-2" style="display: flex; width: 100%; flex-direction: column; align-items: center;">
+            <div style="display: flex; flex-direction: column; align-items: center;">
+                <span style="font-weight: 700; color: cyan;">
+                    Página Web en DESARROLLO 🛠
+                </span>
+                <span style="padding: 0px 20px; font-size: small;">
+                    Esta página está todavía en desarrollo, por lo que es posible que veas diversos fallos o alguna funcionalidad no esté del todo disponible. ¡Gracias por tu paciencia!
+                </span>
+            </div>
             <div class="mr-powered-by-logos mb-2">
                 <div class="mr-powered-by-logos-azure" title="Microsoft Azure">
                     <img title="Azure" src="~/assets/images/azure-white.png" style="width: 20px; height: 20px;" />

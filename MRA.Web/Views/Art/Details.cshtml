@@ -68,7 +68,7 @@
         <div class="col-sm-12 col-md-6 col-lg-4 mb-2">
 
             <div class="mr-first-column-image">
-                <div class="mr-img-full-container heart-rain @(drawing.Favorite ? "favorite" : "")" ondblclick="cheerDrawing()">
+                <div class="mr-img-full-container heart-rain @(drawing.Favorite ? "favorite" : "")" ondblclick="cheerDrawing(event)">
                     <img id="imgFull" src="@Model.Drawing.Url" class="mr-img-full" onerror="errorLoadingImage('@Model.Drawing.Id')">
 
                     <div class="mr-error-load-placeholder" data-error-drawing-id="@Model.Drawing.Id">
@@ -88,7 +88,7 @@
                         <div class="mr-like-container">
                             <input type="hidden" name="id" value="@drawing.Id" />
 
-                            <button id="btnCheer" type="button" class="btn btn-danger mr-like-button like-semaphore vibrate" onclick="cheerDrawing()">
+                            <button id="btnCheer" type="button" class="btn btn-danger mr-like-button like-semaphore vibrate" onclick="cheerDrawing(event)">
                                 <i id="iCheerIcon" class="bi bi-heart"></i> ¡ KUDOS !
                             </button>
                         </div>
@@ -277,13 +277,15 @@
                     });
             }
 
-            await Html.RenderPartialAsync("_DetailsSection", new DetailsSectionModel()
-                {
-                    Title = "🏷 Etiquetas",
-                    Tags = true,
-                    Capitalize = false,
-                    RawText = drawing.Tags.Count > 0 ? string.Join(";",drawing.Tags) : "Todavía no existen etiquetas para este dibujo"
-                });
+            if(drawing.Tags.Count > 0){
+                await Html.RenderPartialAsync("_DetailsSection", new DetailsSectionModel()
+                    {
+                        Title = "🏷 Etiquetas",
+                        Tags = true,
+                        Capitalize = false,
+                        RawText = string.Join(";",drawing.Tags)
+                    });
+            }
         }
     </div>
 

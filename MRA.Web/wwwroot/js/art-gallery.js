@@ -1,4 +1,4 @@
-var FILTER_FORM_ID = "formFilter";
+﻿var FILTER_FORM_ID = "formFilter";
 var ALERT_FILTER_FORM_ID = "formFilterAlert";
 
 var LOADING_ICON_ART_GALLERY = "artGalleryLoader";
@@ -93,7 +93,7 @@ function sortDivCollection(orderedCollection) {
     // Convierte la lista de divs en un array para poder ordenarlos
     const divsArray = Array.from(unorderedDivs);
 
-    // Ordena el array de divs bas�ndote en el orden de la colecci�n
+    // Ordena el array de divs basándote en el orden de la colección
     divsArray.sort((a, b) => {
         const idA = a.getAttribute('data-drawingId');
         const idB = b.getAttribute('data-drawingId');
@@ -104,20 +104,65 @@ function sortDivCollection(orderedCollection) {
         return indexA - indexB;
     });
 
-    // Ahora, los divs en divsArray est�n ordenados de la misma manera que la colecci�n
+    // Ahora, los divs en divsArray están ordenados de la misma manera que la colección
     // Puedes agregar estos divs ordenados de nuevo al DOM
     const container = document.querySelector('#artGallery');
     divsArray.forEach(div => container.appendChild(div));
 
 }
 
+var mensajesAgradecimiento = [
+    "Muchas gracias por el like 😉",
+    "Tú sí que eres una obra de arte 😁",
+    "Eres muy amable, ¡gracias! 😘",
+    "Significa mucho para mí 🥺",
+    "Todos estos corazones son tuyos 💖",
+    "¡Gracias, gracias, gracias! 🙏",
+    "Me alegro de que te guste 😊",
+    "¿Le diste sin querer? aú así, ¡gracias! 😂",
+    "Haré saber al modelo que le gustas 🙊",
+    "Eres muy grande 🙂",
+    "¡Gracias, un abrazo! 🤗",
+    "¡Gracias por tocar 2 veces la imagen! ✌",
+    "Gracias, generoso 😏",
+    "Gracias, eres un sol ☀",
+    "Se te cayó esto, mi rey 👑",
+    "Se te cayó esto, mi reina 👑",
+    "Mereció la pena dibujarlo por esto 🥰",
+    "¿Tienes curiosidad por ver todas las frases? 🙃",
+    "Eres mu' salao' 🧂",
+    "¡Gracias! 😁",
+    "Thank you! 😎",
+    "Si apagas la pantalla ahora, verás algo más bello aún 😜",
+    "¡Gracias! No olvides ver el resto de la galería 🖼",
+];
+function obtenerMensajeAleatorio() {
+    var indiceAleatorio = Math.floor(Math.random() * mensajesAgradecimiento.length);
+    return mensajesAgradecimiento[indiceAleatorio];
+}
 
-function cheerDrawing() {
-    console.log("Cheering drawing!");
+function cheerDrawing(event) {
     $("#" + CHEER_FORM_ID).submit();
     $("#btnCheer").attr("disabled", true);
     $("#iCheerIcon").addClass("bi-heart-fill");
     $("#iCheerIcon").removeClass("bi-heart");
+    
+    var element = document.createElement("div");
+    element.innerHTML = obtenerMensajeAleatorio();
+
+
+    element.style.left = (event.clientX - 20)+ 'px';
+    element.style.top = (event.clientY) + 'px';
+    element.style.position = 'absolute';
+    element.classList.add("mr-thanks-message");
+    element.classList.add("dissapear-message-thanks");
+    document.body.appendChild(element);
+
+
+    var interval = setTimeout(() => {
+        element.remove();
+    }, 3000);
+
     showHearts();
 }
 
@@ -132,14 +177,14 @@ function onSuccessCheer() {
     var numberElement = document.getElementById(childId);
     var newNumber = parseInt(numberElement.textContent) + 1;
 
-    // Ocultar el n�mero actual
+    // Ocultar el número actual
     document.getElementById("divContainerLikes").classList.remove('bounce-bottom');
 
-    // Configurar el nuevo n�mero despu�s de un breve tiempo
+    // Configurar el nuevo número después de un breve tiempo
     setTimeout(function () {
         numberElement.textContent = newNumber;
 
-        // Mostrar el nuevo n�mero
+        // Mostrar el nuevo número
         document.getElementById("divContainerLikes").classList.add('bounce-bottom');
     }, 500);
 }
@@ -202,7 +247,7 @@ function generateHeartSize() {
 function capturarEnter(event) {
     if (event.key === "Enter") {
         event.preventDefault();
-        //console.log("Se presion� la tecla Enter (evento prevenido)");
+        //console.log("Se presionó la tecla Enter (evento prevenido)");
         sendFormFilterGallery();
     }
 }
