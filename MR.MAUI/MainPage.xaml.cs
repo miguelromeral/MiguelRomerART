@@ -8,7 +8,6 @@ using System.Diagnostics;
 using Google.Protobuf;
 using MRA.Services.AzureStorage;
 using MR.MAUI.Classes;
-using MR.MAUI.Pages;
 
 namespace MR.MAUI
 {
