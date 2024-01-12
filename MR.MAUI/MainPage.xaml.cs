@@ -8,6 +8,7 @@ using System.Diagnostics;
 using Google.Protobuf;
 using MRA.Services.AzureStorage;
 using MR.MAUI.Classes;
+using MR.MAUI.Pages;
 
 namespace MR.MAUI
 {
@@ -394,6 +395,10 @@ namespace MR.MAUI
                 drawing.CommentPros = string.Join(Drawing.SEPARATOR_COMMENTS, ListaComentariosPros);
                 drawing.CommentCons = string.Join(Drawing.SEPARATOR_COMMENTS, ListaComentariosCons);
 
+                drawing.ProductName = tbDrawingProductName.Text ?? "";
+                drawing.ModelName = tbDrawingModelName.Text ?? "";
+                drawing.Name = tbDrawingName.Text ?? "";
+
                 await _drawingService.AddAsync(drawing);
                 DisplayAlert("Actualizado", $"El dibujo con ID '{drawing.Id}' ha sido guardado con éxito.", "Vale");
                 LoadDrawingsId(drawing.Id);
@@ -510,6 +515,10 @@ namespace MR.MAUI
             }
         }
 
+        //private async void btnColecciones_Clicked(object sender, EventArgs e)
+        //{
+        //    await Navigation.PushAsync(new PageCollections());
+        //}
     }
 
 }
