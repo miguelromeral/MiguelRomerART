@@ -204,7 +204,7 @@
 
             await Html.RenderPartialAsync("_DetailsSection", new DetailsSectionModel()
                 {
-                    Title = "🖌 Tipo",
+                    Title = "🖌 Estilo",
                     RawText = drawing.TypeName
                 });
 
@@ -230,7 +230,7 @@
 
             if (drawing.ProductType > 0 && !String.IsNullOrEmpty(drawing.ProductName))
             {
-                var textoTitulo = "Producto";
+                var textoTitulo = "Temática";
                 switch (drawing.ProductType)
                 {
                     case 1:
@@ -246,7 +246,7 @@
                         textoTitulo = "⚽ Deporte";
                         break;
                     default:
-                        textoTitulo = "Producto";
+                        textoTitulo = "Temática";
                         break;
                 }
 

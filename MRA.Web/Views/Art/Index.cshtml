@@ -125,7 +125,7 @@
 
             <select id="sFilterProductName" class="mr-custom-select form-select form-select-sm mr-filter-item"
                     name="ProductName" data-bs-theme="dark" onchange="sendFormFilterGallery()">
-                <option value="" selected>PRODUCTO</option>
+                <option value="" selected>TEMÁTICA</option>
 
                 @foreach (var product in Model.ProductNameSelect.Where(x => !String.IsNullOrEmpty(x.Key)).OrderBy(x => x.Key.ToString()))
                 {
