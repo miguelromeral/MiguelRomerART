@@ -20,6 +20,9 @@
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body class="dark">
+    <span id="bannerDevelopmentMode" title="Página Web en Desarrollo">
+        EN DESARROLLO 🛠
+    </span>
     <div class="container mr-body">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -74,9 +77,10 @@
             </div>
         </a>
         <a class="mr-bottom-bar-button" asp-area="" asp-controller="Home" asp-action="About">
-            <div class="mr-bottom-bar-icon">
-                👨‍🎨
+            <div class="mr-bottom-profile-pic">
+                <img src="~/assets/images/miguel.jpeg" class="mr-chat-image-miguel brand" />
             </div>
+            
             <div class="mr-bottom-bar-text">
                 Sobre Mí
             </div>

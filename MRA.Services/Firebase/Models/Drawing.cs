@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
@@ -72,6 +73,32 @@ namespace MRA.Services.Firebase.Models
         }
         public string Name { get; set; }
         public string ModelName { get; set; }
+        public string SpotifyUrl { get; set; }
+        public string SpotifyTrackId { 
+            get
+            {
+                return String.IsNullOrEmpty(SpotifyUrl) ? "" : GetSpotifyTrackByUrl(SpotifyUrl);
+            }
+        }
+
+        public static string GetSpotifyTrackByUrl(string url)
+        {
+            string pattern = @"\/track\/([^\/?]+)(?:\?|$)";
+
+            Regex regex = new Regex(pattern);
+
+            Match match = regex.Match(url);
+
+            if (match.Success)
+            {
+                return match.Groups[1].Value;
+            }
+            else
+            {
+                return "";
+            }
+        }
+
         public string Title { get; set; }
         public string Date { get; set; }
         public int Software { get; set; }

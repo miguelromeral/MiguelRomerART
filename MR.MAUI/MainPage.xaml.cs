@@ -88,6 +88,7 @@ namespace MR.MAUI
             tbDrawingTime.Text = "";
             cbDrawingProductType.SelectedIndex = 0;
             tbDrawingProductName.Text = "";
+            tbDrawingSpotifyUrl.Text = "";
 
 
             ListaComentarios = new List<string>();
@@ -158,6 +159,7 @@ namespace MR.MAUI
             cbDrawingSoftware.SelectedIndex = drawing.Software;
             cbDrawingProductType.SelectedIndex = drawing.ProductType;
             cbDrawingPaperSize.SelectedIndex = drawing.Paper;
+            tbDrawingSpotifyUrl.Text = drawing.SpotifyUrl ?? "";
 
             tbDrawingTags.Text = String.Join(" ", drawing.Tags);
             
@@ -397,6 +399,8 @@ namespace MR.MAUI
                 drawing.ProductName = tbDrawingProductName.Text ?? "";
                 drawing.ModelName = tbDrawingModelName.Text ?? "";
                 drawing.Name = tbDrawingName.Text ?? "";
+
+                drawing.SpotifyUrl = tbDrawingSpotifyUrl.Text ?? "";
 
                 await _drawingService.AddAsync(drawing);
                 DisplayAlert("Actualizado", $"El dibujo con ID '{drawing.Id}' ha sido guardado con éxito.", "Vale");

@@ -264,3 +264,18 @@ body {
     position: relative;
     bottom: 5px;
 }
+
+.mr-bottom-profile-pic {
+    background-color: black;
+    border-radius: 40px;
+    position: relative;
+}
+
+#bannerDevelopmentMode {
+    position: fixed;
+    top: 6px;
+    right: 3px;
+    color: cyan;
+    font-size: x-small;
+    z-index:1000;
+}

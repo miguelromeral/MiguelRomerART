@@ -45,6 +45,7 @@ namespace MRA.Services.Firebase.Converters
                 PathThumbnail = drawingDocument.path_thumbnail,
                 Software = drawingDocument.software,
                 Paper = drawingDocument.paper,
+                SpotifyUrl = drawingDocument.spotify_url,
                 Tags = drawingDocument.tags ?? new List<string>()
             };
         }
@@ -73,6 +74,7 @@ namespace MRA.Services.Firebase.Converters
                 path_thumbnail = drawing.PathThumbnail,
                 software = drawing.Software,
                 paper = drawing.Paper,
+                spotify_url = drawing.SpotifyUrl,
                 tags = drawing.Tags
             };
         }

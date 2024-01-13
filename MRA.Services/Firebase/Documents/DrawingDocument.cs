@@ -65,6 +65,9 @@ namespace MRA.Services.Firebase.Documents
         public string reference_url { get; set; }
 
         [FirestoreProperty]
+        public string spotify_url { get; set; }
+
+        [FirestoreProperty]
         public int software { get; set; }
 
         [FirestoreProperty]

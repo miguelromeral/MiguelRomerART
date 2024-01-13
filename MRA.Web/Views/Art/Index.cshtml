@@ -114,7 +114,7 @@
 
 
             <select id="sFilterProduct" class="mr-custom-select form-select form-select-sm mr-filter-item" name="ProductType" data-bs-theme="dark" onchange="sendFormFilterGallery()">
-                <option value="-1" selected>TIPO</option>
+                <option value="-1" selected>📺 TIPO</option>
                 @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_PRODUCT_TYPES.Where(x => x.Key > 0).OrderBy(x => x.Value))
                 {
                     <option value="@(type.Key)">@(type.Value)</option>
@@ -125,7 +125,7 @@
 
             <select id="sFilterProductName" class="mr-custom-select form-select form-select-sm mr-filter-item"
                     name="ProductName" data-bs-theme="dark" onchange="sendFormFilterGallery()">
-                <option value="" selected>TEMÁTICA</option>
+                <option value="" selected>🖼 TEMÁTICA</option>
 
                 @foreach (var product in Model.ProductNameSelect.Where(x => !String.IsNullOrEmpty(x.Key)).OrderBy(x => x.Key.ToString()))
                 {
@@ -153,9 +153,21 @@
             </select>
 
 
+
+            <select id="sFilterCollection" class="mr-custom-select form-select form-select-sm mr-filter-item"
+                    name="Collection" data-bs-theme="dark" onchange="sendFormFilterGallery()">
+                <option value="" selected>🤩 COLECCIÓN</option>
+
+                @foreach (var col in Model.ListCollections.OrderBy(x => x.Name))
+                {
+                    <option value="@(col.Id)">@(col.Name)</option>
+                }
+            </select>
+
+
             <select id="sFilterCharacterName" class="mr-custom-select form-select form-select-sm mr-filter-item"
                     name="CharacterName" data-bs-theme="dark" onchange="sendFormFilterGallery()">
-                <option value="" selected>PERSONAJE</option>
+                <option value="" selected>😺 PERSONAJE</option>
 
                 @foreach (var product in Model.CharacterNameSelect.Where(x => !String.IsNullOrEmpty(x.Key)).OrderBy(x => x.Key.ToString()))
                 {
@@ -185,7 +197,7 @@
             <select id="sFilterModel" class="mr-custom-select form-select form-select-sm mr-filter-item"
                     name="ModelName" data-bs-theme="dark" onchange="sendFormFilterGallery()">
 
-                <option value="" selected>📸 MODELO</option>
+                <option value="" selected>👩 MODELO</option>
 
                 @foreach (var modelName in Model.ModelNameSelect.Where(x => !String.IsNullOrEmpty(x)).OrderBy(x => x.Replace("@", "").ToLower()))
                 {
@@ -217,21 +229,11 @@
             </select>
 
 
-            <select id="sFilterCollection" class="mr-custom-select form-select form-select-sm mr-filter-item"
-                    name="Collection" data-bs-theme="dark" onchange="sendFormFilterGallery()">
-                <option value="" selected>🤩 COLECCIÓN</option>
-
-                @foreach (var col in Model.ListCollections.OrderBy(x => x.Name))
-                {
-                    <option value="@(col.Id)">@(col.Name)</option>
-                }
-            </select>
-
 
             
 
             <div class="mr-choice-filter mr-filter-item">
-                <label class="form-check-label choice-label" for="flexSwitchCheckChecked" style="font-weight: bold;">FAVORITOS</label>
+                <label class="form-check-label choice-label" for="flexSwitchCheckChecked" style="font-weight: bold;">⭐ FAVORITOS</label>
                 <input class="form-check-input" name="Favorites" type="checkbox" role="switch" value="true" id="flexSwitchCheckChecked" onchange="sendFormFilterGallery()">
             </div>
 

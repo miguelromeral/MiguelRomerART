@@ -268,12 +268,32 @@
             </Grid>
 
 
-            <StackLayout Orientation="Vertical" Margin="0,0,0,10">
-                <Label Text="URL Imagen de Referencia" Style="{StaticResource mrLabelTitle}"/>
-                <Entry x:Name="tbDrawingReference" 
+
+            <Grid Margin="0,0,0,10">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <StackLayout Grid.Column="0" Orientation="Vertical" Margin="0,0,0,10" VerticalOptions="StartAndExpand">
+
+                    <Label Text="URL Imagen de Referencia" Style="{StaticResource mrLabelTitle}"/>
+                    <Entry x:Name="tbDrawingReference" 
                        Text="{Binding drawing.ReferenceUrl}" Style="{StaticResource mrEntry}"
                        Placeholder="Imagen de Referencia" />
-            </StackLayout>
+                </StackLayout>
+
+
+                <StackLayout Grid.Column="1" Orientation="Vertical" Margin="0,0,0,10" VerticalOptions="StartAndExpand">
+
+                    <Label Text="URL de Spotify" Style="{StaticResource mrLabelTitle}"/>
+                    <Entry x:Name="tbDrawingSpotifyUrl" 
+                       Text="{Binding drawing.SpotifyUrl}" Style="{StaticResource mrEntry}"
+                       Placeholder="URL de Spotify" />
+                </StackLayout>
+            </Grid>
+
 
             <StackLayout Orientation="Vertical" Margin="0,0,0,10">
                 <Label Text="Etiquetas" Style="{StaticResource mrLabelTitle}"/>
