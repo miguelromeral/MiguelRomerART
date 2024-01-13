@@ -232,7 +232,6 @@ body {
     flex-direction: row;
     backdrop-filter: blur(5px);
     background-color: var(--mr-nav-color-a);
-    border-top: 1px solid var(--mr-chat-color);
     z-index: 1000;
 }
 
@@ -277,5 +276,68 @@ body {
     right: 3px;
     color: cyan;
     font-size: x-small;
-    z-index:1000;
+    z-index: 1001;
+}
+
+
+@media screen and (min-width: 600px) {
+
+    .mr-body {
+        padding-left: 130px;
+        padding-bottom: 0px;
+    }
+
+    .mr-bottom-bar {
+        position: fixed;
+        display: flex;
+        align-items: flex-start;
+        flex-wrap: nowrap;
+        flex-direction: column;
+        left: 0;
+        top: 0;
+        height: 100%;
+        min-width: 130px;
+        justify-content: flex-start;
+        padding-top: 5%;
+        padding-bottom: 30%;
+        background-color: var(--mr-chat-color-terciary);
+        max-width: 12%;
+        gap: 4px;
+    }
+
+    .mr-bottom-bar-button {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: center;
+        height: min-content;
+        padding: 10px 5px;
+        max-width: 12%;
+        justify-content: flex-start;
+        gap: 10px;
+        min-width: -webkit-fill-available;
+    }
+
+    .mr-bottom-bar-icon {
+        top: 0px;
+        position: relative;
+        width: 30px;
+    }
+
+    .mr-bottom-bar-text {
+        font-size: medium;
+        position: relative;
+        bottom: 0px;
+    }
+
+    .mr-bottom-bar-button:hover {
+        background-color: var(--mr-chat-color-secondary);
+    }
+
+
+    #bannerDevelopmentMode {
+        position: fixed;
+        top: 6px;
+        left: 3px;
+    }
 }
