@@ -167,7 +167,6 @@ nav a:hover, .nav-link:hover, a:hover {
 }
 
 footer {
-    height: 50px;
     border-top: 1px solid var(--mr-chat-color);
     padding-top: 10px;
 }
