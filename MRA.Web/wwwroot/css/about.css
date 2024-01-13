@@ -48,6 +48,7 @@ div.mr-references-section{
     gap: 14px;
     font-family: monospace;
     position: relative;
+    text-shadow: 1px 1px black;
     /*font-family: Courier New, Courier, monospace;*/
 }
 

@@ -109,7 +109,7 @@
                 {
                     <option value="@(type.Key)">@(type.Value)</option>
                 }
-                <option value="0">(Otros)</option>
+                <option value="0">(Otro Estilo)</option>
             </select>
 
 
@@ -119,7 +119,7 @@
                 {
                     <option value="@(type.Key)">@(type.Value)</option>
                 }
-                <option value="0">(Otro)</option>
+                <option value="0">(Otro Tipo)</option>
             </select>
 
 
@@ -148,7 +148,7 @@
                             break;
                     }
                 }
-                <option value="none">(Ninguno)</option>
+                <option value="none">(Ninguna Temática)</option>
 
             </select>
 
@@ -178,7 +178,7 @@
                             break;
                     }
                 }
-                <option value="none">(Ninguno)</option>
+                <option value="none">(Ningún Personaje)</option>
 
             </select>
 
@@ -191,7 +191,7 @@
                 {
                     <option value="@(modelName)">@(modelName)</option>
                 }
-                <option value="none">(Ninguno)</option>
+                <option value="none">(Ningún Modelo)</option>
             </select>
 
 
@@ -213,6 +213,17 @@
                 @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_PAPER_SIZE.Where(x => x.Key > 0).OrderBy(x => x.Value))
                 {
                     <option value="@(type.Key)">@(type.Value)</option>
+                }
+            </select>
+
+
+            <select id="sFilterCollection" class="mr-custom-select form-select form-select-sm mr-filter-item"
+                    name="Collection" data-bs-theme="dark" onchange="sendFormFilterGallery()">
+                <option value="" selected>🤩 COLECCIÓN</option>
+
+                @foreach (var col in Model.ListCollections.OrderBy(x => x.Name))
+                {
+                    <option value="@(col.Id)">@(col.Name)</option>
                 }
             </select>
 

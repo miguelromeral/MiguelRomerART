@@ -59,6 +59,8 @@ namespace MRA.Web.Controllers
                 }
             }
 
+            model.ListCollections = await _drawingService.GetAllCollections();
+
             return View(model);
         }
 

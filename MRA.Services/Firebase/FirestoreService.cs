@@ -122,10 +122,6 @@ namespace MRA.Services.Firebase
                 {
                     query = query.WhereArrayContainsAny("tags", DeleteAndAdjustTags(filter.Tags));
                 }
-                if (!String.IsNullOrEmpty(filter.Collection))
-                {
-                    query = query.WhereArrayContains("collection", filter.Collection);
-                }
                 if (!String.IsNullOrEmpty(filter.ProductName))
                 {
                     if (filter.ProductName.Equals("none"))
@@ -178,8 +174,24 @@ namespace MRA.Services.Firebase
 
                 var documents = (await query.GetSnapshotAsync()).Documents.Select(s => s.ConvertTo<DrawingDocument>()).ToList();
 
-                return documents.Select(_converterDrawing.ConvertToModel).ToList();
-            }catch(Exception ex)
+                var list = documents.Select(_converterDrawing.ConvertToModel).ToList();
+
+
+                if (!String.IsNullOrEmpty(filter.Collection))
+                {
+                    var collection = (await GetAllCollections()).Find(x => x.Id.Equals(filter.Collection));
+
+                    if(collection != null)
+                    {
+                        var idsCollection = collection.Drawings.Select(x => x.Id).ToList();
+
+                        list = list.Where(d => idsCollection.Contains(d.Id)).ToList();
+                    }
+                }
+
+                return list;
+            }
+            catch(Exception ex)
             {
                 Debug.WriteLine("Error when filtering documents: " + ex.Message);
             }
