@@ -70,7 +70,8 @@
                 <span>
                     Ordenar por...
                 </span>
-                <select class="mr-custom-select filters form-select form-select-sm" name="Sortby" aria-label="Default select example" data-bs-theme="dark" onchange="sendFormFilterGallery()"
+                <select id="sFilterSortBy"
+                        class="mr-custom-select filters form-select form-select-sm" name="Sortby" aria-label="Default select example" data-bs-theme="dark" onchange="sendFormFilterGallery()"
                         data-bs-theme="dark">
                     <option value="date-desc">Nuevos Primero</option>
                     <option value="date-asc">Viejos Primero</option>
@@ -245,7 +246,7 @@
                 <span id="spResultsCount">@Model.Drawings.Count</span> <span id="spTextoImagenes">imágenes</span><span id="spTextoImagen" style="display: none;">imagen</span>
             </span>
         </div>
-        <div id="artGalleryLoader" class="mr-loader" style="display: none;">
+        <div id="artGalleryLoader" class="mr-loader">
             <img src="~/assets/bean eater-0.3s-200px.svg" class="mr-loading-icon-pacman" />
             <span class="mr-loader-subtitle">Filtrando imágenes. Por favor, espere.</span>
         </div>
@@ -281,18 +282,33 @@
 
         $(document).ready(() => {
 
+            var tq = "@Model.Query_TextQuery";
+            var type = "@Model.Query_Type";
+            var pt = "@Model.Query_ProductType";
+            var pname = "@Model.Query_ProductName";
+            var col = "@Model.Query_Collection";
+            var cname = "@Model.Query_CharacterName";
+            var mname = "@Model.Query_ModelName";
+            var sw = "@Model.Query_Software";
+            var paper = "@Model.Query_Paper";
+            var fav = "@Model.Query_Favorites" == "True";
+            var sort = "@Model.Query_Sortby";
+            var submit = tq != "" || type != "" || pt != "" || pname != "" || col != "" || cname != "" ||
+                        mname != "" || sw != "" || paper != "" || sort != "" || fav;
+
             changeArtUrl(
-                "@Model.Query_TextQuery",
-                "@Model.Query_Type",
-                "@Model.Query_ProductType",
-                "@Model.Query_ProductName",
-                "@Model.Query_Collection",
-                "@Model.Query_CharacterName",
-                "@Model.Query_ModelName",
-                "@Model.Query_Software",
-                "@Model.Query_Paper",
-                "@Model.Query_Favorites" == "True",
-                true);
+                tq,
+                type,
+                pt,
+                pname,
+                col,
+                cname,
+                mname,
+                sw,
+                paper,
+                fav,
+                sort,
+                submit);
         });
 
     </script>

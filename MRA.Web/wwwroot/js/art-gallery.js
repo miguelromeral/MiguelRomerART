@@ -21,13 +21,14 @@ function sendFormFilterGallery() {
         $("#sFilterSoftware").val(),
         $("#sFilterPaper").val(),
         $("#flexSwitchCheckChecked").prop("checked"),
+        $("#sFilterSortBy").val(),
         false);
 
     $("#" + FILTER_FORM_ID).submit();
 }
 
 
-function changeArtUrl(textQuery, type, productType, productName, collection, characterName, modelName, software, paper, favorites, submit) {
+function changeArtUrl(textQuery, type, productType, productName, collection, characterName, modelName, software, paper, favorites, sortby, submit) {
     // Obtén la URL base
     var baseUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
     
@@ -43,6 +44,7 @@ function changeArtUrl(textQuery, type, productType, productName, collection, cha
     queryParams.push(setFilterValue("#sFilterSoftware", "Software", software, [0]));
     queryParams.push(setFilterValue("#sFilterPaper", "Paper", paper, [0]));
     queryParams.push(setFilterValue("#flexSwitchCheckChecked", "Favorites", favorites, [false], true));
+    queryParams.push(setFilterValue("#sFilterSortBy", "Sortby", sortby, ["date-desc"]));
 
 
     queryParams = queryParams.filter(x => x != null);
@@ -58,7 +60,7 @@ function changeArtUrl(textQuery, type, productType, productName, collection, cha
     history.pushState(null, null, newUrl);
 
     // Puedes imprimir la nueva URL en la consola para verificar
-    console.log("Nueva URL:", window.location.href);
+    //console.log("Nueva URL:", window.location.href);
 
     if (submit) {
         sendFormFilterGallery();
@@ -95,13 +97,15 @@ function resetFilters() {
 }
 
 function onBeginFilter() {
-    //document.getElementById(DIV_ART_GALLERY).style.visibility = 'hidden';
-    $("#" + LOADING_ICON_ART_GALLERY).show();
+    $("#artGallery").addClass("loading");
+    //$("#" + LOADING_ICON_ART_GALLERY).show();
+    $("#" + LOADING_ICON_ART_GALLERY).addClass("loading");
 }
 
 function onCompleteFilter() {
-    $("#" + LOADING_ICON_ART_GALLERY).hide();
-    //document.getElementById(DIV_ART_GALLERY).style.visibility = 'visible';
+    $("#" + LOADING_ICON_ART_GALLERY).removeClass("loading");
+    //$("#" + LOADING_ICON_ART_GALLERY).hide();
+    $("#artGallery").removeClass("loading");
 }
 
 function onSuccessFilter(data) {

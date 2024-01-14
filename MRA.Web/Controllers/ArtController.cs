@@ -22,7 +22,7 @@ namespace MRA.Web.Controllers
 
 
         public async Task<IActionResult> Index(string TextQuery, string Type, string ProductType, string ProductName, string Collection,
-            string CharacterName, string ModelName, string Software, string Paper, bool Favorites)
+            string CharacterName, string ModelName, string Software, string Paper, string Sortby, bool Favorites)
         {
             var model = new IndexModel()
             {
@@ -36,6 +36,7 @@ namespace MRA.Web.Controllers
                 Query_Software = Software,
                 Query_Paper = Paper,
                 Query_Favorites = Favorites,
+                Query_Sortby = Sortby
             };
 
             model.Drawings = await _drawingService.GetAllDrawings();

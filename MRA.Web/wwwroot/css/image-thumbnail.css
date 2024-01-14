@@ -8,6 +8,12 @@
     flex-direction: row;
     align-content: center;
     align-items: center;
+    transition: 0.3s ease-in-out;
+    opacity: 1;
+}
+
+#artGallery.mr-img-gallery.loading {
+    opacity: 0.1;
 }
 
 /* Container of one thumbnail */

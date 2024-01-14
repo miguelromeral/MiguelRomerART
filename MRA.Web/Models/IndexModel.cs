@@ -24,5 +24,6 @@ namespace MRA.Web.Models
         public string Query_Software { get; set; }
         public string Query_Paper { get; set; }
         public bool Query_Favorites { get; set; }
+        public string Query_Sortby { get; set; }
     }
 }
