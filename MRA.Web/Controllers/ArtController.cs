@@ -21,9 +21,22 @@ namespace MRA.Web.Controllers
         }
 
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string TextQuery, string Type, string ProductType, string ProductName, string Collection,
+            string CharacterName, string ModelName, string Software, string Paper, bool Favorites)
         {
-            var model = new IndexModel();
+            var model = new IndexModel()
+            {
+                Query_TextQuery = TextQuery,
+                Query_Type = Type,
+                Query_ProductType = ProductType,
+                Query_ProductName = ProductName,
+                Query_Collection = Collection,
+                Query_CharacterName = CharacterName,
+                Query_ModelName = ModelName,
+                Query_Software = Software,
+                Query_Paper = Paper,
+                Query_Favorites = Favorites,
+            };
 
             model.Drawings = await _drawingService.GetAllDrawings();
 

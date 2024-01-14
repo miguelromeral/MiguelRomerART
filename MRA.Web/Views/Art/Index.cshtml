@@ -222,7 +222,7 @@
                     name="Paper" data-bs-theme="dark" onchange="sendFormFilterGallery()">
                 <option value="0" selected>📄 TAMAÑO</option>
 
-                @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_PAPER_SIZE.Where(x => x.Key > 0).OrderBy(x => x.Value))
+                @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_PAPER_SIZE.Where(x => x.Key > 0 && x.Key > 3).OrderBy(x => x.Value))
                 {
                     <option value="@(type.Key)">@(type.Value)</option>
                 }
@@ -276,4 +276,24 @@
 
 @section Scripts {
     <script src="~/js/art-gallery.js"></script>
+    <script>
+
+
+        $(document).ready(() => {
+
+            changeArtUrl(
+                "@Model.Query_TextQuery",
+                "@Model.Query_Type",
+                "@Model.Query_ProductType",
+                "@Model.Query_ProductName",
+                "@Model.Query_Collection",
+                "@Model.Query_CharacterName",
+                "@Model.Query_ModelName",
+                "@Model.Query_Software",
+                "@Model.Query_Paper",
+                "@Model.Query_Favorites" == "True",
+                true);
+        });
+
+    </script>
 }

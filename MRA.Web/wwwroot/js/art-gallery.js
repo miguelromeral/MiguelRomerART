@@ -7,26 +7,77 @@ var DIV_ART_GALLERY = "artGallery";
 var CHEER_FORM_ID = "cheerForm";
 
 var timeMsDelayLike = 1000;
+
 function sendFormFilterGallery() {
-    var type = $("#sFilterType").val();
 
-    //// If Digital, show filter
-    //if (type == 0) {
-    //    $("#sFilterSoftware").show();
-    //    $("#sFilterPaper").show();
-    //} else if (type == 2) {
-    //    $("#sFilterPaper").hide();
-    //    $("#sFilterPaper").val(0);
-
-    //    $("#sFilterSoftware").show();
-    //} else {
-    //    $("#sFilterSoftware").hide();
-    //    $("#sFilterSoftware").val(0);
-
-    //    $("#sFilterPaper").show();
-    //}
+    changeArtUrl(
+        $("#tbTags").val(),
+        $("#sFilterType").val(),
+        $("#sFilterProduct").val(),
+        $("#sFilterProductName").val(),
+        $("#sFilterCollection").val(),
+        $("#sFilterCharacterName").val(),
+        $("#sFilterModel").val(),
+        $("#sFilterSoftware").val(),
+        $("#sFilterPaper").val(),
+        $("#flexSwitchCheckChecked").prop("checked"),
+        false);
 
     $("#" + FILTER_FORM_ID).submit();
+}
+
+
+function changeArtUrl(textQuery, type, productType, productName, collection, characterName, modelName, software, paper, favorites, submit) {
+    // Obtén la URL base
+    var baseUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+    
+    var queryParams = [];
+
+    queryParams.push(setFilterValue("#tbTags", "TextQuery", textQuery));
+    queryParams.push(setFilterValue("#sFilterType", "Type", type, [-1]));
+    queryParams.push(setFilterValue("#sFilterProduct", "ProductType", productType, [-1]));
+    queryParams.push(setFilterValue("#sFilterProductName", "ProductName", productName));
+    queryParams.push(setFilterValue("#sFilterCollection", "Collection", collection));
+    queryParams.push(setFilterValue("#sFilterCharacterName", "CharacterName", characterName));
+    queryParams.push(setFilterValue("#sFilterModel", "ModelName", modelName));
+    queryParams.push(setFilterValue("#sFilterSoftware", "Software", software, [0]));
+    queryParams.push(setFilterValue("#sFilterPaper", "Paper", paper, [0]));
+    queryParams.push(setFilterValue("#flexSwitchCheckChecked", "Favorites", favorites, [false], true));
+
+
+    queryParams = queryParams.filter(x => x != null);
+
+    var params = "";
+
+    if (queryParams.length > 0) {
+        params = "?" + queryParams.join("&");
+    }
+
+    var newUrl = baseUrl + params;
+    // Cambia la URL sin recargar la página
+    history.pushState(null, null, newUrl);
+
+    // Puedes imprimir la nueva URL en la consola para verificar
+    console.log("Nueva URL:", window.location.href);
+
+    if (submit) {
+        sendFormFilterGallery();
+    }
+}
+
+function setFilterValue(querySelector, name, value, ommitValues, isSwitch) {
+    if (ommitValues == undefined || ommitValues == null) {
+        ommitValues = [];
+    }
+    if (value != undefined && value != null && value != "" && ommitValues.filter(x => x == value).length == 0) {
+        if (isSwitch != undefined && isSwitch != null && isSwitch) {
+            $(querySelector).prop("checked" , value);
+        } else {
+            $(querySelector).val(value);
+        }
+        return name + "=" + value;
+    }
+    return null;
 }
 
 function resetFilters() {
@@ -37,8 +88,9 @@ function resetFilters() {
     $("#tbTags").val("");
     $("#sFilterModel").val("");
     $("#sFilterSoftware").val(0);
+    $("#sFilterCollection").val("");
     $("#sFilterPaper").val(0);
-    $("#flexSwitchCheckChecked").attr("checked", false);
+    $("#flexSwitchCheckChecked").prop("checked", false);
     sendFormFilterGallery();
 }
 

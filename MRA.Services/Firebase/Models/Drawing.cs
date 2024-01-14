@@ -46,6 +46,9 @@ namespace MRA.Services.Firebase.Models
         public static Dictionary<int, string> DRAWING_PAPER_SIZE = new Dictionary<int, string>()
             {
                 {0, "Desconocido"},
+                {1, "A1"},
+                {2, "A2"},
+                {3, "A3"},
                 {4, "A4"},
                 {5, "A5"},
                 {6, "A6"},

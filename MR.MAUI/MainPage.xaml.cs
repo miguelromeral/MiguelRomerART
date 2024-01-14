@@ -158,8 +158,8 @@ namespace MR.MAUI
             cbDrawingType.SelectedIndex = drawing.Type;
             cbDrawingSoftware.SelectedIndex = drawing.Software;
             cbDrawingProductType.SelectedIndex = drawing.ProductType;
-            cbDrawingPaperSize.SelectedIndex = drawing.Paper;
             tbDrawingSpotifyUrl.Text = drawing.SpotifyUrl ?? "";
+            cbDrawingPaperSize.SelectedIndex = drawing.Paper;
 
             tbDrawingTags.Text = String.Join(" ", drawing.Tags);
             
@@ -383,10 +383,9 @@ namespace MR.MAUI
                     return;
                 }
 
-                if (drawing.Paper > 0)
-                {
-                    drawing.Paper += 3;
-                }
+
+                drawing.Paper = cbDrawingPaperSize.SelectedIndex;
+
 
                 drawing.Date = ParseDate(dpDrawingDate.Date);
 
