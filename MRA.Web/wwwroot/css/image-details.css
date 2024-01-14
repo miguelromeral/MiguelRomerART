@@ -1,4 +1,7 @@
-﻿/* Title of the Drawing */
+﻿@import 'variables.css';
+
+
+/* Title of the Drawing */
 .mr-image-page-title {
     color: var(--mr-chat-color) !important;
     font-style: italic;
@@ -28,12 +31,39 @@
     padding: var(--mr-padding-btw-border-image);
     width: -webkit-fill-available;
     min-height: 100px;
+    transition: var(--mr-transition-time) ease-in-out;
 }
 
-/* If the image is a favorite, change border color */
-.mr-img-full-container.favorite {
-    border-color: var(--mr-color-gold);
-}
+    .mr-img-full-container.fullscreen {
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        right: 0px;
+        bottom: 0px;
+        display: block;
+        align-items: center;
+        z-index: 10000;
+        height: 100%;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(5px);
+        display: flex;
+        justify-content: center;
+    }
+
+        .mr-img-full-container.fullscreen img {
+            height: auto;
+            width: auto;
+            /* object-fit: cover; */
+            max-width: 100%;
+            max-height: 100%;
+        }
+     
+        
+        /* If the image is a favorite, change border color */
+        .mr-img-full-container.favorite {
+            border-color: var(--mr-color-gold);
+        }
 
 /* Favorite Icon */
 #iFavoriteIcon {
@@ -50,8 +80,43 @@
     text-shadow: 0px 0px 10px var(--mr-color-gold);
 }
 
-/* Watermark */
-/*.mr-img-full-container::after {
+#divIconFullScreen {
+    position: absolute;
+    display: block;
+    top: 10px;
+    left: 10px;
+    color: black;
+    transition: 0.3s ease-in-out;
+    color: var(--mr-chat-color);
+    font-size: large;
+    text-shadow: 1px 1px 0px black;
+}
+
+    #divIconFullScreen #iFS {
+        display: block;
+    }
+
+    #divIconFullScreen #iFSe {
+        display: none;
+    }
+
+#divImgFull.fullscreen #iFS {
+    display: none;
+}
+
+#divImgFull.fullscreen #iFSe {
+    display: block;
+}
+
+
+
+    #divIconFullScreen:hover {
+        color: white;
+        cursor: pointer;
+    }
+
+    /* Watermark */
+    /*.mr-img-full-container::after {
     content: "MiguelRomeral";
     position: absolute;
     top: 10%;
@@ -65,14 +130,14 @@
     color: rgba(255, 255, 255, 0.5);
     text-shadow: 0px 0px 5px #ffffff85;
 }*/
-
-/* Full resolution image */
+    /* Full resolution image */
 img.mr-img-full {
     width: 100%;
     height: auto;
     user-select: none;
     pointer-events: none;
     border-radius: var(--mr-border-radius-image);
+    transition: var(--mr-transition-time) ease-in-out;
 }
 
 /* Placeholder shown before the own image if error */
@@ -292,7 +357,7 @@ div.mr-chat-container {
     position: absolute;
     border-radius: var(--mr-border-radius);
     padding: 2px 10px;
-    z-index: 10;
+    z-index: 10000;
     border: 1px solid var(--mr-chat-color-secondary);
     font-weight: bolder;
 }

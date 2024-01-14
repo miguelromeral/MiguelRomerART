@@ -68,7 +68,7 @@
         <div class="col-sm-12 col-md-6 col-lg-4 mb-2">
 
             <div class="mr-first-column-image">
-                <div class="mr-img-full-container heart-rain @(drawing.Favorite ? "favorite" : "")" ondblclick="cheerDrawing(event)">
+                <div id="divImgFull" class="mr-img-full-container heart-rain @(drawing.Favorite ? "favorite" : "")" ondblclick="cheerDrawing(event)">
                     <img id="imgFull" src="@Model.Drawing.Url" class="mr-img-full" onerror="errorLoadingImage('@Model.Drawing.Id')">
 
                     <div class="mr-error-load-placeholder" data-error-drawing-id="@Model.Drawing.Id">
@@ -77,6 +77,10 @@
                     </div>
 
                     <i id="iFavoriteIcon" class="bi bi-star-fill" title="One of my favorites drawings."></i>
+                    <div id="divIconFullScreen" onclick="fullScreenImage()">
+                        <i id="iFS" class="bi bi-fullscreen" title="Ver en pantalla completa"></i>
+                        <i id="iFSe" class="bi bi-fullscreen-exit" title="Cerrar la pantalla completa"></i>
+                    </div>
                 </div>
 
                 <div class="mr-stats-container">
@@ -125,19 +129,19 @@
                         for (int count = 0; count < comments.Count; count++)
                         {
                             var last = count + 1 == comments.Count;
-                            <div class="mr-chat-row">
-                                <div class="mr-chat-message-container slide-top">
-                                    <div class="mr-chat-message @(last ? "last" : "")">
-                                        @Html.Raw(comments[count])
+                                <div class="mr-chat-row">
+                                    <div class="mr-chat-message-container slide-top">
+                                        <div class="mr-chat-message @(last ? "last" : "")">
+                                            @Html.Raw(comments[count])
+                                        </div>
+                                    </div>
+                                    <div class="mr-chat-image">
+                                        @if (last)
+                                    {
+                                            <img src="~/assets/images/miguel.jpeg" class="mr-chat-image-miguel slide-top" />
+                                    }
                                     </div>
                                 </div>
-                                <div class="mr-chat-image">
-                                    @if (last)
-                                    {
-                                        <img src="~/assets/images/miguel.jpeg" class="mr-chat-image-miguel slide-top" />
-                                    }
-                                </div>
-                            </div>
                         }
                     }
                 </div>
@@ -306,4 +310,10 @@ else
 
 @section Scripts {
     <script src="~/js/art-gallery.js"></script>
+
+    <script>
+        function fullScreenImage() {
+            $("#divImgFull").toggleClass("fullscreen");
+        }
+    </script>
 }
