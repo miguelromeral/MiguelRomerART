@@ -93,7 +93,6 @@ function resetFilters() {
     $("#sFilterCollection").val("");
     $("#sFilterPaper").val(0);
     $("#flexSwitchCheckChecked").prop("checked", false);
-    sendFormFilterGallery();
 }
 
 function onBeginFilter() {

@@ -9,6 +9,7 @@ using Grpc.Auth;
 using Google.Apis.Storage.v1.Data;
 using Google.Cloud.Firestore.V1;
 using Azure.Storage.Blobs;
+using Microsoft.Extensions.Caching.Memory;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,12 +36,15 @@ var firebaseService = new FirestoreService(
 
 builder.Services.AddSingleton<IFirestoreService>(firebaseService);
 
-var drawingService = new DrawingService(azureStorageService, firebaseService);
+var drawingService = new DrawingService(builder.Configuration.GetValue<int>("CacheSeconds"), new MemoryCache(new MemoryCacheOptions()), azureStorageService, firebaseService);
 
 builder.Services.AddSingleton(drawingService);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddMemoryCache();
+
 
 var app = builder.Build();
 

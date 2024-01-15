@@ -1,5 +1,6 @@
 ﻿using Google.Api;
 using Google.Cloud.Firestore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -79,7 +80,9 @@ namespace MR.MAUI
 
             builder.Services.AddSingleton<IFirestoreService>(firebaseService);
 
-            var drawingService = new DrawingService(azureStorageService, firebaseService);
+            var cacheSeconds = int.Parse(appSettings["CacheSeconds"] ?? "1");
+
+            var drawingService = new DrawingService(cacheSeconds, new MemoryCache(new MemoryCacheOptions()), azureStorageService, firebaseService);
 
             builder.Services.AddSingleton(drawingService);
 
