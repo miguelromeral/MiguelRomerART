@@ -9,6 +9,12 @@ var CHEER_FORM_ID = "cheerForm";
 var timeMsDelayLike = 1000;
 
 function sendFormFilterGallery() {
+    changeBasicArtUrl();
+
+    $("#" + FILTER_FORM_ID).submit();
+}
+
+function changeBasicArtUrl() {
 
     changeArtUrl(
         $("#tbTags").val(),
@@ -23,10 +29,7 @@ function sendFormFilterGallery() {
         $("#flexSwitchCheckChecked").prop("checked"),
         $("#sFilterSortBy").val(),
         false);
-
-    $("#" + FILTER_FORM_ID).submit();
 }
-
 
 function changeArtUrl(textQuery, type, productType, productName, collection, characterName, modelName, software, paper, favorites, sortby, submit) {
     // Obtén la URL base
@@ -93,6 +96,7 @@ function resetFilters() {
     $("#sFilterCollection").val("");
     $("#sFilterPaper").val(0);
     $("#flexSwitchCheckChecked").prop("checked", false);
+    changeBasicArtUrl();
 }
 
 function onBeginFilter() {

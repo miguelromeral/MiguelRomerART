@@ -309,9 +309,9 @@ else
 }
 
 @section Scripts {
-    <script src="~/js/art-gallery.js"></script>
+    <script src="~/js/art-gallery.js" asp-append-version="true"></script>
 
-    <script>
+    <script asp-append-version="true">
         function fullScreenImage() {
             $("#divImgFull").toggleClass("fullscreen");
         }
