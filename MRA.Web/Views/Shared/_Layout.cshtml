@@ -33,38 +33,6 @@
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
-        <div>
-        <footer>
-            <div class="container">
-                <p>
-                    &copy; @DateTime.Now.Year - Developed by <b>
-                        <a style="color: var(--mr-chat-color);"
-                           asp-area="" asp-controller="Home" asp-action="About">MiguelRomeral</a>
-                    </b>
-                </p>
-                <div class="mb-2" style="display: flex; width: 100%; flex-direction: column; align-items: center;">
-                    <div style="display: flex; flex-direction: column; align-items: center;">
-                        <span style="font-weight: 700;" class="mr-development-banner">
-                            Página Web en DESARROLLO 🛠
-                        </span>
-                        <span style="padding: 0px 20px; font-size: small;">
-                            Esta página está todavía en desarrollo, por lo que es posible que veas diversos fallos o alguna funcionalidad no esté del todo disponible. ¡Gracias por tu paciencia!
-                        </span>
-                    </div>
-                    <div class="mr-powered-by-logos mb-2">
-                        <div class="mr-powered-by-logos-azure" title="Microsoft Azure">
-                            <img title="Azure" src="~/assets/images/azure-white.png" style="width: 20px; height: 20px;" />
-                            <img title="Microsoft" src="~/assets/images/micro-white.png" style="width: 30px;" />
-                        </div>
-                        <div>
-                            <img title="Google Firebase" src="~/assets/images/Built_with_Firebase_Logo_Knockout.svg" style="height: 30px;" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            </footer>
-        </div>
     </div>
     
     <div class="mr-bottom-bar">

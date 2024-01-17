@@ -10,6 +10,7 @@ html {
 }
 
 body {
+    transition: var(--mr-transition-time);
   margin-bottom: 60px;
 }
 
