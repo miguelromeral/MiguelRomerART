@@ -49,6 +49,7 @@
         backdrop-filter: blur(5px);
         display: flex;
         justify-content: center;
+        border: none;
     }
 
         .mr-img-full-container.fullscreen img {

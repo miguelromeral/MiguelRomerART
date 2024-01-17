@@ -65,6 +65,7 @@
     font-size: var(--mr-font-size-large);
     flex-direction: column;
     text-align: center;
+    backdrop-filter: blur(2px);
 }
 
 .favorite .mr-img-thumbnail-title {

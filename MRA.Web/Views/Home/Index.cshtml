@@ -30,7 +30,9 @@
         var numDrawings = col.Drawings.Count;
         var nameCarousel = "carousel" + col.Id;
 
-        <div class="col-sm-12 col-md-12 col-lg-6 mb-2 p-2 mr-collection-section">
+        <div class="col-sm-12 col-md-12 col-lg-6 mb-2 p-2">
+
+            <div class="mr-collection-section">
 
             <div id="@(nameCarousel)" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-indicators">
@@ -69,6 +71,7 @@
             <h3 class="mr-collection-title">@col.Name</h3>
             <div class="mr-collection-description">
                 @Html.Raw(col.Description)
+            </div>
             </div>
 
         </div>

@@ -34,7 +34,7 @@
 }
 
 .mr-collection-section {
-    border: var(--mr-border-size) solid var(--mr-chat-color);
+    /*border: var(--mr-border-size) solid var(--mr-chat-color);*/
     border-radius: var(--mr-border-radius);
     padding: var(--mr-padding-btw-border-image);
     background-color: var(--mr-background-color-secondary);
