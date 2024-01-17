@@ -20,7 +20,7 @@ html {
 
 body {
     margin: 0;
-    font-family: 'Josefin Sans', sans-serif;
+    font-family: var(--mr-font-family);
     /*font-family: 'Kanit', sans-serif;*/
     background: var(--mr-background-color);
     color: white;

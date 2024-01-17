@@ -30,4 +30,7 @@
     --mr-font-size-small: small;
     --mr-ff-title-color: #04e5e7;
     --mr-carousel-max-height: 400px;
+    --mr-font-family-default: 'Josefin Sans', sans-serif;
+    --mr-font-family-sans-serif: sans-serif;
+    --mr-font-family: var(--mr-font-family-default); 
 }

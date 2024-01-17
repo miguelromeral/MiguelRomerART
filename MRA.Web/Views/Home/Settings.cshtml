@@ -18,9 +18,9 @@
             <div class="container">
                 <div class="row">
                     <div class="col-sm-12 col-md-8">
-                        <h6>
+                        <h5>
                             Modo Oscuro
-                        </h6>
+                        </h5>
                         <p>
                             Ver la página web con colores más claros o más oscuros
                         </p>
@@ -37,9 +37,32 @@
             <div class="container">
                 <div class="row">
                     <div class="col-sm-12 col-md-8">
-                        <h6>
+                        <h5>
+                            Fuente
+                        </h5>
+                        <p>
+                            Cambia entre la fuente original de la web o una fuente algo más estándar (se recomienda cambiar este ajuste si se tiene problemas al leer las letras)
+                        </p>
+                    </div>
+                    <div class="col-sm-12 col-md-4 mr-setting-change-value">
+
+                        <select id="fontFamilySelector" class="mr-custom-select form-select form-select-sm" onchange="eventChangeFontFamily()">
+                            <option value="var(--mr-font-family-default)">Predeterminada</option>
+                            <option value="var(--mr-font-family-sans-serif)">Estándar</option>
+                        </select>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mr-setting-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12 col-md-8">
+                        <h5>
                             Tamaño de la Fuente
-                        </h6>
+                        </h5>
                         <p>
                             Cambia el tamaño del texto a lo largo de la web
                         </p>
@@ -55,20 +78,14 @@
                     </div>
                 </div>
             </div>
-            <div>
-            </div>
         </div>
     </div>
 </div>
 
 @section Scripts {
     <script asp-append-version="true">
-
         changeLightModeButton();
         changeFontSize();
-
-        // Agregar un evento de clic al botón para cambiar el tema
-        document.getElementById('theme-switch').addEventListener('click', toggleTheme);
-
+        changeFontFamily();
     </script>
 }

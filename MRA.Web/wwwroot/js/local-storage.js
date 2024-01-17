@@ -2,6 +2,7 @@
 var localStorageKeys = {
     lightTheme: "light-theme",
     fontSize: "font-size",
+    fontFamily: "font-family",
 }
 
 function getCacheItem(key, defaultValue) {
@@ -23,7 +24,29 @@ function loadConfig() {
 
     const tamanioGuardado = getCacheItem(localStorageKeys.fontSize, "medium");
     if (tamanioGuardado) {
+
+        var sizeSmall = "small";
+        var sizeLarge = "large";
+
+        switch (tamanioGuardado) {
+            case "small":
+                sizeSmall = "x-small";
+                sizeLarge = "medium";
+                break;
+            case "large":
+                sizeSmall = "medium";
+                sizeLarge = "x-large";
+                break;
+        }
+
+        document.documentElement.style.setProperty('--mr-font-size-small', sizeSmall);
         document.documentElement.style.setProperty('--mr-font-size-default', tamanioGuardado);
+        document.documentElement.style.setProperty('--mr-font-size-large', sizeLarge);
+    }
+
+    const fontFamily = getCacheItem(localStorageKeys.fontFamily, "var(--mr-font-family-default)");
+    if (fontFamily) {
+        document.documentElement.style.setProperty('--mr-font-family', fontFamily);
     }
 }
 
@@ -55,10 +78,22 @@ function cambiarTamanio() {
     var selector = document.getElementById('fontSizeSelector');
     var tamanio = selector.options[selector.selectedIndex].value;
 
-    console.log("--> " + tamanio);
 
     // Guardar la preferencia en localStorage para recordarla en futuras visitas
     setCacheItem(localStorageKeys.fontSize, tamanio);
 
     loadConfig();
+}
+
+
+function eventChangeFontFamily() {
+    var selector = document.getElementById('fontFamilySelector');
+    var family = selector.options[selector.selectedIndex].value;
+    
+    setCacheItem(localStorageKeys.fontFamily, family);
+
+    loadConfig();
+}
+function changeFontFamily() {
+    $("#fontFamilySelector").val(getCacheItem(localStorageKeys.fontFamily, "var(--mr-font-family-default)"));
 }
