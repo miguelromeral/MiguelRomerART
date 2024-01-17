@@ -20,6 +20,7 @@ namespace MRA.Services.Firebase.Converters
                 Id = collectionDocument.Id,
                 Name = collectionDocument.name,
                 Description = collectionDocument.description,
+                Order = collectionDocument.order,
                 DrawingsReferences = collectionDocument.drawings
             };
         }
@@ -31,6 +32,7 @@ namespace MRA.Services.Firebase.Converters
                 Id = collection.Id,
                 name = collection.Name,
                 description = collection.Description,
+                order = collection.Order,
                 drawings = collection.DrawingsReferences
             };
         }

@@ -340,16 +340,38 @@
                     </StackLayout>
                 </Grid>
 
-                <Label Text="Nombre" Style="{StaticResource mrLabelTitle}"/>
-                <Entry x:Name="tbCollectionName" Style="{StaticResource mrEntry}"
+
+                <Grid Margin="0,0,0,10">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackLayout Grid.Column="0" Orientation="Vertical" Margin="0,0,0,10" VerticalOptions="StartAndExpand">
+
+
+                        <Label Text="Nombre" Style="{StaticResource mrLabelTitle}"/>
+                        <Entry x:Name="tbCollectionName" Style="{StaticResource mrEntry}"
                        Placeholder="Nombre" />
+
+                    </StackLayout>
+
+
+                    <StackLayout Grid.Column="1" Orientation="Vertical" Margin="0,0,0,10" VerticalOptions="StartAndExpand">
+
+
+                        <Label Text="Orden" Style="{StaticResource mrLabelTitle}"/>
+                        <Entry x:Name="tbCollectionOrder" Style="{StaticResource mrEntry}"
+                       Placeholder="Orden (de Mayor a Menor)" />
+                    </StackLayout>
+                </Grid>
 
                 <Label Text="Descripción" Style="{StaticResource mrLabelTitle}"/>
                 <Editor x:Name="tbCollectionDescription" Style="{StaticResource mrEntry}"
                        Placeholder="Descripcion" />
                 
-
-            <StackLayout>
+                <StackLayout>
                 <!-- FlexLayout para mostrar las imágenes -->
                 <FlexLayout x:Name="imageFlexLayout" Direction="Row" Wrap="Wrap">
                     <BindableLayout.ItemTemplate>

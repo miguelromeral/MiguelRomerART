@@ -14,7 +14,7 @@ namespace MRA.Services.Firebase.Models
         public string Name { get; set; }
 
         public string Description { get; set; }
-
+        public int Order { get; set; }
         public List<Drawing> Drawings { get; set; }
         public List<DocumentReference> DrawingsReferences { get; set; }
 

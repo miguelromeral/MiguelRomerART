@@ -20,6 +20,9 @@ namespace MRA.Services.Firebase.Documents
         public string description { get; set; }
 
         [FirestoreProperty]
+        public int order { get; set; }
+
+        [FirestoreProperty]
         public List<DocumentReference> drawings { get; set; }
     }
 }

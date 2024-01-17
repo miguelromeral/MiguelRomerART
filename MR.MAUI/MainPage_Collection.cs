@@ -119,6 +119,7 @@ namespace MR.MAUI
 
             tbCollectionName.Text = collection.Name;
             tbCollectionDescription.Text = collection.Description;
+            tbCollectionOrder.Text = collection.Order.ToString();
         }
 
         private void OnImageTapped(object sender, EventArgs e)
@@ -153,6 +154,7 @@ namespace MR.MAUI
 
                 collection.DrawingsReferences = selected;
                 collection.Name = tbCollectionName.Text;
+                collection.Order = int.Parse(tbCollectionOrder.Text);
                 collection.Description = tbCollectionDescription.Text;
 
                 await _drawingService.AddAsync(collection);
