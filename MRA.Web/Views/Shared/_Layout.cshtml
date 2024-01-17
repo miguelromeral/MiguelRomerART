@@ -22,14 +22,9 @@
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body class="transition" data-theme="dark">
-
-
+    <script src="~/js/local-storage.js" asp-append-version="true"></script>
     <script asp-append-version="true">
-
-        const isLightMode = JSON.parse(localStorage.getItem('light-theme')) || false;
-        if (isLightMode) {
-            document.body.classList.add('light-theme');
-        }
+        loadConfig();
     </script>
     <span id="bannerDevelopmentMode" class="mr-development-banner" title="Página Web en Desarrollo">
         EN DESARROLLO 🛠
@@ -38,6 +33,7 @@
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
+        <div>
         <footer>
             <div class="container">
                 <p>
@@ -67,7 +63,8 @@
                 </div>
             </div>
 
-        </footer>
+            </footer>
+        </div>
     </div>
     
     <div class="mr-bottom-bar">

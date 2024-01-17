@@ -9,53 +9,63 @@
 <h1>
     Ajustes
 </h1>
-<div class="container">
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="mr-setting-section">
-                <h4>
-                    Modo Oscuro
-                </h4>
-                <div>
-                    <p>
-                        Ver la página web con colores más claros o más oscuros
-                    </p>
+<div class="row">
+    <div class="col-sm-12">
+        <h3>Accesibilidad</h3>
+    </div>
+    <div class="col-sm-12">
+        <div class="mr-setting-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12 col-md-8">
+                        <h6>
+                            Modo Oscuro
+                        </h6>
+                        <p>
+                            Ver la página web con colores más claros o más oscuros
+                        </p>
+                    </div>
+                    <div class="col-sm-12 col-md-4 mr-setting-change-value">
+                        <button id="theme-switch" class="btn btn-light">Cambiar Tema</button>
+                    </div>
                 </div>
-                @* <div>
-                    <input class="container_toggle" type="checkbox" id="switch" name="mode">
-                    <label for="switch">Toggle</label>
-                </div> *@
-                <button id="theme-switch" class="btn btn-light">Cambiar Tema</button>
+            </div>
+            <div>
+            </div>
+        </div>
+        <div class="mr-setting-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12 col-md-8">
+                        <h6>
+                            Tamaño de la Fuente
+                        </h6>
+                        <p>
+                            Cambia el tamaño del texto a lo largo de la web
+                        </p>
+                    </div>
+                    <div class="col-sm-12 col-md-4 mr-setting-change-value">
 
+                        <select id="fontSizeSelector" class="mr-custom-select form-select form-select-sm" onchange="cambiarTamanio()">
+                            <option value="small">Pequeño</option>
+                            <option value="medium">Mediano</option>
+                            <option value="large">Grande</option>
+                        </select>
+
+                    </div>
+                </div>
+            </div>
+            <div>
             </div>
         </div>
     </div>
 </div>
 
-
 @section Scripts {
     <script asp-append-version="true">
 
         changeLightModeButton();
-
-        function toggleTheme() {
-            const isLightMode = !(JSON.parse(localStorage.getItem('light-theme')) || false);
-            localStorage.setItem('light-theme', isLightMode);
-            document.body.classList.toggle('light-theme');
-            changeLightModeButton();
-        }
-
-        function changeLightModeButton() {
-            const isLightMode = JSON.parse(localStorage.getItem('light-theme')) || false;
-            console.log("Is Light Mode: " + isLightMode);
-            if (isLightMode) {
-                $("#theme-switch").addClass("btn-dark");
-                $("#theme-switch").removeClass("btn-light");
-            } else {
-                $("#theme-switch").addClass("btn-light");
-                $("#theme-switch").removeClass("btn-dark");
-            }
-        }
+        changeFontSize();
 
         // Agregar un evento de clic al botón para cambiar el tema
         document.getElementById('theme-switch').addEventListener('click', toggleTheme);

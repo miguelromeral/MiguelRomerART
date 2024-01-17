@@ -13,5 +13,3 @@ function errorLoadingImage(drawingId) {
     $(selector).addClass("show");
 }
 
-
-
