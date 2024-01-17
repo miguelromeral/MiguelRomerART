@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿using Google.Cloud.Firestore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using MRA.Services.AzureStorage;
 using MRA.Services.Firebase.Interfaces;
@@ -112,10 +113,13 @@ namespace MRA.Services
         public async Task<bool> ExistsBlob(string rutaBlob) => await _azureStorageService.ExistsBlob(rutaBlob);
 
         public async Task<Drawing> AddAsync(Drawing document) => await _firestoreService.AddAsync(document);
+        public async Task<Collection> AddAsync(Collection document) => await _firestoreService.AddAsync(document);
 
         public async Task RedimensionarYGuardarEnAzureStorage(string rutaEntrada, string nombreBlob, int anchoDeseado) =>
             await _azureStorageService.RedimensionarYGuardarEnAzureStorage(rutaEntrada, nombreBlob, anchoDeseado);
 
         public string CrearThumbnailName(string rutaImagen) => _azureStorageService.CrearThumbnailName(rutaImagen);
+
+        public DocumentReference GetDbDocumentDrawing(string id) => _firestoreService.GetDbDocumentDrawing(id);
     }
 }

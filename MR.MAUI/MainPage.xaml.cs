@@ -71,6 +71,7 @@ namespace MR.MAUI
             cbSelectOperation.SelectedIndex = 0;
 
             tbDrawingId.Text = "";
+            tbCollectionId.Text = "";
 
             imageDrawing.Source = "";
             imageDrawingThumbnail.Source = "";
@@ -429,20 +430,12 @@ namespace MR.MAUI
             var newValue = ((Entry)sender).Text;
             if (ListaDrawings.Count(x => x.Id.Equals(newValue)) > 0)
             {
+                tbDrawingId.Text = "";
                 DisplayAlert("ID Usado", $"Ya existe un dibujo con ID '{newValue}'.\nCambia el ID y vuelve a intentarlo", "Vale");
-
-                //tbDrawingId.StyleClass = new List<string>()
-                //{
-                //    "mrWrongText"
-                //};
             }
             else
             {
                 drawing.Id = newValue;
-                //tbDrawingId.StyleClass = new List<string>()
-                //{
-                //    "mrWrongGood"
-                //};
             }
         }
 

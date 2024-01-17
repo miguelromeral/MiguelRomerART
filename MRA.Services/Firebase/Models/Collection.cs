@@ -25,5 +25,20 @@ namespace MRA.Services.Firebase.Models
                 return Environment.NewLine + String.Join(", "+ Environment.NewLine, DrawingsReferences.Select(x => "* "+x.Parent + "/" + x.Id).ToList());
             }
         }
+
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append(Id);
+
+            if (!String.IsNullOrEmpty(Name))
+            {
+                sb.Append($" ({Name})");
+            }
+
+            return sb.ToString();
+        }
     }
 }

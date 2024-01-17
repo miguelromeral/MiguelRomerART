@@ -450,7 +450,7 @@ namespace MRA.Services.Firebase
         }
 
 
-        public async Task AddAsync(Collection document)
+        public async Task<Collection> AddAsync(Collection document)
         {
             var collection = _firestoreDb.Collection(_collectionNameCollections);
             var drawingDocument = _converterCollection.ConvertToDocument(document);
@@ -460,6 +460,18 @@ namespace MRA.Services.Firebase
 
             // Inserta o actualiza el documento con los datos especificados
             await docRef.SetAsync(drawingDocument);
+
+            return _converterCollection.ConvertToModel(drawingDocument);
+        }
+
+        public DocumentReference GetDbDocument(string path)
+        {
+            return _firestoreDb.Document(path);
+        }
+
+        public DocumentReference GetDbDocumentDrawing(string id)
+        {
+            return _firestoreDb.Document(_collectionNameDrawings + "/" + id);
         }
 
 

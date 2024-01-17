@@ -303,6 +303,77 @@
 
             <StackLayout Orientation="Vertical" Margin="0,0,0,10">
                 <Button x:Name="btnSave" Text="GUARDAR" Clicked="OnSaveDrawing" BackgroundColor="#30cf5a" />
+                <Button x:Name="btnLoadCollections" Text="Cargar Colecciones" Clicked="btnLoadCollections_Clicked"  />
+            </StackLayout>
+
+
+            <!-- COLECCIONES -->
+
+            <StackLayout Orientation="Vertical" Margin="0,0,0,10" x:Name="layoutCollections" IsVisible="false">
+
+
+                <Grid Margin="0,0,0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="2*" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackLayout Grid.Column="0" Orientation="Vertical" Margin="0,0,0,10">
+                        <Label Text="Operación" Style="{StaticResource mrLabelTitle}"/>
+                        <Picker x:Name="cbSelectOperationCollection"
+                            Style="{StaticResource mrEntry}"
+                        ItemsSource="{Binding SelectAdd}" SelectedIndexChanged="cbSelectOperationCollection_SelectedIndexChanged"/>
+                    </StackLayout>
+
+                    <StackLayout Grid.Column="1" Orientation="Vertical" Margin="0,0,0,10">
+                        <VerticalStackLayout x:Name="layoutAddCollectionOperation">
+                            <Label Text="ID de la nueva Colección" Style="{StaticResource mrLabelTitle}" />
+                            <Entry x:Name="tbCollectionId" Placeholder="Collection ID" Unfocused="tbCollectionId_Unfocused" 
+                                Style="{StaticResource mrEntry}"/>
+                        </VerticalStackLayout>
+
+                        <StackLayout x:Name="layoutEditCollection" Orientation="Vertical" Margin="0,0,0,10" IsVisible="false">
+                            <Label Text="ID de la Colección a Editar" Style="{StaticResource mrLabelTitle}"/>
+
+                            <Picker x:Name="cbCollectionId" SelectedIndexChanged="cbCollectionId_SelectedIndexChanged"/>
+                        </StackLayout>
+                    </StackLayout>
+                </Grid>
+
+                <Label Text="Nombre" Style="{StaticResource mrLabelTitle}"/>
+                <Entry x:Name="tbCollectionName" Style="{StaticResource mrEntry}"
+                       Placeholder="Nombre" />
+
+                <Label Text="Descripción" Style="{StaticResource mrLabelTitle}"/>
+                <Editor x:Name="tbCollectionDescription" Style="{StaticResource mrEntry}"
+                       Placeholder="Descripcion" />
+                
+
+            <StackLayout>
+                <!-- FlexLayout para mostrar las imágenes -->
+                <FlexLayout x:Name="imageFlexLayout" Direction="Row" Wrap="Wrap">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <!-- Contenedor para cada elemento en el FlexLayout -->
+                            <StackLayout>
+                                <!-- Imagen con TapGestureRecognizer -->
+                                <Image Source="{Binding ImageSource}" HeightRequest="100" WidthRequest="100" Aspect="AspectFill">
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="OnImageTapped" CommandParameter="{Binding .}" />
+                                    </Image.GestureRecognizers>
+                                </Image>
+                                <Label Text="{Binding Id}" Style="{StaticResource mrLabelTitle}"/>
+
+                                <!-- CheckBox para la selección -->
+                                <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}" />
+                            </StackLayout>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </FlexLayout>
+
+                <!-- Botón para guardar las imágenes seleccionadas -->
+                <Button Text="Guardar seleccionadas" x:Name="btnSaveCollection" Clicked="OnSaveSelectedImagesClicked" BackgroundColor="#30cf5a" />
+                </StackLayout>
             </StackLayout>
 
         </StackLayout>

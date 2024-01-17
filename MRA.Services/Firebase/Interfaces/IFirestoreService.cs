@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Google.Cloud.Firestore;
 using MRA.Services.Firebase.Models;
 using MRA.Web.Models.Art;
 
@@ -14,8 +15,10 @@ namespace MRA.Services.Firebase.Interfaces
         Task<List<Inspiration>> GetAllInspirations();
         Task<List<Collection>> GetAllCollections();
         Task<Drawing> AddAsync(Drawing document);
+        Task<Collection> AddAsync(Collection document);
         Task<List<Drawing>> Filter(FilterDrawingModel filter);
         Task<Drawing> FindDrawingById(string documentId);
         Task UpdateLikes(string documentId);
+        DocumentReference GetDbDocumentDrawing(string id);
     }
 }
