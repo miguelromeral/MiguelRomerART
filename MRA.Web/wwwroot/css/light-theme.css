@@ -1,0 +1,74 @@
+﻿@import 'variables.css';
+
+
+body.light-theme {
+    background-color: var(--mr-background-color-light);
+    color: black;
+}
+
+
+    body.light-theme .mr-bottom-bar {
+        background-color: var(--mr-nav-color-light);
+    }
+
+    body.light-theme nav a, body.light-theme .nav-link, body.light-theme a {
+        color: var(--mr-color-emphasis-light) !important;
+    }
+
+    body.light-theme .mr-collection-section {
+        background-color: var(--mr-nav-color-light);
+    }
+
+    body.light-theme .mr-chat-message {
+        color: white;
+    }
+
+        body.light-theme .mr-chat-message.last:after {
+            background-color: white;
+        }
+
+    body.light-theme .mr-tag {
+        background-color: var(--mr-nav-color-light);
+        color: black;
+    }
+
+    body.light-theme .mr-thanks-message {
+        color: var(--mr-background-color-light);
+    }
+
+
+    body.light-theme .mr-powered-by-logos {
+        filter: grayscale(100%) invert(85%);
+    }
+
+    body.light-theme .mr-bottom-profile-pic {
+        background-color: var(--mr-nav-color-light);
+    }
+
+    body.light-theme .mr-bottom-bar-button:hover {
+        background-color: var(--mr-color-emphasis-light);
+        color: white !important;
+    }
+
+    body.light-theme .mr-img-thumbnail-title {
+        background: linear-gradient(160deg, transparent 0%, rgba(0,0,0,0.6) 100%);
+    }
+    body.light-theme  .favorite .mr-img-thumbnail-title {
+    background: linear-gradient(160deg, transparent 0%, var(--mr-color-gold) 100%);
+    color: white;
+}
+
+    body.light-theme .mr-development-banner, body.light-theme #bannerDevelopmentMode {
+        color: #0068ff;
+    }
+
+
+    body.light-theme .mr-custom-select, body.light-theme .mr-custom-btn {
+        background-color: var(--mr-nav-color-light);
+        color: black;
+    }
+
+    body.light-theme .mr-custom-text {
+        background-color: var(--mr-nav-color-light);
+        color: black;
+    }

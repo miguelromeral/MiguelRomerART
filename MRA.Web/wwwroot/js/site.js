@@ -12,3 +12,6 @@ function errorLoadingImage(drawingId) {
     console.log(selector);
     $(selector).addClass("show");
 }
+
+
+

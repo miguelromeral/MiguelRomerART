@@ -12,15 +12,26 @@
     @* <link href='https://fonts.googleapis.com/css?family=Kanit' rel='stylesheet'> *@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link href="~/css/light-theme.css" rel="stylesheet" asp-append-version="true" />
     <link href="~/css/normalize.css" rel="stylesheet" asp-append-version="true" />
     <link href="~/css/variables.css rel="stylesheet" asp-append-version="true" />
     <link href="~/css/animations.css" rel="stylesheet" asp-append-version="true" />
     <link rel="stylesheet" href="~/MRA.Web.styles.css" asp-append-version="true" />
     
+
     @await RenderSectionAsync("Styles", required: false)
 </head>
-<body class="dark">
-    <span id="bannerDevelopmentMode" title="Página Web en Desarrollo">
+<body class="transition" data-theme="dark">
+
+
+    <script asp-append-version="true">
+
+        const isLightMode = JSON.parse(localStorage.getItem('light-theme')) || false;
+        if (isLightMode) {
+            document.body.classList.add('light-theme');
+        }
+    </script>
+    <span id="bannerDevelopmentMode" class="mr-development-banner" title="Página Web en Desarrollo">
         EN DESARROLLO 🛠
     </span>
     <div class="container mr-body">
@@ -37,7 +48,7 @@
                 </p>
                 <div class="mb-2" style="display: flex; width: 100%; flex-direction: column; align-items: center;">
                     <div style="display: flex; flex-direction: column; align-items: center;">
-                        <span style="font-weight: 700; color: cyan;">
+                        <span style="font-weight: 700;" class="mr-development-banner">
                             Página Web en DESARROLLO 🛠
                         </span>
                         <span style="padding: 0px 20px; font-size: small;">
@@ -85,8 +96,15 @@
                 Sobre Mí
             </div>
         </a>
+        <a class="mr-bottom-bar-button" asp-area="" asp-controller="Home" asp-action="Settings">
+            <div class="mr-bottom-bar-icon">
+                <i class="bi bi-gear-fill"></i>
+            </div>
+            <div class="mr-bottom-bar-text">
+                Ajustes
+            </div>
+        </a>
     </div>
-
     
     <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
@@ -94,5 +112,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.js" integrity="sha256-v2nySZafnswY87um3ymbg7p9f766IQspC5oqaqZVX2c=" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/4f3ce16e3e.js" crossorigin="anonymous"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
+
 </body>
 </html>

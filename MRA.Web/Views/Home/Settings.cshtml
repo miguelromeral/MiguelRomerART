@@ -1,0 +1,64 @@
+﻿@{
+    ViewData["Title"] = "Ajustes";
+}
+
+@section Styles {
+    <link href="~/css/settings.css" rel="stylesheet" asp-append-version="true" />
+}
+
+<h1>
+    Ajustes
+</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="mr-setting-section">
+                <h4>
+                    Modo Oscuro
+                </h4>
+                <div>
+                    <p>
+                        Ver la página web con colores más claros o más oscuros
+                    </p>
+                </div>
+                @* <div>
+                    <input class="container_toggle" type="checkbox" id="switch" name="mode">
+                    <label for="switch">Toggle</label>
+                </div> *@
+                <button id="theme-switch" class="btn btn-light">Cambiar Tema</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script asp-append-version="true">
+
+        changeLightModeButton();
+
+        function toggleTheme() {
+            const isLightMode = !(JSON.parse(localStorage.getItem('light-theme')) || false);
+            localStorage.setItem('light-theme', isLightMode);
+            document.body.classList.toggle('light-theme');
+            changeLightModeButton();
+        }
+
+        function changeLightModeButton() {
+            const isLightMode = JSON.parse(localStorage.getItem('light-theme')) || false;
+            console.log("Is Light Mode: " + isLightMode);
+            if (isLightMode) {
+                $("#theme-switch").addClass("btn-dark");
+                $("#theme-switch").removeClass("btn-light");
+            } else {
+                $("#theme-switch").addClass("btn-light");
+                $("#theme-switch").removeClass("btn-dark");
+            }
+        }
+
+        // Agregar un evento de clic al botón para cambiar el tema
+        document.getElementById('theme-switch').addEventListener('click', toggleTheme);
+
+    </script>
+}

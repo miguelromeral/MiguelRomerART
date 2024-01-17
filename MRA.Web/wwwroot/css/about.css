@@ -37,6 +37,7 @@ div.mr-references-section{
 }
 
 .mr-ff-container {
+    color: white;
     border: 3px solid white;
     border-radius: 8px;
     background: linear-gradient(135deg, #0b0cae, black);

@@ -2,8 +2,10 @@
 
 :root {
     --mr-background-color: #191919;
+    --mr-background-color-light: white;
     --mr-background-color-secondary: #271e2c;
     --mr-color-box-shadow: #c6b896;
+    --mr-color-emphasis-light: rgb(199 70 215);
     --mr-chat-color: rgb(214 125 225);
     --mr-chat-color-secondary: rgb(82 63 84);
     --mr-chat-color-terciary: #121113;
@@ -14,6 +16,7 @@
     --mr-color-gold: #ffb023;
     --mr-nav-color: rgb(29 11 40);
     --mr-nav-color-a: rgb(15, 12, 17, 0.90);
+    --mr-nav-color-light: rgb(248 215 252);
     --mr-profile-pic-size: 40px;
     --mr-margin-vertical: 10px;
     --mr-border-size: 2px;

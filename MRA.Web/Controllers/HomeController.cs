@@ -35,6 +35,11 @@ namespace MRA.Web.Controllers
             return View();
         }
 
+        public IActionResult Settings()
+        {
+            return View();
+        }
+
         public async Task<IActionResult> About()
         {
             return View(new AboutViewModel() { Inspirations = await _drawingService.GetAllInspirations() });
