@@ -27,6 +27,7 @@
 }
 
 @section Styles {
+    <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
     <link href="~/css/images.css" rel="stylesheet" asp-append-version="true" />
     <link href="~/css/image-details.css" rel="stylesheet" asp-append-version="true" />
 }
@@ -112,7 +113,7 @@
                 <div class="mr-scores">
                     <div class="mr-scores-reviews">
                         <div class="mr-scores-critic-container" title="Puntuación del Artista">
-                            <span class="mr-scores-critic @Model.GetClassScore(drawing.ScoreCritic)">
+                            <span class="mr-scores-critic @DetailsModel.GetClassScore(drawing.ScoreCritic)">
                                 @(drawing.ScoreCritic == 0 ? "--" : drawing.ScoreCritic)
                             </span>
                             <div class="mr-score-image">
@@ -120,7 +121,7 @@
                             </div>
                         </div>
                         <div class="mr-scores-popular" title="Puntuación de los Usuarios">
-                            <span id="spScoreUserVotes" class="mr-scores-popular-span @Model.GetClassScore(drawing.ScorePopularHuman)">
+                            <span id="spScoreUserVotes" class="mr-scores-popular-span @DetailsModel.GetClassScore(drawing.ScorePopularHuman)">
                                 @(drawing.ScorePopularHuman == 0 ? "--" : drawing.ScorePopularHuman)
                             </span>
                             <div id="divScorePopular" class="mr-scores-popular-votes" title="Votos de Usuarios">

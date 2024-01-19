@@ -201,3 +201,34 @@ mr-img-thumbnail-stats-item
 .mr-img-thumbnail-stats-item.likes {
     color: var(--mr-thumbnail-text-likes-color);
 }
+
+
+.mr-img-thumbnail-score-container {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    display: flex;
+    flex-direction: column;
+    font-size: var(--mr-font-size-small);
+    font-weight: var(--mr-font-weight-bold);
+    gap: 4px;
+    transition: var(--mr-transition-time) ease-in-out;
+    z-index: 1
+}
+
+
+.mr-img-thumbnail-score {
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 2px;
+}
+
+.mr-img-thumbnail-score.miguel {
+    border-radius: 4px;
+}
+.mr-img-thumbnail-score.popular {
+    border-radius: 20px;
+}

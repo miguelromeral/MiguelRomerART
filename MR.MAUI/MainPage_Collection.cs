@@ -68,14 +68,16 @@ namespace MR.MAUI
         private void tbCollectionId_Unfocused(object sender, FocusEventArgs e)
         {
             var newValue = ((Entry)sender).Text;
-            if (ListaCollections.Count(x => x.Id.Equals(newValue)) > 0)
-            {
-                tbCollectionId.Text = "";
-                DisplayAlert("ID Usado", $"Ya existe una colección con ID '{newValue}'.\nCambia el ID y vuelve a intentarlo", "Vale");
-            }
-            else
-            {
-                collection.Id = newValue;
+            if (String.IsNullOrEmpty(newValue)) { 
+                if (ListaCollections.Count(x => x.Id.Equals(newValue)) > 0)
+                {
+                    tbCollectionId.Text = "";
+                    DisplayAlert("ID Usado", $"Ya existe una colección con ID '{newValue}'.\nCambia el ID y vuelve a intentarlo", "Vale");
+                }
+                else
+                {
+                    collection.Id = newValue;
+                }
             }
         }
 

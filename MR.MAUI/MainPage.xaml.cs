@@ -114,6 +114,7 @@ namespace MR.MAUI
             ListaDrawings = (await _drawingService.GetAllDrawings()).OrderBy(x => x.Id).ToList();
             ListaDrawingsId = ListaDrawings.Select(x => x.ToString()).ToList();
             cbDrawingId.ItemsSource = ListaDrawingsId;
+            cbSelectOperation.SelectedIndex = 0;
             if (!String.IsNullOrEmpty(id))
             {
                 cbSelectOperation.SelectedIndex = 1;
@@ -162,6 +163,7 @@ namespace MR.MAUI
             cbDrawingProductType.SelectedIndex = drawing.ProductType;
             tbDrawingSpotifyUrl.Text = drawing.SpotifyUrl ?? "";
             cbDrawingPaperSize.SelectedIndex = drawing.Paper;
+            tbDrawingScore.Text = drawing.ScoreCritic.ToString();
 
             tbDrawingTags.Text = String.Join(" ", drawing.Tags);
             

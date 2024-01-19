@@ -12,7 +12,7 @@ namespace MRA.Web.Models.Art
             QueryId = id;
         }
 
-        public string GetClassScore(int score)
+        public static string GetClassScore(int score)
         {
             if(score == 0)
             {

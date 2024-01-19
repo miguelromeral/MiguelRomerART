@@ -429,28 +429,6 @@ div.mr-chat-container {
     transition: var(--mr-transition-time);
 }
 
-.mr-score-bad {
-    background: var(--mr-score-background-color-bad);
-    color: var(--mr-score-text-color-bad);
-}
-
-.mr-score-mild {
-    background-color: var(--mr-score-background-color-mild);
-    color: var(--mr-score-text-color-mild);
-}
-
-.mr-score-good {
-    background-color: var(--mr-score-background-color-good);
-    color: var(--mr-score-text-color-good);
-}
-
-.mr-score-platinum {
-    background: var(--mr-score-background-color-platinum);
-    color: var(--mr-score-text-color-platinum);
-    border: 1px solid var(--mr-score-platinum-blue);
-    text-shadow: 1px 1px 0px var(--mr-score-platinum-blue);
-}
-
 #btnOpenVoteForm {
     position: relative;
     top: 10px;
