@@ -8,7 +8,7 @@
     flex-direction: row;
     align-content: center;
     align-items: center;
-    transition: 0.3s ease-in-out;
+    transition: var(--mr-transition-time) ease-in-out;
     opacity: 1;
 }
 
@@ -41,11 +41,11 @@
     position: absolute;
     top: 2px;
     left: 2px;
-    background-color: white;
+    background-color: var(--mr-thumbnail-date-background-color);
     padding: 0px 8px;
     font-size: x-small;
     border-radius: 30px;
-    color: black;
+    color: var(--mr-text-color-opposite);
     transition: var(--mr-transition-time) ease-in-out;
 }
 
@@ -61,7 +61,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
+    color: var(--mr-text-color-dark);
     font-size: var(--mr-font-size-large);
     flex-direction: column;
     text-align: center;
@@ -70,7 +70,7 @@
 
 .favorite .mr-img-thumbnail-title {
     background: linear-gradient(160deg, transparent 0%, var(--mr-color-gold) 100%);
-    color: white;
+    color: var(--mr-thumbnail-text-color);
 }
 
 .mr-img-thumbnail-subtitle {
@@ -94,7 +94,7 @@
 }
 
 .mr-img-thumbnail.favorite .mr-img-thumbnail-container:hover .mr-img-thumbnail-title {
-    color: white;
+    color: var(--mr-thumbnail-text-color);
     text-shadow: 0 0 4px black;
 }
 
@@ -165,7 +165,7 @@
 }
 
 .favorite .mr-img-thumbnail-title {
-    color: white;
+    color: var(--mr-thumbnail-text-color);
 }
 
 
@@ -173,7 +173,7 @@
     display: flex;
     flex-direction: row;
     align-items: flex-end;
-    color: white;
+    color: var(--mr-thumbnail-text-color);
     z-index: -1;
     position: absolute;
     bottom: 0px;
@@ -190,18 +190,14 @@
 }
 
 .favorite .mr-img-thumbnail-container:hover .mr-img-thumbnail-stats {
-    text-shadow: 0 0 4px white;
+    /*text-shadow: 0 0 4px white;*/
 }
 
 mr-img-thumbnail-stats-item
 {
-    color: white;
+    color: var(--mr-thumbnail-text-color);
 }
 
-.mr-img-thumbnail-stats-item.likes
-{
-    color: var(--mr-color-red-light);
-}
-.favorite .mr-img-thumbnail-stats-item.likes {
-    color: red;
+.mr-img-thumbnail-stats-item.likes {
+    color: var(--mr-thumbnail-text-likes-color);
 }

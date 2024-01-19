@@ -3,7 +3,7 @@
 
 body.light-theme {
     background-color: var(--mr-background-color-light);
-    color: black;
+    color: var(--mr-text-color-light);
 }
 
 
@@ -20,16 +20,16 @@ body.light-theme {
     }
 
     body.light-theme .mr-chat-message {
-        color: white;
+        color: var(--mr-text-color-dark);
     }
 
-        body.light-theme .mr-chat-message.last:after {
-            background-color: white;
-        }
+    body.light-theme .mr-chat-message.last:after {
+        background-color: var(--mr-background-color-light);
+    }
 
     body.light-theme .mr-tag {
         background-color: var(--mr-nav-color-light);
-        color: black;
+        color: var(--mr-text-color-light);
     }
 
     body.light-theme .mr-thanks-message {
@@ -53,22 +53,19 @@ body.light-theme {
     body.light-theme .mr-img-thumbnail-title {
         background: linear-gradient(160deg, transparent 0%, rgba(0,0,0,0.6) 100%);
     }
+
     body.light-theme  .favorite .mr-img-thumbnail-title {
     background: linear-gradient(160deg, transparent 0%, var(--mr-color-gold) 100%);
     color: white;
 }
 
-    body.light-theme .mr-development-banner, body.light-theme #bannerDevelopmentMode {
-        color: #0068ff;
-    }
-
-
-    body.light-theme .mr-custom-select, body.light-theme .mr-custom-btn {
-        background-color: var(--mr-nav-color-light);
-        color: black;
-    }
-
-    body.light-theme .mr-custom-text {
-        background-color: var(--mr-nav-color-light);
-        color: black;
-    }
+:root body.light-theme {
+    --mr-text-color: var(--mr-text-color-light);
+    --mr-text-color-opposite: var(--mr-text-color-dark);
+    --mr-control-background-color: var(--mr-control-background-color-light);
+    --mr-chat-color: var(--mr-chat-color-light);
+    --mr-ff-border-color: #b6b6b6;
+    --mr-development-banner-color: var(--mr-development-banner-color-light);
+    --mr-thumbnail-date-background-color: var(--mr-thumbnail-date-background-color-light);
+    --mr-text-color-not-important: var(--mr-text-color-not-important-light);
+}

@@ -20,5 +20,6 @@ namespace MRA.Services.Firebase.Interfaces
         Task<Drawing> FindDrawingById(string documentId);
         Task UpdateLikes(string documentId);
         DocumentReference GetDbDocumentDrawing(string id);
+        Task UpdateViews(string documentId);
     }
 }

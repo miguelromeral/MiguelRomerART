@@ -1,17 +1,15 @@
 @import 'variables.css';
 
 html {
-  font-size: var(--mr-font-size-default);
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-    transition: var(--mr-transition-time);
-  margin-bottom: 60px;
+    /*transition: var(--mr-transition-time);*/
+    font-size: var(--mr-font-size-default);
+
+    margin-bottom: 60px;
 }
 
 
@@ -49,8 +47,8 @@ body {
         }
 
             .mr-sort-filter-container .mr-sort-filter span, span.mr-suboption-filter {
-                font-size: small;
-                color: grey;
+                font-size: var(--mr-font-size-small);
+                color: var(--mr-text-color-not-important);
             }
 
     .mr-loader-container {
@@ -71,7 +69,7 @@ body {
     height: -webkit-fill-available;
     backdrop-filter: blur(5px);
     text-shadow: 1px 1px 1px black;
-    transition: 0.3s ease-in-out;
+    transition: var(--mr-transition-time) ease-in-out;
     opacity: 0;
 }
 
@@ -80,41 +78,41 @@ body {
     opacity: 1;
 }
 
-    img.mr-loading-icon-pacman {
-        width: 100px;
-        height: auto;
-    }
+img.mr-loading-icon-pacman {
+    width: var(--mr-pacman-size);
+    height: auto;
+}
 
-    span.mr-loader-subtitle {
-        font-style: italic;
-        font-weight: 500;
-    }
+span.mr-loader-subtitle {
+    font-style: italic;
+    font-weight: var(--mr-font-weight-bold);
+}
 
-    .mr-custom-select, .mr-custom-btn {
-        background-color: var(--mr-chat-color-secondary);
-        border: 1px solid var(--mr-chat-color);
-        color: white;
-        height: 30px;
-        display: flex;
-        align-items: center;
-        transition: var(--mr-transition-time) ease-in-out;
-        cursor: pointer;
-    }
+.mr-custom-select, .mr-custom-btn {
+    background-color: var(--mr-control-background-color);
+    border: 1px solid var(--mr-chat-color);
+    color: var(--mr-text-color);
+    height: var(--mr-control-height);
+    display: flex;
+    align-items: center;
+    transition: var(--mr-transition-time) ease-in-out;
+    cursor: pointer;
+}
 
 
 .mr-custom-text {
-    height: 30px;
-    background-color: var(--mr-background-color-secondary);
-    color: white;
+    height: var(--mr-control-height);
+    background-color: var(--mr-control-background-color);
+    color: var(--mr-text-color);
     border-color: var(--mr-chat-color);
 }
 
-        .mr-custom-select:hover, .mr-custom-btn:hover {
-            background-color: var(--mr-chat-color);
-        }
+    .mr-custom-select:hover, .mr-custom-btn:hover {
+        background-color: var(--mr-chat-color);
+    }
 
-        .mr-custom-select.filters {
-        }
+    .mr-custom-select.filters {
+    }
 
     .hide-on-load {
         opacity: 0 !important;
@@ -122,7 +120,7 @@ body {
 
     .nav-link {
         color: var(--mr-background-color) !important;
-        font-weight: bold;
+        font-weight: var(--mr-font-weight-bold);
     }
 
     img.mr-chat-image-miguel.brand {
@@ -135,15 +133,15 @@ body {
     }
 
     /* Profile Picture */
-    img.mr-chat-image-miguel {
-        width: var(--mr-profile-pic-size);
-        height: var(--mr-profile-pic-size);
-        border-radius: 40px;
-        border: var(--mr-border-size) solid var(--mr-chat-color);
-        padding: 2px;
-        user-select: none;
-        pointer-events: none;
-    }
+img.mr-chat-image-miguel {
+    width: var(--mr-profile-pic-size);
+    height: var(--mr-profile-pic-size);
+    border-radius: 40px;
+    border: var(--mr-border-size) solid var(--mr-chat-color);
+    padding: var(--mr-padding-picture);
+    user-select: none;
+    pointer-events: none;
+}
 
 
     /* Each container section of the detail */
@@ -155,37 +153,37 @@ body {
     }
 
     .mr-details-section-title {
-        font-weight: bold;
+        font-weight: var(--mr-font-weight-bold);
         text-transform: uppercase;
-        font-size: smaller;
+        font-size: var(--mr-font-size-small);
     }
 
     .mr-details-section-content {
-        font-weight: lighter;
+        font-weight: var(--mr-font-weight-light);
     }
 
         .mr-details-section-content.large {
-            max-height: 150px;
+            max-height: var(--mr-details-section-large-height);
             width: 100%;
             overflow: auto;
         }
 
-        .mr-details-section-content.capitalize {
-            text-transform: capitalize;
-        }
-
-
-
-    .mr-powered-by-logos {
-        display: flex;
-        flex-wrap: nowrap;
-        flex-direction: row;
-        width: 100%;
-        justify-content: center;
-        height: auto;
-        gap: 10px;
-        align-items: flex-end;
+    .mr-details-section-content.capitalize {
+        text-transform: capitalize;
     }
+
+
+
+.mr-powered-by-logos {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    width: 100%;
+    justify-content: center;
+    height: auto;
+    gap: var(--mr-padding-powered-logos);
+    align-items: flex-end;
+}
 
     .mr-powered-by-logos-azure {
         display: flex;
@@ -198,19 +196,19 @@ body {
         pointer-events: none;
     }
 
-    ::-webkit-scrollbar {
-        width: 8px;
-    }
+::-webkit-scrollbar {
+    width: var(--mr-scrollbar-width);
+}
 
-    ::-webkit-scrollbar-track {
-        background-color: transparent;
-        /*box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);*/
-    }
+::-webkit-scrollbar-track {
+    background-color: var(--mr-scrollbar-background-color);
+    /*box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);*/
+}
 
-    ::-webkit-scrollbar-thumb {
-        background: var(--mr-chat-color);
-        border-radius: 20px;
-    }
+::-webkit-scrollbar-thumb {
+    background: var(--mr-scrollbar-color);
+    border-radius: var(--mr-scrollbar-border-radius);
+}
 
 
 .dropdown-menu {
@@ -224,7 +222,7 @@ body {
 
 
 .mr-body {
-    padding-bottom: 50px;
+    padding-bottom: var(--mr-bottom-bar-height);
     padding-top: 12px;
 }
 
@@ -237,19 +235,20 @@ body {
     display: flex;
     justify-content: space-around;
     padding: 4px 0px;
-    height: 50px;
+    height: var(--mr-bottom-bar-height);
     align-items: center;
     flex-wrap: nowrap;
     flex-direction: row;
     backdrop-filter: blur(5px);
     background-color: var(--mr-nav-color-a);
     z-index: 1000;
+    animation: none;
 }
 
 .mr-bottom-bar-button {
     text-decoration: none;
     border-radius: 5px;
-    transition: background-color 0.5s ease;
+    transition: background-color var(--mr-transition-time) ease;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -259,9 +258,9 @@ body {
     justify-content: center;
 }
 
-    .mr-bottom-bar-button:hover {
-        background-color: black;
-    }
+.mr-bottom-bar-button:hover {
+    background-color: var(--mr-bottom-bar-button-color-hover);
+}
 
 .mr-bottom-bar-icon {
     font-size: x-large;
@@ -270,13 +269,13 @@ body {
 }
 
 .mr-bottom-bar-text {
-    font-size: small;
+    font-size: var(--mr-font-size-small);
     position: relative;
     bottom: 5px;
 }
 
 .mr-bottom-profile-pic {
-    background-color: black;
+    background-color: var(--mr-nav-color-a);
     border-radius: 40px;
     position: relative;
 }
@@ -295,7 +294,7 @@ body {
 @media screen and (min-width: 600px) {
 
     .mr-body {
-        padding-left: 130px;
+        padding-left: var(--mr-bottom-bar-width);
         padding-bottom: 0px;
     }
 
@@ -308,13 +307,14 @@ body {
         left: 0;
         top: 0;
         height: 100%;
-        min-width: 130px;
+        min-width: var(--mr-bottom-bar-width);
         justify-content: flex-start;
         padding-top: 5%;
         padding-bottom: 30%;
         background-color: var(--mr-chat-color-terciary);
         max-width: 12%;
         gap: 4px;
+        animation: slide-right .5s ease-out;
     }
 
     .mr-bottom-bar-button {
@@ -333,7 +333,7 @@ body {
     .mr-bottom-bar-icon {
         top: 0px;
         position: relative;
-        width: 30px;
+        width: var(--mr-bottom-bar-icon-width);
     }
 
     .mr-bottom-bar-text {
@@ -356,5 +356,5 @@ body {
 }
 
 .mr-development-banner {
-    color: cyan;
+    color: var(--mr-development-banner-color);
 }

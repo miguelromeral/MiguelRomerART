@@ -99,15 +99,25 @@ namespace MRA.Services
             drawings.ForEach(d => d.UrlBase = _azureStorageService.BlobURL);
         }
 
-        public async Task<Drawing> FindDrawingById(string documentId)
+        public async Task<Drawing> FindDrawingById(string documentId, bool cache = true)
         {
-            return await GetOrSetAsync<Drawing>($"drawing_{documentId}", async () =>
+            //await _firestoreService.UpdateViews(documentId);
+            if (cache)
+            {
+                return await GetOrSetAsync<Drawing>($"drawing_{documentId}", async () =>
+                {
+                    return await _firestoreService.FindDrawingById(documentId);
+                }, TimeSpan.FromSeconds(_secondsCache));
+            }
+            else
             {
                 return await _firestoreService.FindDrawingById(documentId);
-            }, TimeSpan.FromSeconds(_secondsCache));
-        }   
-            
-            
+            }
+        }
+
+        public async Task UpdateViews(string documentId) => await _firestoreService.UpdateViews(documentId);
+
+
         public async Task UpdateLikes(string documentId) => await _firestoreService.UpdateLikes(documentId);
 
         public async Task<bool> ExistsBlob(string rutaBlob) => await _azureStorageService.ExistsBlob(rutaBlob);

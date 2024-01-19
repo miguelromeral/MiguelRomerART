@@ -11,20 +11,13 @@ html {
     -webkit-text-size-adjust: 100%; /* 2 */
 }
 
-/* Sections
-   ========================================================================== */
-
-/**
- * Remove the margin in all browsers.
- */
-
 body {
     margin: 0;
     font-family: var(--mr-font-family);
     /*font-family: 'Kanit', sans-serif;*/
     background: var(--mr-background-color);
-    color: white;
-    font-weight: 300;
+    color: var(--mr-text-color);
+    font-weight: var(--mr-font-weight-medium);
 }
 
 main {
@@ -156,13 +149,12 @@ nav {
 }
 
 nav a, .nav-link, a {
-    color: var(--mr-chat-color) !important;
+    color: var(--mr-link-color) !important;
     transition: var(--mr-transition-time) ease-in-out;
-    font-weight: bold;
+    font-weight: var(--mr-font-weight-bold);
 }
 
 nav a:hover, .nav-link:hover, a:hover {
-    /*text-shadow: 0px 0px 12px black;*/
     color: var(--mr-color-gold) !important;
 }
 

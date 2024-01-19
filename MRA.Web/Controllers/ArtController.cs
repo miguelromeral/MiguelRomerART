@@ -81,7 +81,7 @@ namespace MRA.Web.Controllers
         public async Task<IActionResult> Details(string id)
         {
             var model = new DetailsModel(id);
-            model.Drawing = await _drawingService.FindDrawingById(id);
+            model.Drawing = await _drawingService.FindDrawingById(id, false);
             return View(model);
         }
 

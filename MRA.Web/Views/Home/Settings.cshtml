@@ -2,9 +2,6 @@
     ViewData["Title"] = "Ajustes";
 }
 
-@section Styles {
-    <link href="~/css/settings.css" rel="stylesheet" asp-append-version="true" />
-}
 
 <h1>
     Ajustes
@@ -47,15 +44,15 @@
                     <div class="col-sm-12 col-md-4 mr-setting-change-value">
 
                         <select id="fontFamilySelector" class="mr-custom-select form-select form-select-sm" onchange="eventChangeFontFamily()">
-                            <option value="var(--mr-font-family-default)">Predeterminada</option>
-                            <option value="var(--mr-font-family-sans-serif)">Estándar</option>
+                            <option value="josefine">Josefine (Por defecto)</option>
+                            <option value="sans-serif">Sans Serif (Estándar)</option>
                         </select>
 
                     </div>
                 </div>
             </div>
         </div>
-
+        
         <div class="mr-setting-section">
             <div class="container">
                 <div class="row">
@@ -73,6 +70,30 @@
                             <option value="small">Pequeño</option>
                             <option value="medium">Mediano (por defecto)</option>
                             <option value="large">Grande</option>
+                        </select>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mr-setting-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12 col-md-8">
+                        <h5>
+                            Peso de la Fuente
+                        </h5>
+                        <p>
+                            Cambia la fuente de tal manera que se pueda ver o más negrita o más ligera.
+                        </p>
+                    </div>
+                    <div class="col-sm-12 col-md-4 mr-setting-change-value">
+
+                        <select id="fontWeightSelector" class="mr-custom-select form-select form-select-sm" onchange="cambiarPeso()">
+                            <option value="light">Ligera</option>
+                            <option value="normal">Normal (por defecto)</option>
+                            <option value="bold">Negrita</option>
                         </select>
 
                     </div>
@@ -117,5 +138,6 @@
         changeLightModeButton();
         changeFontSize();
         changeFontFamily();
+        changeFontWeight();
     </script>
 }

@@ -3,6 +3,7 @@ var localStorageKeys = {
     lightTheme: "light-theme",
     fontSize: "font-size",
     fontFamily: "font-family",
+    fontWeight: "font-weight",
 }
 
 function getCacheItem(key, defaultValue) {
@@ -24,29 +25,52 @@ function loadConfig() {
 
     const tamanioGuardado = getCacheItem(localStorageKeys.fontSize, "medium");
     if (tamanioGuardado) {
-
-        var sizeSmall = "small";
-        var sizeLarge = "large";
-
         switch (tamanioGuardado) {
             case "small":
-                sizeSmall = "x-small";
-                sizeLarge = "medium";
+                document.body.classList.add('mr-setting-text-small');
+                document.body.classList.remove('mr-setting-text-large');
+                break;
+            case "medium":
+                document.body.classList.remove('mr-setting-text-small');
+                document.body.classList.remove('mr-setting-text-large');
                 break;
             case "large":
-                sizeSmall = "medium";
-                sizeLarge = "x-large";
+                document.body.classList.remove('mr-setting-text-small');
+                document.body.classList.add('mr-setting-text-large');
                 break;
         }
-
-        document.documentElement.style.setProperty('--mr-font-size-small', sizeSmall);
-        document.documentElement.style.setProperty('--mr-font-size-default', tamanioGuardado);
-        document.documentElement.style.setProperty('--mr-font-size-large', sizeLarge);
     }
 
-    const fontFamily = getCacheItem(localStorageKeys.fontFamily, "var(--mr-font-family-default)");
+    const fontFamily = getCacheItem(localStorageKeys.fontFamily, "josefine");
     if (fontFamily) {
-        document.documentElement.style.setProperty('--mr-font-family', fontFamily);
+        switch (fontFamily) {
+            case "josefine":
+                document.body.classList.add('mr-setting-font-josefine');
+                document.body.classList.remove('mr-setting-font-sans-serif');
+                break;
+            case "sans-serif":
+                document.body.classList.remove('mr-setting-font-josefine');
+                document.body.classList.add('mr-setting-font-sans-serif');
+                break;
+        }
+    }
+
+    const fontWeight = getCacheItem(localStorageKeys.fontWeight, "normal");
+    if (fontWeight) {
+        switch (fontWeight) {
+            case "light":
+                document.body.classList.add('mr-setting-font-weight-light');
+                document.body.classList.remove('mr-setting-font-weight-bold');
+                break;
+            case "normal":
+                document.body.classList.remove('mr-setting-font-weight-light');
+                document.body.classList.remove('mr-setting-font-weight-bold');
+                break;
+            case "bold":
+                document.body.classList.remove('mr-setting-font-weight-light');
+                document.body.classList.add('mr-setting-font-weight-bold');
+                break;
+        }
     }
 }
 
@@ -95,5 +119,20 @@ function eventChangeFontFamily() {
     loadConfig();
 }
 function changeFontFamily() {
-    $("#fontFamilySelector").val(getCacheItem(localStorageKeys.fontFamily, "var(--mr-font-family-default)"));
+    $("#fontFamilySelector").val(getCacheItem(localStorageKeys.fontFamily, "josefine"));
+}
+
+
+function cambiarPeso() {
+    var selector = document.getElementById('fontWeightSelector');
+    var tamanio = selector.options[selector.selectedIndex].value;
+    
+    // Guardar la preferencia en localStorage para recordarla en futuras visitas
+    setCacheItem(localStorageKeys.fontWeight, tamanio);
+
+    loadConfig();
+}
+
+function changeFontWeight() {
+    $("#fontWeightSelector").val(getCacheItem(localStorageKeys.fontWeight, "normal"));
 }

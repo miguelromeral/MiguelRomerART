@@ -1,7 +1,9 @@
-﻿
+﻿@import 'variables.css';
+
+
 /* Placeholder when the image couldn't be loaded */
 .mr-error-load-placeholder {
-    transition: 0.2s ease-out;
+    transition: var(--mr-transition-time) ease-out;
     display: none;
     position: absolute;
     width: 100%;
@@ -22,7 +24,7 @@
 
 /* Text of the error placeholder */
 .mr-error-load-placeholder .subtitle {
-    font-size: small;
+    font-size: var(--mr-font-size-small);
 }
 
 /* Show the placeholder when error */

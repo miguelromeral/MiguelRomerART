@@ -14,3 +14,34 @@
     justify-content: flex-start;
     align-content: stretch;
 }
+
+:root body.mr-setting-text-small {
+    --mr-font-size-small: x-small;
+    --mr-font-size-default: small;
+    --mr-font-size-large: medium;
+}
+
+:root body.mr-setting-text-large {
+    --mr-font-size-small: medium;
+    --mr-font-size-default: large;
+    --mr-font-size-large: x-large;
+}
+
+
+:root body.mr-setting-font-josefine {
+    --mr-font-family: var(--mr-font-family-default);
+}
+:root body.mr-setting-font-sans-serif {
+    --mr-font-family: var(--mr-font-family-sans-serif);
+}
+
+:root body.mr-setting-font-weight-light {
+    --mr-font-weight-light: lighter;
+    --mr-font-weight-medium: light;
+    --mr-font-weight-bold: normal;
+}
+:root body.mr-setting-font-weight-bold {
+    --mr-font-weight-light: normal;
+    --mr-font-weight-medium: bold;
+    --mr-font-weight-bold: bolder;
+}

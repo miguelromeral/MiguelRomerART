@@ -4,9 +4,12 @@
     --mr-background-color: #191919;
     --mr-background-color-light: white;
     --mr-background-color-secondary: #271e2c;
+    --mr-text-color-terciary: rgb(199 70 215);
     --mr-color-box-shadow: #c6b896;
     --mr-color-emphasis-light: rgb(199 70 215);
-    --mr-chat-color: rgb(214 125 225);
+    --mr-chat-color-dark: rgb(214 125 225);
+    --mr-chat-color-light: rgb(214 125 225);
+    --mr-chat-color: var(--mr-chat-color-dark);
     --mr-chat-color-secondary: rgb(82 63 84);
     --mr-chat-color-terciary: #121113;
     --mr-chat-color-likes: rgb(0 167 68);
@@ -25,12 +28,77 @@
     --mr-border-radius-image: calc(var(--mr-border-radius) - var(--mr-padding-btw-border-image));
     --mr-transition-time: 0.4s;
     --mr-gap-icon-text: 5px;
+    --mr-carousel-max-height: 400px;
+    --mr-pacman-size: 30%;
+    --mr-control-height: 30px;
+    --mr-padding-picture: 2px;
+    --mr-details-section-large-height: 150px;
+    --mr-padding-powered-logos: 10px;
+    --mr-scrollbar-width: 8px;
+    --mr-scrollbar-border-radius: 20px;
+    --mr-scrollbar-color: var(--mr-chat-color);
+    --mr-scrollbar-background-color: transparent;
+    --mr-bottom-bar-height: 50px;
+    --mr-bottom-bar-button-color-hover: black;
+    --mr-bottom-bar-width: 130px;
+    --mr-bottom-bar-icon-width: 30px;
+    --mr-development-banner-color-dark: cyan;
+    --mr-development-banner-color-light: #0068ff;
+    --mr-development-banner-color: var(--mr-development-banner-color-dark);
+    --mr-link-color: var(--mr-chat-color);
+    --mr-thumbnail-text-color: white;
+    --mr-thumbnail-text-likes-color: var(--mr-color-red-light);
+    --mr-background-color-fullscreen-image: rgba(0, 0, 0, 0.8);
+    --mr-spacing-img-buttons: 10px;
+    --mr-chat-margin-vertical: 5px;
+}
+
+/* FINAL FANTASY VII */
+:root {
+    --mr-ff-title-color: #04e5e7;
+    --mr-ff-materia-size: 20px;
+    --mr-ff-border-size: 3px;
+    --mr-ff-border-radius: 8px;
+    --mr-ff-text-color: white;
+    --mr-ff-border-color: white;
+    --mr-ff-hand-animation-time: 0.3s;
+    --mr-ff-hand-width: 32px;
+    --mr-ff-progress-bar-height: 2px;
+    --mr-ff-progress-bar-width: 80px;
+    --mr-ff-progress-bar-total-color: black;
+    --mr-ff-progress-bar-total-health: linear-gradient(90deg, #0d7ff7, white);
+    --mr-ff-progress-bar-total-magic: linear-gradient(90deg, rgb(4 255 130), white);
+    --mr-ff-materia-summon-border: #fd9da2;
+    --mr-ff-materia-summon-color: radial-gradient(circle at 30% 30%, white 0%, #652e2d 5%, #340400 20%, #ab1d1b 60%, var(--mr-ff-materia-summon-border) 100%);
+    --mr-ff-materia-support-border: #75c4ff;
+    --mr-ff-materia-support-color: radial-gradient(circle at 30% 30%, white 0%, #061194 5%, #000d33 20%, #0255fd 60%, var(--mr-ff-materia-support-border) 100%);
+    --mr-ff-materia-magic-border: #8cfe81;
+    --mr-ff-materia-magic-color: radial-gradient(circle at 30% 30%, white 0%, #127d14 5%, #081b0b 20%, #12b408 60%, var(--mr-ff-materia-magic-border) 100%);
+}
+
+/* Settings */
+:root {
+    --mr-font-family-default: 'Josefin Sans', sans-serif;
+    --mr-font-family-sans-serif: sans-serif;
+    --mr-font-family: var(--mr-font-family-default);
+    --mr-font-weight-light: light;
+    --mr-font-weight-medium: normal;
+    --mr-font-weight-bold: bold;
+    --mr-text-color-dark: white;
+    --mr-text-color-light: black;
+    --mr-text-color: var(--mr-text-color-dark);
+    --mr-text-color-opposite: var(--mr-text-color-light);
+    --mr-control-background-color-dark: var(--mr-chat-color-secondary);
+    --mr-control-background-color-light: var(--mr-nav-color-light);
+    --mr-control-background-color: var(--mr-control-background-color-dark);
+    --mr-thumbnail-date-background-color-dark: white;
+    --mr-thumbnail-date-background-color-light: black;
+    --mr-thumbnail-date-background-color: var(--mr-thumbnail-date-background-color-dark);
+    /* Font Size */
     --mr-font-size-large: large;
     --mr-font-size-default: medium;
     --mr-font-size-small: small;
-    --mr-ff-title-color: #04e5e7;
-    --mr-carousel-max-height: 400px;
-    --mr-font-family-default: 'Josefin Sans', sans-serif;
-    --mr-font-family-sans-serif: sans-serif;
-    --mr-font-family: var(--mr-font-family-default); 
+    --mr-text-color-not-important-dark: rgb(209 149 217);
+    --mr-text-color-not-important-light: rgb(143 58 155);
+    --mr-text-color-not-important: var(--mr-text-color-not-important-dark);
 }
