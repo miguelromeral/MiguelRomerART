@@ -84,6 +84,18 @@ namespace MRA.Services
                     case "views-desc":
                         drawings = drawings.OrderByDescending(x => x.Views).ToList();
                         break;
+                    case "scorem-desc":
+                        drawings = drawings.OrderByDescending(x => x.ScoreCritic).ToList();
+                        break;
+                    case "scorem-asc":
+                        drawings = drawings.OrderBy(x => x.ScoreCritic).ToList();
+                        break;
+                    case "scoreu-desc":
+                        drawings = drawings.OrderByDescending(x => x.ScorePopular).ToList();
+                        break;
+                    case "scoreu-asc":
+                        drawings = drawings.OrderBy(x => x.ScorePopular).ToList();
+                        break;
                     default:
                         drawings = drawings.OrderByDescending(x => x.Date).ToList();
                         break;
@@ -119,6 +131,7 @@ namespace MRA.Services
 
 
         public async Task UpdateLikes(string documentId) => await _firestoreService.UpdateLikes(documentId);
+        public async Task<VoteSubmittedModel> Vote(string documentId, int score) => await _firestoreService.Vote(documentId, score);
 
         public async Task<bool> ExistsBlob(string rutaBlob) => await _azureStorageService.ExistsBlob(rutaBlob);
 

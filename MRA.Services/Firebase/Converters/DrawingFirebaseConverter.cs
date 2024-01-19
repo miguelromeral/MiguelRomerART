@@ -46,6 +46,9 @@ namespace MRA.Services.Firebase.Converters
                 Software = drawingDocument.software,
                 Paper = drawingDocument.paper,
                 SpotifyUrl = drawingDocument.spotify_url,
+                ScorePopular = drawingDocument.score_popular,
+                ScoreCritic = drawingDocument.score_critic,
+                VotesPopular = drawingDocument.votes_popular,
                 Tags = drawingDocument.tags ?? new List<string>()
             };
         }
@@ -75,7 +78,10 @@ namespace MRA.Services.Firebase.Converters
                 software = drawing.Software,
                 paper = drawing.Paper,
                 spotify_url = drawing.SpotifyUrl,
-                tags = drawing.Tags
+                tags = drawing.Tags,
+                votes_popular = drawing.VotesPopular,
+                score_critic = drawing.ScoreCritic,
+                score_popular = drawing.ScorePopular
             };
         }
     }

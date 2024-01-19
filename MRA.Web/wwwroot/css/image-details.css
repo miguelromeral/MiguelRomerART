@@ -9,7 +9,6 @@
 
 /* First column, including the image and the likes */
 .mr-first-column-image {
-    
 }
 
 /* Title of the image */
@@ -60,12 +59,12 @@
             max-width: 100%;
             max-height: 100%;
         }
-     
-        
-        /* If the image is a favorite, change border color */
-        .mr-img-full-container.favorite {
-            border-color: var(--mr-color-gold);
-        }
+
+
+    /* If the image is a favorite, change border color */
+    .mr-img-full-container.favorite {
+        border-color: var(--mr-color-gold);
+    }
 
 /* Favorite Icon */
 #iFavoriteIcon {
@@ -112,13 +111,13 @@
 
 
 
-    #divIconFullScreen:hover {
-        color: white;
-        cursor: pointer;
-    }
+#divIconFullScreen:hover {
+    color: white;
+    cursor: pointer;
+}
 
-    /* Watermark */
-    /*.mr-img-full-container::after {
+/* Watermark */
+/*.mr-img-full-container::after {
     content: "MiguelRomeral";
     position: absolute;
     top: 10%;
@@ -132,7 +131,7 @@
     color: rgba(255, 255, 255, 0.5);
     text-shadow: 0px 0px 5px #ffffff85;
 }*/
-    /* Full resolution image */
+/* Full resolution image */
 img.mr-img-full {
     width: 100%;
     height: auto;
@@ -158,11 +157,11 @@ img.mr-img-full {
     transition: var(--mr-transition-time) ease-in;
 }
 
-/* Like Button disabled */
-#btnCheer:disabled {
-    animation: none;
-    background-color: black;
-}
+    /* Like Button disabled */
+    #btnCheer:disabled {
+        animation: none;
+        background-color: black;
+    }
 
 /* Container of the likes and views */
 .mr-stats-container {
@@ -183,10 +182,10 @@ img.mr-img-full {
     gap: var(--mr-gap-icon-text);
 }
 
-/* Item of the likes */
-.mr-stats-item.likes {
-    color: var(--mr-color-red-light);
-}
+    /* Item of the likes */
+    .mr-stats-item.likes {
+        color: var(--mr-color-red-light);
+    }
 
 /* Container of the like count, for animation purposes*/
 #divContainerLikes {
@@ -194,7 +193,6 @@ img.mr-img-full {
 }
 
 // https://stackoverflow.com/questions/19400183/how-to-style-chat-bubble-in-iphone-classic-style-using-css-only
-
 /* Column that displays the messages */
 .mr-social-container {
     display: flex;
@@ -246,10 +244,10 @@ div.mr-chat-container {
     transition: var(--mr-transition-time) ease-in-out;
 }
 
-/* Space from the last message to line up the image at its right side */
-.mr-chat-message.last {
-    margin-bottom: 20px !important;
-}
+    /* Space from the last message to line up the image at its right side */
+    .mr-chat-message.last {
+        margin-bottom: 20px !important;
+    }
 
 .mr-chat-icon {
     margin-right: 10px;
@@ -310,28 +308,29 @@ div.mr-chat-container {
     border: 2px solid var(--mr-chat-color-dislikes);
 }
 
-.mr-chat-row.dislikes .mr-chat-message:hover {
-    background-color: var(--mr-chat-color-dislikes);
-    color: var(--mr-text-color-opposite);
-}
+    .mr-chat-row.dislikes .mr-chat-message:hover {
+        background-color: var(--mr-chat-color-dislikes);
+        color: var(--mr-text-color-opposite);
+    }
 
 @media (min-width: 992px) {
     .mr-row-pros-cons {
         flex-direction: column !important;
         align-content: flex-start !important;
     }
+
         .mr-row-pros-cons > div {
             flex: 0 !important;
         }
 }
 
-    @media (min-width: 768px) {
-        .mr-row-pros-cons {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: nowrap;
-            align-items: flex-start;
-        }
+@media (min-width: 768px) {
+    .mr-row-pros-cons {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: flex-start;
+    }
 
         .mr-row-pros-cons > div {
             flex: 1;
@@ -362,4 +361,158 @@ div.mr-chat-container {
     z-index: 10000;
     border: 1px solid var(--mr-chat-color-secondary);
     font-weight: var(--mr-font-weight-bold);
+}
+
+
+.mr-scores {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    width: 100%;
+    margin: 10px 0px;
+    user-select: none;
+}
+
+.mr-scores-reviews {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    align-content: flex-start;
+    flex-wrap: nowrap;
+    width: 100%;
+    justify-content: space-evenly;
+}
+
+.mr-scores-critic, .mr-scores-popular-span {
+    padding: 8px;
+    height: 60px;
+    width: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--mr-score-background-color-none);
+    color: var(--mr-text-color-opposite);
+    font-size: xx-large;
+    font-weight: var(--mr-font-weight-bold);
+}
+
+.mr-scores-critic-container {
+    position: relative;
+}
+
+.mr-scores-critic {
+    border-radius: 8px;
+}
+
+.mr-scores-popular-span {
+    border-radius: 30px;
+    transition: var(--mr-transition-time);
+}
+
+.mr-scores-popular {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+}
+
+.mr-scores-popular-votes {
+    font-size: var(--mr-font-size-small);
+    color: var(--mr-text-color-not-important);
+    padding: 0px 5px;
+    border-radius: 20px;
+    transition: var(--mr-transition-time);
+}
+
+#spNumberUserVotes {
+    transition: var(--mr-transition-time);
+}
+
+.mr-score-bad {
+    background: var(--mr-score-background-color-bad);
+    color: var(--mr-score-text-color-bad);
+}
+
+.mr-score-mild {
+    background-color: var(--mr-score-background-color-mild);
+    color: var(--mr-score-text-color-mild);
+}
+
+.mr-score-good {
+    background-color: var(--mr-score-background-color-good);
+    color: var(--mr-score-text-color-good);
+}
+
+.mr-score-platinum {
+    background: var(--mr-score-background-color-platinum);
+    color: var(--mr-score-text-color-platinum);
+    border: 1px solid var(--mr-score-platinum-blue);
+    text-shadow: 1px 1px 0px var(--mr-score-platinum-blue);
+}
+
+#btnOpenVoteForm {
+    position: relative;
+    top: 10px;
+    border-radius: 30px;
+}
+
+#btnVote {
+    padding: 5px 10px;
+    border-radius: 30px;
+    animation-delay: 1s;
+}
+
+#cardVoteForm {
+    background-color: var(--mr-vote-card-background-color);
+    color: var(--mr-text-color);
+}
+
+#voteForm {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+}
+
+#divLabelVote {
+    display: flex;
+    justify-content: space-between;
+}
+
+#spScoreUser {
+    flex-grow: 0;
+    font-weight: var(--mr-font-weight-bold);
+    font-size: var(--mr-font-size-large);
+    border: 1px solid black;
+    /* padding: 0px 5px; */
+    border-radius: 4px;
+    width: 50px;
+    text-align: center;
+}
+
+#spScoreUser.bad {
+    color: var(--mr-score-background-color-bad);
+    border-color: var(--mr-score-background-color-bad);
+}
+
+#spScoreUser.mild {
+    color: var(--mr-score-background-color-mild);
+    border-color: var(--mr-score-background-color-mild);
+}
+
+#spScoreUser.good {
+    color: var(--mr-score-background-color-good);
+    border-color: var(--mr-score-background-color-good);
+}
+
+#spScoreUser.platinum {
+    color: var(--mr-score-platinum-blue);
+    border-color: var(--mr-score-platinum-blue);
+}
+
+.mr-score-image {
+    position: absolute;
+    bottom: -20px;
+    right: -20px;
 }

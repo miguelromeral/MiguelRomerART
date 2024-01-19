@@ -97,6 +97,12 @@ namespace MRA.Web.Controllers
             await _drawingService.UpdateLikes(id);
         }
 
+        [HttpPost]
+        public async Task<VoteSubmittedModel> Vote(string id, int score)
+        {
+            return await _drawingService.Vote(id, score);
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

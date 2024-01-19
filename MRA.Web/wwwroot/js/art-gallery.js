@@ -8,6 +8,20 @@ var CHEER_FORM_ID = "cheerForm";
 
 var timeMsDelayLike = 1000;
 
+var filtersControls = {
+    tags: "#tbTags",
+    type: "#sFilterType",
+    product: "#sFilterProduct",
+    productName: "#sFilterProductName",
+    collection: "#sFilterCollection",
+    characterName: "#sFilterCharacterName",
+    model: "#sFilterModel",
+    software: "#sFilterSoftware",
+    paper: "#sFilterPaper",
+    favorite: "#flexSwitchCheckChecked",
+    sortby: "#sFilterSortBy",
+}
+
 function sendFormFilterGallery() {
     changeBasicArtUrl();
 
@@ -17,17 +31,17 @@ function sendFormFilterGallery() {
 function changeBasicArtUrl() {
 
     changeArtUrl(
-        $("#tbTags").val(),
-        $("#sFilterType").val(),
-        $("#sFilterProduct").val(),
-        $("#sFilterProductName").val(),
-        $("#sFilterCollection").val(),
-        $("#sFilterCharacterName").val(),
-        $("#sFilterModel").val(),
-        $("#sFilterSoftware").val(),
-        $("#sFilterPaper").val(),
-        $("#flexSwitchCheckChecked").prop("checked"),
-        $("#sFilterSortBy").val(),
+        $(filtersControls.tags).val(),
+        $(filtersControls.type).val(),
+        $(filtersControls.product).val(),
+        $(filtersControls.productName).val(),
+        $(filtersControls.collection).val(),
+        $(filtersControls.characterName).val(),
+        $(filtersControls.model).val(),
+        $(filtersControls.software).val(),
+        $(filtersControls.paper).val(),
+        $(filtersControls.favorite).prop("checked"),
+        $(filtersControls.sortby).val(),
         false);
 }
 
@@ -37,17 +51,17 @@ function changeArtUrl(textQuery, type, productType, productName, collection, cha
     
     var queryParams = [];
 
-    queryParams.push(setFilterValue("#tbTags", "TextQuery", textQuery));
-    queryParams.push(setFilterValue("#sFilterType", "Type", type, [-1]));
-    queryParams.push(setFilterValue("#sFilterProduct", "ProductType", productType, [-1]));
-    queryParams.push(setFilterValue("#sFilterProductName", "ProductName", productName));
-    queryParams.push(setFilterValue("#sFilterCollection", "Collection", collection));
-    queryParams.push(setFilterValue("#sFilterCharacterName", "CharacterName", characterName));
-    queryParams.push(setFilterValue("#sFilterModel", "ModelName", modelName));
-    queryParams.push(setFilterValue("#sFilterSoftware", "Software", software, [0]));
-    queryParams.push(setFilterValue("#sFilterPaper", "Paper", paper, [0]));
-    queryParams.push(setFilterValue("#flexSwitchCheckChecked", "Favorites", favorites, [false], true));
-    queryParams.push(setFilterValue("#sFilterSortBy", "Sortby", sortby, ["date-desc"]));
+    queryParams.push(setFilterValue(filtersControls.tags, "TextQuery", textQuery));
+    queryParams.push(setFilterValue(filtersControls.type, "Type", type, [-1]));
+    queryParams.push(setFilterValue(filtersControls.product, "ProductType", productType, [-1]));
+    queryParams.push(setFilterValue(filtersControls.productName, "ProductName", productName));
+    queryParams.push(setFilterValue(filtersControls.collection, "Collection", collection));
+    queryParams.push(setFilterValue(filtersControls.characterName, "CharacterName", characterName));
+    queryParams.push(setFilterValue(filtersControls.model, "ModelName", modelName));
+    queryParams.push(setFilterValue(filtersControls.software, "Software", software, [0]));
+    queryParams.push(setFilterValue(filtersControls.paper, "Paper", paper, [0]));
+    queryParams.push(setFilterValue(filtersControls.favorite, "Favorites", favorites, [false], true));
+    queryParams.push(setFilterValue(filtersControls.sortby, "Sortby", sortby, ["date-desc"]));
 
 
     queryParams = queryParams.filter(x => x != null);
@@ -86,28 +100,26 @@ function setFilterValue(querySelector, name, value, ommitValues, isSwitch) {
 }
 
 function resetFilters() {
-    $("#sFilterType").val(-1);
-    $("#sFilterProduct").val(-1);
-    $("#sFilterCharacterName").val("");
-    $("#sFilterProductName").val("");
-    $("#tbTags").val("");
-    $("#sFilterModel").val("");
-    $("#sFilterSoftware").val(0);
-    $("#sFilterCollection").val("");
-    $("#sFilterPaper").val(0);
-    $("#flexSwitchCheckChecked").prop("checked", false);
+    $(filtersControls.tags).val("");
+    $(filtersControls.type).val(-1);
+    $(filtersControls.product).val(-1);
+    $(filtersControls.productName).val("");
+    $(filtersControls.collection).val("");
+    $(filtersControls.characterName).val("");
+    $(filtersControls.model).val("");
+    $(filtersControls.software).val(0);
+    $(filtersControls.paper).val(0);
+    $(filtersControls.favorite).prop("checked", false);
     changeBasicArtUrl();
 }
 
 function onBeginFilter() {
     $("#artGallery").addClass("loading");
-    //$("#" + LOADING_ICON_ART_GALLERY).show();
     $("#" + LOADING_ICON_ART_GALLERY).addClass("loading");
 }
 
 function onCompleteFilter() {
     $("#" + LOADING_ICON_ART_GALLERY).removeClass("loading");
-    //$("#" + LOADING_ICON_ART_GALLERY).hide();
     $("#artGallery").removeClass("loading");
 }
 
@@ -286,27 +298,94 @@ function showHearts() {
 }   
 
 function generateRedTone() {
-    // Genera un valor aleatorio para la componente roja (R)
     var componenteRoja = Math.floor(Math.random() * 192 + 64);
-
-    // Establece las componentes verde (G) y azul (B) en cero
     var componenteVerde = 0;
     var componenteAzul = 0;
-
     return 'rgb(' + componenteRoja + ',' + componenteVerde + ',' + componenteAzul + ')';
 }
 
 function generateHeartSize() {
-    // Genera un valor aleatorio para la componente roja (R)
     var pixels = Math.floor(Math.random() * 20 + 10);
-    
     return pixels + "px";
 }
 
 function capturarEnter(event) {
     if (event.key === "Enter") {
         event.preventDefault();
-        //console.log("Se presionó la tecla Enter (evento prevenido)");
         sendFormFilterGallery();
     }
+}
+
+function onChangeRangeVote(event) {
+    var score = event.target.value;
+    $("#spScoreUser").text(score);
+    
+    $("#spScoreUser").removeClass("bad");
+    $("#spScoreUser").removeClass("mild");
+    $("#spScoreUser").removeClass("good");
+    $("#spScoreUser").removeClass("platinum");
+
+    if (score < 50) {
+        $("#spScoreUser").addClass("bad");
+    }
+    else if (score < 70) {
+        $("#spScoreUser").addClass("mild");
+    }
+    else if (score < 95) {
+        $("#spScoreUser").addClass("good");
+    }
+    else if (score < 101) {
+        $("#spScoreUser").addClass("platinum");
+    }
+}
+
+
+function voteDrawing(event) {
+    $("#voteForm").submit();
+    $("#btnVote").attr("disabled", true);
+}
+function onBeginVote() {
+
+}
+function OnFailureVote() {
+
+}
+function onSuccessVote(data) {
+    var newVotes = data?.newVotes;
+    console.log(data);
+    if (newVotes != undefined && newVotes != null && newVotes > 0) {
+        var score = data.newScore;
+        $("#spScoreUserVotes").text(data.newScoreHuman);
+        $("#spNumberUserVotes").text(newVotes);
+        $("#divScorePopular").addClass("scale-up-center");
+
+        $("#spScoreUserVotes").removeClass("mr-score-bad");
+        $("#spScoreUserVotes").removeClass("mr-score-mild");
+        $("#spScoreUserVotes").removeClass("mr-score-good");
+        $("#spScoreUserVotes").removeClass("mr-score-platinum");
+        
+        if (score < 50) {
+            $("#spScoreUserVotes").addClass("mr-score-bad");
+        }
+        else if (score < 70) {
+            $("#spScoreUserVotes").addClass("mr-score-mild");
+        }
+        else if (score < 95) {
+            $("#spScoreUserVotes").addClass("mr-score-good");
+        }
+        else if (score < 101) {
+            $("#spScoreUserVotes").addClass("mr-score-platinum");
+        }
+
+        document.getElementById("containerCollapseVoteForm").remove();
+        document.getElementById("btnOpenVoteForm").remove();
+    } else {
+        alert("Error al enviar el voto. Por favor, vuelva a intentarlo más tarde");
+    }
+}
+function onCompleteVote() {
+    //setTimeout(function () {
+    //    $("#btnCheer").attr("disabled", false);
+    //    console.log("Button enabled!");
+    //}, timeMsDelayLike);
 }

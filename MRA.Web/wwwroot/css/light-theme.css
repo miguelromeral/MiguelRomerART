@@ -68,4 +68,8 @@ body.light-theme {
     --mr-development-banner-color: var(--mr-development-banner-color-light);
     --mr-thumbnail-date-background-color: var(--mr-thumbnail-date-background-color-light);
     --mr-text-color-not-important: var(--mr-text-color-not-important-light);
+    --mr-score-background-color-none: var(--mr-score-background-color-none-light);
+    --mr-score-text-color-none: var(--mr-score-text-color-none-light);
+    --mr-vote-card-background-color: var(--mr-vote-card-background-color-light);
+    --mr-custom-range-track-color: var(--mr-custom-range-track-color-light);
 }

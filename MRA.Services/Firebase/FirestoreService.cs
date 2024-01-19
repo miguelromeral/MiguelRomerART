@@ -336,6 +336,56 @@ namespace MRA.Services.Firebase
             });
         }
 
+
+        public async Task<VoteSubmittedModel> Vote(string documentId, int score)
+        {
+            // Realiza la transacción para actualizar la propiedad "views"
+            return await _firestoreDb.RunTransactionAsync(async transaction =>
+            {
+                var model = new VoteSubmittedModel();
+                try
+                {
+                    if (score > 100) score = 100;
+                    if (score < 0) score = 0;
+
+                    DocumentReference docRef = _firestoreDb.Collection(_collectionNameDrawings).Document(documentId);
+
+                    // Obtiene el documento actual
+                    DocumentSnapshot snapshot = await transaction.GetSnapshotAsync(docRef);
+
+
+                    if (snapshot.ContainsField("score_popular") && snapshot.ContainsField("votes_popular"))
+                    {
+                        int nVotes = snapshot.GetValue<int>("votes_popular");
+                        double average = snapshot.GetValue<double>("score_popular");
+
+                        model.NewVotes = nVotes + 1;
+                        model.NewScore = ((average * nVotes) + score) / (nVotes + 1);
+
+                        transaction.Update(docRef, "score_popular", model.NewScore);
+                        transaction.Update(docRef, "votes_popular", model.NewVotes);
+                    }
+                    else
+                    {
+
+                        model.NewVotes = 1;
+                        model.NewScore = score;
+
+                        // Si no existe, crea la propiedad "views" con el valor inicial de 1
+                        transaction.Set(docRef, new { votes_popular = model.NewVotes, score_popular = model.NewScore }, SetOptions.MergeAll);
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    model.NewVotes = -1;
+                    Debug.WriteLine("Error when updating score for document '" + documentId + "': " + ex.Message);
+                }
+                return model;
+            });
+        }
+
+
         public void SetAutomaticTags(ref Drawing document)
         {
             var list = new List<string>();

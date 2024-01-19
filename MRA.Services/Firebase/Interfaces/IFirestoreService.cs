@@ -19,6 +19,7 @@ namespace MRA.Services.Firebase.Interfaces
         Task<List<Drawing>> Filter(FilterDrawingModel filter);
         Task<Drawing> FindDrawingById(string documentId);
         Task UpdateLikes(string documentId);
+        Task<VoteSubmittedModel> Vote(string documentId, int score);
         DocumentReference GetDbDocumentDrawing(string id);
         Task UpdateViews(string documentId);
     }

@@ -196,6 +196,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
                 <StackLayout Grid.Column="0" Orientation="Vertical" Margin="0,0,0,10">
@@ -205,6 +206,13 @@
                 </StackLayout>
 
                 <StackLayout Grid.Column="1" Orientation="Vertical" Margin="0,0,0,10">
+                    <Label Text="Puntuación" VerticalOptions="CenterAndExpand" Style="{StaticResource mrLabelTitle}"/>
+                    <Entry Placeholder="Puntuación" x:Name="tbDrawingScore"
+                           Text="{Binding drawing.ScoreCritic}"
+                       Keyboard="Numeric" Style="{StaticResource mrEntry}"/>
+                </StackLayout>
+                
+                <StackLayout Grid.Column="2" Orientation="Vertical" Margin="0,0,0,10">
                     <Label Text="Tiempo en minutos" VerticalOptions="CenterAndExpand" Style="{StaticResource mrLabelTitle}"/>
                     <Entry Placeholder="Tiempo en minutos" x:Name="tbDrawingTime"
                        Text="{Binding drawing.Time}"

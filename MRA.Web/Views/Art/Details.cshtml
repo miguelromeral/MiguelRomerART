@@ -109,6 +109,61 @@
                         </div>
                     </div>
                 </div>
+                <div class="mr-scores">
+                    <div class="mr-scores-reviews">
+                        <div class="mr-scores-critic-container" title="Puntuación del Artista">
+                            <span class="mr-scores-critic @Model.GetClassScore(drawing.ScoreCritic)">
+                                @(drawing.ScoreCritic == 0 ? "--" : drawing.ScoreCritic)
+                            </span>
+                            <div class="mr-score-image">
+                                <img src="~/assets/images/miguel.jpeg" class="mr-chat-image-miguel" />
+                            </div>
+                        </div>
+                        <div class="mr-scores-popular" title="Puntuación de los Usuarios">
+                            <span id="spScoreUserVotes" class="mr-scores-popular-span @Model.GetClassScore(drawing.ScorePopularHuman)">
+                                @(drawing.ScorePopularHuman == 0 ? "--" : drawing.ScorePopularHuman)
+                            </span>
+                            <div id="divScorePopular" class="mr-scores-popular-votes" title="Votos de Usuarios">
+                                <span id="spNumberUserVotes">
+                                    @drawing.VotesPopular
+                                </span>
+                                <span>
+                                    voto@(drawing.VotesPopular != 1 ? "s" : "")
+                                </span>
+                            </div>
+                        </div>
+                        <button id="btnOpenVoteForm" class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#cardVoteForm"
+                                aria-expanded="false" aria-controls="cardVoteForm">
+                            Votar
+                        </button>
+                    </div>
+                    <div class="mr-scores-form mt-2" id="containerCollapseVoteForm">
+                        <div id="cardVoteForm" class="card card-body collapse">
+                        
+                        <form id="voteForm" asp-action="Vote" asp-controller="Art"
+                              data-ajax="true" data-ajax-method="POST"
+                              data-ajax-begin="onBeginVote" data-ajax-failure="OnFailureVote"
+                              data-ajax-success="onSuccessVote" data-ajax-complete="onCompleteVote">
+                            <input type="hidden" name="id" value="@drawing.Id" />
+
+                                <div id="divLabelVote">
+                                    <span>Seleccione una puntuación</span>
+                                    <span id="spScoreUser" class="good">70</span>
+                            </div>
+
+                            <input type="range" name="score" class="mr-custom-range form-range" min="1" max="100" step="1" value="70" id="rScoreUser" oninput="onChangeRangeVote(event)">
+                            
+
+
+                            <button id="btnVote" type="button" class="mt-2 btn btn-success vibrate" onclick="voteDrawing(event)">
+                                <i id="iCheerIcon" class="bi bi-send-plus"></i> Envia tu Voto Ahora
+                            </button>
+
+                            
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="col-sm-12 col-md-6 col-lg-4">

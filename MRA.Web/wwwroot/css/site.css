@@ -242,7 +242,7 @@ img.mr-chat-image-miguel {
     backdrop-filter: blur(5px);
     background-color: var(--mr-nav-color-a);
     z-index: 1000;
-    animation: none;
+    animation: slide-up .5s ease-out;
 }
 
 .mr-bottom-bar-button {
@@ -284,7 +284,6 @@ img.mr-chat-image-miguel {
     position: fixed;
     top: 6px;
     right: 3px;
-    color: cyan;
     font-size: x-small;
     z-index: 1001;
     width: auto;
@@ -357,4 +356,19 @@ img.mr-chat-image-miguel {
 
 .mr-development-banner {
     color: var(--mr-development-banner-color);
+}
+
+
+
+.mr-custom-range::-webkit-slider-thumb {
+    background-color: var(--mr-chat-color);
+}
+
+.mr-custom-range::-webkit-slider-thumb:hover {
+    background-color: var(--mr-chat-color-secondary);
+}
+
+.mr-custom-range::-webkit-slider-runnable-track {
+    background-color: var(--mr-custom-range-track-color);
+}
 }

@@ -86,6 +86,7 @@ namespace MR.MAUI
             cbDrawingType.SelectedIndex = 0;
             cbDrawingSoftware.SelectedIndex = 0;
             cbDrawingPaperSize.SelectedIndex = 0;
+            tbDrawingScore.Text = "";
             tbDrawingTime.Text = "";
             cbDrawingProductType.SelectedIndex = 0;
             tbDrawingProductName.Text = "";

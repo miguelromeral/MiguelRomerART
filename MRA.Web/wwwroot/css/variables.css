@@ -41,7 +41,7 @@
     --mr-bottom-bar-height: 50px;
     --mr-bottom-bar-button-color-hover: black;
     --mr-bottom-bar-width: 130px;
-    --mr-bottom-bar-icon-width: 30px;
+    --mr-bottom-bar-icon-width: 40px;
     --mr-development-banner-color-dark: cyan;
     --mr-development-banner-color-light: #0068ff;
     --mr-development-banner-color: var(--mr-development-banner-color-dark);
@@ -51,6 +51,28 @@
     --mr-background-color-fullscreen-image: rgba(0, 0, 0, 0.8);
     --mr-spacing-img-buttons: 10px;
     --mr-chat-margin-vertical: 5px;
+    --mr-score-platinum-blue: #4e9fd3;
+    --mr-score-platinum-white: #a5c0d4;
+    --mr-score-background-color-none-dark: #8c6992;
+    --mr-score-background-color-none-light: #d8bedd;
+    --mr-score-background-color-none: var(--mr-score-background-color-none-dark);
+    --mr-score-background-color-bad: red;
+    --mr-score-background-color-mild: #edad25;
+    --mr-score-background-color-good: #36b936;
+    --mr-score-background-color-platinum: linear-gradient(135deg, white 30%, var(--mr-score-platinum-blue) 55%, white 55%, var(--mr-score-platinum-white) 100%);
+    --mr-score-text-color-none-dark: black;
+    --mr-score-text-color-none-light: white;
+    --mr-score-text-color-none: var(--mr-score-text-color-none-dark);
+    --mr-score-text-color-bad: white;
+    --mr-score-text-color-mild: black;
+    --mr-score-text-color-good: black;
+    --mr-score-text-color-platinum: #333664;
+    --mr-vote-card-background-color-dark: var(--mr-background-color-secondary);
+    --mr-vote-card-background-color-light: var(--mr-nav-color-light);
+    --mr-vote-card-background-color: var(--mr-vote-card-background-color-dark);
+    --mr-custom-range-track-color-dark: var(--mr-nav-color-light);
+    --mr-custom-range-track-color-light: white;
+    --mr-custom-range-track-color: var(--mr-custom-range-track-color-dark);
 }
 
 /* FINAL FANTASY VII */

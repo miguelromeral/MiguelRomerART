@@ -171,6 +171,14 @@ namespace MRA.Services.Firebase.Models
         public bool Favorite { get; set; }
         public string ReferenceUrl { get; set; }
 
+        public int ScoreCritic { get; set; }
+        public double ScorePopular { get; set; }
+        public int VotesPopular { get; set; }
+        public int ScorePopularHuman { get { return CalculateScorePopular(ScorePopular); } }
+
+
+        public static int CalculateScorePopular(double score) => (int)Math.Round(score);
+
         public List<string> ListComments
         {
             get

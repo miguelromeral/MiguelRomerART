@@ -75,5 +75,12 @@ namespace MRA.Services.Firebase.Documents
 
         [FirestoreProperty]
         public List<string>? tags { get; set; }
+
+        [FirestoreProperty]
+        public int score_critic { get; set; }
+        [FirestoreProperty]
+        public double score_popular { get; set; }
+        [FirestoreProperty]
+        public int votes_popular { get; set; }
     }
 }
