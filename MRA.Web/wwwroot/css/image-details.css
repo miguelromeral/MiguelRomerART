@@ -490,7 +490,14 @@ div.mr-chat-container {
 }
 
 .mr-score-image {
+    background-color: var(--mr-background-color);
+    padding: 2px;
+    border-radius: 30px;
     position: absolute;
     bottom: -20px;
     right: -20px;
 }
+
+    .mr-score-image img {
+        background-color: var(--mr-background-color);
+    }

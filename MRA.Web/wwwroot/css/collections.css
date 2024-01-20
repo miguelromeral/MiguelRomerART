@@ -23,7 +23,7 @@
     /* max-height: var(--mr-carousel-max-height); */
     justify-content: center;
     position: relative;
-    padding: 0px 10%;
+    padding: 10px 10%;
 }
 
 .carousel-indicators .mr-carousel-indicator {

@@ -29,6 +29,7 @@ div.mr-social-links {
     font-family: monospace;
     position: relative;
     text-shadow: 1px 1px black;
+    font-size: var(--mr-font-size-large);
 }
 
 .mr-ff-container .mr-ff-image img {

@@ -167,7 +167,9 @@ namespace MRA.Services.Firebase.Models
         public string Comment { get; set; }
         public string CommentPros { get; set; }
         public long Views { get; set; }
+        public string ViewsHuman { get { return Drawing.FormatoLegible(Views); } }
         public long Likes { get; set; }
+        public string LikesHuman { get { return Drawing.FormatoLegible(Likes); } }
         public bool Favorite { get; set; }
         public string ReferenceUrl { get; set; }
 
@@ -261,6 +263,27 @@ namespace MRA.Services.Firebase.Models
             }
 
             return sb.ToString();
+        }
+
+        public static string FormatoLegible(long numero)
+        {
+            const long UN_MILLON = 1000000;
+            const long MIL = 1000;
+
+            if (numero < MIL)
+            {
+                return numero.ToString();
+            }
+            else if (numero < UN_MILLON)
+            {
+                double valorFormateado = Math.Round((double)numero / MIL, 1);
+                return $"{valorFormateado} k";
+            }
+            else
+            {
+                double valorFormateado = Math.Round((double)numero / UN_MILLON, 1);
+                return $"{valorFormateado} M";
+            }
         }
     }
 }

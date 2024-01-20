@@ -14,26 +14,41 @@
                 <span class="emoji">🙃</span>
                 <span class="subtitle">Imagen No Encontrada</span>
             </div>
-
-
+            
             <span class="mr-img-thumbnail-date mr-img-thumbnail-info">
                 @(Model.Drawing.FormattedDateMini)
             </span>
 
-            <div class="mr-img-thumbnail-score-container mr-img-thumbnail-info">
-                @if (Model.Drawing.ScoreCritic > 0)
-                {
-                    <span class="mr-img-thumbnail-score miguel @DetailsModel.GetClassScore(Model.Drawing.ScoreCritic)">
-                        @Model.Drawing.ScoreCritic
-                    </span>
-                }
-                @if (Model.Drawing.ScorePopular > 0)
-                {
-                    <span class="mr-img-thumbnail-score popular @DetailsModel.GetClassScore(Model.Drawing.ScorePopularHuman)">
-                        @Model.Drawing.ScorePopularHuman
-                    </span>
-                }
+
+            <div class="mr-img-thumbnail-details-container mr-img-thumbnail-info">
+
+                <div class="mr-img-thumbnail-stats mr-img-thumbnail-info">
+                    @* <div class="mr-img-thumbnail-stats-item">
+                        <i class="bi bi-eye"></i>
+                        <span>@Model.Drawing.Views</span>
+                    </div> *@
+                    <div class="mr-img-thumbnail-stats-item likes">
+                        <i class="bi bi-heart"></i>
+                        <span>@(Model.Drawing.LikesHuman)</span>
+                    </div>
+                </div>
+
+                    <div class="mr-img-thumbnail-score-container mr-img-thumbnail-info">
+                        @if (Model.Drawing.ScoreCritic > 0)
+                        {
+                            <span class="mr-img-thumbnail-score miguel @DetailsModel.GetClassScore(Model.Drawing.ScoreCritic)">
+                                @Model.Drawing.ScoreCritic
+                            </span>
+                        }
+                        @if (Model.Drawing.ScorePopular > 0)
+                        {
+                            <span class="mr-img-thumbnail-score popular @DetailsModel.GetClassScore(Model.Drawing.ScorePopularHuman)">
+                                @Model.Drawing.ScorePopularHuman
+                            </span>
+                        }
+                    </div>
             </div>
+
             
             
 
@@ -59,16 +74,6 @@
                 <span class="mr-img-thumbnail-title mr-img-thumbnail-info"> </span>
             }
 
-            <div class="mr-img-thumbnail-stats mr-img-thumbnail-info">
-                <div class="mr-img-thumbnail-stats-item">
-                    <i class="bi bi-eye"></i>
-                    <span>@Model.Drawing.Views</span>
-                </div>
-                <div class="mr-img-thumbnail-stats-item likes">
-                    <i class="bi bi-heart"></i>
-                    <span>@(Model.Drawing.Likes)</span>
-                </div>
-            </div>
         </a>
     </div>
 </div>

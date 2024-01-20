@@ -23,6 +23,7 @@
     justify-content: center;*/
     height: 100%;
     width: 100%;
+    text-decoration: none;
 }
 
 
@@ -38,8 +39,8 @@
 /* Date thumbnail */
 .mr-img-thumbnail-date {
     z-index: 1;
-    position: absolute;
-    top: 2px;
+    position: absolute; 
+    top: 2px; 
     left: 2px;
     background-color: var(--mr-thumbnail-date-background-color);
     padding: 0px 8px;
@@ -141,7 +142,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    overflow: hidden;
+    overflow: visible;
     object-fit: contain;
     display: flex;
     align-items: center;
@@ -156,7 +157,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    overflow: hidden;
+    overflow: visible;
     object-fit: contain;
     display: flex;
     align-items: center;
@@ -172,16 +173,17 @@
 .mr-img-thumbnail-stats {
     display: flex;
     flex-direction: row;
-    align-items: flex-end;
+    align-items: center;
     color: var(--mr-thumbnail-text-color);
     z-index: -1;
-    position: absolute;
+    /* position: absolute; */
     bottom: 0px;
-    width: 100%;
+    /* width: 100%; */
     justify-content: space-around;
     flex-wrap: nowrap;
     transition: var(--mr-transition-time) ease-in-out;
     font-size: var(--mr-font-size-small);
+    /* height: -webkit-fill-available; */
 }
 
 
@@ -204,16 +206,13 @@ mr-img-thumbnail-stats-item
 
 
 .mr-img-thumbnail-score-container {
-    position: absolute;
-    top: 2px;
-    right: 2px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     font-size: var(--mr-font-size-small);
     font-weight: var(--mr-font-weight-bold);
     gap: 4px;
     transition: var(--mr-transition-time) ease-in-out;
-    z-index: 1
+    z-index: 1;
 }
 
 
@@ -231,4 +230,30 @@ mr-img-thumbnail-stats-item
 }
 .mr-img-thumbnail-score.popular {
     border-radius: 20px;
+}
+
+.mr-img-thumbnail-details-container {
+    background: var(--mr-thumbnails-details-background);
+    border-radius: 4px;
+    position: relative;
+    padding: 4px;
+    bottom: 20px;
+    transition: var(--mr-transition-time);
+    z-index: -1;
+    opacity: 0;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+a:hover .mr-img-thumbnail-details-container{
+    text-decoration: none !important;
+}
+
+.mr-img-thumbnail-container:hover .mr-img-thumbnail-details-container {
+    z-index: 3;
+    animation: slide-bottom 0.3s ease-in-out;
 }

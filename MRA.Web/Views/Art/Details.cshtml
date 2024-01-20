@@ -1,4 +1,5 @@
-﻿@using MRA.Web.Models.Art
+﻿@using MRA.Services.Firebase.Models
+@using MRA.Web.Models.Art
 @using MRA.Web.Models.Images
 @model DetailsModel
 
@@ -101,12 +102,12 @@
 
                     <div class="mr-stats-item" title="Views">
                         <i class="bi bi-eye"></i>
-                        <span>@(drawing.Views + 1)</span>
+                        <span>@(Drawing.FormatoLegible(drawing.Views + 1))</span>
                     </div>
                     <div class="mr-stats-item likes" title="Kudos">
                         <i class="bi bi-heart"></i>
                         <div id="divContainerLikes">
-                            <div id="spLikesCounter">@(drawing.Likes)</div>
+                            <div id="spLikesCounter">@(drawing.LikesHuman)</div>
                         </div>
                     </div>
                 </div>
@@ -133,7 +134,7 @@
                                 </span>
                             </div>
                         </div>
-                        <button id="btnOpenVoteForm" class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#cardVoteForm"
+                        <button id="btnOpenVoteForm" class="btn mr-custom-btn" type="button" data-bs-toggle="collapse" data-bs-target="#cardVoteForm"
                                 aria-expanded="false" aria-controls="cardVoteForm">
                             Votar
                         </button>

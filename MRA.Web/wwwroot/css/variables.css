@@ -73,6 +73,9 @@
     --mr-custom-range-track-color-dark: var(--mr-nav-color-light);
     --mr-custom-range-track-color-light: white;
     --mr-custom-range-track-color: var(--mr-custom-range-track-color-dark);
+    --mr-thumbnails-details-background-dark: linear-gradient(180deg, transparent 0%, var(--mr-background-color) 50%, var(--mr-background-color) 100%);
+    --mr-thumbnails-details-background-light: linear-gradient(180deg, transparent 0%, var(--mr-background-color-light) 50%, var(--mr-background-color-light) 100%);
+    --mr-thumbnails-details-background: var(--mr-thumbnails-details-background-dark);
 }
 
 /* FINAL FANTASY VII */
