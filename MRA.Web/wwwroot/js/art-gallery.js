@@ -328,7 +328,7 @@ function onChangeRangeVote(event) {
     if (score < 50) {
         $("#spScoreUser").addClass("bad");
     }
-    else if (score < 70) {
+    else if (score < 65) {
         $("#spScoreUser").addClass("mild");
     }
     else if (score < 95) {
@@ -367,7 +367,7 @@ function onSuccessVote(data) {
         if (score < 50) {
             $("#spScoreUserVotes").addClass("mr-score-bad");
         }
-        else if (score < 70) {
+        else if (score < 65) {
             $("#spScoreUserVotes").addClass("mr-score-mild");
         }
         else if (score < 95) {

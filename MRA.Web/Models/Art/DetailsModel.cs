@@ -21,7 +21,7 @@ namespace MRA.Web.Models.Art
             {
                 return "mr-score-bad";
             }
-            else if (score < 70)
+            else if (score < 65)
             {
                 return "mr-score-mild";
             }
