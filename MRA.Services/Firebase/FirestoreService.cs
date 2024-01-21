@@ -171,6 +171,17 @@ namespace MRA.Services.Firebase
                 {
                     query = query.WhereEqualTo("paper", filter.Paper);
                 }
+                if (filter.Spotify != null)
+                {
+                    if (filter.Spotify ?? false)
+                    {
+                        query = query.WhereNotEqualTo("spotify_url", "");
+                    }
+                    else
+                    {
+                        query = query.WhereEqualTo("spotify_url", "");
+                    }
+                }
 
                 var documents = (await query.GetSnapshotAsync()).Documents.Select(s => s.ConvertTo<DrawingDocument>()).ToList();
 

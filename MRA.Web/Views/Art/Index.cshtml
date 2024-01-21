@@ -221,7 +221,7 @@
                     <option value="@(type.Key)">@(type.Value)</option>
                 }
             </select>
-
+            
 
             <select id="sFilterPaper" class="mr-custom-select form-select form-select-sm mr-filter-item"
                     name="Paper" data-bs-theme="dark" onchange="sendFormFilterGallery()">
@@ -231,6 +231,13 @@
                 {
                     <option value="@(type.Key)">@(type.Value)</option>
                 }
+            </select>
+
+            <select id="sFilterSpotify" class="mr-custom-select form-select form-select-sm mr-filter-item"
+                    name="Spotify" data-bs-theme="dark" onchange="sendFormFilterGallery()">
+                <option value="null" selected>🎵 MÚSICA</option>
+                <option value="true">Pista de Spotify Sugerida</option>
+                <option value="false">Sin pista sugerida</option>
             </select>
 
 
@@ -295,10 +302,11 @@
             var mname = "@Model.Query_ModelName";
             var sw = "@Model.Query_Software";
             var paper = "@Model.Query_Paper";
+            var spotify = "@Model.Query_Spotify";
             var fav = "@Model.Query_Favorites" == "True";
             var sort = "@Model.Query_Sortby";
             var submit = tq != "" || type != "" || pt != "" || pname != "" || col != "" || cname != "" ||
-                        mname != "" || sw != "" || paper != "" || sort != "" || fav;
+                        mname != "" || sw != "" || paper != "" || sort != "" || spotify != "" || fav;
 
             changeArtUrl(
                 tq,
@@ -310,6 +318,7 @@
                 mname,
                 sw,
                 paper,
+                spotify,
                 fav,
                 sort,
                 submit);

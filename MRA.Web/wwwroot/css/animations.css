@@ -18,6 +18,22 @@
     }
 }
 
+.slide-left {
+    animation: slide-left 0.3s ease-in;
+}
+
+@keyframes slide-left {
+    0% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
 .like-semaphore {
     animation: like-semaphore 3s ease-in-out infinite;
 }

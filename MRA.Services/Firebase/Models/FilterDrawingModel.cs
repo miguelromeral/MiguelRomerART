@@ -11,11 +11,12 @@
         public int Software { get; set; }
         public int Paper { get; set; }
         public string Sortby { get; set; }
+        public bool? Spotify { get; set; }
         public string TextQuery { get; set; }
         public List<string> Tags { get { return (TextQuery ?? "").Split(" ").Select(x => x.ToLower()).ToList(); } }
         public bool Favorites { get; set; }
 
-        public string CacheKey { get => $"filter_{Type}_{ProductType}_{ProductName}_{ModelName}_{CharacterName}_{Collection}_{Software}_{Paper}_{Sortby}_{string.Join("_",Tags)}_{Favorites}"; }
+        public string CacheKey { get => $"filter_{Type}_{ProductType}_{ProductName}_{ModelName}_{CharacterName}_{Collection}_{Software}_{Paper}_{Sortby}_{Spotify}_{string.Join("_",Tags)}_{Favorites}"; }
 
 
         public static FilterDrawingModel GetModelNoFilters() =>
@@ -31,7 +32,8 @@
                 ModelName = "",
                 Software = 0,
                 Paper = 0,
-                Favorites = false
+                Favorites = false,
+                Spotify = null,
             };
 
         public bool HasNoFilters()
@@ -48,6 +50,7 @@
                 (ModelName ?? "").Equals(nofilters.ModelName) &&
                 Software.Equals(nofilters.Software) &&
                 Paper.Equals(nofilters.Paper) &&
+                Spotify == nofilters.Spotify &&
                 Favorites.Equals(nofilters.Favorites);
         }
     }

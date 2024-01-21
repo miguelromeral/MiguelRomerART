@@ -18,6 +18,7 @@ var filtersControls = {
     model: "#sFilterModel",
     software: "#sFilterSoftware",
     paper: "#sFilterPaper",
+    spotify: "#sFilterSpotify",
     favorite: "#flexSwitchCheckChecked",
     sortby: "#sFilterSortBy",
 }
@@ -40,12 +41,13 @@ function changeBasicArtUrl() {
         $(filtersControls.model).val(),
         $(filtersControls.software).val(),
         $(filtersControls.paper).val(),
+        $(filtersControls.spotify).val(),
         $(filtersControls.favorite).prop("checked"),
         $(filtersControls.sortby).val(),
         false);
 }
 
-function changeArtUrl(textQuery, type, productType, productName, collection, characterName, modelName, software, paper, favorites, sortby, submit) {
+function changeArtUrl(textQuery, type, productType, productName, collection, characterName, modelName, software, paper, spotify, favorites, sortby, submit) {
     // Obtén la URL base
     var baseUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
     
@@ -60,11 +62,14 @@ function changeArtUrl(textQuery, type, productType, productName, collection, cha
     queryParams.push(setFilterValue(filtersControls.model, "ModelName", modelName));
     queryParams.push(setFilterValue(filtersControls.software, "Software", software, [0]));
     queryParams.push(setFilterValue(filtersControls.paper, "Paper", paper, [0]));
+    queryParams.push(setFilterValue(filtersControls.spotify, "Spotify", spotify, ["null"]));
     queryParams.push(setFilterValue(filtersControls.favorite, "Favorites", favorites, [false], true));
     queryParams.push(setFilterValue(filtersControls.sortby, "Sortby", sortby, ["date-desc"]));
 
 
     queryParams = queryParams.filter(x => x != null);
+
+    console.log(queryParams);
 
     var params = "";
 
@@ -109,6 +114,7 @@ function resetFilters() {
     $(filtersControls.model).val("");
     $(filtersControls.software).val(0);
     $(filtersControls.paper).val(0);
+    $(filtersControls.spotify).val("null");
     $(filtersControls.favorite).prop("checked", false);
     changeBasicArtUrl();
 }

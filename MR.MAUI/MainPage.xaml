@@ -297,7 +297,7 @@
 
                 <!-- COLECCIONES -->
 
-                <StackLayout Orientation="Vertical" Margin="0,0,0,10" x:Name="layoutCollections" IsVisible="true">
+                <StackLayout Orientation="Vertical" Margin="0,0,0,10" x:Name="layoutCollections" IsVisible="false">
 
 
                     <Grid Margin="0,0,0,10">
@@ -396,6 +396,8 @@
                 <Button x:Name="btnSave" Text="GUARDAR" Clicked="OnSaveDrawing" BackgroundColor="#30cf5a" />
                 <Button x:Name="btnLoadCollections" Text="Cargar Colecciones" Clicked="btnLoadCollections_Clicked"  />
             </StackLayout>
+            
+            
 
             <ScrollView>
                 <StackLayout>

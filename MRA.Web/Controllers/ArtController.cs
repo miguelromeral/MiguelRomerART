@@ -22,7 +22,7 @@ namespace MRA.Web.Controllers
 
 
         public async Task<IActionResult> Index(string TextQuery, string Type, string ProductType, string ProductName, string Collection,
-            string CharacterName, string ModelName, string Software, string Paper, string Sortby, bool Favorites)
+            string CharacterName, string ModelName, string Software, string Paper, string Spotify, string Sortby, bool Favorites)
         {
             var model = new IndexModel()
             {
@@ -35,6 +35,7 @@ namespace MRA.Web.Controllers
                 Query_ModelName = ModelName,
                 Query_Software = Software,
                 Query_Paper = Paper,
+                Query_Spotify = Spotify,
                 Query_Favorites = Favorites,
                 Query_Sortby = Sortby
             };
