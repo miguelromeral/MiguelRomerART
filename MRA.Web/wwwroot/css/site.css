@@ -393,3 +393,9 @@ img.mr-chat-image-miguel {
     border: 1px solid var(--mr-score-platinum-blue) !important;
     text-shadow: 1px 1px 0px var(--mr-score-platinum-blue) !important;
 }
+
+
+
+.mr-hide-kudos .kudos {
+    display: none !important;
+}

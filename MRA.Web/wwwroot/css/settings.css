@@ -45,3 +45,7 @@
     --mr-font-weight-medium: bold;
     --mr-font-weight-bold: bolder;
 }
+
+.mr-setting-section h5 i {
+    color: var(--mr-chat-color);
+}

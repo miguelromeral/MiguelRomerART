@@ -8,6 +8,35 @@
 </h1>
 <div class="row">
     <div class="col-sm-12">
+        <h3>Interacciones</h3>
+    </div>
+    <div class="col-sm-12">
+        <div class="mr-setting-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12 col-md-8">
+                        <h5>
+                            <i class="bi bi-heart-fill"></i> Mostrar Kudos
+                        </h5>
+                        <p>
+                            Ver la cantidad de kudos (o "likes") que ha recibido un dibujo.
+                        </p>
+                    </div>
+                    <div class="col-sm-12 col-md-4 mr-setting-change-value">
+                        <select id="showKudosSelector" class="mr-custom-select form-select form-select-sm" onchange="eventChangeShowKudos()">
+                            <option value="show">Mostrar Kudos</option>
+                            <option value="hide">Esconder Kudos</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
         <h3>Accesibilidad</h3>
     </div>
     <div class="col-sm-12">
@@ -16,7 +45,7 @@
                 <div class="row">
                     <div class="col-sm-12 col-md-8">
                         <h5>
-                            Modo Oscuro
+                            <i class="bi bi-moon-fill"></i> Modo Oscuro
                         </h5>
                         <p>
                             Ver la página web con colores más claros o más oscuros
@@ -35,7 +64,7 @@
                 <div class="row">
                     <div class="col-sm-12 col-md-8">
                         <h5>
-                            Fuente
+                            <i class="bi bi-fonts"></i> Fuente
                         </h5>
                         <p>
                             Cambia entre la fuente original de la web o una fuente algo más estándar (se recomienda cambiar este ajuste si se tiene problemas al leer las letras)
@@ -58,7 +87,7 @@
                 <div class="row">
                     <div class="col-sm-12 col-md-8">
                         <h5>
-                            Tamaño de la Fuente
+                            <i class="bi bi-type"></i> Tamaño de la Fuente
                         </h5>
                         <p>
                             Cambia el tamaño del texto a lo largo de la web
@@ -82,7 +111,7 @@
                 <div class="row">
                     <div class="col-sm-12 col-md-8">
                         <h5>
-                            Peso de la Fuente
+                            <i class="bi bi-type-bold"></i> Peso de la Fuente
                         </h5>
                         <p>
                             Cambia la fuente de tal manera que se pueda ver o más negrita o más ligera.

@@ -4,12 +4,14 @@ var localStorageKeys = {
     fontSize: "font-size",
     fontFamily: "font-family",
     fontWeight: "font-weight",
+    showKudos: "show-kudos",
 }
 
 var settingsControl = {
     selectorFontSize: "#fontSizeSelector",
     selectorFontFamily: "#fontFamilySelector",
     selectorFontWeight: "#fontWeightSelector",
+    selectorShowKudos: "#showKudosSelector",
 }
 
 var settingsClasses = {
@@ -25,7 +27,8 @@ var settingsClasses = {
     textWeight: {
         light: "mr-setting-font-weight-light",
         bold: "mr-setting-font-weight-bold",
-    }
+    },
+    showKudos: "mr-hide-kudos",
 }
 
 function getCacheItem(key, defaultValue) {
@@ -94,6 +97,19 @@ function loadConfig() {
                 break;
         }
     }
+
+    const showKudos = getCacheItem(localStorageKeys.showKudos, "show");
+    if (showKudos) {
+        switch (showKudos) {
+            case "show":
+                document.body.classList.remove(settingsClasses.showKudos);
+                break;
+            case "hide":
+                document.body.classList.add(settingsClasses.showKudos);
+                break;
+        }
+    }
+
 }
 
 
@@ -142,4 +158,15 @@ function cambiarPeso() {
 
 function changeFontWeight() {
     $(settingsControl.selectorFontWeight).val(getCacheItem(localStorageKeys.fontWeight, "normal"));
+}
+
+
+
+function eventChangeShowKudos() {
+    setCacheItem(localStorageKeys.showKudos, $(settingsControl.selectorShowKudos).val());
+    loadConfig();
+}
+
+function changeShowKudos() {
+    $(settingsControl.showKudos).val(getCacheItem(localStorageKeys.showKudos, "show"));
 }
