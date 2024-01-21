@@ -236,6 +236,10 @@ mr-img-thumbnail-stats-item
     border-radius: 20px;
 }
 
+.mr-collection-section .mr-img-thumbnail-details-container {
+    background: var(--mr-thumbnails-details-background-carousel);
+}
+
 .mr-img-thumbnail-details-container {
     background: var(--mr-thumbnails-details-background);
     border-radius: 4px;

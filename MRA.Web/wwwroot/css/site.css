@@ -400,6 +400,8 @@ img.mr-chat-image-miguel {
 .mr-hide-views .views,
 .mr-hide-spotify .mr-spotify,
 .mr-hide-comment-pros .mr-comment-pro,
-.mr-hide-comment-cons .mr-comment-con {
+.mr-hide-comment-cons .mr-comment-con,
+.mr-hide-score-miguel .mr-score-miguel,
+.mr-hide-score-popular .mr-score-popular {
     display: none !important;
 }

@@ -73,4 +73,5 @@ body.light-theme {
     --mr-vote-card-background-color: var(--mr-vote-card-background-color-light);
     --mr-custom-range-track-color: var(--mr-custom-range-track-color-light);
     --mr-thumbnails-details-background: var(--mr-thumbnails-details-background-light);
+    --mr-thumbnails-details-background-carousel: var(--mr-thumbnails-details-background-carousel-light);
 }

@@ -112,6 +112,48 @@
                 </div>
             </div>
         </div>
+
+        <div class="mr-setting-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12 col-md-8">
+                        <h5>
+                            <i class="bi bi-7-square-fill"></i> Mostrar Puntuación de Artista
+                        </h5>
+                        <p>
+                            Mostrar la puntuación que Miguel ha dado a sus propios dibujos.
+                        </p>
+                    </div>
+                    <div class="col-sm-12 col-md-4 mr-setting-change-value">
+                        <select id="hideScoreMiguelSelector" class="mr-custom-select form-select form-select-sm" onchange="eventChangeHideScoreMiguel()">
+                            <option value="show">Mostrar Puntuación</option>
+                            <option value="hide">Esconder</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mr-setting-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12 col-md-8">
+                        <h5>
+                            <i class="bi bi-7-circle-fill"></i> Mostrar Puntuación Popular
+                        </h5>
+                        <p>
+                            Mostrar la puntuación media que los usuarios han asignaod a un dibujo.
+                        </p>
+                    </div>
+                    <div class="col-sm-12 col-md-4 mr-setting-change-value">
+                        <select id="hideScorePopularSelector" class="mr-custom-select form-select form-select-sm" onchange="eventChangeHideScorePopular()">
+                            <option value="show">Mostrar Puntuación Popular</option>
+                            <option value="hide">Esconder</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <div class="row">
@@ -251,5 +293,7 @@
         changeLightModeButton();
         changeFontSize();
         changeFontFamily();
+        changeHideScoreMiguel();
+        changeHideScorePopular();
     </script>
 }

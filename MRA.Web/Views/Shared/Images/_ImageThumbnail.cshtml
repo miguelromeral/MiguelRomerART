@@ -44,13 +44,13 @@
                     <div class="mr-img-thumbnail-score-container mr-img-thumbnail-info">
                         @if (Model.Drawing.ScoreCritic > 0)
                         {
-                            <span class="mr-img-thumbnail-score miguel @DetailsModel.GetClassScore(Model.Drawing.ScoreCritic)">
+                        <span class="mr-img-thumbnail-score miguel @DetailsModel.GetClassScore(Model.Drawing.ScoreCritic) mr-score-miguel">
                                 @Model.Drawing.ScoreCritic
                             </span>
                         }
                         @if (Model.Drawing.ScorePopular > 0)
                         {
-                            <span class="mr-img-thumbnail-score popular @DetailsModel.GetClassScore(Model.Drawing.ScorePopularHuman)">
+                        <span class="mr-img-thumbnail-score popular @DetailsModel.GetClassScore(Model.Drawing.ScorePopularHuman) mr-score-popular">
                                 @Model.Drawing.ScorePopularHuman
                             </span>
                         }

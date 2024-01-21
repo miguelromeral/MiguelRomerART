@@ -371,6 +371,11 @@ div.mr-chat-container {
     width: 100%;
     margin: 10px 0px;
     user-select: none;
+    /*border: 1px solid white;*/
+    border-radius: 4px;
+    padding: 4px;
+    background-color: red;
+    background-color: var(--mr-vote-card-background-color);
 }
 
 .mr-scores-reviews {
@@ -443,8 +448,10 @@ div.mr-chat-container {
 }
 
 #cardVoteForm {
-    background-color: var(--mr-vote-card-background-color);
+    /*background-color: var(--mr-vote-card-background-color);*/
+    background-color: transparent;
     color: var(--mr-text-color);
+    border: none;
 }
 
 #voteForm {
@@ -467,7 +474,10 @@ div.mr-chat-container {
     /* padding: 0px 5px; */
     border-radius: 4px;
     width: 50px;
-    text-align: center;
+    /* text-align: center; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #spScoreUser.bad {

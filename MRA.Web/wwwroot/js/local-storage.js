@@ -9,6 +9,8 @@ var localStorageKeys = {
     hideSpotify: "hide-spotify",
     hideCommentPros: "hide-comment-pros",
     hideCommentCons: "hide-comment-cons",
+    hideScoreMiguel: "hide-score-miguel",
+    hideScorePopular: "hide-score-popular",
 }
 
 var settingsControl = {
@@ -20,6 +22,8 @@ var settingsControl = {
     selectorHideSpotify: "#hideSpotifySelector",
     selectorHideCommentPros: "#hideCommentProsSelector",
     selectorHideCommentCons: "#hideCommentConsSelector",
+    selectorHideScoreMiguel: "#hideScoreMiguelSelector",
+    selectorHideScorePopular: "#hideScorePopularSelector",
 }
 
 var settingsClasses = {
@@ -40,7 +44,9 @@ var settingsClasses = {
     hideViews: "mr-hide-views",
     hideSpotify: "mr-hide-spotify",
     hideCommentPros: "mr-hide-comment-pros",
-    hideCommentCons: "mr-hide-comment-cons"
+    hideCommentCons: "mr-hide-comment-cons",
+    hideScoreMiguel: "mr-hide-score-miguel",
+    hideScorePopular: "mr-hide-score-popular",
 }
 
 function getCacheItem(key, defaultValue) {
@@ -137,6 +143,8 @@ function loadConfig() {
     loadHideSpotify();
     loadHideCommentPros();
     loadHideCommentCons();
+    loadHideScoreMiguel();
+    loadHideScorePopular();
 }
 
 
@@ -269,6 +277,49 @@ function loadHideCommentCons() {
                 break;
             case "hide":
                 document.body.classList.add(settingsClasses.hideCommentCons);
+                break;
+        }
+    }
+}
+
+function eventChangeHideScoreMiguel() {
+    setCacheItem(localStorageKeys.hideScoreMiguel, $(settingsControl.selectorHideScoreMiguel).val());
+    loadConfig();
+}
+function changeHideScoreMiguel() {
+    $(settingsControl.selectorHideScoreMiguel).val(getCacheItem(localStorageKeys.hideScoreMiguel, "show"));
+}
+
+function loadHideScoreMiguel() {
+    const hide = getCacheItem(localStorageKeys.hideScoreMiguel, "show");
+    if (hide) {
+        switch (hide) {
+            case "show":
+                document.body.classList.remove(settingsClasses.hideScoreMiguel);
+                break;
+            case "hide":
+                document.body.classList.add(settingsClasses.hideScoreMiguel);
+                break;
+        }
+    }
+}
+function eventChangeHideScorePopular() {
+    setCacheItem(localStorageKeys.hideScorePopular, $(settingsControl.selectorHideScorePopular).val());
+    loadConfig();
+}
+function changeHideScorePopular() {
+    $(settingsControl.selectorHideScorePopular).val(getCacheItem(localStorageKeys.hideScorePopular, "show"));
+}
+
+function loadHideScorePopular() {
+    const hide = getCacheItem(localStorageKeys.hideScorePopular, "show");
+    if (hide) {
+        switch (hide) {
+            case "show":
+                document.body.classList.remove(settingsClasses.hideScorePopular);
+                break;
+            case "hide":
+                document.body.classList.add(settingsClasses.hideScorePopular);
                 break;
         }
     }

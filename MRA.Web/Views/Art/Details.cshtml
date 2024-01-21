@@ -113,7 +113,7 @@
                 </div>
                 <div class="mr-scores">
                     <div class="mr-scores-reviews">
-                        <div class="mr-scores-critic-container" title="Puntuación del Artista">
+                        <div class="mr-scores-critic-container mr-score-miguel" title="Puntuación del Artista">
                             <span class="mr-scores-critic @DetailsModel.GetClassScore(drawing.ScoreCritic)">
                                 @(drawing.ScoreCritic == 0 ? "--" : drawing.ScoreCritic)
                             </span>
@@ -121,7 +121,7 @@
                                 <img src="~/assets/images/miguel.jpeg" class="mr-chat-image-miguel" />
                             </div>
                         </div>
-                        <div class="mr-scores-popular" title="Puntuación de los Usuarios">
+                        <div class="mr-scores-popular mr-score-popular" title="Puntuación de los Usuarios">
                             <span id="spScoreUserVotes" class="mr-scores-popular-span @DetailsModel.GetClassScore(drawing.ScorePopularHuman)">
                                 @(drawing.ScorePopularHuman == 0 ? "--" : drawing.ScorePopularHuman)
                             </span>
@@ -134,12 +134,12 @@
                                 </span>
                             </div>
                         </div>
-                        <button id="btnOpenVoteForm" class="btn mr-custom-btn" type="button" data-bs-toggle="collapse" data-bs-target="#cardVoteForm"
+                        <button id="btnOpenVoteForm" class="btn mr-custom-btn mr-score-popular" type="button" data-bs-toggle="collapse" data-bs-target="#cardVoteForm"
                                 aria-expanded="false" aria-controls="cardVoteForm">
                             Votar
                         </button>
                     </div>
-                    <div class="mr-scores-form mt-2" id="containerCollapseVoteForm">
+                    <div class="mr-scores-form mr-score-popular mt-2" id="containerCollapseVoteForm">
                         <div id="cardVoteForm" class="card card-body collapse">
                         
                         <form id="voteForm" asp-action="Vote" asp-controller="Art"

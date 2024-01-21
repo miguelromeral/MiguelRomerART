@@ -77,6 +77,9 @@
     --mr-thumbnails-details-background-dark: linear-gradient(180deg, transparent 0%, var(--mr-background-color) 50%, var(--mr-background-color) 100%);
     --mr-thumbnails-details-background-light: linear-gradient(180deg, transparent 0%, var(--mr-background-color-light) 50%, var(--mr-background-color-light) 100%);
     --mr-thumbnails-details-background: var(--mr-thumbnails-details-background-dark);
+    --mr-thumbnails-details-background-carousel-dark: linear-gradient(180deg, transparent 0%, var(--mr-background-color-secondary) 50%, var(--mr-background-color-secondary) 100%);
+    --mr-thumbnails-details-background-carousel-light: linear-gradient(180deg, transparent 0%, var(--mr-nav-color-light) 50%, var(--mr-nav-color-light) 100%);
+    --mr-thumbnails-details-background-carousel: var(--mr-thumbnails-details-background-carousel-dark);
 }
 
 /* FINAL FANTASY VII */
