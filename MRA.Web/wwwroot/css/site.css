@@ -396,10 +396,10 @@ img.mr-chat-image-miguel {
 
 
 
-.mr-hide-kudos .kudos {
-    display: none !important;
-}
-
-.mr-hide-views .views {
+.mr-hide-kudos .kudos,
+.mr-hide-views .views,
+.mr-hide-spotify .mr-spotify,
+.mr-hide-comment-pros .mr-comment-pro,
+.mr-hide-comment-cons .mr-comment-con {
     display: none !important;
 }

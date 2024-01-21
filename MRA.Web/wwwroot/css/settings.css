@@ -49,3 +49,6 @@
 .mr-setting-section h5 i {
     color: var(--mr-chat-color);
 }
+.mr-setting-section p {
+    font-size: var(--mr-font-size-small);
+}

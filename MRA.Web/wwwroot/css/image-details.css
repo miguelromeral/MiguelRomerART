@@ -439,6 +439,7 @@ div.mr-chat-container {
     padding: 5px 10px;
     border-radius: 30px;
     animation-delay: 1s;
+    background-color: var(--mr-chat-color);
 }
 
 #cardVoteForm {

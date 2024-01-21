@@ -173,12 +173,14 @@
 
                 @if (!String.IsNullOrEmpty(drawing.SpotifyTrackId))
                 {
-                    <iframe
-                            src="https://open.spotify.com/embed/track/@(drawing.SpotifyTrackId)?utm_source=generator"
-                            width="100%"
-                            height="152"
-                            allowfullscreen="true"
-                            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                    <div class="mr-spotify">
+                        <iframe
+                                src="https://open.spotify.com/embed/track/@(drawing.SpotifyTrackId)?utm_source=generator"
+                                width="100%"
+                                height="152"
+                                allowfullscreen="true"
+                                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                    </div>
                 }
                 <div class="mr-chat-container" style="width: 100%;">
                     @{
@@ -206,7 +208,7 @@
         </div>
 
         <div class="col-sm-12 col-md-12 col-lg-4 mr-row-pros-cons">
-            <div class="mr-social-container" style="width: 100%;">
+            <div class="mr-social-container mr-comment-pro" style="width: 100%;">
                 <div class="mr-chat-container" style="width: 100%;">
                     @if (!String.IsNullOrEmpty(drawing.CommentPros))
                     {
@@ -228,7 +230,7 @@
                 </div>
             </div>
 
-            <div class="mr-social-container" style="width: 100%;">
+            <div class="mr-social-container mr-comment-con" style="width: 100%;">
 
                 <div class="mr-chat-container" style="width: 100%;">
                     @if (!String.IsNullOrEmpty(drawing.CommentCons))

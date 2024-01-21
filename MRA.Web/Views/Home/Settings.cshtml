@@ -51,6 +51,67 @@
                 </div>
             </div>
         </div>
+        <div class="mr-setting-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12 col-md-8">
+                        <h5>
+                            <i class="bi bi-spotify"></i> Mostrar Spotify
+                        </h5>
+                        <p>
+                            Si el dibujo tiene una canción sugerida de Spotify, mostrar u ocultar el banner.
+                        </p>
+                    </div>
+                    <div class="col-sm-12 col-md-4 mr-setting-change-value">
+                        <select id="hideSpotifySelector" class="mr-custom-select form-select form-select-sm" onchange="eventChangeHideSpotify()">
+                            <option value="show">Mostrar Pistas Sugeridas</option>
+                            <option value="hide">Esconder Spotify</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mr-setting-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12 col-md-8">
+                        <h5>
+                            <i class="bi bi-hand-thumbs-up-fill"></i> Mostrar Comentarios Positivos
+                        </h5>
+                        <p>
+                            Ver los comentarios positivos sobre el dibujo.
+                        </p>
+                    </div>
+                    <div class="col-sm-12 col-md-4 mr-setting-change-value">
+                        <select id="hideCommentProsSelector" class="mr-custom-select form-select form-select-sm" onchange="eventChangeHideCommentPros()">
+                            <option value="show">Mostrar Comentarios Positivos</option>
+                            <option value="hide">Esconder</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mr-setting-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12 col-md-8">
+                        <h5>
+                            <i class="bi bi-hand-thumbs-down-fill"></i> Mostrar Comentarios Negativos
+                        </h5>
+                        <p>
+                            Ver los comentarios negativos sobre el dibujo.
+                        </p>
+                    </div>
+                    <div class="col-sm-12 col-md-4 mr-setting-change-value">
+                        <select id="hideCommentConsSelector" class="mr-custom-select form-select form-select-sm" onchange="eventChangeHideCommentCons()">
+                            <option value="show">Mostrar Comentarios Negativos</option>
+                            <option value="hide">Esconder</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <div class="row">
@@ -182,11 +243,13 @@
 
 @section Scripts {
     <script asp-append-version="true">
-        changeLightModeButton();
-        changeFontSize();
-        changeFontFamily();
         changeFontWeight();
         changeShowKudos();
         changeHideViews();
+        changeHideSpotify();
+        changeHideCommentPros();
+        changeLightModeButton();
+        changeFontSize();
+        changeFontFamily();
     </script>
 }

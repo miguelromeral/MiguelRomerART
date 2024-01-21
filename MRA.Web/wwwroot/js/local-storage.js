@@ -6,6 +6,9 @@ var localStorageKeys = {
     fontWeight: "font-weight",
     showKudos: "show-kudos",
     hideViews: "hide-views",
+    hideSpotify: "hide-spotify",
+    hideCommentPros: "hide-comment-pros",
+    hideCommentCons: "hide-comment-cons",
 }
 
 var settingsControl = {
@@ -14,6 +17,9 @@ var settingsControl = {
     selectorFontWeight: "#fontWeightSelector",
     selectorShowKudos: "#showKudosSelector",
     selectorHideViews: "#hideViewsSelector",
+    selectorHideSpotify: "#hideSpotifySelector",
+    selectorHideCommentPros: "#hideCommentProsSelector",
+    selectorHideCommentCons: "#hideCommentConsSelector",
 }
 
 var settingsClasses = {
@@ -31,7 +37,10 @@ var settingsClasses = {
         bold: "mr-setting-font-weight-bold",
     },
     showKudos: "mr-hide-kudos",
-    hideViews: "mr-hide-views"
+    hideViews: "mr-hide-views",
+    hideSpotify: "mr-hide-spotify",
+    hideCommentPros: "mr-hide-comment-pros",
+    hideCommentCons: "mr-hide-comment-cons"
 }
 
 function getCacheItem(key, defaultValue) {
@@ -124,6 +133,10 @@ function loadConfig() {
                 break;
         }
     }
+
+    loadHideSpotify();
+    loadHideCommentPros();
+    loadHideCommentCons();
 }
 
 
@@ -193,4 +206,70 @@ function eventChangeHideViews() {
 
 function changeHideViews() {
     $(settingsControl.selectorHideViews).val(getCacheItem(localStorageKeys.hideViews, "show"));
+}
+function eventChangeHideSpotify() {
+    setCacheItem(localStorageKeys.hideSpotify, $(settingsControl.selectorHideSpotify).val());
+    loadConfig();
+}
+function changeHideSpotify() {
+    $(settingsControl.selectorHideSpotify).val(getCacheItem(localStorageKeys.hideSpotify, "show"));
+}
+
+function loadHideSpotify() {
+    const hideSpotify = getCacheItem(localStorageKeys.hideSpotify, "show");
+    if (hideSpotify) {
+        switch (hideSpotify) {
+            case "show":
+                document.body.classList.remove(settingsClasses.hideSpotify);
+                break;
+            case "hide":
+                document.body.classList.add(settingsClasses.hideSpotify);
+                break;
+        }
+    }
+}
+
+function eventChangeHideCommentPros() {
+    setCacheItem(localStorageKeys.hideCommentPros, $(settingsControl.selectorHideCommentPros).val());
+    loadConfig();
+}
+function changeHideCommentPros() {
+    $(settingsControl.selectorHideCommentPros).val(getCacheItem(localStorageKeys.hideCommentPros, "show"));
+}
+
+function loadHideCommentPros() {
+    const hide = getCacheItem(localStorageKeys.hideCommentPros, "show");
+    if (hide) {
+        switch (hide) {
+            case "show":
+                document.body.classList.remove(settingsClasses.hideCommentPros);
+                break;
+            case "hide":
+                document.body.classList.add(settingsClasses.hideCommentPros);
+                break;
+        }
+    }
+}
+
+
+function eventChangeHideCommentCons() {
+    setCacheItem(localStorageKeys.hideCommentCons, $(settingsControl.selectorHideCommentCons).val());
+    loadConfig();
+}
+function changeHideCommentCons() {
+    $(settingsControl.selectorHideCommentCons).val(getCacheItem(localStorageKeys.hideCommentCons, "show"));
+}
+
+function loadHideCommentCons() {
+    const hide = getCacheItem(localStorageKeys.hideCommentCons, "show");
+    if (hide) {
+        switch (hide) {
+            case "show":
+                document.body.classList.remove(settingsClasses.hideCommentCons);
+                break;
+            case "hide":
+                document.body.classList.add(settingsClasses.hideCommentCons);
+                break;
+        }
+    }
 }
