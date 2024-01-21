@@ -5,6 +5,7 @@ var localStorageKeys = {
     fontFamily: "font-family",
     fontWeight: "font-weight",
     showKudos: "show-kudos",
+    hideViews: "hide-views",
 }
 
 var settingsControl = {
@@ -12,6 +13,7 @@ var settingsControl = {
     selectorFontFamily: "#fontFamilySelector",
     selectorFontWeight: "#fontWeightSelector",
     selectorShowKudos: "#showKudosSelector",
+    selectorHideViews: "#hideViewsSelector",
 }
 
 var settingsClasses = {
@@ -29,6 +31,7 @@ var settingsClasses = {
         bold: "mr-setting-font-weight-bold",
     },
     showKudos: "mr-hide-kudos",
+    hideViews: "mr-hide-views"
 }
 
 function getCacheItem(key, defaultValue) {
@@ -110,6 +113,17 @@ function loadConfig() {
         }
     }
 
+    const hideViews = getCacheItem(localStorageKeys.hideViews, "show");
+    if (hideViews) {
+        switch (hideViews) {
+            case "show":
+                document.body.classList.remove(settingsClasses.hideViews);
+                break;
+            case "hide":
+                document.body.classList.add(settingsClasses.hideViews);
+                break;
+        }
+    }
 }
 
 
@@ -138,13 +152,13 @@ function changeFontSize() {
 
 function cambiarTamanio() {
     setCacheItem(localStorageKeys.fontSize, $(settingsControl.selectorFontSize).val());
-    loadConfig();
+        loadConfig();
 }
 
 
 function eventChangeFontFamily() {
     setCacheItem(localStorageKeys.fontFamily, $(settingsControl.selectorFontFamily).val());
-    loadConfig();
+        loadConfig();
 }
 function changeFontFamily() {
     $(settingsControl.selectorFontFamily).val(getCacheItem(localStorageKeys.fontFamily, "josefine"));
@@ -153,7 +167,7 @@ function changeFontFamily() {
 
 function cambiarPeso() {
     setCacheItem(localStorageKeys.fontWeight, $(settingsControl.selectorFontWeight).val());
-    loadConfig();
+        loadConfig();
 }
 
 function changeFontWeight() {
@@ -168,5 +182,15 @@ function eventChangeShowKudos() {
 }
 
 function changeShowKudos() {
-    $(settingsControl.showKudos).val(getCacheItem(localStorageKeys.showKudos, "show"));
+    $(settingsControl.selectorShowKudos).val(getCacheItem(localStorageKeys.showKudos, "show"));
+}
+
+
+function eventChangeHideViews() {
+    setCacheItem(localStorageKeys.hideViews, $(settingsControl.selectorHideViews).val());
+    loadConfig();
+}
+
+function changeHideViews() {
+    $(settingsControl.selectorHideViews).val(getCacheItem(localStorageKeys.hideViews, "show"));
 }

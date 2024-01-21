@@ -399,3 +399,7 @@ img.mr-chat-image-miguel {
 .mr-hide-kudos .kudos {
     display: none !important;
 }
+
+.mr-hide-views .views {
+    display: none !important;
+}
