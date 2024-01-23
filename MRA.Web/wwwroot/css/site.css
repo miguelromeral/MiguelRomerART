@@ -405,3 +405,7 @@ img.mr-chat-image-miguel {
 .mr-hide-score-popular .mr-score-popular {
     display: none !important;
 }
+
+.mr-details-section-title{
+    color: var(--mr-chat-color);
+}

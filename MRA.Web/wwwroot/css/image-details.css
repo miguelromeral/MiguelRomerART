@@ -5,6 +5,7 @@
 .mr-image-page-title {
     color: var(--mr-chat-color) !important;
     font-style: italic;
+    transition: var(--mr-transition-time) ease-in-out;
 }
 
 /* First column, including the image and the likes */
@@ -14,6 +15,7 @@
 /* Title of the image */
 .mr-image-detail-title {
     margin-bottom: 0px;
+    color: var(--mr-text-color);
 }
 
 /* Subtitle of the image*/
@@ -512,3 +514,8 @@ div.mr-chat-container {
     .mr-score-image img {
         background-color: var(--mr-background-color);
     }
+
+.mr-image-page-title:hover {
+    color: var(--mr-text-color) !important;
+
+}

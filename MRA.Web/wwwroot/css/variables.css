@@ -27,7 +27,7 @@
     --mr-border-radius: 12px;
     --mr-padding-btw-border-image: 6px;
     --mr-border-radius-image: calc(var(--mr-border-radius) - var(--mr-padding-btw-border-image));
-    --mr-transition-time: 0.4s;
+    --mr-transition-time: 0.3s;
     --mr-gap-icon-text: 5px;
     --mr-carousel-max-height: 400px;
     --mr-pacman-size: 30%;
