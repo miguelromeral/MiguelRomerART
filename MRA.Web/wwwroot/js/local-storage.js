@@ -11,6 +11,7 @@ var localStorageKeys = {
     hideCommentCons: "hide-comment-cons",
     hideScoreMiguel: "hide-score-miguel",
     hideScorePopular: "hide-score-popular",
+    chatColor: "chat-color",
 }
 
 
@@ -28,6 +29,7 @@ var localStorageDefaultValues = {
     hideCommentCons: "show",
     hideScoreMiguel: "show",
     hideScorePopular: "show",
+    chatColor: "#D67DFB",
 }
 
 var settingsControl = {
@@ -41,6 +43,7 @@ var settingsControl = {
     selectorHideCommentCons: "#hideCommentConsSelector",
     selectorHideScoreMiguel: "#hideScoreMiguelSelector",
     selectorHideScorePopular: "#hideScorePopularSelector",
+    chatColor: "#iChatColor",
 }
 
 var settingsClasses = {
@@ -90,6 +93,7 @@ function loadConfig() {
     loadHideCommentCons();
     loadHideScoreMiguel();
     loadHideScorePopular();
+    loadChatColor();
 }
 
 
@@ -399,5 +403,28 @@ function resetConfig() {
     setCacheItem(localStorageKeys.hideScorePopular, localStorageDefaultValues.hideScorePopular);
     $(settingsControl.selectorHideScorePopular).val(localStorageDefaultValues.hideScorePopular);
 
+    setCacheItem(localStorageKeys.chatColor, localStorageDefaultValues.chatColor);
+    $(settingsControl.chatColor).val(localStorageDefaultValues.chatColor);
+
+
     loadConfig();
+}
+
+function onInputChatColor(event) {
+    setCacheItem(localStorageKeys.chatColor, event.target.value);
+    loadChatColor();
+}
+
+
+function changeChatColor() {
+    $(settingsControl.chatColor).val(getCacheItem(localStorageKeys.chatColor, localStorageDefaultValues.chatColor));
+}
+
+function loadChatColor() {
+    const color = getCacheItem(localStorageKeys.chatColor, localStorageDefaultValues.chatColor);
+    if (color != localStorageDefaultValues.chatColor) {
+        document.documentElement.style.setProperty('--mr-chat-color', color);
+    } else {
+        document.documentElement.style.setProperty('--mr-chat-color', "");
+    }
 }

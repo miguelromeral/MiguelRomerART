@@ -156,6 +156,31 @@
         </div>
     </div>
 </div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <h3>Apariencia</h3>
+    </div>
+    <div class="col-sm-12">
+        <div class="mr-setting-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12 col-md-8">
+                        <h5>
+                            <i class="bi bi-palette-fill"></i> Color Favorito
+                        </h5>
+                        <p>
+                            Establece el color destacado de la página web. Esto afectará al menú, los encabezados, algunos botones, mensajes de detalles, etc.
+                        </p>
+                    </div>
+                    <div class="col-sm-12 col-md-4 mr-setting-change-value">
+                        <input id="iChatColor" type="color" class="m-auto form-control form-control-color" value="#D67DFB" oninput="onInputChatColor(event)">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="row">
     <div class="col-sm-12">
         <h3>Accesibilidad</h3>
@@ -269,7 +294,7 @@
                         </p>
                     </div>
                     <div class="col-sm-12 col-md-4 mr-setting-change-value">
-                        <button id="theme-switch" class="btn mr-custom-btn" onclick="resetConfig()">Reestablecer</button>
+                        <button id="btnRestablecer" class="btn mr-custom-btn" onclick="resetConfig()">Reestablecer</button>
                     </div>
                 </div>
             </div>
@@ -319,5 +344,6 @@
         changeFontFamily();
         changeHideScoreMiguel();
         changeHideScorePopular();
+        changeChatColor();
     </script>
 }

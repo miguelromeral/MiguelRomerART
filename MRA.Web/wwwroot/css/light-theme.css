@@ -59,11 +59,16 @@ body.light-theme {
     color: white;
 }
 
-:root body.light-theme {
+
+html:not([style*="--mr-chat-color"]) {
+    --mr-chat-color: var(--mr-chat-color-light);
+}
+
+
+:root .light-theme {
     --mr-text-color: var(--mr-text-color-light);
     --mr-text-color-opposite: var(--mr-text-color-dark);
     --mr-control-background-color: var(--mr-control-background-color-light);
-    --mr-chat-color: var(--mr-chat-color-light);
     --mr-ff-border-color: #b6b6b6;
     --mr-development-banner-color: var(--mr-development-banner-color-light);
     --mr-thumbnail-date-background-color: var(--mr-thumbnail-date-background-color-light);
