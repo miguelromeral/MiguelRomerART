@@ -13,6 +13,23 @@ var localStorageKeys = {
     hideScorePopular: "hide-score-popular",
 }
 
+
+
+
+var localStorageDefaultValues = {
+    lightTheme: false,
+    fontSize: "medium",
+    fontFamily: "josefine",
+    fontWeight: "normal",
+    showKudos: "show",
+    hideViews: "show",
+    hideSpotify: "show",
+    hideCommentPros: "show",
+    hideCommentCons: "show",
+    hideScoreMiguel: "show",
+    hideScorePopular: "show",
+}
+
 var settingsControl = {
     selectorFontSize: "#fontSizeSelector",
     selectorFontFamily: "#fontFamilySelector",
@@ -60,86 +77,14 @@ function setCacheItem(key, value) {
     localStorage.setItem(key, value);
 }
 
+
 function loadConfig() {
-    const isLightMode = getCacheItem(localStorageKeys.lightTheme, false);
-    if (isLightMode) {
-        document.body.classList.add(settingsClasses.lightTheme);
-    }
-
-    const tamanioGuardado = getCacheItem(localStorageKeys.fontSize, "medium");
-    if (tamanioGuardado) {
-        switch (tamanioGuardado) {
-            case "small":
-                document.body.classList.add(settingsClasses.textSize.small);
-                document.body.classList.remove(settingsClasses.textSize.large);
-                break;
-            case "medium":
-                document.body.classList.remove(settingsClasses.textSize.small);
-                document.body.classList.remove(settingsClasses.textSize.large);
-                break;
-            case "large":
-                document.body.classList.remove(settingsClasses.textSize.small);
-                document.body.classList.add(settingsClasses.textSize.large);
-                break;
-        }
-    }
-
-    const fontFamily = getCacheItem(localStorageKeys.fontFamily, "josefine");
-    if (fontFamily) {
-        switch (fontFamily) {
-            case "josefine":
-                document.body.classList.add(settingsClasses.textFamily.josefine);
-                document.body.classList.remove(settingsClasses.textFamily.sansSerif);
-                break;
-            case "sans-serif":
-                document.body.classList.remove(settingsClasses.textFamily.josefine);
-                document.body.classList.add(settingsClasses.textFamily.sansSerif);
-                break;
-        }
-    }
-
-    const fontWeight = getCacheItem(localStorageKeys.fontWeight, "normal");
-    if (fontWeight) {
-        switch (fontWeight) {
-            case "light":
-                document.body.classList.add(settingsClasses.textWeight.light);
-                document.body.classList.remove(settingsClasses.textWeight.bold);
-                break;
-            case "normal":
-                document.body.classList.remove(settingsClasses.textWeight.light);
-                document.body.classList.remove(settingsClasses.textWeight.bold);
-                break;
-            case "bold":
-                document.body.classList.remove(settingsClasses.textWeight.light);
-                document.body.classList.add(settingsClasses.textWeight.bold);
-                break;
-        }
-    }
-
-    const showKudos = getCacheItem(localStorageKeys.showKudos, "show");
-    if (showKudos) {
-        switch (showKudos) {
-            case "show":
-                document.body.classList.remove(settingsClasses.showKudos);
-                break;
-            case "hide":
-                document.body.classList.add(settingsClasses.showKudos);
-                break;
-        }
-    }
-
-    const hideViews = getCacheItem(localStorageKeys.hideViews, "show");
-    if (hideViews) {
-        switch (hideViews) {
-            case "show":
-                document.body.classList.remove(settingsClasses.hideViews);
-                break;
-            case "hide":
-                document.body.classList.add(settingsClasses.hideViews);
-                break;
-        }
-    }
-
+    loadLightTheme();
+    loadFontSize();
+    loadFontFamily();
+    loadFontWeight();
+    loadShowKudos();
+    loadHideViews();
     loadHideSpotify();
     loadHideCommentPros();
     loadHideCommentCons();
@@ -150,30 +95,60 @@ function loadConfig() {
 
 
 function toggleTheme() {
-    var isLightMode = getCacheItem(localStorageKeys.lightTheme, false);
+    var isLightMode = getCacheItem(localStorageKeys.lightTheme, localStorageDefaultValues.lightTheme);
     setCacheItem(localStorageKeys.lightTheme, !isLightMode);
-    changeLightModeButton();
+    loadConfig();
 }
 
 function changeLightModeButton() {
-    if (getCacheItem(localStorageKeys.lightTheme, false)) {
+    if (getCacheItem(localStorageKeys.lightTheme, localStorageDefaultValues.lightTheme)) {
         document.body.classList.add(settingsClasses.lightTheme);
-        $("#theme-switch").addClass("btn-dark");
-        $("#theme-switch").removeClass("btn-light");
+        //$("#theme-switch").addClass("btn-dark");
+        //$("#theme-switch").removeClass("btn-light");
     } else {
         document.body.classList.remove(settingsClasses.lightTheme);
-        $("#theme-switch").addClass("btn-light");
-        $("#theme-switch").removeClass("btn-dark");
+        //$("#theme-switch").addClass("btn-light");
+        //$("#theme-switch").removeClass("btn-dark");
+    }
+}
+
+function loadLightTheme() {
+    const isLightMode = getCacheItem(localStorageKeys.lightTheme, localStorageDefaultValues.lightTheme);
+    if (isLightMode) {
+        document.body.classList.add(settingsClasses.lightTheme);
+    } else {
+        document.body.classList.remove(settingsClasses.lightTheme);
     }
 }
 
 function changeFontSize() {
-    $(settingsControl.selectorFontSize).val(getCacheItem(localStorageKeys.fontSize, "medium"));
+    $(settingsControl.selectorFontSize).val(getCacheItem(localStorageKeys.fontSize, localStorageDefaultValues.fontSize));
 }
 
 function cambiarTamanio() {
     setCacheItem(localStorageKeys.fontSize, $(settingsControl.selectorFontSize).val());
         loadConfig();
+}
+
+function loadFontSize() {
+
+    const tamanioGuardado = getCacheItem(localStorageKeys.fontSize, localStorageDefaultValues.fontSize);
+    if (tamanioGuardado) {
+        switch (tamanioGuardado) {
+            case "small":
+                document.body.classList.add(settingsClasses.textSize.small);
+                document.body.classList.remove(settingsClasses.textSize.large);
+                break;
+            case localStorageDefaultValues.fontSize:
+                document.body.classList.remove(settingsClasses.textSize.small);
+                document.body.classList.remove(settingsClasses.textSize.large);
+                break;
+            case "large":
+                document.body.classList.remove(settingsClasses.textSize.small);
+                document.body.classList.add(settingsClasses.textSize.large);
+                break;
+        }
+    }
 }
 
 
@@ -182,9 +157,24 @@ function eventChangeFontFamily() {
         loadConfig();
 }
 function changeFontFamily() {
-    $(settingsControl.selectorFontFamily).val(getCacheItem(localStorageKeys.fontFamily, "josefine"));
+    $(settingsControl.selectorFontFamily).val(getCacheItem(localStorageKeys.fontFamily, localStorageDefaultValues.fontFamily));
 }
 
+function loadFontFamily() {
+    const fontFamily = getCacheItem(localStorageKeys.fontFamily, localStorageDefaultValues.fontFamily);
+    if (fontFamily) {
+        switch (fontFamily) {
+            case localStorageDefaultValues.fontFamily:
+                document.body.classList.add(settingsClasses.textFamily.josefine);
+                document.body.classList.remove(settingsClasses.textFamily.sansSerif);
+                break;
+            case "sans-serif":
+                document.body.classList.remove(settingsClasses.textFamily.josefine);
+                document.body.classList.add(settingsClasses.textFamily.sansSerif);
+                break;
+        }
+    }
+}
 
 function cambiarPeso() {
     setCacheItem(localStorageKeys.fontWeight, $(settingsControl.selectorFontWeight).val());
@@ -192,9 +182,29 @@ function cambiarPeso() {
 }
 
 function changeFontWeight() {
-    $(settingsControl.selectorFontWeight).val(getCacheItem(localStorageKeys.fontWeight, "normal"));
+    $(settingsControl.selectorFontWeight).val(getCacheItem(localStorageKeys.fontWeight, localStorageDefaultValues.fontWeight));
 }
 
+function loadFontWeight() {
+
+    const fontWeight = getCacheItem(localStorageKeys.fontWeight, localStorageDefaultValues.fontWeight);
+    if (fontWeight) {
+        switch (fontWeight) {
+            case "light":
+                document.body.classList.add(settingsClasses.textWeight.light);
+                document.body.classList.remove(settingsClasses.textWeight.bold);
+                break;
+            case localStorageDefaultValues.fontWeight:
+                document.body.classList.remove(settingsClasses.textWeight.light);
+                document.body.classList.remove(settingsClasses.textWeight.bold);
+                break;
+            case "bold":
+                document.body.classList.remove(settingsClasses.textWeight.light);
+                document.body.classList.add(settingsClasses.textWeight.bold);
+                break;
+        }
+    }
+}
 
 
 function eventChangeShowKudos() {
@@ -203,9 +213,22 @@ function eventChangeShowKudos() {
 }
 
 function changeShowKudos() {
-    $(settingsControl.selectorShowKudos).val(getCacheItem(localStorageKeys.showKudos, "show"));
+    $(settingsControl.selectorShowKudos).val(getCacheItem(localStorageKeys.showKudos, localStorageDefaultValues.showKudos));
 }
 
+function loadShowKudos() {
+    const showKudos = getCacheItem(localStorageKeys.showKudos, localStorageDefaultValues.showKudos);
+    if (showKudos) {
+        switch (showKudos) {
+            case localStorageDefaultValues.showKudos:
+                document.body.classList.remove(settingsClasses.showKudos);
+                break;
+            case "hide":
+                document.body.classList.add(settingsClasses.showKudos);
+                break;
+        }
+    }
+}
 
 function eventChangeHideViews() {
     setCacheItem(localStorageKeys.hideViews, $(settingsControl.selectorHideViews).val());
@@ -213,21 +236,38 @@ function eventChangeHideViews() {
 }
 
 function changeHideViews() {
-    $(settingsControl.selectorHideViews).val(getCacheItem(localStorageKeys.hideViews, "show"));
+    $(settingsControl.selectorHideViews).val(getCacheItem(localStorageKeys.hideViews, localStorageDefaultValues.hideViews));
 }
+
+
+function loadHideViews() {
+    const hideViews = getCacheItem(localStorageKeys.hideViews, localStorageDefaultValues.hideViews);
+    if (hideViews) {
+        switch (hideViews) {
+            case localStorageDefaultValues.hideViews:
+                document.body.classList.remove(settingsClasses.hideViews);
+                break;
+            case "hide":
+                document.body.classList.add(settingsClasses.hideViews);
+                break;
+        }
+    }
+}
+
+
 function eventChangeHideSpotify() {
     setCacheItem(localStorageKeys.hideSpotify, $(settingsControl.selectorHideSpotify).val());
     loadConfig();
 }
 function changeHideSpotify() {
-    $(settingsControl.selectorHideSpotify).val(getCacheItem(localStorageKeys.hideSpotify, "show"));
+    $(settingsControl.selectorHideSpotify).val(getCacheItem(localStorageKeys.hideSpotify, localStorageDefaultValues.hideSpotify));
 }
 
 function loadHideSpotify() {
-    const hideSpotify = getCacheItem(localStorageKeys.hideSpotify, "show");
+    const hideSpotify = getCacheItem(localStorageKeys.hideSpotify, localStorageDefaultValues.hideSpotify);
     if (hideSpotify) {
         switch (hideSpotify) {
-            case "show":
+            case localStorageDefaultValues.hideSpotify:
                 document.body.classList.remove(settingsClasses.hideSpotify);
                 break;
             case "hide":
@@ -242,14 +282,14 @@ function eventChangeHideCommentPros() {
     loadConfig();
 }
 function changeHideCommentPros() {
-    $(settingsControl.selectorHideCommentPros).val(getCacheItem(localStorageKeys.hideCommentPros, "show"));
+    $(settingsControl.selectorHideCommentPros).val(getCacheItem(localStorageKeys.hideCommentPros, localStorageDefaultValues.hideCommentPros));
 }
 
 function loadHideCommentPros() {
-    const hide = getCacheItem(localStorageKeys.hideCommentPros, "show");
+    const hide = getCacheItem(localStorageKeys.hideCommentPros, localStorageDefaultValues.hideCommentPros);
     if (hide) {
         switch (hide) {
-            case "show":
+            case localStorageDefaultValues.hideCommentPros:
                 document.body.classList.remove(settingsClasses.hideCommentPros);
                 break;
             case "hide":
@@ -265,14 +305,14 @@ function eventChangeHideCommentCons() {
     loadConfig();
 }
 function changeHideCommentCons() {
-    $(settingsControl.selectorHideCommentCons).val(getCacheItem(localStorageKeys.hideCommentCons, "show"));
+    $(settingsControl.selectorHideCommentCons).val(getCacheItem(localStorageKeys.hideCommentCons, localStorageDefaultValues.hideCommentCons));
 }
 
 function loadHideCommentCons() {
-    const hide = getCacheItem(localStorageKeys.hideCommentCons, "show");
+    const hide = getCacheItem(localStorageKeys.hideCommentCons, localStorageDefaultValues.hideCommentCons);
     if (hide) {
         switch (hide) {
-            case "show":
+            case localStorageDefaultValues.hideCommentCons:
                 document.body.classList.remove(settingsClasses.hideCommentCons);
                 break;
             case "hide":
@@ -287,14 +327,14 @@ function eventChangeHideScoreMiguel() {
     loadConfig();
 }
 function changeHideScoreMiguel() {
-    $(settingsControl.selectorHideScoreMiguel).val(getCacheItem(localStorageKeys.hideScoreMiguel, "show"));
+    $(settingsControl.selectorHideScoreMiguel).val(getCacheItem(localStorageKeys.hideScoreMiguel, localStorageDefaultValues.hideScoreMiguel));
 }
 
 function loadHideScoreMiguel() {
-    const hide = getCacheItem(localStorageKeys.hideScoreMiguel, "show");
+    const hide = getCacheItem(localStorageKeys.hideScoreMiguel, localStorageDefaultValues.hideScoreMiguel);
     if (hide) {
         switch (hide) {
-            case "show":
+            case localStorageDefaultValues.hideScoreMiguel:
                 document.body.classList.remove(settingsClasses.hideScoreMiguel);
                 break;
             case "hide":
@@ -308,14 +348,14 @@ function eventChangeHideScorePopular() {
     loadConfig();
 }
 function changeHideScorePopular() {
-    $(settingsControl.selectorHideScorePopular).val(getCacheItem(localStorageKeys.hideScorePopular, "show"));
+    $(settingsControl.selectorHideScorePopular).val(getCacheItem(localStorageKeys.hideScorePopular, localStorageDefaultValues.hideScorePopular));
 }
 
 function loadHideScorePopular() {
-    const hide = getCacheItem(localStorageKeys.hideScorePopular, "show");
+    const hide = getCacheItem(localStorageKeys.hideScorePopular, localStorageDefaultValues.hideScorePopular);
     if (hide) {
         switch (hide) {
-            case "show":
+            case localStorageDefaultValues.hideScorePopular:
                 document.body.classList.remove(settingsClasses.hideScorePopular);
                 break;
             case "hide":
@@ -323,4 +363,41 @@ function loadHideScorePopular() {
                 break;
         }
     }
+}
+
+function resetConfig() {
+    setCacheItem(localStorageKeys.lightTheme, localStorageDefaultValues.lightTheme);
+    $(settingsControl.lightTheme).val(localStorageDefaultValues.lightTheme);
+
+    setCacheItem(localStorageKeys.fontSize, localStorageDefaultValues.fontSize);
+    $(settingsControl.selectorFontSize).val(localStorageDefaultValues.fontSize);
+
+    setCacheItem(localStorageKeys.fontFamily, localStorageDefaultValues.fontFamily);
+    $(settingsControl.selectorFontFamily).val(localStorageDefaultValues.fontFamily);
+
+    setCacheItem(localStorageKeys.fontWeight, localStorageDefaultValues.fontWeight);
+    $(settingsControl.selectorFontWeight).val(localStorageDefaultValues.fontWeight);
+
+    setCacheItem(localStorageKeys.showKudos, localStorageDefaultValues.showKudos);
+    $(settingsControl.selectorShowKudos).val(localStorageDefaultValues.showKudos);
+
+    setCacheItem(localStorageKeys.hideViews, localStorageDefaultValues.hideViews);
+    $(settingsControl.selectorHideViews).val(localStorageDefaultValues.hideViews);
+
+    setCacheItem(localStorageKeys.hideCommentPros, localStorageDefaultValues.hideCommentPros);
+    $(settingsControl.selectorHideCommentPros).val(localStorageDefaultValues.hideCommentPros);
+
+    setCacheItem(localStorageKeys.hideCommentCons, localStorageDefaultValues.hideCommentCons);
+    $(settingsControl.selectorHideCommentCons).val(localStorageDefaultValues.hideCommentCons);
+
+    setCacheItem(localStorageKeys.hideSpotify, localStorageDefaultValues.hideSpotify);
+    $(settingsControl.selectorHideSpotify).val(localStorageDefaultValues.hideSpotify);
+
+    setCacheItem(localStorageKeys.hideScoreMiguel, localStorageDefaultValues.hideScoreMiguel);
+    $(settingsControl.selectorHideScoreMiguel).val(localStorageDefaultValues.hideScoreMiguel);
+
+    setCacheItem(localStorageKeys.hideScorePopular, localStorageDefaultValues.hideScorePopular);
+    $(settingsControl.selectorHideScorePopular).val(localStorageDefaultValues.hideScorePopular);
+
+    loadConfig();
 }
