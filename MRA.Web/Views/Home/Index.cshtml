@@ -3,7 +3,7 @@
 
 
 @{
-    ViewData["Title"] = "Colecciones";
+    ViewData["Title"] = "Inicio";
 }
 
 @section Styles {
@@ -12,14 +12,35 @@
     <link href="~/css/collections.css" rel="stylesheet" asp-append-version="true" />
 }
 
+@* <div class="row mb-2">
+
+    <div class="col-sm-12">
+        <h6>Otros menús</h6>
+        <p>
+            Accede a diferentes sitios de la web a través de alguno de estos enlaces.
+        </p>
+        <div class="mr-home-menu-container">
+            <div class="mr-home-menu-item">
+                🎨 <a href="@Url.Action("Index", "Art")">Ver la Gelería Completa</a>
+            </div>
+            <div class="mr-home-menu-item">
+                🎶 <a href="@Url.Action("Playlist", "Spotify")">Escuchar playlist sugerida</a>
+            </div>
+            <div class="mr-home-menu-item">
+                😳 <a href="@Url.Action("Index", "About")">Saber sobre mí</a>
+            </div>
+            <div class="mr-home-menu-item">
+                ⚙ <a href="@Url.Action("Settings", "Home")">Cambiar ajustes</a>
+            </div>
+        </div>
+    </div>
+</div> *@
+
 <div class="row mb-2">
     <div class="col-sm-12">
         <h1>Colecciones</h1>
         <p>
             Aquí puedes ver una selección de diferentes imágenes en función de diferentes temas. Pulsa en cualquiera de ellas para ver más detalles.
-        </p>
-        <p>
-            También puedes <a href="@Url.Action("Index", "Art")">Ver la Gelería Completa</a>.
         </p>
     </div>
 </div>

@@ -37,34 +37,76 @@
     </div>
     
     <div class="mr-bottom-bar">
+        @{
+            string controladorActual = ViewContext.RouteData.Values["controller"].ToString();
+            string accionActual = ViewContext.RouteData.Values["action"].ToString();
+        }
+
         <a class="mr-bottom-bar-button" asp-area="" asp-controller="Home" asp-action="Index">
             <div class="mr-bottom-bar-icon">
-                🤩
+                @if (controladorActual == "Home" && accionActual == "Index")
+                {
+                    <i class="bi bi-house-door-fill"></i>
+                }
+                else
+                {
+                    <i class="bi bi-house-door"></i>
+                }
             </div>
             <div class="mr-bottom-bar-text">
-                Colección
+                Inicio
             </div>
         </a>
         <a class="mr-bottom-bar-button" asp-area="" asp-controller="Art" asp-action="Index">
             <div class="mr-bottom-bar-icon">
-                🎨
+                @if (controladorActual == "Art" && accionActual == "Index")
+                {
+                    <i class="bi bi-easel-fill"></i>
+                }
+                else
+                {
+                    <i class="bi bi-easel"></i>
+                }
             </div>
             <div class="mr-bottom-bar-text">
                 Galería
             </div>
         </a>
+        <a class="mr-bottom-bar-button mr-spotify" asp-area="" asp-controller="Spotify" asp-action="Playlist">
+            <div class="mr-bottom-bar-icon">
+                @if (controladorActual == "Spotify" && accionActual == "Playlist")
+                {
+                    <i class="bi bi-cassette-fill"></i>
+                }
+                else
+                {
+                    <i class="bi bi-cassette"></i>
+                }
+            </div>
+            <div class="mr-bottom-bar-text">
+                Playlist
+            </div>
+        </a>
         <a class="mr-bottom-bar-button" asp-area="" asp-controller="Home" asp-action="About">
             <div class="mr-bottom-profile-pic">
-                <img src="~/assets/images/miguel.jpeg" class="mr-chat-image-miguel brand" />
+                <img src="~/assets/images/miguel.jpeg" class="mr-chat-image-miguel brand"
+                     style="@(controladorActual == "Home" && accionActual == "About" ? "border-color: var(--mr-chat-color);" : "border: none;") " />
             </div>
             
-            <div class="mr-bottom-bar-text">
+            <div class="mr-bottom-bar-text" id="bottomBarTextAbout">
                 Sobre Mí
             </div>
         </a>
         <a class="mr-bottom-bar-button" asp-area="" asp-controller="Home" asp-action="Settings">
             <div class="mr-bottom-bar-icon">
-                <i class="bi bi-gear-fill"></i>
+                @if (controladorActual == "Home" && accionActual == "Settings")
+                {
+                    <i class="bi bi-gear-fill"></i>
+                }
+                else
+                {
+                    <i class="bi bi-gear"></i>
+                }
             </div>
             <div class="mr-bottom-bar-text">
                 Ajustes

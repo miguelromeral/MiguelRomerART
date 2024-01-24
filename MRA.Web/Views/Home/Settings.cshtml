@@ -8,6 +8,130 @@
 </h1>
 <div class="row">
     <div class="col-sm-12">
+        <h3>Accesibilidad</h3>
+    </div>
+    <div class="col-sm-12">
+        <div class="mr-setting-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12 col-md-8">
+                        <h5>
+                            <i class="bi bi-moon-fill"></i> Modo Oscuro
+                        </h5>
+                        <p>
+                            Ver la página web con colores más claros o más oscuros.
+                        </p>
+                    </div>
+                    <div class="col-sm-12 col-md-4 mr-setting-change-value">
+                        <button id="theme-switch" class="btn mr-custom-btn" onclick="toggleTheme()">Cambiar Tema</button>
+                    </div>
+                </div>
+            </div>
+            <div>
+            </div>
+        </div>
+        <div class="mr-setting-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12 col-md-8">
+                        <h5>
+                            <i class="bi bi-fonts"></i> Fuente
+                        </h5>
+                        <p>
+                            Cambia entre la fuente original de la web o una fuente algo más estándar (se recomienda cambiar este ajuste si se tiene problemas al leer las letras).
+                        </p>
+                    </div>
+                    <div class="col-sm-12 col-md-4 mr-setting-change-value">
+
+                        <select id="fontFamilySelector" class="mr-custom-select form-select form-select-sm" onchange="eventChangeFontFamily()">
+                            <option value="josefine">Josefine (Por defecto)</option>
+                            <option value="sans-serif">Sans Serif (Estándar)</option>
+                        </select>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mr-setting-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12 col-md-8">
+                        <h5>
+                            <i class="bi bi-type"></i> Tamaño de la Fuente
+                        </h5>
+                        <p>
+                            Cambia el tamaño del texto a lo largo de la web.
+                        </p>
+                    </div>
+                    <div class="col-sm-12 col-md-4 mr-setting-change-value">
+
+                        <select id="fontSizeSelector" class="mr-custom-select form-select form-select-sm" onchange="cambiarTamanio()">
+                            <option value="small">Pequeño</option>
+                            <option value="medium">Mediano (por defecto)</option>
+                            <option value="large">Grande</option>
+                        </select>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mr-setting-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12 col-md-8">
+                        <h5>
+                            <i class="bi bi-type-bold"></i> Peso de la Fuente
+                        </h5>
+                        <p>
+                            Cambia la fuente de tal manera que se pueda ver o más negrita o más ligera.
+                        </p>
+                    </div>
+                    <div class="col-sm-12 col-md-4 mr-setting-change-value">
+
+                        <select id="fontWeightSelector" class="mr-custom-select form-select form-select-sm" onchange="cambiarPeso()">
+                            <option value="light">Ligera</option>
+                            <option value="normal">Normal (por defecto)</option>
+                            <option value="bold">Negrita</option>
+                        </select>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <h3>Apariencia</h3>
+    </div>
+    <div class="col-sm-12">
+        <div class="mr-setting-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12 col-md-8">
+                        <h5>
+                            <i class="bi bi-palette-fill"></i> Color Favorito
+                        </h5>
+                        <p>
+                            Establece el color destacado de la página web. Esto afectará al menú, los encabezados, algunos botones, mensajes de detalles, etc.
+                        </p>
+                        <p>
+                            Se recomienda utilizar <strong>colores saturados</strong>, que no sean muy oscuros ni muy claros (Podría afectar negativamente
+                            a la navegabilidad de la web).
+                        </p>
+                    </div>
+                    <div class="col-sm-12 col-md-4 mr-setting-change-value">
+                        <input id="iChatColor" type="color" class="m-auto form-control form-control-color" value="#D67DFB" oninput="onInputChatColor(event)">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
         <h3>Interacciones</h3>
     </div>
     <div class="col-sm-12">
@@ -150,127 +274,6 @@
                             <option value="show">Mostrar Puntuación Popular</option>
                             <option value="hide">Esconder</option>
                         </select>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-sm-12">
-        <h3>Apariencia</h3>
-    </div>
-    <div class="col-sm-12">
-        <div class="mr-setting-section">
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-12 col-md-8">
-                        <h5>
-                            <i class="bi bi-palette-fill"></i> Color Favorito
-                        </h5>
-                        <p>
-                            Establece el color destacado de la página web. Esto afectará al menú, los encabezados, algunos botones, mensajes de detalles, etc.
-                        </p>
-                    </div>
-                    <div class="col-sm-12 col-md-4 mr-setting-change-value">
-                        <input id="iChatColor" type="color" class="m-auto form-control form-control-color" value="#D67DFB" oninput="onInputChatColor(event)">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-sm-12">
-        <h3>Accesibilidad</h3>
-    </div>
-    <div class="col-sm-12">
-        <div class="mr-setting-section">
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-12 col-md-8">
-                        <h5>
-                            <i class="bi bi-moon-fill"></i> Modo Oscuro
-                        </h5>
-                        <p>
-                            Ver la página web con colores más claros o más oscuros.
-                        </p>
-                    </div>
-                    <div class="col-sm-12 col-md-4 mr-setting-change-value">
-                        <button id="theme-switch" class="btn mr-custom-btn" onclick="toggleTheme()">Cambiar Tema</button>
-                    </div>
-                </div>
-            </div>
-            <div>
-            </div>
-        </div>
-        <div class="mr-setting-section">
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-12 col-md-8">
-                        <h5>
-                            <i class="bi bi-fonts"></i> Fuente
-                        </h5>
-                        <p>
-                            Cambia entre la fuente original de la web o una fuente algo más estándar (se recomienda cambiar este ajuste si se tiene problemas al leer las letras).
-                        </p>
-                    </div>
-                    <div class="col-sm-12 col-md-4 mr-setting-change-value">
-
-                        <select id="fontFamilySelector" class="mr-custom-select form-select form-select-sm" onchange="eventChangeFontFamily()">
-                            <option value="josefine">Josefine (Por defecto)</option>
-                            <option value="sans-serif">Sans Serif (Estándar)</option>
-                        </select>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="mr-setting-section">
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-12 col-md-8">
-                        <h5>
-                            <i class="bi bi-type"></i> Tamaño de la Fuente
-                        </h5>
-                        <p>
-                            Cambia el tamaño del texto a lo largo de la web.
-                        </p>
-                    </div>
-                    <div class="col-sm-12 col-md-4 mr-setting-change-value">
-
-                        <select id="fontSizeSelector" class="mr-custom-select form-select form-select-sm" onchange="cambiarTamanio()">
-                            <option value="small">Pequeño</option>
-                            <option value="medium">Mediano (por defecto)</option>
-                            <option value="large">Grande</option>
-                        </select>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="mr-setting-section">
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-12 col-md-8">
-                        <h5>
-                            <i class="bi bi-type-bold"></i> Peso de la Fuente
-                        </h5>
-                        <p>
-                            Cambia la fuente de tal manera que se pueda ver o más negrita o más ligera.
-                        </p>
-                    </div>
-                    <div class="col-sm-12 col-md-4 mr-setting-change-value">
-
-                        <select id="fontWeightSelector" class="mr-custom-select form-select form-select-sm" onchange="cambiarPeso()">
-                            <option value="light">Ligera</option>
-                            <option value="normal">Normal (por defecto)</option>
-                            <option value="bold">Negrita</option>
-                        </select>
-
                     </div>
                 </div>
             </div>

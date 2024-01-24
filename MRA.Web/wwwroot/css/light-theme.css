@@ -11,9 +11,9 @@ body.light-theme {
         background-color: var(--mr-nav-color-light);
     }
 
-    body.light-theme nav a, body.light-theme .nav-link, body.light-theme a {
+    /*body.light-theme nav a, body.light-theme .nav-link, body.light-theme a {
         color: var(--mr-color-emphasis-light) !important;
-    }
+    }*/
 
     body.light-theme .mr-collection-section {
         background-color: var(--mr-nav-color-light);
@@ -46,7 +46,7 @@ body.light-theme {
     }
 
     body.light-theme .mr-bottom-bar-button:hover {
-        background-color: var(--mr-color-emphasis-light);
+        background-color: var(--mr-chat-color);
         color: white !important;
     }
 
@@ -72,7 +72,7 @@ html:not([style*="--mr-chat-color"]) {
     --mr-ff-border-color: #b6b6b6;
     --mr-development-banner-color: var(--mr-development-banner-color-light);
     --mr-thumbnail-date-background-color: var(--mr-thumbnail-date-background-color-light);
-    --mr-text-color-not-important: var(--mr-text-color-not-important-light);
+    /*--mr-text-color-not-important: var(--mr-text-color-not-important-light);*/
     --mr-score-background-color-none: var(--mr-score-background-color-none-light);
     --mr-score-text-color-none: var(--mr-score-text-color-none-light);
     --mr-vote-card-background-color: var(--mr-vote-card-background-color-light);
