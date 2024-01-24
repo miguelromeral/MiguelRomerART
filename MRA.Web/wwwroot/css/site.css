@@ -309,15 +309,15 @@ img.mr-chat-image-miguel {
         flex-direction: column;
         left: 0;
         top: 0;
-        height: 100%;
+        height: auto;
         min-width: var(--mr-bottom-bar-width);
         justify-content: flex-start;
         padding-top: 5%;
-        padding-bottom: 30%;
         background-color: var(--mr-chat-color-terciary);
         max-width: 12%;
         gap: 4px;
-        animation: slide-right .5s ease-out;
+        animation: slide-right var(--mr-transition-time) ease-out;
+        overflow-y: scroll;
     }
 
     .mr-bottom-bar-button {
