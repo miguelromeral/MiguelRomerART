@@ -32,7 +32,7 @@
     padding: var(--mr-padding-btw-border-image);
     width: -webkit-fill-available;
     min-height: 100px;
-    transition: var(--mr-transition-time) ease-in-out;
+    transition: var(--mr-transition-time) ease;
 }
 
     .mr-img-full-container.fullscreen {

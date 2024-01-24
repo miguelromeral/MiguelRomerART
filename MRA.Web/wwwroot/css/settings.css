@@ -3,6 +3,16 @@
 
 h1, h2, h3, h4, h5, h6 {
     color: var(--mr-chat-color);
+    transition: var(--mr-transition-time);
+}
+
+h1:hover,
+h2:hover,
+h3:hover,
+h4:hover,
+h5:hover,
+h6:hover {
+    color: var(--mr-text-color) !important;
 }
 
 .mr-setting-section {

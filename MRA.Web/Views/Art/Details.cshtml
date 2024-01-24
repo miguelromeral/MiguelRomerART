@@ -114,7 +114,7 @@
                 <div class="mr-scores">
                     <div class="mr-scores-reviews">
                         <div class="mr-scores-critic-container mr-score-miguel" title="Puntuación del Artista">
-                            <span class="mr-scores-critic @DetailsModel.GetClassScore(drawing.ScoreCritic)">
+                            <span class="mr-scores-critic @DetailsModel.GetClassScore(drawing.ScoreCritic) hvr-buzz-out">
                                 @(drawing.ScoreCritic == 0 ? "--" : drawing.ScoreCritic)
                             </span>
                             <div class="mr-score-image">
@@ -122,7 +122,7 @@
                             </div>
                         </div>
                         <div class="mr-scores-popular mr-score-popular" title="Puntuación de los Usuarios">
-                            <span id="spScoreUserVotes" class="mr-scores-popular-span @DetailsModel.GetClassScore(drawing.ScorePopularHuman)">
+                            <span id="spScoreUserVotes" class="mr-scores-popular-span @DetailsModel.GetClassScore(drawing.ScorePopularHuman) hvr-buzz-out">
                                 @(drawing.ScorePopularHuman == 0 ? "--" : drawing.ScorePopularHuman)
                             </span>
                             <div id="divScorePopular" class="mr-scores-popular-votes" title="Votos de Usuarios">
@@ -194,10 +194,10 @@
                                             @Html.Raw(comments[count])
                                         </div>
                                     </div>
-                                    <div class="mr-chat-image">
+                                <div class="mr-chat-image hvr-wobble-horizontal">
                                         @if (last)
                                     {
-                                            <img src="~/assets/images/miguel.jpeg" class="mr-chat-image-miguel slide-top" />
+                                        <img src="~/assets/images/miguel.jpeg" class="mr-chat-image-miguel slide-top " />
                                     }
                                     </div>
                                 </div>
