@@ -81,6 +81,7 @@
     --mr-thumbnails-details-background-carousel-dark: linear-gradient(180deg, transparent 0%, var(--mr-background-color-secondary) 50%, var(--mr-background-color-secondary) 100%);
     --mr-thumbnails-details-background-carousel-light: linear-gradient(180deg, transparent 0%, var(--mr-nav-color-light) 50%, var(--mr-nav-color-light) 100%);
     --mr-thumbnails-details-background-carousel: var(--mr-thumbnails-details-background-carousel-dark);
+    --mr-text-shadow-score: 20px;
 }
 
 /* FINAL FANTASY VII */

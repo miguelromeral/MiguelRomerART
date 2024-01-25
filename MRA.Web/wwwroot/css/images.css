@@ -25,6 +25,7 @@
 /* Text of the error placeholder */
 .mr-error-load-placeholder .subtitle {
     font-size: var(--mr-font-size-small);
+    text-align: center;
 }
 
 /* Show the placeholder when error */
@@ -35,4 +36,5 @@
     align-content: center;
     flex-direction: column;
     flex-wrap: wrap;
+    border-radius: var(--mr-border-radius-image);
 }

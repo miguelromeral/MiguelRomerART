@@ -107,10 +107,12 @@
 .carousel-item .cuadrado {
     position: relative;
     border-radius: var(--mr-border-radius) !important;
-    margin: 1%;
+    /* margin: 1%; */
     /* width: 90% !important; */
     /* padding-bottom: 85% !important; */
-    padding: 33%;
+    padding: 0%;
+    width: 100%;
+    /* height: 100%;    */
 }
 
 /* Each thumbnail. Size: 4xN */
@@ -237,9 +239,6 @@ mr-img-thumbnail-stats-item
     border-radius: 20px;
 }
 
-.mr-collection-section .mr-img-thumbnail-details-container {
-    background: var(--mr-thumbnails-details-background-carousel);
-}
 
 .mr-img-thumbnail-details-container {
     background: var(--mr-thumbnails-details-background);

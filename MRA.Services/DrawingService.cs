@@ -85,16 +85,22 @@ namespace MRA.Services
                         drawings = drawings.OrderByDescending(x => x.Views).ToList();
                         break;
                     case "scorem-desc":
-                        drawings = drawings.OrderByDescending(x => x.ScoreCritic).ToList();
+                        drawings = drawings.Where(x => x.ScoreCritic > 0).OrderByDescending(x => x.ScoreCritic).ToList();
                         break;
                     case "scorem-asc":
-                        drawings = drawings.OrderBy(x => x.ScoreCritic).ToList();
+                        drawings = drawings.Where(x => x.ScoreCritic > 0).OrderBy(x => x.ScoreCritic).ToList();
                         break;
                     case "scoreu-desc":
-                        drawings = drawings.OrderByDescending(x => x.ScorePopular).ToList();
+                        drawings = drawings.Where(x => x.ScorePopular > 0).OrderByDescending(x => x.ScorePopular).ToList();
                         break;
                     case "scoreu-asc":
-                        drawings = drawings.OrderBy(x => x.ScorePopular).ToList();
+                        drawings = drawings.Where(x => x.ScorePopular > 0).OrderBy(x => x.ScorePopular).ToList();
+                        break;
+                    case "time-asc":
+                        drawings = drawings.Where(x => x.Time > 0).OrderBy(x => x.Time).ToList();
+                        break;
+                    case "time-desc":
+                        drawings = drawings.Where(x => x.Time > 0).OrderByDescending(x => x.Time).ToList();
                         break;
                     default:
                         drawings = drawings.OrderByDescending(x => x.Date).ToList();

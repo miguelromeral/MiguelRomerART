@@ -16,7 +16,19 @@
         }
 
         <a class="mr-img-thumbnail-container slide-right" href="@Url.Action("Details", "Art", new { id = Model.Drawing.Id })">
-            <img src="@(String.IsNullOrEmpty(Model.Drawing.PathThumbnail) ? Model.Drawing.Url: Model.Drawing.UrlThumbnail)" onerror="errorLoadingImage('@Model.Drawing.Id')"
+
+            @{
+                var url = Model.Drawing.UrlThumbnail;
+                if (Model.FullSize)
+                    url = Model.Drawing.Url;
+
+                if (String.IsNullOrEmpty(url))
+                {
+                    url = Model.Drawing.Url;
+                }
+            }
+
+            <img src="@url" onerror="errorLoadingImage('@Model.Drawing.Id')"
                  loading="lazy" decoding="async">
 
             <div class="mr-error-load-placeholder" data-error-drawing-id="@Model.Drawing.Id">

@@ -6,24 +6,28 @@
 
 .carousel-inner {
     /*max-height: var(--mr-carousel-max-height);*/
+    height: 100%;
 }
 
 .carousel-item {
     /*max-height: var(--mr-carousel-max-height);*/
+    height: 100%;
 }
 
-.carousel-item img {
+/*.carousel-item img {
     width: 100%;
     object-fit: contain;
     border-radius: var(--mr-border-radius-image);
-}
+}*/
 
 .mr-carousel-item-image {
     display: flex;
     /* max-height: var(--mr-carousel-max-height); */
     justify-content: center;
     position: relative;
-    padding: 10px 10%;
+    height: 100%;
+    width: 100%;
+    /*padding: 10px 10%;*/
 }
 
 .carousel-indicators .mr-carousel-indicator {
@@ -34,7 +38,7 @@
 }
 
 .mr-collection-section {
-    /*border: var(--mr-border-size) solid var(--mr-chat-color);*/
+    border: var(--mr-border-size) solid var(--mr-chat-color);
     border-radius: var(--mr-border-radius);
     padding: var(--mr-padding-btw-border-image);
     background-color: var(--mr-background-color-secondary);
@@ -47,4 +51,35 @@
 
 .mr-collection-description {
     padding: 10px 8px;
+}
+
+
+
+
+.cuadrado2 {
+    width: 100%;
+    padding-bottom: 100%; /* Esto hace que la altura sea igual al 100% del ancho */
+    /*background-color: lightblue;*/
+    position: relative;
+}
+
+.contenido2 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.mr-carousel {
+    height: 100%;
+    width: 100%;
+}
+
+.mr-carousel-item-image .mr-img-thumbnail-details-container {
+    background: var(--mr-thumbnails-details-background-carousel) !important;
+}
+
+.carousel-indicators {
+    z-index: 10;
 }

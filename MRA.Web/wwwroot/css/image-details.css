@@ -443,10 +443,9 @@ div.mr-chat-container {
 }
 
 #btnVote {
-    padding: 5px 10px;
     border-radius: 30px;
-    animation-delay: 1s;
-    background-color: var(--mr-chat-color);
+    display: flex;
+    justify-content: space-around;
 }
 
 #cardVoteForm {
@@ -480,28 +479,46 @@ div.mr-chat-container {
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: var(--mr-transition-time);
 }
 
-#spScoreUser.bad {
-    color: var(--mr-score-background-color-bad);
-    border-color: var(--mr-score-background-color-bad);
-}
+    #spScoreUser:hover {
+        box-shadow: 0px 0px var(--mr-text-shadow-score) white;
+    }
+
+    #spScoreUser.bad {
+        color: var(--mr-score-background-color-bad);
+        border-color: var(--mr-score-background-color-bad);
+    }
+
+        #spScoreUser.bad:hover {
+            box-shadow: 0px 0px var(--mr-text-shadow-score) var(--mr-score-background-color-bad);
+        }
 
 #spScoreUser.mild {
     color: var(--mr-score-background-color-mild);
     border-color: var(--mr-score-background-color-mild);
 }
 
+    #spScoreUser.mild:hover {
+        box-shadow: 0px 0px var(--mr-text-shadow-score) var(--mr-score-background-color-mild);
+    }
+
 #spScoreUser.good {
     color: var(--mr-score-background-color-good);
     border-color: var(--mr-score-background-color-good);
 }
+    #spScoreUser.good:hover {
+        box-shadow: 0px 0px var(--mr-text-shadow-score) var(--mr-score-background-color-good);
+    }
 
 #spScoreUser.platinum {
     color: var(--mr-score-platinum-blue);
     border-color: var(--mr-score-platinum-blue);
 }
-
+    #spScoreUser.platinum:hover {
+        box-shadow: 0px 0px var(--mr-text-shadow-score) var(--mr-score-platinum-blue);
+    }
 .mr-score-image {
     background-color: var(--mr-background-color);
     padding: 2px;

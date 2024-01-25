@@ -9,7 +9,7 @@
 function errorLoadingImage(drawingId) {
     console.log("Drawing ID not loaded: " + drawingId);
     var selector = ".mr-error-load-placeholder[data-error-drawing-id='" + drawingId + "']";
-    console.log(selector);
+    //console.log(selector);
     $(selector).addClass("show");
 }
 
