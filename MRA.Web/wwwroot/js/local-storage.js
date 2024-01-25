@@ -55,6 +55,7 @@ var settingsClasses = {
     textFamily: {
         josefine: "mr-setting-font-josefine",
         sansSerif: "mr-setting-font-sans-serif",
+        monospace: "mr-setting-font-monospace",
     },
     textWeight: {
         light: "mr-setting-font-weight-light",
@@ -171,10 +172,17 @@ function loadFontFamily() {
             case localStorageDefaultValues.fontFamily:
                 document.body.classList.add(settingsClasses.textFamily.josefine);
                 document.body.classList.remove(settingsClasses.textFamily.sansSerif);
+                document.body.classList.remove(settingsClasses.textFamily.monospace);
                 break;
             case "sans-serif":
                 document.body.classList.remove(settingsClasses.textFamily.josefine);
                 document.body.classList.add(settingsClasses.textFamily.sansSerif);
+                document.body.classList.remove(settingsClasses.textFamily.monospace);
+                break;
+            case "monospace":
+                document.body.classList.remove(settingsClasses.textFamily.josefine);
+                document.body.classList.remove(settingsClasses.textFamily.sansSerif);
+                document.body.classList.add(settingsClasses.textFamily.monospace);
                 break;
         }
     }

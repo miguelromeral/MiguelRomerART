@@ -264,7 +264,7 @@ div.mr-chat-container {
     width: 40px;
     background-color: var(--mr-background-color);
     /* text-align: center; */
-    right: 0px;
+    right: 10px;
     /* margin-right: 10px; */
     display: flex;
     align-items: center;

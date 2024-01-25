@@ -50,6 +50,10 @@ h6:hover {
     --mr-font-family: var(--mr-font-family-sans-serif);
 }
 
+:root body.mr-setting-font-monospace {
+    --mr-font-family: monospace;
+}
+
 :root body.mr-setting-font-weight-light {
     --mr-font-weight-light: lighter;
     --mr-font-weight-medium: light;
