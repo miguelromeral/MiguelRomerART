@@ -182,7 +182,7 @@
                                 allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
                     </div>
                 }
-                <div class="mr-chat-container" style="width: 100%;">
+                <div class="mr-chat-container mr-comments" style="width: 100%;">
                     @{
                         var comments = drawing.ListComments;
                         for (int count = 0; count < comments.Count; count++)
@@ -218,12 +218,11 @@
                                 {
                                     <div class="mr-chat-message">
                                         <span>@Html.Raw(comment)</span>
+                                        <div class="mr-chat-icon" title="Puntos buenos y cosas que me gustan">
+                                            <i class="bi bi-hand-thumbs-up slide-top delay1s"></i>
+                                        </div>
                                     </div>
                                 }
-                            </div>
-
-                            <div class="mr-chat-image mr-chat-icon" title="Puntos buenos y cosas que me gustan">
-                                <i class="bi bi-hand-thumbs-up slide-top delay1s"></i>
                             </div>
                         </div>
                     }
@@ -241,12 +240,13 @@
                                 {
                                     <div class="mr-chat-message">
                                         <span>@comment</span>
+                                        <div class="mr-chat-icon" title="Puntos negativos y cosas a mejorar">
+                                            <i class="bi bi-hand-thumbs-down slide-top delay2s"></i>
+                                        </div>
                                     </div>
                                 }
                             </div>
-                            <div class="mr-chat-image mr-chat-icon" title="Puntos negativos y cosas a mejorar">
-                                <i class="bi bi-hand-thumbs-down slide-top delay2s"></i>
-                            </div>
+                            
                         </div>
                     }
                 </div>

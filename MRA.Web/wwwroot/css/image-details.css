@@ -221,15 +221,21 @@ div.mr-chat-container {
     justify-content: space-between;
 }
 
-/* Container for the left part of the message (the text, not including the image) */
-.mr-chat-message-container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    margin-right: 10px;
-    width: -webkit-fill-available;
-    padding-right: 10px;
+.mr-comments .mr-chat-message-container {
+    /*padding-right: 10px;*/
 }
+
+    .mr-comments .mr-chat-message-container:has(.last) {
+        padding-right: 10px;
+    }
+    /* Container for the left part of the message (the text, not including the image) */
+    .mr-chat-message-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        /*margin-right: 10px;*/
+        width: -webkit-fill-available;
+    }
 
 /* Text of the message */
 .mr-chat-message {
@@ -252,7 +258,25 @@ div.mr-chat-container {
     }
 
 .mr-chat-icon {
-    margin-right: 10px;
+    position: absolute;
+    border: var(--mr-border-size) solid var(--mr-chat-color);
+    border-radius: 20px;
+    width: 40px;
+    background-color: var(--mr-background-color);
+    /* text-align: center; */
+    right: 0px;
+    /* margin-right: 10px; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dislikes .mr-chat-icon {
+    border-color: var(--mr-chat-color-dislikes);
+}
+
+.likes .mr-chat-icon {
+    border-color: var(--mr-chat-color-likes);
 }
 
 /* Apex of the last message (colored) */
@@ -326,17 +350,24 @@ div.mr-chat-container {
         }
 }
 
-@media (min-width: 768px) {
+@media (min-width: 768px) and (max-width: 991px) {
     .mr-row-pros-cons {
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
         align-items: flex-start;
+        /*margin: 0px 3px;*/
+        gap: 20px;
     }
 
         .mr-row-pros-cons > div {
             flex: 1;
         }
+}
+
+.mr-chat-row.likes .mr-chat-message, 
+.mr-chat-row.dislikes .mr-chat-message {
+    margin-bottom: 20px;
 }
 
 
@@ -520,7 +551,7 @@ div.mr-chat-container {
         box-shadow: 0px 0px var(--mr-text-shadow-score) var(--mr-score-platinum-blue);
     }
 .mr-score-image {
-    background-color: var(--mr-background-color);
+    background-color: var(--mr-vote-card-background-color);
     padding: 2px;
     border-radius: 30px;
     position: absolute;
@@ -529,7 +560,7 @@ div.mr-chat-container {
 }
 
     .mr-score-image img {
-        background-color: var(--mr-background-color);
+        background-color: var(--mr-vote-card-background-color);
     }
 
 .mr-image-page-title:hover {
