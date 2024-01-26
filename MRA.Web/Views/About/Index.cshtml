@@ -1,0 +1,37 @@
+﻿@using MRA.Services
+@using MRA.Web.Models.Images
+@model IndexModel
+
+@{
+    ViewData["Title"] = "Sobre Mí";
+}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <h2>
+                ¿Qué quieres saber?
+            </h2>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <h3>Conóceme</h3>
+            <p>
+                Aspectos sobre mi personalidad y tonterías varias
+            </p>
+            <a class="btn mr-custom-btn" asp-area="" asp-controller="About" asp-action="Me">
+                Conóceme
+            </a>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <h3>Contrátame</h3>
+            <p>
+                Currículum y datos sobre mi carrera profesional
+            </p>
+            <a class="btn mr-custom-btn" asp-area="" asp-controller="About" asp-action="Hire">
+                Contrátame
+            </a>
+
+        </div>
+    </div>
+</div>

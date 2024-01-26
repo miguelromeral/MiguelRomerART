@@ -164,6 +164,7 @@ namespace MR.MAUI
             tbDrawingSpotifyUrl.Text = drawing.SpotifyUrl ?? "";
             cbDrawingPaperSize.SelectedIndex = drawing.Paper;
             tbDrawingScore.Text = drawing.ScoreCritic.ToString();
+            tbDrawingTime.Text = drawing.Time.ToString();
 
             tbDrawingTags.Text = String.Join(" ", drawing.Tags);
             

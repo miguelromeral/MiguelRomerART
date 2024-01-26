@@ -40,11 +40,6 @@ namespace MRA.Web.Controllers
             return View();
         }
 
-        public async Task<IActionResult> About()
-        {
-            return View(new AboutViewModel() { Inspirations = await _drawingService.GetAllInspirations() });
-        }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

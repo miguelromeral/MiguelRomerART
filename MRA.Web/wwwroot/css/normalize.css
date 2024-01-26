@@ -149,7 +149,7 @@ nav {
     border-bottom: 1px solid var(--mr-chat-color);
 }
 
-nav a, .nav-link, a {
+nav a, .nav-link, a:not(.mr-custom-btn) {
     color: var(--mr-link-color) !important;
     transition: var(--mr-transition-time) ease-in-out;
     font-weight: var(--mr-font-weight-bold);

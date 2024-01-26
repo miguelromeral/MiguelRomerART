@@ -222,6 +222,14 @@ img.mr-chat-image-miguel {
     border-radius: var(--mr-scrollbar-border-radius);
 }
 
+/* Links Redes Sociales en Inspiraciones */
+div.mr-social-links {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 8px;
+}
 
 .dropdown-menu {
     background-color: var(--mr-background-color);
@@ -233,11 +241,6 @@ img.mr-chat-image-miguel {
 }
 
 
-.mr-body {
-    padding-bottom: var(--mr-bottom-bar-height);
-    padding-top: 12px;
-}
-
 .mr-bottom-bar {
     position: fixed;
     bottom: 0;
@@ -246,14 +249,14 @@ img.mr-chat-image-miguel {
     width: 100%;
     display: flex;
     justify-content: space-around;
-    padding: 4px 0px;
+    padding: 0px;
     height: var(--mr-bottom-bar-height);
     align-items: center;
     flex-wrap: nowrap;
     flex-direction: row;
     backdrop-filter: blur(5px);
     background-color: var(--mr-nav-color-a);
-    z-index: 1000;
+    z-index: 0;
     animation: slide-up .5s ease-out;
 }
 
@@ -307,10 +310,27 @@ img.mr-chat-image-miguel {
     bottom: 2px;
 }
 
+
+.mr-body {
+    padding-bottom: var(--mr-bottom-bar-height);
+    padding-top: 12px;
+}
+
+.mr-padding-space {
+    padding:10px;
+}
+
 @media screen and (min-width: 600px) {
     .mr-body {
-        padding-left: var(--mr-bottom-bar-width);
-        padding-bottom: 0px;
+        width: var(--mr-body-width);
+        position: fixed;
+        top: 0px;
+        left: var(--mr-bottom-bar-width);
+        padding: 10px 0px;
+        overflow-y: scroll;
+        overflow-x: clip;
+        /* margin: 10px 0px; */
+        height: -webkit-fill-available;
     }
 
     .mr-bottom-bar {
@@ -322,14 +342,14 @@ img.mr-chat-image-miguel {
         left: 0;
         top: 0;
         height: auto;
-        min-width: var(--mr-bottom-bar-width);
+        width: var(--mr-bottom-bar-width);
         justify-content: flex-start;
-        padding-top: 5%;
+        padding-top: 30px;
         background-color: var(--mr-chat-color-terciary);
-        max-width: 12%;
         gap: 4px;
         animation: slide-right var(--mr-transition-time) ease-out;
-        overflow-y: scroll;
+        overflow-y: auto;
+        z-index: -1;
     }
 
     .mr-bottom-bar-button {

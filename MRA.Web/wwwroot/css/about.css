@@ -1,14 +1,6 @@
 ﻿@import 'variables.css';
 
 
-/* Links Redes Sociales en Inspiraciones */
-div.mr-social-links {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    align-items: center;
-    gap: 8px;
-}
 
 .mr-inspiration-name {
     font-size: var(--mr-font-size-large);

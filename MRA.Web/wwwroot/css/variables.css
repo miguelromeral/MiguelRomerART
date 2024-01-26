@@ -42,7 +42,8 @@
     --mr-scrollbar-background-color: transparent;
     --mr-bottom-bar-height: 50px;
     --mr-bottom-bar-button-color-hover: black;
-    --mr-bottom-bar-width: 130px;
+    --mr-bottom-bar-width: 20vw;
+    --mr-body-width: 80vw;
     --mr-bottom-bar-icon-width: 40px;
     --mr-development-banner-color-dark: cyan;
     --mr-development-banner-color-light: #0068ff;

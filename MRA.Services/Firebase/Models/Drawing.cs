@@ -223,13 +223,7 @@ namespace MRA.Services.Firebase.Models
         {
             get
             {
-                if (String.IsNullOrEmpty(Date))
-                    return "";
-
-                DateTime date = DateTime.ParseExact(Date, "yyyy/MM/dd", CultureInfo.InvariantCulture);
-                //CultureInfo currentCulture = CultureInfo.CurrentCulture;
-                var cultureInfo = CultureInfo.GetCultureInfo("es-ES");
-                return date.ToString("dd MMMM yyyy", cultureInfo);
+                return Utilities.FormattedDate(Date);
             }
         }
 
@@ -237,13 +231,7 @@ namespace MRA.Services.Firebase.Models
         {
             get
             {
-                if (String.IsNullOrEmpty(Date))
-                    return "";
-
-                DateTime date = DateTime.ParseExact(Date, "yyyy/MM/dd", CultureInfo.InvariantCulture);
-                //CultureInfo currentCulture = CultureInfo.CurrentCulture;
-                var cultureInfo = CultureInfo.GetCultureInfo("es-ES");
-                return date.ToString("MMMM yy", cultureInfo);
+                return Utilities.FormattedDateMini(Date);
             }
         }
 

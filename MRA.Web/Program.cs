@@ -30,6 +30,7 @@ var firebaseService = new FirestoreService(
             builder.Configuration.GetValue<string>("Firebase:CollectionDrawings"),
             builder.Configuration.GetValue<string>("Firebase:CollectionInspirations"),
             builder.Configuration.GetValue<string>("Firebase:CollectionCollections"),
+            builder.Configuration.GetValue<string>("Firebase:CollectionExperience"),
             builder.Configuration.GetValue<string>("AzureStorage:BlobPath"),
 
     FirestoreDb.Create(builder.Configuration.GetValue<string>("Firebase:ProjectID")));

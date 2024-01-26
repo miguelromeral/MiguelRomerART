@@ -150,5 +150,14 @@ namespace MRA.Services
         public string CrearThumbnailName(string rutaImagen) => _azureStorageService.CrearThumbnailName(rutaImagen);
 
         public DocumentReference GetDbDocumentDrawing(string id) => _firestoreService.GetDbDocumentDrawing(id);
+
+
+        public async Task<Resume> GetAllExperience()
+        {
+            return await GetOrSetAsync<Resume> ("all_experience", async () =>
+            {
+                return await _firestoreService.GetAllExperience();
+            }, TimeSpan.FromSeconds(_secondsCache));
+        }
     }
 }

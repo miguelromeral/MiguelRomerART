@@ -74,6 +74,7 @@ namespace MR.MAUI
                         appSettings["Firebase:CollectionDrawings"],
                         appSettings["Firebase:CollectionInspirations"],
                         appSettings["Firebase:CollectionCollections"],
+                        appSettings["Firebase:CollectionExperience"],
                         appSettings["AzureStorage:BlobPath"],
 
                 db);

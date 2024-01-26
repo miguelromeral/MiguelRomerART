@@ -24,13 +24,14 @@ try
     var collectionNameDrawings = "drawings";
     var collectionNameInspirations = "inspirations";
     var collectionNameCollections = "collections";
+    var collectionNameExperience = "experience";
     var urlbase = "https://romerartstorageaccount.blob.core.windows.net/romerartblobcontainer/";
 
 
     // Inicializa Firestore
     FirestoreDb db = FirestoreDb.Create(firebaseProjecTId);
 
-    var firebaseService = new FirestoreService(collectionNameDrawings, collectionNameInspirations, collectionNameCollections, urlbase, db);
+    var firebaseService = new FirestoreService(collectionNameDrawings, collectionNameInspirations, collectionNameCollections, collectionNameExperience, urlbase, db);
 
     helper.ShowMessageInfo("Setting up AZURE STORAGE ACCOUNT.");
 

@@ -1,0 +1,239 @@
+﻿@import 'variables.css';
+
+.mr-container-portofolio {
+    /*height: 200vh;*/
+    margin: 0;
+    padding: 0;
+    /*font-family: Arial, sans-serif;*/
+}
+
+.portfolio-item {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: var(--mr-transition-time);
+    /*border: 1px solid black;*/
+}
+
+    .portfolio-item.active {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+
+.mr-portofolio-img img {
+    width: 100%;
+}
+
+.portfolio-item a{
+    color: var(--mr-text-color) !important;
+}
+
+.mr-portofolio-img .mr-banner {
+    width: 100%;
+    min-height: 200px;
+    padding-top: 100px;
+    margin-top: 20px;
+}
+
+.mr-banner.prodware {
+    background-color: #6497f5;
+}
+
+.mr-portofolio-time {
+    font-size: var(--mr-font-size-small);
+}
+
+.mr-portofolio-address {
+}
+
+.portfolio-item h1,
+.portfolio-item h2,
+.portfolio-item h3,
+.portfolio-item h4,
+.portfolio-item h5,
+.portfolio-item h6 {
+    color: var(--mr-text-color);
+    font-size: var(--mr-font-size-large);
+}
+
+.mr-aptitudes {
+    margin-bottom: 14px;
+}
+
+.portfolio-item.mr-aptitudes .mr-aptitudes-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+    .portfolio-item.mr-aptitudes .mr-aptitudes-list .item {
+        font-size: var(--mr-font-size-small);
+        font-weight: var(--mr-font-weight-light);
+        background-color: var(--mr-score-background-color-none);
+        border-radius: 20px;
+        padding: 0px 10px;
+    }
+
+.cv-pic {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+    .cv-pic img {
+        height: 200px;
+        border-radius: var(--mr-border-radius);
+    }
+
+.mr-certifications-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.mr-certification-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+    .mr-certification-row img {
+        width: 40px;
+        height: 40px;
+    }
+
+.mr-certification-details {
+    display: flex;
+    flex-direction: column;
+}
+
+    .mr-certification-details .date {
+        font-size: var(--mr-font-size-small);
+        font-weight: var(--mr-font-weight-light);
+        cursor: help;
+    }
+
+.mr-company-logo{
+    width:30px !important;
+    height: auto;
+}
+
+.mr-personal-data .title {
+    font-weight: var(--mr-font-weight-bold);
+}
+
+.mr-personal-data .row {
+    border-radius: var(--mr-border-radius);
+    transition: var(--mr-transition-time);
+}
+
+.mr-personal-data .row:hover {
+    background-color: var(--mr-control-background-color);
+}
+
+.mr-experience-details {
+    border: var(--mr-border-size) solid var(--mr-company-color);
+    border-radius: 0px 0px var(--mr-border-radius) var(--mr-border-radius);
+    margin-bottom: 20px;
+    margin-left: 20px;
+    margin-right: 10px;
+    margin-top: calc(0px - var(--mr-border-size));
+}
+
+.mr-banner h4 {
+    font-size: var(--mr-font-size-large);
+    font-weight: var(--mr-font-weight-bold);
+}
+
+.show-only-print {
+    display: none;
+}
+.hide-print {
+    display: block;
+}
+
+.mr-social-link-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.mr-social-link-title {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 4px;
+}
+
+.mr-qr-code{
+    width: 64px;
+    height: 64px;
+}
+
+.row.details {
+    background: linear-gradient(155deg, var(--mr-company-color), transparent 60%);
+    border-radius: 0px 0px var(--mr-border-radius) var(--mr-border-radius);
+}
+
+.mr-banner {
+    background-color: var(--mr-company-color);
+}
+
+@media print {
+
+    :root {
+        --mr-company-color: white !important;
+        --mr-font-size-large: 18px;
+        --mr-font-size-default: 14px;
+        --mr-font-size-small: 12px;
+    }
+
+    div {
+        border: none;
+    }
+
+    .mr-container-portofolio {
+        font-family: Arial, sans-serif;
+    }
+
+
+    .cv-pic img {
+        border-radius: 0px;
+        height: 120px;
+    }
+
+    .portfolio-item {
+        opacity: 1;
+    }
+
+    .mr-portofolio-img .mr-banner {
+        width: 100%;
+        min-height: 0px;
+        padding-top: 0px;
+        margin-top: 10px;
+    }
+
+    .mr-container-portofolio,
+    h1, h2, h3, h4, h5, h6 {
+        color: black !important;
+    }
+
+    .container {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .show-only-print {
+        display: block;
+    }
+
+    .mr-bottom-bar,
+    .hide-print,
+    #bannerDevelopmentMode,
+    .mr-portofolio-img img,
+    #divInfoPrint {
+        display: none;
+    }
+}

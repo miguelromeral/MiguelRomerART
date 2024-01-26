@@ -30,7 +30,7 @@
     <span id="bannerDevelopmentMode" class="mr-development-banner" title="Página Web en Desarrollo">
         EN DESARROLLO 🛠
     </span>
-    <div class="container mr-body">
+    <div class="mr-body">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
@@ -87,10 +87,10 @@
                 Playlist
             </div>
         </a>
-        <a class="mr-bottom-bar-button" asp-area="" asp-controller="Home" asp-action="About">
+        <a class="mr-bottom-bar-button" asp-area="" asp-controller="About" asp-action="Index">
             <div class="mr-bottom-profile-pic">
                 <img src="~/assets/images/miguel.jpeg" class="mr-chat-image-miguel brand"
-                     style="@(controladorActual == "Home" && accionActual == "About" ? "border-color: var(--mr-chat-color);" : "border: none;") " />
+                     style="@(controladorActual == "About" ? "border-color: var(--mr-chat-color);" : "border: none;") " />
             </div>
             
             <div class="mr-bottom-bar-text" id="bottomBarTextAbout">
