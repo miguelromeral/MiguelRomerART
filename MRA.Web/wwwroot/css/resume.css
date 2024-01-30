@@ -35,9 +35,6 @@
     margin-top: 20px;
 }
 
-.mr-banner.prodware {
-    background-color: #6497f5;
-}
 
 .mr-portofolio-time {
     font-size: var(--mr-font-size-small);
@@ -98,6 +95,7 @@
     display: flex;
     gap: 8px;
     margin-bottom: 10px;
+    flex: 1;
 }
 
     .mr-certification-row img {
@@ -181,13 +179,58 @@
     background-color: var(--mr-company-color);
 }
 
+.data-section {
+    width: min-content;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+    .data-section .title {
+        width: 20vw;
+    }
+    .data-section .value {
+        width: 58vw;
+    }
+
 @media print {
+
+    html, body {
+        background-color: white;
+        color: black;
+    }
+
+    .data-section {
+        width: max-content;
+    }
+        .mr-personal-data .row:first-child {
+        width: 20% !important;
+    }
+    .mr-personal-data .row:nth-child(2) {
+        width: 80% !important;
+    }
+
+    .mr-social-link-title a {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        gap: 4px;
+    }
 
     :root {
         --mr-company-color: white !important;
         --mr-font-size-large: 18px;
         --mr-font-size-default: 14px;
         --mr-font-size-small: 12px;
+    }
+
+    .row.details {
+        background: white;
+    }
+
+    .mr-experience-details {
+        border: none;
+        border-left: 2px solid var(--mr-company-color);
     }
 
     div {
@@ -208,11 +251,31 @@
         opacity: 1;
     }
 
+        .portfolio-item a{
+            color: black !important;
+        }
+
     .mr-portofolio-img .mr-banner {
         width: 100%;
         min-height: 0px;
         padding-top: 0px;
         margin-top: 10px;
+        background-color: white;
+        border-bottom: 2px solid var(--mr-company-color);
+        background: linear-gradient(90deg, var(--mr-company-color), transparent);
+        color: white;
+        padding: 6px 0px;
+    }
+
+
+    .portfolio-item.mr-aptitudes .mr-aptitudes-list{
+        gap: 4px;
+    }
+    .portfolio-item.mr-aptitudes .mr-aptitudes-list .item {
+        font-size: 10px;
+        font-weight: lighter;
+        background: none;
+        padding:0px;
     }
 
     .mr-container-portofolio,
@@ -229,11 +292,26 @@
         display: block;
     }
 
+    .mr-certification-row img {
+        width: 30px;
+        height: 30px;
+    }
+
+
+    .mr-portofolio-img img {
+        /*filter: grayscale(100%) invert(85%);*/
+    }
+
+    .mr-personal-data .row:hover{
+        background: none;
+    }
+
     .mr-bottom-bar,
     .hide-print,
     #bannerDevelopmentMode,
-    .mr-portofolio-img img,
     #divInfoPrint {
         display: none;
     }
+
+
 }

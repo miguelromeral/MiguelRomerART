@@ -69,7 +69,7 @@ function changeArtUrl(textQuery, type, productType, productName, collection, cha
 
     queryParams = queryParams.filter(x => x != null);
 
-    console.log(queryParams);
+    //console.log(queryParams);
 
     var params = "";
 
@@ -196,7 +196,7 @@ var mensajesAgradecimiento = [
     "Todos estos corazones son tuyos 💖",
     "¡Gracias, gracias, gracias! 🙏",
     "Me alegro de que te guste 😊",
-    "¿Le diste sin querer? aú así, ¡gracias! 😂",
+    "¿Le diste sin querer? aún así, ¡gracias! 😂",
     "Haré saber al modelo que le gustas 🙊",
     "Eres muy grande 🙂",
     "¡Gracias, un abrazo! 🤗",

@@ -33,85 +33,83 @@
                 <h1>
                     Datos Personales
                 </h1>
-                <div class="container mr-personal-data">
-                    <div class="row">
-                        <div class="col-sm-12 col-md-4">
-                            <span class="title">
-                                Edad
-                            </span>
-                        </div>
-                        <div class="col-sm-12 col-md-8">
-                            @{
-                                DateTime fechaInicial = new DateTime(1996, 1, 12);
-                                DateTime fechaActual = DateTime.Now;
-                                int añosPasados = fechaActual.Year - fechaInicial.Year;
-                                if (fechaActual.Month < fechaInicial.Month || (fechaActual.Month == fechaInicial.Month && fechaActual.Day < fechaInicial.Day))
-                                {
-                                    añosPasados--;
-                                }
-                            }
-                            <span>@añosPasados</span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12 col-md-4">
-                            <span class="title">
-                                Ciudad
-                            </span>
-                        </div>
-                        <div class="col-sm-12 col-md-8">
-                            <span>Alcalá de Henares</span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12 col-md-4">
-                            <span class="title">
-                                Enlaces
-                            </span>
-                        </div>
-                        <div class="col-sm-12 col-md-8">
-                            <div class="mr-social-links">
-                                @{
-                                    var links = new List<Tuple<string, string, string>>()
-                                    {
+                <div class="mr-personal-data">
+                            <div class="data-section">
+                                <div class="title">
+                                    Edad
+                                </div>
+                                <div class="value">
+                                    @{
+                                        DateTime fechaInicial = new DateTime(1996, 1, 12);
+                                        DateTime fechaActual = DateTime.Now;
+                                        int añosPasados = fechaActual.Year - fechaInicial.Year;
+                                        if (fechaActual.Month < fechaInicial.Month || (fechaActual.Month == fechaInicial.Month && fechaActual.Day < fechaInicial.Day))
+                                        {
+                                            añosPasados--;
+                                        }
+                                    }
+                                    @añosPasados
+                                </div>
+                            </div>
+                            <div class="data-section">
+                                <div class="title">
+                                    Ciudad
+                                </div>
+                                <div class="value">
+                                    Alcalá de Henares
+                                </div>
+                            </div>
+                            <div class="data-section">
+                                <div class="title">
+                                    Formación
+                                </div>
+                                <div class="value">
+                                    Grado en Ingeniería Informática en la <a href="https://www.uah.es/es/">UAH (Universidad de Alcalá)</a> en 2018.
+                                </div>
+                            </div>
+
+                            <div class="data-section">
+                                <div class="title">
+                                    Idiomas
+                                </div>
+                                <div class="value">
+                                    Español (nativo), Inglés (APTIS C)
+                                </div>
+                            </div>
+                            <div class="data-section">
+                                <div class="title">
+                                    Enlaces
+                                </div>
+                                <div class="value">
+                                    <div class="mr-social-links">
+                                        @{
+                                            var links = new List<Tuple<string, string, string>>()
+                                        {
                                         Tuple.Create("LinkedIn", "linkedin", "https://www.linkedin.com/in/miguelromeral/"),
                                         Tuple.Create("GitHub", "github", "https://github.com/miguelromeral/"),
                                         Tuple.Create("Google Play", "google-play", "https://play.google.com/store/apps/dev?id=8494694764432462089"),
-                                    };
-                                    foreach(var link in links)
-                                    {
-                                        <div class="mr-social-link-section">
-                                        <div class="mr-social-link-title">
-                                            <a href="@link.Item3" target="_blank">
-                                                <i class="bi bi-@link.Item2"></i>
-                                            </a>
-                                            <span class="show-only-print">@link.Item1</span>
-                                        </div>
-                                        
+                                        };
+                                            foreach (var link in links)
+                                            {
+                                                <div class="mr-social-link-section">
+                                                    <div class="mr-social-link-title">
+                                                        <a href="@link.Item3" target="_blank">
+                                                            <i class="bi bi-@link.Item2"></i>
+                                                            <span class="show-only-print">@link.Item1</span>
+                                                        </a>
+                                                    </div>
 
-                                        <div>
-                                            <div class="mr-qr-code show-only-print" data-link="@(link.Item3)">
-                                            </div>
-                                            </div>
-                                        </div>
-                                    }
-                                }
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12 col-md-4">
-                            <span class="title">
-                                Idiomas
-                            </span>
-                        </div>
-                        <div class="col-sm-12 col-md-8">
-                            <span>Español (nativo), Inglés (APTIS C)</span>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="mr-personal-data-section">
+                                                    <div>
+                                                        <div class="mr-qr-code show-only-print" data-link="@(link.Item3)">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                    </div>
                 </div>
             </div>
             <div class="col-sm-4 col-md-4">
@@ -122,13 +120,6 @@
         </div>
         <div class="row">
             <div class="col-sm-12 col-md-12">
-                <h1>
-                    Formación
-                </h1>
-                <div>
-                    2014 - 2018. Grado en Ingeniería Informática en la <a href="https://www.uah.es/es/">UAH (Universidad de Alcalá)</a>.
-                </div>
-
                 <h1>
                     Certificaciones
                 </h1>
@@ -186,7 +177,12 @@
 @section Scripts {
     <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
     <script asp-append-version="true">
-        document.querySelector(".mr-body").addEventListener('scroll', revealOnScroll);
+        const mrBody = document.querySelector(".mr-body");
+
+        mrBody.addEventListener('scroll', revealOnScroll);
+        mrBody.addEventListener('touchmove', revealOnScroll);
+        mrBody.addEventListener('touchend', revealOnScroll);
+        mrBody.addEventListener('touchcancel', revealOnScroll);
 
         function revealOnScroll() {
             var items = document.querySelectorAll('.portfolio-item');

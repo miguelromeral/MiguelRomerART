@@ -325,7 +325,7 @@ div.mr-social-links {
         width: var(--mr-body-width);
         position: fixed;
         top: 0px;
-        left: var(--mr-bottom-bar-width);
+        left: calc(var(--mr-bottom-bar-width) + var(--mr-bottom-bar-width-margin) + var(--mr-bottom-bar-width-margin));
         padding: 10px 0px;
         overflow-y: scroll;
         overflow-x: clip;
@@ -341,7 +341,7 @@ div.mr-social-links {
         flex-direction: column;
         left: 0;
         top: 0;
-        height: auto;
+        height: min-content;
         width: var(--mr-bottom-bar-width);
         justify-content: flex-start;
         padding-top: 30px;
@@ -350,6 +350,9 @@ div.mr-social-links {
         animation: slide-right var(--mr-transition-time) ease-out;
         overflow-y: auto;
         z-index: -1;
+        margin: var(--mr-bottom-bar-height) var(--mr-bottom-bar-width-margin) var(--mr-bottom-bar-height) var(--mr-bottom-bar-width-margin);
+        border-radius: var(--mr-border-radius);
+        padding: var(--mr-padding-btw-border-image);
     }
 
     .mr-bottom-bar-button {
