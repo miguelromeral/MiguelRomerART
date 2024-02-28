@@ -256,7 +256,7 @@ div.mr-social-links {
     flex-direction: row;
     backdrop-filter: blur(5px);
     background-color: var(--mr-nav-color-a);
-    z-index: 0;
+    z-index: 1000000;
     animation: slide-up .5s ease-out;
 }
 
@@ -342,6 +342,7 @@ div.mr-social-links {
         left: 0;
         top: 0;
         height: min-content;
+        max-height: 90vh;
         width: var(--mr-bottom-bar-width);
         justify-content: flex-start;
         padding-top: 30px;
@@ -353,6 +354,9 @@ div.mr-social-links {
         margin: var(--mr-bottom-bar-height) var(--mr-bottom-bar-width-margin) var(--mr-bottom-bar-height) var(--mr-bottom-bar-width-margin);
         border-radius: var(--mr-border-radius);
         padding: var(--mr-padding-btw-border-image);
+        width: var(--mr-bottom-bar-width);
+        overflow-y: auto;
+        overflow-x: hidden;
     }
 
     .mr-bottom-bar-button {

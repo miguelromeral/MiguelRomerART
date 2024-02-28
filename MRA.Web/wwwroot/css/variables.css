@@ -3,6 +3,9 @@
 :root {
     --mr-background-color: #191919;
     --mr-background-color-light: white;
+    --mr-bg-color-dark: #191919;
+    --mr-bg-color-light: white;
+    --mr-bg-color: var(--mr-bg-color-dark);
     --mr-background-color-secondary: #271e2c;
     --mr-text-color-terciary: rgb(199 70 215);
     --mr-color-box-shadow: #c6b896;
@@ -40,13 +43,13 @@
     --mr-scrollbar-border-radius: 20px;
     --mr-scrollbar-color: var(--mr-chat-color);
     --mr-scrollbar-background-color: transparent;
-    --mr-bottom-bar-height: 50px;
+    --mr-bottom-bar-height: 10px;
     --mr-bottom-bar-button-color-hover: black;
     --mr-bottom-bar-width: 18vw;
     --mr-bottom-bar-width-margin: 1vw;
     --mr-bottom-bar-height-margin: 5vh;
     --mr-body-width: 80vw;
-    --mr-bottom-bar-icon-width: 40px;
+    --mr-bottom-bar-icon-width: 30px;
     --mr-development-banner-color-dark: cyan;
     --mr-development-banner-color-light: #0068ff;
     --mr-development-banner-color: var(--mr-development-banner-color-dark);

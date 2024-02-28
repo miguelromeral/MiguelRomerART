@@ -66,6 +66,7 @@ html:not([style*="--mr-chat-color"]) {
 
 
 :root .light-theme {
+    --mr-bg-color: var(--mr-bg-color-light);
     --mr-text-color: var(--mr-text-color-light);
     --mr-text-color-opposite: var(--mr-text-color-dark);
     --mr-control-background-color: var(--mr-control-background-color-light);
