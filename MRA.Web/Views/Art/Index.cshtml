@@ -197,7 +197,7 @@
                     name="Collection" data-bs-theme="dark" onchange="sendFormFilterGallery()">
                 <option value="" selected>🤩 COLECCIÓN</option>
 
-                @foreach (var col in Model.ListCollections.OrderByDescending(x => x.Order))
+                @foreach (var col in Model.ListCollections.OrderBy(x => x.Name))
                 {
                     <option value="@(col.Id)">@(col.Name)</option>
                 }

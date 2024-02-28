@@ -52,6 +52,14 @@ namespace MRA.Services
         }
 
 
+        public async Task<List<Collection>> GetAllCollectionsOrderPositive()
+        {
+            return await GetOrSetAsync<List<Collection>>("all_collections_positive", async () =>
+            {
+                return await _firestoreService.GetAllCollectionsOrderPositive();
+            }, TimeSpan.FromSeconds(_secondsCache));
+        }
+
         public async Task<List<Drawing>> FilterDrawings(FilterDrawingModel filter)
         {
             return await GetOrSetAsync<List<Drawing>>(filter.CacheKey, async () => {

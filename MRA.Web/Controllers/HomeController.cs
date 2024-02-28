@@ -24,7 +24,7 @@ namespace MRA.Web.Controllers
         {
             var model = new IndexViewModel()
             {
-                Collections = await _drawingService.GetAllCollections()
+                Collections = await _drawingService.GetAllCollectionsOrderPositive()
             };
 
             return View(model);

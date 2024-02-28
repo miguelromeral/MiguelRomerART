@@ -13,6 +13,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Google.Cloud.Firestore.V1.StructuredQuery.Types;
 
 namespace MRA.Services.Firebase
 {
@@ -197,6 +198,24 @@ namespace MRA.Services.Firebase
         }
 
 
+        public async Task<List<Collection>> GetAllCollectionsOrderPositive()
+        {
+            try
+            {
+                Query query = _firestoreDb.Collection(_collectionNameCollections);
+                query = query.WhereGreaterThanOrEqualTo("order", 0);
+                var snapshot = (await query.GetSnapshotAsync());
+                var collections = snapshot.Documents;
+                var collectionDocs = collections.Select(s => s.ConvertTo<CollectionDocument>()).ToList();
+                return await HandleAllCollections(collectionDocs);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error when getting collections: " + ex.Message);
+                return new List<Collection>();
+            }
+        }
+
         public async Task<List<Collection>> GetAllCollections()
         {
             try
@@ -204,6 +223,19 @@ namespace MRA.Services.Firebase
                 var snapshot = (await _firestoreDb.Collection(_collectionNameCollections).GetSnapshotAsync());
                 var collections = snapshot.Documents;
                 var collectionDocs = collections.Select(s => s.ConvertTo<CollectionDocument>()).ToList();
+                return await HandleAllCollections(collectionDocs);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error when getting collections: " + ex.Message);
+                return new List<Collection>();
+            }
+        }
+
+        public async Task<List<Collection>> HandleAllCollections(List<CollectionDocument> collectionDocs)
+        {
+            try
+            {
                 var listCollections = new List<Collection>();
 
                 foreach(var collection in collectionDocs)

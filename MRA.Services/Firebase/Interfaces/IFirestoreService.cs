@@ -14,6 +14,7 @@ namespace MRA.Services.Firebase.Interfaces
         Task<List<Drawing>> GetAll();
         Task<List<Inspiration>> GetAllInspirations();
         Task<List<Collection>> GetAllCollections();
+        Task<List<Collection>> GetAllCollectionsOrderPositive();
         Task<Resume> GetAllExperience();
         Task<Drawing> AddAsync(Drawing document);
         Task<Collection> AddAsync(Collection document);
