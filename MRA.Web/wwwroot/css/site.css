@@ -351,7 +351,7 @@ div.mr-social-links {
         animation: slide-right var(--mr-transition-time) ease-out;
         overflow-y: auto;
         z-index: -1;
-        margin: var(--mr-bottom-bar-height) var(--mr-bottom-bar-width-margin) var(--mr-bottom-bar-height) var(--mr-bottom-bar-width-margin);
+        margin: 10px var(--mr-bottom-bar-width-margin) var(--mr-bottom-bar-height) var(--mr-bottom-bar-width-margin);
         border-radius: var(--mr-border-radius);
         padding: var(--mr-padding-btw-border-image);
         width: var(--mr-bottom-bar-width);
@@ -475,4 +475,19 @@ div.mr-social-links {
 .mr-home-menu-item {
     flex-grow: 1;
     padding: 8px;
+}
+
+
+
+.carousel-control-next,
+.carousel-control-prev {
+    background-color: var(--mr-chat-color);
+    border-radius: 50px;
+    height: fit-content;
+    padding: 10px;
+    align-content: center;
+    align-self: center;
+    width: 35px;
+    height: 35px;
+    transform: scale(0.8);
 }

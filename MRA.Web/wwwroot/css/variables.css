@@ -43,7 +43,7 @@
     --mr-scrollbar-border-radius: 20px;
     --mr-scrollbar-color: var(--mr-chat-color);
     --mr-scrollbar-background-color: transparent;
-    --mr-bottom-bar-height: 10px;
+    --mr-bottom-bar-height: 50px;
     --mr-bottom-bar-button-color-hover: black;
     --mr-bottom-bar-width: 18vw;
     --mr-bottom-bar-width-margin: 1vw;
