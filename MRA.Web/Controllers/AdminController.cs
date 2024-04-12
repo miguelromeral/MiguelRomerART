@@ -9,6 +9,10 @@ using SixLabors.ImageSharp;
 using MRA.Web.Models.Art;
 using MRA.Web.Models.Admin;
 using MRA.Services.Firebase.Models;
+using System.IO;
+using SixLabors.ImageSharp.Processing;
+using System;
+using Azure.Storage.Blobs.Models;
 
 namespace MRA.Web.Controllers
 {
@@ -150,6 +154,63 @@ namespace MRA.Web.Controllers
             {
                 ViewBag.Error = "Ha ocurrido un fallo al calcular la nota final.";
                 return null;
+            }
+        }
+
+        [HttpPost]
+        [AutorizacionRequerida]
+        public async Task<bool> CheckAzurePath(string id)
+        {
+            return await _drawingService.ExistsBlob(id);
+        }
+
+        [HttpPost]
+        [AutorizacionRequerida]
+        public async Task<IActionResult> UploadAzureImage(int azureImageThumbnailSize, string path, IFormFile azureImage)
+        {
+            try
+            {
+                if (azureImage == null || azureImage.Length == 0)
+                {
+                    return new JsonResult(new
+                    {
+                        error = "No se ha proporcionado ninguna imagen",
+                    });
+                }
+
+                var blobLocationThumbnail = _drawingService.CrearThumbnailName(path);
+                await UploadImage(azureImage, blobLocationThumbnail, azureImageThumbnailSize);
+                await UploadImage(azureImage, path, 0);
+
+                var urlBase = _drawingService.GetAzureUrlBase();
+                var url = urlBase + path;
+                var url_tn = urlBase + blobLocationThumbnail;
+
+
+                return new JsonResult(new
+                {
+                    error = "",
+                    url = url,
+                    url_tn = url_tn,
+                    tn = blobLocationThumbnail
+                });
+            }catch(Exception ex)
+            {
+                return new JsonResult(new
+                {
+                    error = ex.Message,
+                });
+            }
+        }
+
+        private async Task UploadImage(IFormFile azureImage, string path, int azureImageThumbnailSize)
+        {
+            using (var imageStream = new MemoryStream())
+            {
+                await azureImage.CopyToAsync(imageStream);
+                imageStream.Position = 0;
+
+                await _drawingService.RedimensionarYGuardarEnAzureStorage(imageStream, path, azureImageThumbnailSize);
             }
         }
     }

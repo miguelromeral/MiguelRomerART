@@ -8,3 +8,21 @@
 
     .mr-admin-form-control .mr-not-editable-value {
     }
+
+.mr-lista-imagenes .col-12{
+    display: flex;
+    flex-direction: column;
+}
+
+#imgTmp {
+    max-width: 100%;
+    display: none;
+}
+
+#imgPreviewFullSize {
+    max-width: 100%;
+}
+
+#imgPreviewThumbnail {
+    max-width: fit-content;
+}

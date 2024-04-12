@@ -1,5 +1,6 @@
 ﻿var SETTINGS = {
     FORM_DRAWING: "formDrawing",
+    AZURE_FORM: "rowUploadToAzure",
 }
 
 
@@ -107,4 +108,87 @@ function mostrarMensajeError(mensaje = "", titulo = "Error") {
     //});
     //$("#" + ALERT_FILTER_FORM_ID).text(mensaje);
     //$("#" + ALERT_FILTER_FORM_ID).show();
+}
+
+
+function onChangeAzurePath(input) {
+    var newPath = input.value;
+
+    $.ajax({
+        type: 'POST',
+        url: '/Admin/CheckAzurePath',
+        data: { id: newPath },
+        success: function (response) {
+            console.log("Response:" + response);
+            if (response === true) {
+                $("#" + SETTINGS.AZURE_FORM).hide();
+            } else {
+                $("#" + SETTINGS.AZURE_FORM).show();
+                console.log("Esa ruta no existe!");
+            }
+        },
+        error: function (xhr, status, error) {
+            mostrarMensajeError(error);
+        }
+    });
+}
+
+function uploadAzureImage() {
+    $("#btnUploadToAzure").prop("disabled", true);
+    var fileInput = document.getElementById('azureImage');
+    var thumbnailSizeInput = document.getElementById('azureImageThumbnailSize');
+    var pathInput = document.getElementById('azurePath');
+
+    // Verificar si se seleccionó un archivo
+    if (fileInput.files.length === 0) {
+        alert('Por favor, selecciona un archivo.');
+        return;
+    }
+
+    var file = fileInput.files[0];
+    var thumbnailSize = thumbnailSizeInput.value;
+    var path = pathInput.value;
+
+    // Crear objeto FormData
+    var formData = new FormData();
+    formData.append('path', path);
+    formData.append('azureImage', file);
+    formData.append('azureImageThumbnailSize', thumbnailSize);
+    $.ajax({
+        type: 'POST',
+        url: '/Admin/UploadAzureImage',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+            $("#btnUploadToAzure").prop("disabled", false);
+            $("#" + SETTINGS.AZURE_FORM).hide();
+            $("#imgPreviewFullSize").attr("src", response.url);
+            $("#imgPreviewThumbnail").attr("src", response.url_tn);
+            $("#iHiddenUrlThumbnail").val(response.tn);
+            alert('Imagen subida exitosamente');
+        },
+        error: function (xhr, status, error) {
+            $("#btnUploadToAzure").prop("disabled", false);
+            mostrarMensajeError(error);
+        }
+    });
+}
+
+
+
+function mostrarImagenAzureTmp() {
+    var input = document.getElementById('azureImage');
+    var imgTmp = document.getElementById('imgTmp');
+
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            imgTmp.src = e.target.result;
+            imgTmp.style.display = 'block'; // Mostrar la imagen
+        }
+
+        reader.readAsDataURL(input.files[0]);
+    }
 }
