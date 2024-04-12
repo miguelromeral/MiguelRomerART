@@ -32,5 +32,15 @@ namespace MRA.Services
             return date.ToString("MMMM yy", cultureInfo);
         }
 
+        public static string FormattedDateInput(string Date)
+        {
+            if (String.IsNullOrEmpty(Date))
+                return "";
+
+            DateTime date = DateTime.ParseExact(Date, "yyyy/MM/dd", CultureInfo.InvariantCulture);
+            var cultureInfo = CultureInfo.GetCultureInfo("es-ES");
+            return date.ToString("yyyy-MM-dd");
+
+        }
     }
 }

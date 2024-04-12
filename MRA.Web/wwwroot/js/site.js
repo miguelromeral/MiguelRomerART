@@ -22,3 +22,9 @@ function updateCheckValue(checkbox) {
         hiddenInput.value = false;
     }
 }
+
+
+function onChangeInputDate(input, id) {
+    var newValue = $(input).val();
+    $("#" + id).val(newValue.toString().replace("-", "/").replace("-", "/"));
+}

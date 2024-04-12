@@ -1,4 +1,5 @@
-﻿@using MRA.Services.Firebase.Models
+﻿@using MRA.Services
+@using MRA.Services.Firebase.Models
 @model Drawing
 @{
     ViewBag.Title = $"Editando \"{Model.Id}\"";
@@ -148,6 +149,8 @@
                         <div class="col-12 col-sm-12 col-md-4">
                             <div class="mr-admin-form-control">
                                 <label>Fecha de Creación</label>
+                                <input type="hidden" id="iHiddenDate" name="Date" value="@Model.Date" />
+                                <input type="date" onchange="onChangeInputDate(this, 'iHiddenDate');" value="@Utilities.FormattedDateInput(Model.Date)">
                             </div>
                         </div>
                         <div class="col-12 col-sm-12 col-md-4">
