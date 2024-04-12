@@ -10,6 +10,8 @@ using Google.Apis.Storage.v1.Data;
 using Google.Cloud.Firestore.V1;
 using Azure.Storage.Blobs;
 using Microsoft.Extensions.Caching.Memory;
+using Google.Api;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,8 +43,17 @@ var drawingService = new DrawingService(builder.Configuration.GetValue<int>("Cac
 
 builder.Services.AddSingleton(drawingService);
 
+builder.Services.AddSession();
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie("Cookies", options =>
+    {
+        options.Cookie.Name = "CookieMiguelRomeral";
+        options.LoginPath = "/Admin/Login";
+    });
 
 builder.Services.AddMemoryCache();
 
@@ -62,6 +73,9 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseSession();
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 var firestoreService = app.Services.GetRequiredService<IFirestoreService>();
