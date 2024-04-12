@@ -13,3 +13,12 @@ function errorLoadingImage(drawingId) {
     $(selector).addClass("show");
 }
 
+
+function updateCheckValue(checkbox) {
+    var hiddenInput = document.getElementById(checkbox.name + "Hidden");
+    if (checkbox.checked) {
+        hiddenInput.value = true;
+    } else {
+        hiddenInput.value = false;
+    }
+}

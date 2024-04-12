@@ -6,10 +6,12 @@ namespace MRA.Web.Models.Art
     {
         public readonly string QueryId;
         public Drawing Drawing;
+        public bool IsAdmin;
 
-        public DetailsModel(string id)
+        public DetailsModel(string id, bool isAdmin)
         {
             QueryId = id;
+            IsAdmin = isAdmin;
         }
 
         public static string GetClassScore(int score)

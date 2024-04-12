@@ -152,6 +152,12 @@ namespace MRA.Services
         public async Task<bool> ExistsBlob(string rutaBlob) => await _azureStorageService.ExistsBlob(rutaBlob);
 
         public async Task<Drawing> AddAsync(Drawing document) => await _firestoreService.AddAsync(document);
+
+        //public async Task<Drawing> SetAsync(Drawing document)
+        //{
+        //    return null;
+        //}
+
         public async Task<Collection> AddAsync(Collection document) => await _firestoreService.AddAsync(document);
 
         public async Task RedimensionarYGuardarEnAzureStorage(string rutaEntrada, string nombreBlob, int anchoDeseado) =>

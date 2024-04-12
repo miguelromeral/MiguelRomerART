@@ -6,6 +6,9 @@ using MRA.Services.AzureStorage;
 using MRA.Services;
 using MRA.Web.Models.Art;
 using MRA.Services.Firebase.Models;
+using Azure.Storage.Blobs.Models;
+using Google.Api;
+using MRA.Web.Utils;
 
 namespace MRA.Web.Controllers
 {
@@ -13,11 +16,13 @@ namespace MRA.Web.Controllers
     {
         private readonly DrawingService _drawingService;
         private readonly ILogger<HomeController> _logger;
+        private readonly IConfiguration _configuration;
 
-        public ArtController(ILogger<HomeController> logger, DrawingService drawingService)
+        public ArtController(ILogger<HomeController> logger, DrawingService drawingService, IConfiguration configuration)
         {
             _logger = logger;
             _drawingService = drawingService;
+            _configuration = configuration;
         }
 
 
@@ -81,7 +86,7 @@ namespace MRA.Web.Controllers
 
         public async Task<IActionResult> Details(string id)
         {
-            var model = new DetailsModel(id);
+            var model = new DetailsModel(id, SessionSettings.IsLogedAsAdmin(HttpContext.Session.GetString(SessionSettings.USER_ID)));
             model.Drawing = await _drawingService.FindDrawingById(id, false);
             return View(model);
         }

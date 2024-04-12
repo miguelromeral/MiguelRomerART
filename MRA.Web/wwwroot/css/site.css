@@ -491,3 +491,38 @@ div.mr-social-links {
     height: 35px;
     transform: scale(0.8);
 }
+
+
+
+
+/* https://github.com/craftpip/jquery-confirm */
+.jconfirm-box {
+    background-color: var(--mr-background-color) !important;
+    max-width: 95vw;
+}
+
+.jconfirm-buttons [class^="btn"]:not([class*=" "]) {
+    background-color: white;
+    color: var(--mr-text-color-opposite);
+}
+
+
+
+
+.mr-custom-checkbox {
+    height: var(--mr-control-height);
+    width: var(--mr-control-height);
+    border-radius: 20px !important;
+    background-color: transparent;
+    border: var(--mr-border-size) solid var(--mr-chat-color);
+}
+
+.mr-custom-checkbox:active, .mr-custom-checkbox:focus, .mr-custom-checkbox:hover {
+    background-color: var(--mr-text-box-background-color);
+}
+
+.mr-custom-checkbox:checked {
+    background-color: var(--mr-chat-color);
+    color: var(--mr-text-color-opposite);
+    background-blend-mode: exclusion;
+}

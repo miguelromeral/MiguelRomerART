@@ -1,4 +1,7 @@
-﻿namespace MRA.Web.Utils
+﻿using Google.Api;
+using System;
+
+namespace MRA.Web.Utils
 {
     /// <summary>
     /// Variables de Sesión
@@ -11,5 +14,9 @@
         public const string USER_ORIGIN = "User_Proveedor_Login";
         public const string USER_PHOTO = "User_Photo";
         public const string USER_PHOTO_B64 = "User_Photo_B64";
+
+        public const string USER_ID_ADMIN = "AdminMiguelRomeralAzureWebArt";
+
+        public static bool IsLogedAsAdmin(string userId) => userId?.Equals(USER_ID_ADMIN) ?? false;
     }
 }

@@ -1,0 +1,81 @@
+﻿@using MRA.Services.Firebase.Models
+@model Drawing
+@{
+    ViewBag.Title = $"Editando \"{Model.Id}\"";
+}
+
+
+@section Styles {
+    <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/images.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/image-details.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/admin.css" rel="stylesheet" asp-append-version="true" />
+}
+
+
+<div class="container">
+    <form id="formDrawing" asp-action="SaveDrawing"
+          data-ajax="true" data-ajax-method="POST"
+          data-ajax-failure="onFailureSaveDrawing"
+          data-ajax-success="onSuccessSaveDrawing">
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-12">
+                <div class="mr-admin-form-control">
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <label>ID</label>
+                    <div class="mr-not-editable-value">@Model.Id</div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-10">
+                <div class="mr-admin-form-control">
+                    <label>Título del Dibujo</label>
+                    <input asp-for="Title" class="form-control mr-custom-text" type="text" placeholder="Título del Dibujo" value="@Model.Title" />
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-2">
+                <div class="mr-admin-form-control">
+                    <label>Favorito</label>
+
+
+                    <input type="hidden" asp-for="Favorite"
+                           value="@(Model.Favorite ? "true" : "false")"
+                           id="@(nameof(Model.Favorite))Hidden" />
+
+                    <input type="checkbox" name="@nameof(Model.Favorite)"
+                           class="form-control form-check-input mr-custom-checkbox"
+                           onchange="updateCheckValue(this);"
+                            @(Model.Favorite ? "checked" : "") />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-6">
+                <div class="mr-admin-form-control">
+                    <label>Nombre del Personaje</label>
+                    <input asp-for="Name" class="form-control mr-custom-text" type="text" placeholder="Nombre del personaje" value="@Model.Name" />
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-6">
+                <div class="mr-admin-form-control">
+                    <label>Nombre del Modelo</label>
+                    <input asp-for="ModelName" class="form-control mr-custom-text" type="text" placeholder="Nombre del modelo" value="@Model.ModelName" />
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="row">
+        <div class="col-12 col-sm-12 col-md-12">
+            <button class="btn btn-success" onclick="sendForm();">
+                <i class="bi bi-floppy"></i><span class="mr-texto-button"> Guardar Cambios</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <script src="~/js/admin.js" asp-append-version="true"></script>
+}

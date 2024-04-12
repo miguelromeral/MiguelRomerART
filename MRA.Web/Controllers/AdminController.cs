@@ -6,6 +6,9 @@ using MRA.Services;
 using MRA.Web.Utils;
 using System.Security.Claims;
 using SixLabors.ImageSharp;
+using MRA.Web.Models.Art;
+using MRA.Web.Models.Admin;
+using MRA.Services.Firebase.Models;
 
 namespace MRA.Web.Controllers
 {
@@ -52,7 +55,7 @@ namespace MRA.Web.Controllers
 
                 if (passwordAppSettings.Equals(password))
                 {
-                    var userId = "Admin";
+                    var userId = SessionSettings.USER_ID_ADMIN;
                     var userName = "MiguelRomeral";
 
                     var claims = new List<Claim>
@@ -96,6 +99,7 @@ namespace MRA.Web.Controllers
         }
 
         [HttpPost]
+        [AutorizacionRequerida]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
@@ -103,6 +107,50 @@ namespace MRA.Web.Controllers
             HttpContext.Session.SetString(SessionSettings.USER_ID, "");
             HttpContext.Session.SetString(SessionSettings.USER_NAME, "");
             return RedirectToAction("Index", "Home");
+        }
+
+
+
+        [AutorizacionRequerida]
+        public async Task<IActionResult> EditDrawing(string id)
+        {
+            var drawing = await _drawingService.FindDrawingById(id, false);
+            return View(drawing);
+        }
+
+        [HttpPost]
+        [AutorizacionRequerida]
+        public async Task<Drawing> SaveDrawing(Drawing drawing)
+        {
+            try
+            {
+                var userId = HttpContext.Session.GetString(SessionSettings.USER_ID) ?? "";
+                if (!SessionSettings.IsLogedAsAdmin(userId))
+                {
+                    ViewBag.Error = "No eres administrador y no tienes permiso para editarlo";
+                    return null;
+                }
+
+                Drawing result = null;
+                if (!String.IsNullOrEmpty(drawing.Id))
+                {
+                    //result = await _drawingService.AddAsync(drawing);
+                    return drawing;
+                }
+
+                if(result == null)
+                {
+                    ViewBag.Error = "Ha ocurrido un error por el que no se ha guardado el dibujo";
+                    return null;
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = "Ha ocurrido un fallo al calcular la nota final.";
+                return null;
+            }
         }
     }
 }
