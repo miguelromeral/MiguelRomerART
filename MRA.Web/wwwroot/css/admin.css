@@ -26,3 +26,20 @@
 #imgPreviewThumbnail {
     max-width: fit-content;
 }
+
+.mr-comment-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+    .mr-comment-container .mr-comment-pro {
+        border-color: var(--mr-chat-color-likes);
+    }
+    .mr-comment-container .mr-comment-con {
+        border-color: var(--mr-chat-color-dislikes);
+    }
+
+    .mr-comment-container textarea {
+        height: 100px;
+    }

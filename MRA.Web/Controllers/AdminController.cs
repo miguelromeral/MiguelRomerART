@@ -124,7 +124,7 @@ namespace MRA.Web.Controllers
 
         [HttpPost]
         [AutorizacionRequerida]
-        public async Task<Drawing> SaveDrawing(Drawing drawing)
+        public async Task<Drawing> SaveDrawing([FromForm] Drawing drawing)
         {
             try
             {

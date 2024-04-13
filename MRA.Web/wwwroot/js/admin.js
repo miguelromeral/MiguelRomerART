@@ -197,3 +197,57 @@ function actualizarImagenReferencia(input) {
     
     $("#imgReferencia").attr("src",input.value);
 }
+
+function changeListComments(hiddenInputId, clase) {
+    var inputs = $("." + clase);
+    var comments = [];
+    inputs.each((index, input) => {
+        comments.push($(input).val());
+    });
+    $("#" + hiddenInputId).val(comments.join("#"));
+    console.log(comments);
+}
+
+
+function addNewComment(idDivList, hiddenInputId, commentClass, text) {
+    if (text == undefined || text == null) {
+        text = "";
+    }
+    var container = document.getElementById(idDivList);
+
+    var div = document.createElement("div");
+    div.classList.add("mr-comment-container");
+
+    var newInput = document.createElement("textarea");
+    //newInput.type = "text";
+    newInput.value = text ?? "";
+    newInput.placeholder = "Comentario";
+    newInput.rows = "5";
+    newInput.classList.add("form-control");
+    newInput.classList.add("mr-custom-text");
+    newInput.classList.add(commentClass);
+    newInput.addEventListener("change", () => { changeListComments(hiddenInputId, commentClass); });
+
+    var btn = document.createElement("button");
+    btn.classList.add("btn");
+    btn.classList.add("btn-primary");
+    btn.classList.add("mr-custom-btn");
+    btn.type = "button";
+    btn.addEventListener("click", () => { removeComment(btn, idDivList); changeListComments(hiddenInputId, commentClass); });
+
+    var i = document.createElement("i");
+    i.classList.add("bi");
+    i.classList.add("bi-trash");
+    btn.appendChild(i);
+
+    div.appendChild(newInput);
+    div.appendChild(btn);
+
+    container.appendChild(div);
+}
+
+function removeComment(input, idDivList) {
+    var parent = input.parentElement;
+    var container = document.getElementById(idDivList);
+    container.removeChild(parent);
+}
