@@ -138,6 +138,7 @@ namespace MRA.Web.Controllers
                 Drawing result = null;
                 if (!String.IsNullOrEmpty(drawing.Id))
                 {
+                    drawing.Tags = drawing.TagsText.Split(Drawing.SEPARATOR_TAGS).ToList();
                     //result = await _drawingService.AddAsync(drawing);
                     return drawing;
                 }

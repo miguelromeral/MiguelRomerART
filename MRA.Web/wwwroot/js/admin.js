@@ -192,3 +192,8 @@ function mostrarImagenAzureTmp() {
         reader.readAsDataURL(input.files[0]);
     }
 }
+
+function actualizarImagenReferencia(input) {
+    
+    $("#imgReferencia").attr("src",input.value);
+}

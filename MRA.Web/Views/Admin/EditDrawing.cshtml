@@ -150,20 +150,96 @@
                             <div class="mr-admin-form-control">
                                 <label>Fecha de Creación</label>
                                 <input type="hidden" id="iHiddenDate" name="Date" value="@Model.Date" />
-                                <input type="date" onchange="onChangeInputDate(this, 'iHiddenDate');" value="@Utilities.FormattedDateInput(Model.Date)">
+                                <input type="date" class="mr-custom-text" onchange="onChangeInputDate(this, 'iHiddenDate');" value="@Utilities.FormattedDateInput(Model.Date)">
                             </div>
                         </div>
                         <div class="col-12 col-sm-12 col-md-4">
                             <div class="mr-admin-form-control">
                                 <label>Puntuación</label>
+                                <input type="number" asp-for="ScoreCritic" step="1" min="0" max="100"
+                                       class="form-control mr-custom-text zero-if-null" placeholder="0" />
                             </div>
                         </div>
                         <div class="col-12 col-sm-12 col-md-4">
                             <div class="mr-admin-form-control">
                                 <label>Tiempo en Minutos</label>
+                                <input type="number" asp-for="Time" step="1" min="0"
+                                       class="form-control mr-custom-text zero-if-null" placeholder="0" />
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-6">
+                            <div class="mr-admin-form-control">
+                                <label>Tipo de Producto</label>
+                                <select asp-for="ProductType" class="mr-custom-select form-select form-select-sm" data-bs-theme="dark">
+                                    <option value="0"></option>
+                                    @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_PRODUCT_TYPES.Where(x => x.Key > 0).OrderBy(x => x.Value))
+                                    {
+                                        <option value="@(type.Key)">@(type.Value)</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-6">
+                            <div class="mr-admin-form-control">
+                                <label>Nombre del Producto</label>
+                                <input asp-for="ProductName" class="form-control mr-custom-text" type="text" placeholder="Nombre del Producto" value="@Model.ProductName" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-12">
+                            <div class="mr-admin-form-control">
+                                <label>Comentarios</label>
+                                
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-6">
+                            <div class="mr-admin-form-control">
+                                <label>Comentrios Positivos</label>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-6">
+                            <div class="mr-admin-form-control">
+                                <label>Comentarios Negativos</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-12">
+                            <div class="mr-admin-form-control">
+                                <label>Etiquetas (separadas por espacios)</label>
+                                <input asp-for="TagsText" class="form-control mr-custom-text" type="text" placeholder="Etiquetas"
+                                       value="@String.Join(" ", Model.Tags)" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-6">
+                            <div class="mr-admin-form-control">
+                                <label>URL Imagen de Referencia</label>
+                                <input id="iImgReferencia" asp-for="ReferenceUrl" class="form-control mr-custom-text" type="text" placeholder="URL de la Imagen de Referencia" value="@Model.ReferenceUrl" onchange="actualizarImagenReferencia(this);" />
+
+                                <img id="imgReferencia" src="@(Model.ReferenceUrl)" />
+                            </div>
+
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-6">
+                            <div class="mr-admin-form-control">
+                                <label>URL de Spotify</label>
+                                <input asp-for="SpotifyUrl" class="form-control mr-custom-text" type="text" placeholder="URL de Spotify" value="@Model.SpotifyUrl" />
+                            </div>
+                        </div>
+                    </div>
+
                 </form>
                 <div class="row mt-2">
                     <div class="col-12 col-sm-12 col-md-12">

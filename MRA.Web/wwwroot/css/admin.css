@@ -19,7 +19,7 @@
     display: none;
 }
 
-#imgPreviewFullSize {
+#imgPreviewFullSize, #imgReferencia {
     max-width: 100%;
 }
 
