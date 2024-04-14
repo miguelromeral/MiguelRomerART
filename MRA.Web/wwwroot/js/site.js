@@ -14,8 +14,8 @@ function errorLoadingImage(drawingId) {
 }
 
 
-function updateCheckValue(checkbox) {
-    var hiddenInput = document.getElementById(checkbox.name + "Hidden");
+function updateCheckValue(checkbox, hiddenId) {
+    var hiddenInput = document.getElementById(hiddenId);
     if (checkbox.checked) {
         hiddenInput.value = true;
     } else {
@@ -26,5 +26,5 @@ function updateCheckValue(checkbox) {
 
 function onChangeInputDate(input, id) {
     var newValue = $(input).val();
-    $("#" + id).val(newValue.toString().replace("-", "/").replace("-", "/"));
+    $("#" + id).val(newValue.toString().replace("-", "/").replace("-", "/"));   
 }

@@ -19,7 +19,8 @@ namespace MRA.Services.Firebase.Interfaces
         Task<Drawing> AddAsync(Drawing document);
         Task<Collection> AddAsync(Collection document);
         Task<List<Drawing>> Filter(FilterDrawingModel filter);
-        Task<Drawing> FindDrawingById(string documentId);
+        Task<Drawing> FindDrawingById(string documentId, bool updateViews);
+        Task<Collection> FindCollectionById(string documentId);
         Task UpdateLikes(string documentId);
         Task<VoteSubmittedModel> Vote(string documentId, int score);
         DocumentReference GetDbDocumentDrawing(string id);

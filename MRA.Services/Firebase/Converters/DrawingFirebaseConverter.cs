@@ -49,7 +49,8 @@ namespace MRA.Services.Firebase.Converters
                 ScorePopular = drawingDocument.score_popular,
                 ScoreCritic = drawingDocument.score_critic,
                 VotesPopular = drawingDocument.votes_popular,
-                Tags = drawingDocument.tags ?? new List<string>()
+                Tags = drawingDocument.tags ?? new List<string>(),
+                Visible = drawingDocument.visible ?? true,
             };
         }
 
@@ -81,7 +82,8 @@ namespace MRA.Services.Firebase.Converters
                 tags = drawing.Tags,
                 votes_popular = drawing.VotesPopular,
                 score_critic = drawing.ScoreCritic,
-                score_popular = drawing.ScorePopular
+                score_popular = drawing.ScorePopular,
+                visible = drawing.Visible
             };
         }
     }

@@ -1,8 +1,9 @@
 ﻿@using MRA.Services
 @using MRA.Services.Firebase.Models
-@model Drawing
+@using MRA.Web.Models.Admin
+@model EditDrawingViewModel
 @{
-    ViewBag.Title = $"Editando \"{Model.Id}\"";
+    ViewBag.Title = (Model.IsEditing ? $"Editando \"{Model.Drawing?.Id}\"" : "Crear Nuevo Dibujo");
 }
 
 
@@ -20,11 +21,11 @@
                 <div class="row">
                     <div class="col-12 col-sm-12 col-md-12">
                         <label>Imagen A Tamaño Completo</label>
-                        <img src="@Model.Url" id="imgPreviewFullSize" />
+                        <img src="@Model.Drawing?.Url" id="imgPreviewFullSize" />
                     </div>
                     <div class="col-12 col-sm-12 col-md-12">
                         <label>Miniatura</label>
-                        <img src="@Model.UrlThumbnail" id="imgPreviewThumbnail" />
+                        <img src="@Model.Drawing?.UrlThumbnail" id="imgPreviewThumbnail" />
                     </div>
                 </div>
             </div>
@@ -39,9 +40,21 @@
                     <div class="row">
                         <div class="col-12 col-sm-12 col-md-12">
                             <div class="mr-admin-form-control">
-                                <input type="hidden" name="id" value="@Model.Id" />
+                                <input type="hidden" asp-for="Drawing.Likes" />
+                                <input type="hidden" asp-for="Drawing.Views" />
+                                <input type="hidden" asp-for="Drawing.ScorePopular" />
+                                <input type="hidden" asp-for="Drawing.VotesPopular" />
                                 <label>ID</label>
-                                <div class="mr-not-editable-value">@Model.Id</div>
+                                @if (!Model.IsEditing)
+                                {
+                                    <input asp-for="Drawing.Id" id="iDrawingId" class="form-control mr-custom-text" type="text"
+                                           placeholder="ID" onchange="checkDrawingId(this)" />
+                                }
+                                <div class="mr-not-editable-value" id="divDrawingId"
+                                    style="display: @(Model.IsEditing ? "block" : "none")">@Model.Drawing.Id</div>
+                                <input type="hidden" name="Drawing.Id" id="iHiddenDrawingId" value="@Model.Drawing.Id" />
+
+                                <a href="@Url.Action("Details", "Art", new { id = Model.Drawing?.Id })" >Ver Dibujo</a>
                             </div>
                         </div>
                     </div>
@@ -49,8 +62,8 @@
                         <div class="col-12 col-sm-12 col-md-6">
                             <div class="mr-admin-form-control">
                                 <label>Ruta en Azure</label>
-                                <input asp-for="Path" id="azurePath" class="form-control mr-custom-text" type="text" placeholder="Ruta en Azure Container" value="@Model.Path" onchange="onChangeAzurePath(this)" />
-                                <input id="iHiddenUrlThumbnail" type="hidden" asp-for="PathThumbnail" value="@Model.PathThumbnail" />
+                                <input asp-for="Drawing.Path" id="azurePath" class="form-control mr-custom-text" type="text" placeholder="Ruta en Azure Container" value="@Model.Drawing.Path" onchange="onChangeAzurePath(this)" />
+                                <input id="iHiddenUrlThumbnail" type="hidden" asp-for="Drawing.PathThumbnail" value="@Model.Drawing.PathThumbnail" />
                             </div>
                         </div>
                     </div>
@@ -76,20 +89,20 @@
                         <div class="col-12 col-sm-12 col-md-10">
                             <div class="mr-admin-form-control">
                                 <label>Título del Dibujo</label>
-                                <input asp-for="Title" class="form-control mr-custom-text" type="text" placeholder="Título del Dibujo" value="@Model.Title" />
+                                <input asp-for="Drawing.Title" class="form-control mr-custom-text" type="text" placeholder="Título del Dibujo" value="@Model.Drawing.Title" />
                             </div>
                         </div>
                         <div class="col-12 col-sm-12 col-md-2">
                             <div class="mr-admin-form-control">
                                 <label>Favorito</label>
-                                <input type="hidden" asp-for="Favorite"
-                                       value="@(Model.Favorite ? "true" : "false")"
-                                       id="@(nameof(Model.Favorite))Hidden" />
+                                <input type="hidden" asp-for="Drawing.Favorite"
+                                       value="@(Model.Drawing.Favorite ? "true" : "false")"
+                                       id="FavoriteHidden" />
 
-                                <input type="checkbox" name="@nameof(Model.Favorite)"
+                                <input type="checkbox" name="Drawing.Favorite"
                                        class="form-control form-check-input mr-custom-checkbox"
-                                       onchange="updateCheckValue(this);"
-                                @(Model.Favorite ? "checked" : "") />
+                                       onchange="updateCheckValue(this, 'FavoriteHidden');"
+                                @(Model.Drawing.Favorite ? "checked" : "") />
                             </div>
                         </div>
                     </div>
@@ -97,13 +110,13 @@
                         <div class="col-12 col-sm-12 col-md-6">
                             <div class="mr-admin-form-control">
                                 <label>Nombre del Personaje</label>
-                                <input asp-for="Name" class="form-control mr-custom-text" type="text" placeholder="Nombre del personaje" value="@Model.Name" />
+                                <input asp-for="Drawing.Name" class="form-control mr-custom-text" type="text" placeholder="Nombre del personaje" value="@Model.Drawing.Name" />
                             </div>
                         </div>
                         <div class="col-12 col-sm-12 col-md-6">
                             <div class="mr-admin-form-control">
                                 <label>Nombre del Modelo</label>
-                                <input asp-for="ModelName" class="form-control mr-custom-text" type="text" placeholder="Nombre del modelo" value="@Model.ModelName" />
+                                <input asp-for="Drawing.ModelName" class="form-control mr-custom-text" type="text" placeholder="Nombre del modelo" value="@Model.Drawing.ModelName" />
                             </div>
                         </div>
                     </div>
@@ -111,7 +124,7 @@
                         <div class="col-12 col-sm-12 col-md-4">
                             <div class="mr-admin-form-control">
                                 <label>Tipo de Dibujo</label>
-                                <select asp-for="Type" class="mr-custom-select form-select form-select-sm" data-bs-theme="dark">
+                                <select asp-for="Drawing.Type" class="mr-custom-select form-select form-select-sm" data-bs-theme="dark">
                                     <option value="0"></option>
                                     @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_TYPES.Where(x => x.Key > 0).OrderBy(x => x.Value))
                                     {
@@ -123,7 +136,7 @@
                         <div class="col-12 col-sm-12 col-md-4">
                             <div class="mr-admin-form-control">
                                 <label>Software</label>
-                                <select asp-for="Software" class="mr-custom-select form-select form-select-sm" data-bs-theme="dark">
+                                <select asp-for="Drawing.Software" class="mr-custom-select form-select form-select-sm" data-bs-theme="dark">
                                     <option value="0"></option>
                                     @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_SOFTWARE.Where(x => x.Key > 0).OrderBy(x => x.Value))
                                     {
@@ -135,7 +148,7 @@
                         <div class="col-12 col-sm-12 col-md-4">
                             <div class="mr-admin-form-control">
                                 <label>Tamaño de Papel</label>
-                                <select asp-for="Paper" class="mr-custom-select form-select form-select-sm" data-bs-theme="dark">
+                                <select asp-for="Drawing.Paper" class="mr-custom-select form-select form-select-sm" data-bs-theme="dark">
                                     <option value="0"></option>
                                     @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_PAPER_SIZE.Where(x => x.Key > 0 && x.Key > 3).OrderBy(x => x.Value))
                                     {
@@ -149,21 +162,21 @@
                         <div class="col-12 col-sm-12 col-md-4">
                             <div class="mr-admin-form-control">
                                 <label>Fecha de Creación</label>
-                                <input type="hidden" id="iHiddenDate" name="Date" value="@Model.Date" />
-                                <input type="date" class="mr-custom-text" onchange="onChangeInputDate(this, 'iHiddenDate');" value="@Utilities.FormattedDateInput(Model.Date)">
+                                <input type="hidden" id="iHiddenDate" name="Drawing.Date" value="@Model.Drawing.Date" />
+                                <input type="date" class="mr-custom-text" onchange="onChangeInputDate(this, 'iHiddenDate');" value="@Utilities.FormattedDateInput(Model.Drawing.Date)">
                             </div>
                         </div>
                         <div class="col-12 col-sm-12 col-md-4">
                             <div class="mr-admin-form-control">
                                 <label>Puntuación</label>
-                                <input type="number" asp-for="ScoreCritic" step="1" min="0" max="100"
+                                <input type="number" asp-for="Drawing.ScoreCritic" step="1" min="0" max="100"
                                        class="form-control mr-custom-text zero-if-null" placeholder="0" />
                             </div>
                         </div>
                         <div class="col-12 col-sm-12 col-md-4">
                             <div class="mr-admin-form-control">
                                 <label>Tiempo en Minutos</label>
-                                <input type="number" asp-for="Time" step="1" min="0"
+                                <input type="number" asp-for="Drawing.Time" step="1" min="0"
                                        class="form-control mr-custom-text zero-if-null" placeholder="0" />
                             </div>
                         </div>
@@ -172,7 +185,7 @@
                         <div class="col-12 col-sm-12 col-md-6">
                             <div class="mr-admin-form-control">
                                 <label>Tipo de Producto</label>
-                                <select asp-for="ProductType" class="mr-custom-select form-select form-select-sm" data-bs-theme="dark">
+                                <select asp-for="Drawing.ProductType" class="mr-custom-select form-select form-select-sm" data-bs-theme="dark">
                                     <option value="0"></option>
                                     @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_PRODUCT_TYPES.Where(x => x.Key > 0).OrderBy(x => x.Value))
                                     {
@@ -184,7 +197,7 @@
                         <div class="col-12 col-sm-12 col-md-6">
                             <div class="mr-admin-form-control">
                                 <label>Nombre del Producto</label>
-                                <input asp-for="ProductName" class="form-control mr-custom-text" type="text" placeholder="Nombre del Producto" value="@Model.ProductName" />
+                                <input asp-for="Drawing.ProductName" class="form-control mr-custom-text" type="text" placeholder="Nombre del Producto" value="@Model.Drawing.ProductName" />
                             </div>
                         </div>
                     </div>
@@ -195,12 +208,12 @@
                                 <label>Comentarios</label>
 
                                 <div id="divListComments">
-                                    <input type="hidden" id="iHiddenComment" asp-for="Comment" />
-                                    @for (int i = 0; i < Model.ListComments.Count; i++)
+                                    <input type="hidden" id="iHiddenComment" asp-for="Drawing.Comment" />
+                                    @for (int i = 0; i < Model.Drawing.ListComments.Count; i++)
                                     {
                                         <script type="text/javascript">
                                             document.addEventListener("DOMContentLoaded", function (event) {
-                                                addNewComment('divListComments', 'iHiddenComment', 'mr-comment', `@(Html.Raw(Model.ListComments[i]))`);
+                                                addNewComment('divListComments', 'iHiddenComment', 'mr-comment', `@(Html.Raw(Model.Drawing.ListComments[i]))`);
                                             });
                                         </script>
                                     }
@@ -221,12 +234,12 @@
                                 <label>Comentrios Positivos</label>
 
                                 <div id="divListCommentsPros">
-                                    <input type="hidden" id="iHiddenCommentPros" asp-for="CommentPros" />
-                                    @for (int i = 0; i < Model.ListCommentPros.Count; i++)
+                                    <input type="hidden" id="iHiddenCommentPros" asp-for="Drawing.CommentPros" />
+                                    @for (int i = 0; i < Model.Drawing.ListCommentPros.Count; i++)
                                     {
                                         <script type="text/javascript">
                                             document.addEventListener("DOMContentLoaded", function (event) {
-                                                addNewComment('divListCommentsPros', 'iHiddenCommentPros', 'mr-comment-pro', `@(Html.Raw(Model.ListCommentPros[i]))`);
+                                                addNewComment('divListCommentsPros', 'iHiddenCommentPros', 'mr-comment-pro', `@(Html.Raw(Model.Drawing.ListCommentPros[i]))`);
                                             });
                                         </script>
                                     }
@@ -243,12 +256,12 @@
                                 <label>Comentarios Negativos</label>
 
                                 <div id="divListCommentsCons">
-                                    <input type="hidden" id="iHiddenCommentCons" asp-for="CommentCons" />
-                                    @for (int i = 0; i < Model.ListCommentCons.Count; i++)
+                                    <input type="hidden" id="iHiddenCommentCons" asp-for="Drawing.CommentCons" />
+                                    @for (int i = 0; i < Model.Drawing.ListCommentCons.Count; i++)
                                     {
                                         <script type="text/javascript">
                                             document.addEventListener("DOMContentLoaded", function (event) {
-                                                addNewComment('divListCommentsCons', 'iHiddenCommentCons', 'mr-comment-con', `@(Html.Raw(Model.ListCommentCons[i]))`);
+                                                addNewComment('divListCommentsCons', 'iHiddenCommentCons', 'mr-comment-con', `@(Html.Raw(Model.Drawing.ListCommentCons[i]))`);
                                             });
                                         </script>
                                     }
@@ -266,8 +279,8 @@
                         <div class="col-12 col-sm-12 col-md-12">
                             <div class="mr-admin-form-control">
                                 <label>Etiquetas (separadas por espacios)</label>
-                                <input asp-for="TagsText" class="form-control mr-custom-text" type="text" placeholder="Etiquetas"
-                                       value="@String.Join(" ", Model.Tags)" />
+                                <input asp-for="Drawing.TagsText" class="form-control mr-custom-text" type="text" placeholder="Etiquetas"
+                                       value="@String.Join(" ", Model.Drawing.Tags)" />
                             </div>
                         </div>
                     </div>
@@ -276,16 +289,16 @@
                         <div class="col-12 col-sm-12 col-md-6">
                             <div class="mr-admin-form-control">
                                 <label>URL Imagen de Referencia</label>
-                                <input id="iImgReferencia" asp-for="ReferenceUrl" class="form-control mr-custom-text" type="text" placeholder="URL de la Imagen de Referencia" value="@Model.ReferenceUrl" onchange="actualizarImagenReferencia(this);" />
+                                <input id="iImgReferencia" asp-for="Drawing.ReferenceUrl" class="form-control mr-custom-text" type="text" placeholder="URL de la Imagen de Referencia" value="@Model.Drawing.ReferenceUrl" onchange="actualizarImagenReferencia(this);" />
 
-                                <img id="imgReferencia" src="@(Model.ReferenceUrl)" />
+                                <img id="imgReferencia" src="@(Model.Drawing.ReferenceUrl)" />
                             </div>
 
                         </div>
                         <div class="col-12 col-sm-12 col-md-6">
                             <div class="mr-admin-form-control">
                                 <label>URL de Spotify</label>
-                                <input asp-for="SpotifyUrl" class="form-control mr-custom-text" type="text" placeholder="URL de Spotify" value="@Model.SpotifyUrl" />
+                                <input asp-for="Drawing.SpotifyUrl" class="form-control mr-custom-text" type="text" placeholder="URL de Spotify" value="@Model.Drawing.SpotifyUrl" />
                             </div>
                         </div>
                     </div>
@@ -293,7 +306,8 @@
                 </form>
                 <div class="row mt-2">
                     <div class="col-12 col-sm-12 col-md-12">
-                        <button class="btn btn-primary mr-custom-btn" onclick="sendForm();">
+                        <button class="btn btn-primary mr-custom-btn" id="btnSaveDrawing" onclick="sendForm();"
+                            @(!Model.IsEditing ? "disabled" : "")>
                             <i class="bi bi-floppy"></i> <span class="mr-texto-button"> Guardar Cambios</span>
                         </button>
                     </div>

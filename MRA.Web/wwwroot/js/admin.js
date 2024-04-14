@@ -33,6 +33,12 @@ function onSuccessSaveDrawing(data) {
     if (data != undefined && data != null) {
 
 
+        if (data.id) {
+            $("#iDrawingId").hide();
+            $("#divDrawingId").text(data.id);
+            $("#iHiddenDrawingId").val(data.id);
+            $("#divDrawingId").show();
+        }
      
         //$("." + CLASE_NOTA_SECCION).each((index, element) => {
         //    var property = $(element).data(DATA_CLASE_NOTA_SECCION);
@@ -119,12 +125,19 @@ function onChangeAzurePath(input) {
         url: '/Admin/CheckAzurePath',
         data: { id: newPath },
         success: function (response) {
-            console.log("Response:" + response);
-            if (response === true) {
-                $("#" + SETTINGS.AZURE_FORM).hide();
+            if (response) {
+                if (response.existe) {
+                    $("#" + SETTINGS.AZURE_FORM).hide();
+                    $("#imgPreviewFullSize").attr("src", response.url);
+                    $("#imgPreviewThumbnail").attr("src", response.url_tn);
+                } else {
+                    $("#" + SETTINGS.AZURE_FORM).show();
+                    $("#imgPreviewFullSize").attr("src", "");
+                    $("#imgPreviewThumbnail").attr("src", "");
+                    console.log("Esa ruta no existe!");
+                }
             } else {
-                $("#" + SETTINGS.AZURE_FORM).show();
-                console.log("Esa ruta no existe!");
+                mostrarMensajeError("Ha ocurrido un error al comprobar la ruta de Azure");
             }
         },
         error: function (xhr, status, error) {
@@ -250,4 +263,34 @@ function removeComment(input, idDivList) {
     var parent = input.parentElement;
     var container = document.getElementById(idDivList);
     container.removeChild(parent);
+}
+
+
+function checkDrawingId(input) {
+    var drawingId = input.value;
+
+    if (drawingId == "") {
+        alert("El ID es obligatorio");
+        $("#btnSaveDrawing").prop("disabled", true);
+        return;
+    }
+
+    $.ajax({
+        type: 'POST',
+        url: '/Admin/ExisteDrawingId/' + drawingId,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+            console.log("Response: " + response);
+            if (response) {
+                alert("El ID '" + drawingId + "' ya está seleccionado.");
+                $("#btnSaveDrawing").prop("disabled", true);
+            } else {
+                $("#btnSaveDrawing").prop("disabled", false);
+            }
+        },
+        error: function (xhr, status, error) {
+            mostrarMensajeError("Ha ocurrido un error al comprobar el ID del dibujo");
+        }
+    });
 }

@@ -15,6 +15,12 @@ namespace MRA.Services.Firebase.Models
         public static string SEPARATOR_COMMENTS = "#";
         public static string SEPARATOR_TAGS = " ";
 
+        public Drawing()
+        {
+            
+            Tags = new List<string>();
+        }
+
         public static Dictionary<int, string> DRAWING_TYPES = new Dictionary<int, string>()
             {
                 {0, "Otros"},
@@ -59,6 +65,7 @@ namespace MRA.Services.Firebase.Models
         public string Path { get; set; }
         public string PathThumbnail { get; set; }
         public string UrlBase { get; set; }
+        public bool Visible { get; set; }
         public int Type { get; set; }
         public string TagsText { get; set; }
         public List<string> Tags { get; set; }

@@ -13,6 +13,8 @@ using System.IO;
 using SixLabors.ImageSharp.Processing;
 using System;
 using Azure.Storage.Blobs.Models;
+using MRA.Web.Models;
+using System.Diagnostics;
 
 namespace MRA.Web.Controllers
 {
@@ -116,18 +118,32 @@ namespace MRA.Web.Controllers
 
 
         [AutorizacionRequerida]
+        public async Task<IActionResult> NewDrawing(string id)
+        {
+            var model = new EditDrawingViewModel();
+            model.Drawing = new Drawing();
+            return View("EditDrawing", model);
+        }
+
+        [AutorizacionRequerida]
         public async Task<IActionResult> EditDrawing(string id)
         {
-            var drawing = await _drawingService.FindDrawingById(id, false);
-            return View(drawing);
+            var model = new EditDrawingViewModel();
+            model.Drawing = await _drawingService.FindDrawingById(id, false, false);
+            if(model.Drawing == null)
+            {
+                return View("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            }
+            return View("EditDrawing", model);
         }
 
         [HttpPost]
         [AutorizacionRequerida]
-        public async Task<Drawing> SaveDrawing([FromForm] Drawing drawing)
+        public async Task<Drawing> SaveDrawing([FromForm] EditDrawingViewModel model)
         {
             try
             {
+                var drawing = model.Drawing;
                 var userId = HttpContext.Session.GetString(SessionSettings.USER_ID) ?? "";
                 if (!SessionSettings.IsLogedAsAdmin(userId))
                 {
@@ -135,11 +151,20 @@ namespace MRA.Web.Controllers
                     return null;
                 }
 
+                drawing.Name = drawing.Name ?? "";
+                drawing.ModelName = drawing.ModelName ?? "";
+                drawing.ProductName = drawing.ProductName ?? "";
+                drawing.ReferenceUrl = drawing.ReferenceUrl ?? "";
+                drawing.Path = drawing.Path ?? "";
+                drawing.PathThumbnail = _drawingService.CrearThumbnailName(drawing.Path);
+                drawing.Title = drawing.Title ?? "";
+                drawing.SpotifyUrl = drawing.SpotifyUrl ?? "";
+                drawing.Tags = (drawing.TagsText ?? "").Split(Drawing.SEPARATOR_TAGS).ToList();
+
                 Drawing result = null;
                 if (!String.IsNullOrEmpty(drawing.Id))
                 {
-                    drawing.Tags = drawing.TagsText.Split(Drawing.SEPARATOR_TAGS).ToList();
-                    //result = await _drawingService.AddAsync(drawing);
+                    result = await _drawingService.AddAsync(drawing);
                     return drawing;
                 }
 
@@ -149,6 +174,7 @@ namespace MRA.Web.Controllers
                     return null;
                 }
 
+                _drawingService.CleanAllCache();
                 return result;
             }
             catch (Exception ex)
@@ -160,9 +186,22 @@ namespace MRA.Web.Controllers
 
         [HttpPost]
         [AutorizacionRequerida]
-        public async Task<bool> CheckAzurePath(string id)
+        public async Task<JsonResult> CheckAzurePath(string id)
         {
-            return await _drawingService.ExistsBlob(id);
+            var existe = await _drawingService.ExistsBlob(id);
+
+            var blobLocationThumbnail = _drawingService.CrearThumbnailName(id);
+
+            var urlBase = _drawingService.GetAzureUrlBase();
+            var url = urlBase + id;
+            var url_tn = urlBase + blobLocationThumbnail;
+
+            return new JsonResult(new 
+            {
+                existe,
+                url,
+                url_tn
+            });
         }
 
         [HttpPost]
@@ -213,6 +252,39 @@ namespace MRA.Web.Controllers
 
                 await _drawingService.RedimensionarYGuardarEnAzureStorage(imageStream, path, azureImageThumbnailSize);
             }
+        }
+
+        [HttpPost]
+        [AutorizacionRequerida]
+        public async Task<bool> ExisteDrawingId(string id)
+        {
+            try
+            {
+                var drawing = await _drawingService.FindDrawingById(id);
+                return drawing != null;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+
+
+        [AutorizacionRequerida]
+        public async Task<IActionResult> ListCollections()
+        {
+            var model = new ListCollectionsViewModel();
+            model.Collections = await _drawingService.GetAllCollections();
+            return View(model);
+        }
+
+        [AutorizacionRequerida]
+        public async Task<IActionResult> EditCollection(string id)
+        {
+            var model = new EditCollectionsViewModel();
+            model.Collection = await _drawingService.FindCollectionById(id, false);
+            return View(model);
         }
     }
 }

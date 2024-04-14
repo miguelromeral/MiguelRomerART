@@ -23,6 +23,9 @@ namespace MRA.Services.Firebase.Documents
         public int type { get; set; }
 
         [FirestoreProperty]
+        public bool? visible { get; set; }
+
+        [FirestoreProperty]
         public string name { get; set; }
 
         [FirestoreProperty]

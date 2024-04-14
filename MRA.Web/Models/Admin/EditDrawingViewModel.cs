@@ -4,7 +4,7 @@ namespace MRA.Web.Models.Admin
 {
     public class EditDrawingViewModel
     {
-        public string DrawingId { get; set; }
+        public bool IsEditing { get { return !string.IsNullOrEmpty(Drawing?.Id ?? ""); } }
         public Drawing Drawing { get; set; }
     }
 }

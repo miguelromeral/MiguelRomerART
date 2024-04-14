@@ -276,6 +276,8 @@ namespace MRA.Services.Firebase
             {
                 Query query = _firestoreDb.Collection(_collectionNameDrawings);
 
+                //query = query.WhereNotEqualTo("visible", false);
+
                 if (filter.Favorites)
                 {
                     query = query.WhereEqualTo("favorite", true);
@@ -371,7 +373,7 @@ namespace MRA.Services.Firebase
             return new List<Drawing>();
         }
 
-        public async Task<Drawing> FindDrawingById(string documentId)
+        public async Task<Drawing> FindDrawingById(string documentId, bool updateViews = false)
         {
             try
             {
@@ -381,7 +383,11 @@ namespace MRA.Services.Firebase
 
                 if (snapshot.Exists)
                 {
-                    await UpdateViews(documentId);
+                    if (updateViews)
+                    {
+                        await UpdateViews(documentId);
+                    }
+
                     return _converterDrawing.ConvertToModel(snapshot.ConvertTo<DrawingDocument>());
                 }
                  

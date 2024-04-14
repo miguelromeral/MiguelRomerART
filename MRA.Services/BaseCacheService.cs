@@ -16,6 +16,11 @@ namespace MRA.Services
             _cache = cache;
         }
 
+        public void CleanCacheItem(string item)
+        {
+            _cache.Remove(item);
+        }
+
         public async Task<T> GetOrSetAsync<T>(string cacheKey, Func<Task<T>> getDataFunc, TimeSpan cacheDuration)
         {
             if (_cache.TryGetValue(cacheKey, out T cachedData))

@@ -87,7 +87,7 @@ namespace MRA.Web.Controllers
         public async Task<IActionResult> Details(string id)
         {
             var model = new DetailsModel(id, SessionSettings.IsLogedAsAdmin(HttpContext.Session.GetString(SessionSettings.USER_ID)));
-            model.Drawing = await _drawingService.FindDrawingById(id, false);
+            model.Drawing = await _drawingService.FindDrawingById(id, updateViews: true, cache: false);
             return View(model);
         }
 

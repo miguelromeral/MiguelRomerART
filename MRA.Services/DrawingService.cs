@@ -19,6 +19,9 @@ namespace MRA.Services
         private readonly AzureStorageService _azureStorageService;
         private readonly IFirestoreService _firestoreService;
 
+        private readonly string CACHE_ALL_DRAWINGS = "all_drawings";
+        private readonly string CACHE_ALL_COLLECTIONS = "all_collections";
+
         public DrawingService(int secondsCache, IMemoryCache cache, AzureStorageService storageService, IFirestoreService firestoreService) : base(cache)
         {
             _secondsCache = secondsCache;
@@ -28,7 +31,7 @@ namespace MRA.Services
 
         public async Task<List<Drawing>> GetAllDrawings()
         {
-            return await GetOrSetAsync<List<Drawing>>("all_drawings", async () =>
+            return await GetOrSetAsync<List<Drawing>>(CACHE_ALL_DRAWINGS, async () =>
             {
                 return await FilterDrawings(FilterDrawingModel.GetModelNoFilters());
             }, TimeSpan.FromSeconds(_secondsCache));
@@ -45,10 +48,31 @@ namespace MRA.Services
 
         public async Task<List<Collection>> GetAllCollections()
         {
-            return await GetOrSetAsync<List<Collection>>("all_collections", async () =>
+            return await GetOrSetAsync<List<Collection>>(CACHE_ALL_COLLECTIONS, async () =>
             {
                 return await _firestoreService.GetAllCollections();
             }, TimeSpan.FromSeconds(_secondsCache));
+        }
+
+        public void CleanAllCache()
+        {
+            CleanCacheItem(CACHE_ALL_DRAWINGS);
+            CleanCacheItem(CACHE_ALL_COLLECTIONS);
+        }
+
+        public async Task<Collection> FindCollectionById(string documentId, bool cache = true)
+        {
+            if (cache)
+            {
+                return await GetOrSetAsync<Collection>($"collection_{documentId}", async () =>
+                {
+                    return await _firestoreService.FindCollectionById(documentId);
+                }, TimeSpan.FromSeconds(_secondsCache));
+            }
+            else
+            {
+                return await _firestoreService.FindCollectionById(documentId);
+            }
         }
 
 
@@ -127,19 +151,19 @@ namespace MRA.Services
             drawings.ForEach(d => d.UrlBase = _azureStorageService.BlobURL);
         }
 
-        public async Task<Drawing> FindDrawingById(string documentId, bool cache = true)
+        public async Task<Drawing> FindDrawingById(string documentId, bool updateViews = false, bool cache = true)
         {
             //await _firestoreService.UpdateViews(documentId);
             if (cache)
             {
                 return await GetOrSetAsync<Drawing>($"drawing_{documentId}", async () =>
                 {
-                    return await _firestoreService.FindDrawingById(documentId);
+                    return await _firestoreService.FindDrawingById(documentId, updateViews);
                 }, TimeSpan.FromSeconds(_secondsCache));
             }
             else
             {
-                return await _firestoreService.FindDrawingById(documentId);
+                return await _firestoreService.FindDrawingById(documentId, updateViews);
             }
         }
 
