@@ -286,5 +286,21 @@ namespace MRA.Web.Controllers
             model.Collection = await _drawingService.FindCollectionById(id, false);
             return View(model);
         }
+
+
+        [HttpPost]
+        [AutorizacionRequerida]
+        public async Task<Collection> SaveCollection(EditCollectionsViewModel model)
+        {
+            return model.Collection;
+        }
+
+
+        [HttpPost]
+        [AutorizacionRequerida]
+        public async Task<bool> RemoveCollection(string id)
+        {
+            return await _drawingService.RemoveCollection(id);
+        }
     }
 }

@@ -25,5 +25,6 @@ namespace MRA.Services.Firebase.Interfaces
         Task<VoteSubmittedModel> Vote(string documentId, int score);
         DocumentReference GetDbDocumentDrawing(string id);
         Task UpdateViews(string documentId);
+        Task RemoveCollection(string id);
     }
 }

@@ -43,3 +43,14 @@
     .mr-comment-container textarea {
         height: 100px;
     }
+
+
+.mr-list-drawings-in-collection {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
+    /* width: fit-content; */
+    /* max-width: unset; */
+    overflow-x: scroll;
+}

@@ -75,6 +75,19 @@ namespace MRA.Services
             }
         }
 
+        public async Task<bool> RemoveCollection(string id)
+        {
+            try
+            {
+                await _firestoreService.RemoveCollection(id);
+                return true;
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
+        }
+
 
         public async Task<List<Collection>> GetAllCollectionsOrderPositive()
         {

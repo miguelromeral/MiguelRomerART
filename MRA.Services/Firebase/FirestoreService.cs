@@ -445,6 +445,12 @@ namespace MRA.Services.Firebase
             return null;
         }
 
+        public async Task RemoveCollection(string id)
+        {
+            DocumentReference docRef = _firestoreDb.Collection(_collectionNameCollections).Document(id);
+            await docRef.DeleteAsync();
+        }
+
 
         public async Task UpdateViews(string documentId)
         {

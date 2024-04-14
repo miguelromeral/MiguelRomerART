@@ -5,4 +5,56 @@
 }
 
 
-Editar Colección
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-sm-12 col-md-12">
+            <h1>Editar Colección "@(Model.Collection?.Name)"</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-sm-12 col-md-12">
+            <div class="mr-admin-form-control">
+                <label>ID</label>
+                @if (!Model.IsEditing)
+                {
+                    <input asp-for="Collection.Id" id="iCollectionId" class="form-control mr-custom-text" type="text"
+                           placeholder="ID" onchange="checkCollectionId(this)" />
+                }
+                <div class="mr-not-editable-value" id="divCollectionId"
+                     style="display: @(Model.IsEditing ? "block" : "none")">
+                    @Model.Collection.Id
+                </div>
+                <input type="hidden" name="Collection.Id" id="iHiddenCollectionId" value="@Model.Collection.Id" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
+        <div class="col-9 col-sm-9 col-md-9">
+
+            <div class="mr-admin-form-control">
+                <label>Título de la Colección</label>
+                <input asp-for="Collection.Name"
+                       class="form-control mr-custom-text" type="text"
+                       placeholder="Nombre de la Colección" value="@Model.Collection?.Name" />
+            </div>
+        </div>
+
+        <div class="col-3 col-sm-3 col-md-3">
+            <div class="mr-admin-form-control">
+                <label>Orden</label>
+                <input asp-for="Collection.Order" class="form-control mr-custom-text" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
+        <div class="col-12 col-sm-12 col-md-12">
+            <div class="mr-admin-form-control">
+                <label>Descripción</label>
+                <textarea name="Collection.Description" class="form-control mr-custom-text">@Html.Raw(Model.Collection?.Description)</textarea>
+            </div>
+        </div>
+    </div>
+
+</div>
