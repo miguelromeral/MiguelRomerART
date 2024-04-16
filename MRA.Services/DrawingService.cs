@@ -46,18 +46,27 @@ namespace MRA.Services
             }, TimeSpan.FromSeconds(_secondsCache));
         }
 
-        public async Task<List<Collection>> GetAllCollections()
+        public async Task<List<Collection>> GetAllCollections(bool cache = true)
         {
-            return await GetOrSetAsync<List<Collection>>(CACHE_ALL_COLLECTIONS, async () =>
+            if (cache)
+            {
+                return await GetOrSetAsync<List<Collection>>(CACHE_ALL_COLLECTIONS, async () =>
+                {
+                    return await _firestoreService.GetAllCollections();
+                }, TimeSpan.FromSeconds(_secondsCache));
+            }
+            else
             {
                 return await _firestoreService.GetAllCollections();
-            }, TimeSpan.FromSeconds(_secondsCache));
+            }
         }
 
         public void CleanAllCache()
         {
-            CleanCacheItem(CACHE_ALL_DRAWINGS);
-            CleanCacheItem(CACHE_ALL_COLLECTIONS);
+            //CleanCacheItem(CACHE_ALL_DRAWINGS);
+            //CleanCacheItem(CACHE_ALL_COLLECTIONS);
+            base.CleanAllCache();
+
         }
 
         public async Task<Collection> FindCollectionById(string documentId, bool cache = true)
@@ -190,11 +199,6 @@ namespace MRA.Services
 
         public async Task<Drawing> AddAsync(Drawing document) => await _firestoreService.AddAsync(document);
 
-        //public async Task<Drawing> SetAsync(Drawing document)
-        //{
-        //    return null;
-        //}
-
         public async Task<Collection> AddAsync(Collection document) => await _firestoreService.AddAsync(document);
 
         public async Task RedimensionarYGuardarEnAzureStorage(string rutaEntrada, string nombreBlob, int anchoDeseado) =>
@@ -215,5 +219,8 @@ namespace MRA.Services
                 return await _firestoreService.GetAllExperience();
             }, TimeSpan.FromSeconds(_secondsCache));
         }
+
+
+        public async Task<List<DocumentReference>> SetDrawingsReferences(string[] ids) => await _firestoreService.SetDrawingsReferences(ids);
     }
 }

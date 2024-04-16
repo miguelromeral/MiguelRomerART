@@ -27,9 +27,9 @@
     <script asp-append-version="true">
         loadConfig();
     </script>
-    <span id="bannerDevelopmentMode" class="mr-development-banner" title="Página Web en Desarrollo">
+    @* <span id="bannerDevelopmentMode" class="mr-development-banner" title="Página Web en Desarrollo">
         EN DESARROLLO 🛠
-    </span>
+    </span> *@
     <div class="mr-body">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -117,9 +117,11 @@
     <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.js" integrity="sha256-v2nySZafnswY87um3ymbg7p9f766IQspC5oqaqZVX2c=" crossorigin="anonymous"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="https://kit.fontawesome.com/4f3ce16e3e.js" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 
 

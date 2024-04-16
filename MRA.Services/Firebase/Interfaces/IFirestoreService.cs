@@ -26,5 +26,6 @@ namespace MRA.Services.Firebase.Interfaces
         DocumentReference GetDbDocumentDrawing(string id);
         Task UpdateViews(string documentId);
         Task RemoveCollection(string id);
+        Task<List<DocumentReference>> SetDrawingsReferences(string[] ids);
     }
 }

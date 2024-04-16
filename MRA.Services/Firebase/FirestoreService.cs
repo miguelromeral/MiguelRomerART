@@ -11,6 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using static Google.Cloud.Firestore.V1.StructuredQuery.Types;
@@ -232,6 +233,50 @@ namespace MRA.Services.Firebase
             }
         }
 
+        public async Task<Collection> HandleCollection(CollectionDocument collection)
+        {
+            var c = new Collection()
+            {
+                Id = collection.Id,
+                Name = collection.name,
+                Order = collection.order,
+                Description = collection.description,
+                Drawings = new List<Drawing>(),
+                DrawingsReferences = collection.drawings
+            };
+
+            var documentosReferenciados = new List<DrawingDocument>();
+            if (collection.drawings != null)
+            {
+                foreach (var reference in collection.drawings)
+                {
+                    var documentoReferenciadoSnapshot = await reference.GetSnapshotAsync();
+                    if (documentoReferenciadoSnapshot.Exists)
+                    {
+                        c.Drawings.Add(_converterDrawing.ConvertToModel(documentoReferenciadoSnapshot.ConvertTo<DrawingDocument>()));
+                    }
+                }
+            }
+
+            return c;
+        }
+
+        public async Task<List<DocumentReference>> SetDrawingsReferences(string[] ids)
+        {
+            var list = new List<DocumentReference>();
+
+            if (ids != null)
+            {
+                foreach (var id in ids)
+                {
+                    var tmp = _firestoreDb.Document(_collectionNameDrawings + "/" + id);
+                    list.Add(tmp);
+                }
+            }
+
+            return list;
+        }
+
         public async Task<List<Collection>> HandleAllCollections(List<CollectionDocument> collectionDocs)
         {
             try
@@ -240,26 +285,7 @@ namespace MRA.Services.Firebase
 
                 foreach(var collection in collectionDocs)
                 {
-                    var c = new Collection()
-                    {
-                        Id = collection.Id,
-                        Name = collection.name,
-                        Description = collection.description,
-                        Drawings = new List<Drawing>(),
-                        DrawingsReferences = collection.drawings
-                    };
-
-                    var documentosReferenciados = new List<DrawingDocument>();
-                    foreach(var reference in collection.drawings)
-                    {
-                        var documentoReferenciadoSnapshot = await reference.GetSnapshotAsync();
-                        if (documentoReferenciadoSnapshot.Exists)
-                        {
-                            c.Drawings.Add(_converterDrawing.ConvertToModel(documentoReferenciadoSnapshot.ConvertTo<DrawingDocument>()));
-                        }
-                    }
-
-                    listCollections.Add(c);
+                    listCollections.Add(await HandleCollection(collection));
                 }
                 return listCollections;
             }
@@ -433,7 +459,8 @@ namespace MRA.Services.Firebase
                 if (snapshot.Exists)
                 {
                     var converter = new CollectionFirebaseConverter();
-                    return converter.ConvertToModel(snapshot.ConvertTo<CollectionDocument>());
+                    var tmp = snapshot.ConvertTo<CollectionDocument>();
+                    return await HandleCollection(tmp);
                 }
 
                 return null;

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace MRA.Services.Firebase.Models
@@ -15,9 +16,14 @@ namespace MRA.Services.Firebase.Models
 
         public string Description { get; set; }
         public int Order { get; set; }
+        
+        [JsonIgnore]
         public List<Drawing> Drawings { get; set; }
+        
+        [JsonIgnore]
         public List<DocumentReference> DrawingsReferences { get; set; }
 
+        [JsonIgnore]
         public string TextDrawingsReferences
         {
             get

@@ -4,8 +4,18 @@
     ViewBag.Title = "Editar Colección";
 }
 
+@section Styles {
+    <link href="~/css/images.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/image-thumbnail.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/admin.css" rel="stylesheet" asp-append-version="true" />
+}
+
 
 <div class="container">
+    <form id="formCollection" asp-action="SaveCollection"
+                      data-ajax="true" data-ajax-method="POST"
+                      data-ajax-failure="onFailureSaveCollection"
+                      data-ajax-success="onSuccessSaveCollection">
     <div class="row">
         <div class="col-12 col-sm-12 col-md-12">
             <h1>Editar Colección "@(Model.Collection?.Name)"</h1>
@@ -15,6 +25,10 @@
         <div class="col-12 col-sm-12 col-md-12">
             <div class="mr-admin-form-control">
                 <label>ID</label>
+
+
+                    @* @Html.HiddenFor(m => Model.Collection.Id) *@
+
                 @if (!Model.IsEditing)
                 {
                     <input asp-for="Collection.Id" id="iCollectionId" class="form-control mr-custom-text" type="text"
@@ -43,7 +57,7 @@
         <div class="col-3 col-sm-3 col-md-3">
             <div class="mr-admin-form-control">
                 <label>Orden</label>
-                <input asp-for="Collection.Order" class="form-control mr-custom-text" />
+                <input asp-for="Collection.Order" min="-100" max="100" class="form-control mr-custom-text" value="@Model.Collection.Order"/>
             </div>
         </div>
     </div>
@@ -56,5 +70,75 @@
             </div>
         </div>
     </div>
+    <div class="row facet-container">
+        @{
+            var notUsed = Model.ListDrawings.Except(Model.Collection.Drawings);
+        }
+        <div class="col-12 col-sm-12 col-md-12">
+            <p>Drag & drop to rearrange items within a list or between lists.</br>Double-click to move item from one list to the bottom of the other.</p>
+        </div>
+        <div class="col-6 col-sm-6 col-md-6">
+                <label>Todos Los Dibujos</label>
+
+                <ul id="allFacets" class="facet-list">
+                    @foreach (var d in notUsed.OrderByDescending(x => x.Date))
+                    {
+                        await Html.RenderPartialAsync("CollectionImageThumbnail", d);
+                    }
+                </ul>
+
+            </div>
+            <div class="col-6 col-sm-6 col-md-6">
+                <label>Seleccionados</label>
+                <input type="hidden" value="@Model.DrawingsId" name="DrawingList" id="iHiddenDrawingsSelectedId" />
+                <ul id="userFacets" class="facet-list">
+                    @foreach (var d in Model.Collection.Drawings)
+                    {
+                        await Html.RenderPartialAsync("CollectionImageThumbnail", d);
+                    }
+                </ul>
+            </div>
+
+    </div>
+    </form>
+    <div class="row mt-2">
+        <div class="col-12 col-sm-12 col-md-12">
+            <button class="btn btn-primary mr-custom-btn" id="btnSaveCollection" onclick="sendFormCollection();"
+            @(!Model.IsEditing ? "disabled" : "")>
+                <i class="bi bi-floppy"></i> <span class="mr-texto-button"> Guardar Cambios</span>
+            </button>
+        </div>
+    </div>
 
 </div>
+
+
+@section Scripts {
+    <script src="~/js/admin.js" asp-append-version="true"></script>
+    <script asp-append-version="true">
+
+        $(function () {
+            $("#allFacets, #userFacets").sortable({
+                connectWith: "ul",
+                placeholder: "placeholder",
+                delay: 150
+            })
+                .disableSelection()
+                .dblclick(function (e) {
+                    var item = $(e.target).closest('.facet');
+                    if (e.currentTarget.id === 'allFacets') {
+                        //move from all to user
+                        $(item).fadeOut('fast', function () {
+                            $(item).prependTo($('#userFacets')).fadeIn('slow');
+                        });
+                    } else {
+                        //move from user to all
+                        $(item).fadeOut('fast', function () {
+                            $(item).prependTo($('#allFacets')).fadeIn('slow');
+                        });
+                    }
+                });
+        });
+
+    </script>
+}

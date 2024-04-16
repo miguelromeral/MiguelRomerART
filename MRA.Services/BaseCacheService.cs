@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,6 +21,11 @@ namespace MRA.Services
         {
             _cache.Remove(item);
         }
+        public void CleanAllCache()
+        {
+            _cache.Clear();
+        }
+
 
         public async Task<T> GetOrSetAsync<T>(string cacheKey, Func<Task<T>> getDataFunc, TimeSpan cacheDuration)
         {
@@ -39,5 +45,6 @@ namespace MRA.Services
 
             return data;
         }
+
     }
 }

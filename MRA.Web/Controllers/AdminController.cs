@@ -15,6 +15,7 @@ using System;
 using Azure.Storage.Blobs.Models;
 using MRA.Web.Models;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace MRA.Web.Controllers
 {
@@ -275,24 +276,86 @@ namespace MRA.Web.Controllers
         public async Task<IActionResult> ListCollections()
         {
             var model = new ListCollectionsViewModel();
-            model.Collections = await _drawingService.GetAllCollections();
+            model.Collections = await _drawingService.GetAllCollections(false);
             return View(model);
         }
 
         [AutorizacionRequerida]
         public async Task<IActionResult> EditCollection(string id)
         {
-            var model = new EditCollectionsViewModel();
-            model.Collection = await _drawingService.FindCollectionById(id, false);
+            var list = await _drawingService.GetAllDrawings();
+            var col = await _drawingService.FindCollectionById(id, false);
+            var model = new EditCollectionsViewModel()
+            {
+                ListDrawings = list,
+                Collection = col,
+                DrawingsId = String.Join(";", col.Drawings.Select(x => x.Id))
+            };  
+
             return View(model);
         }
 
 
         [HttpPost]
         [AutorizacionRequerida]
-        public async Task<Collection> SaveCollection(EditCollectionsViewModel model)
+        public async Task<bool> ExisteCollectionId(string id)
         {
-            return model.Collection;
+            try
+            {
+                var collection = await _drawingService.FindCollectionById(id);
+                return collection != null;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        [HttpPost]
+        [AutorizacionRequerida]
+        public async Task<Collection> SaveCollection([FromForm] IFormCollection model)
+        {
+            try
+            {
+                var userId = HttpContext.Session.GetString(SessionSettings.USER_ID) ?? "";
+                if (!SessionSettings.IsLogedAsAdmin(userId))
+                {
+                    ViewBag.Error = "No eres administrador y no tienes permiso para editarlo";
+                    return null;
+                }
+
+                var collection = new Collection()
+                {
+                    Id = model["Collection.Id"],
+                    Description = model["Collection.Description"],
+                    Name = model["Collection.Name"],
+                    Order = int.Parse(model["Collection.Order"])
+                };
+                collection.DrawingsReferences = await _drawingService.SetDrawingsReferences(EditCollectionsViewModel.ArrayDrawingsId(
+                    model["DrawingList"]
+                    ));
+
+                Collection result = null;
+                if (!String.IsNullOrEmpty(collection.Id))
+                {
+                    result = await _drawingService.AddAsync(collection);
+                    return result;
+                }
+
+                if (result == null)
+                {
+                    ViewBag.Error = "Ha ocurrido un error por el que no se ha guardado el dibujo";
+                    return null;
+                }
+
+                _drawingService.CleanAllCache();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = "Ha ocurrido un fallo al calcular la nota final.";
+                return null;
+            }
         }
 
 
@@ -301,6 +364,19 @@ namespace MRA.Web.Controllers
         public async Task<bool> RemoveCollection(string id)
         {
             return await _drawingService.RemoveCollection(id);
+        }
+
+
+
+        [AutorizacionRequerida]
+        public async Task<IActionResult> NewCollection()
+        {
+            var list = await _drawingService.GetAllDrawings();
+            var model = new EditCollectionsViewModel();
+            model.Collection = new Collection();
+            model.Collection.Drawings = new List<Drawing>();
+            model.ListDrawings = list;
+            return View("EditCollection", model);
         }
     }
 }

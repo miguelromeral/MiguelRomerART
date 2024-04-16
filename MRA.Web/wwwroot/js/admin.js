@@ -1,23 +1,19 @@
 ﻿var SETTINGS = {
     FORM_DRAWING: "formDrawing",
+    FORM_COLLECTION: "formCollection",
     AZURE_FORM: "rowUploadToAzure",
+    ID_INPUT_DRAWING: "iDrawingId",
+    ID_DIV_DRAWING_ID: "divDrawingId",
+    ID_INPUT_HIDDEN_DRAWING_ID: "iHiddenDrawingId",
+    ID_INPUT_COLLECTION: "iCollectionId",
+    ID_DIV_COLLECTION_ID: "divCollectionId",
+    ID_INPUT_HIDDEN_COLLECTION_ID: "iHiddenCollectionId",
+    ID_INPUT_HIDDEN_DRAWINGS_SELECTED: "iHiddenDrawingsSelectedId"
 }
 
 
 function sendForm() {
-    $(".zero-if-null").each((index, element) => {
-        if (element.value == '') {
-            element.value = 0;
-        }
-    });
-
-    $(".false-if-empty-check").each((index, element) => {
-        if (element.checked) {
-            element.value = true;
-        } else {
-            element.value = false;
-        }
-    });
+    fixInputValues();
 
     $("#" + SETTINGS.FORM_DRAWING).submit();
 }
@@ -291,6 +287,145 @@ function checkDrawingId(input) {
         },
         error: function (xhr, status, error) {
             mostrarMensajeError("Ha ocurrido un error al comprobar el ID del dibujo");
+        }
+    });
+}
+
+
+
+function fixInputValues() {
+    $(".zero-if-null").each((index, element) => {
+        if (element.value == '') {
+            element.value = 0;
+        }
+    });
+
+    $(".false-if-empty-check").each((index, element) => {
+        if (element.checked) {
+            element.value = true;
+        } else {
+            element.value = false;
+        }
+    });
+
+}
+
+function sendFormCollection() {
+    fixInputValues();
+
+    parseCollectionDrawingsId();
+
+
+    $("#" + SETTINGS.FORM_COLLECTION).submit();
+}
+
+function parseCollectionDrawingsId() {
+    var drawingIds = [];
+
+    $("#userFacets .facet").each(function () {
+        var drawingId = this.dataset.drawingId;
+        drawingIds.push(drawingId);
+    });
+    $("#" + SETTINGS.ID_INPUT_HIDDEN_DRAWINGS_SELECTED).val(drawingIds.join(";"));
+    return drawingIds;
+}
+
+function onSuccessSaveCollection(data) {
+
+    console.log(data);
+
+    if (data != undefined && data != null) {
+        if (data.id) {
+            $("#" + SETTINGS.ID_INPUT_COLLECTION).hide();
+            $("#" + SETTINGS.ID_DIV_COLLECTION_ID).text(data.id);
+            $("#" + SETTINGS.ID_INPUT_HIDDEN_COLLECTION_ID).val(data.id);
+            $("#" + SETTINGS.ID_DIV_COLLECTION_ID).show();
+        }
+        alert("¡Tu colección se ha guardado correctamente!");
+
+    } else {
+        mostrarMensajeError("Ha ocurrido un fallo al guardar la colección. Por favor, inténtalo más tarde");
+    }
+}
+
+function onFailureSaveCollection() {
+    mostrarMensajeError("Ha ocurrido un fallo al guardar la colección. Por favor, inténtalo más tarde");
+}
+
+
+function deleteCollection(id, nombre) {
+    $.confirm({
+        closeIcon: true,
+        title: 'Eliminar Colección',
+        content: '<p>¿Realmente quieres eliminar la colección "' + nombre + '"?</p>' +
+            '<p>Esta acción no se puede deshacer</p>',
+        buttons: {
+            cancel: {
+                text: "Cancelar",
+                btnClass: "btn btn-danger",
+                keys: ['enter'],
+                action: function () {
+
+                }
+            },
+            ok: {
+                text: "Sí, Eliminar",
+                btnClass: 'btn',
+                keys: ['enter'],
+                action: function () {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/Admin/RemoveCollection/'+id,
+                        data: { id: id },
+                        success: function (response) {
+                            console.log(response);
+                            if (response == "true" || response === true) {
+                                document.getElementById(id).remove();
+                                $.alert({
+                                    closeIcon: true,
+                                    title: '¡Eliminado!',
+                                    content: 'Colección Eliminada con Éxito.',
+                                });
+                            } else {
+                                mostrarMensajeError(response);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            mostrarMensajeError(error);
+                        }
+                    });
+                }
+            },
+        }
+    });
+}
+
+
+function checkCollectionId(input) {
+    var drawingId = input.value;
+
+    if (drawingId == "") {
+        alert("El ID es obligatorio");
+        $("#btnSaveCollection").prop("disabled", true);
+        return;
+    }
+
+    $.ajax({
+        type: 'POST',
+        url: '/Admin/ExisteCollectionId/' + drawingId,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+            console.log("Response: " + response);
+            if (response) {
+                alert("El ID '" + drawingId + "' ya está seleccionado.");
+                $("#btnSaveCollection").prop("disabled", true);
+            } else {
+                $("#btnSaveCollection").prop("disabled", false);
+            }
+        },
+        error: function (xhr, status, error) {
+            mostrarMensajeError("Ha ocurrido un error al comprobar el ID de la colección");
         }
     });
 }

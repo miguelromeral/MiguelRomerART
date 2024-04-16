@@ -13,18 +13,26 @@
 
 <div class="container">
     <div class="row">
-
+        <div class="col-12 col-sm-12 col-md-12">
+            <a href="@Url.Action("NewCollection", "Admin")" class="btn mr-custom-btn">Crear Nueva Colección</a>
+        </div>
     </div>
     <div class="row">
         <div class="col-12 col-sm-12 col-md-12">
             @foreach(var col in Model.Collections.OrderBy(x => x.Order))
             {
-                <a href="@Url.Action("EditCollection", "Admin", new {id = col.Id})">@col.Name</a>
-                <div class="mr-list-drawings-in-collection">
-                    @foreach (var drawing in col.Drawings)
-                    {
-                        await Html.RenderPartialAsync("Images/_ImageThumbnail", new ImageThumbnailModel(drawing));
-                    }
+                <div id="@(col.Id)">
+                    <a href="@Url.Action("EditCollection", "Admin", new {id = col.Id})">@col.Name</a>
+                    <button type="button" class="btn mr-custom-btn" onclick="deleteCollection('@(col.Id)','@(col.Name)')">Eliminar</button>
+                    <div class="mr-list-drawings-in-collection">
+                        @foreach (var drawing in col.Drawings)
+                        {
+                            <div class="collection-drawing">
+                                <img src="@drawing.UrlThumbnail" />
+                            </div>
+                            @* await Html.RenderPartialAsync("Images/_ImageThumbnail", new ImageThumbnailModel(drawing)); *@
+                        }
+                    </div>
                 </div>
             }
         </div>
@@ -32,3 +40,9 @@
 
 
 </div>
+
+                        
+
+@section Scripts {
+    <script src="~/js/admin.js" asp-append-version="true"></script>
+}
