@@ -25,10 +25,6 @@
         <div class="col-12 col-sm-12 col-md-12">
             <div class="mr-admin-form-control">
                 <label>ID</label>
-
-
-                    @* @Html.HiddenFor(m => Model.Collection.Id) *@
-
                 @if (!Model.IsEditing)
                 {
                     <input asp-for="Collection.Id" id="iCollectionId" class="form-control mr-custom-text" type="text"
@@ -71,17 +67,14 @@
         </div>
     </div>
     <div class="row facet-container">
-        @{
-            var notUsed = Model.ListDrawings.Except(Model.Collection.Drawings);
-        }
         <div class="col-12 col-sm-12 col-md-12">
-            <p>Drag & drop to rearrange items within a list or between lists.</br>Double-click to move item from one list to the bottom of the other.</p>
+            <p>Drag & drop to rearrange items within a list or between lists.</br>Double-click to move item from one list to the top of the other.</p>
         </div>
         <div class="col-6 col-sm-6 col-md-6">
                 <label>Todos Los Dibujos</label>
 
                 <ul id="allFacets" class="facet-list">
-                    @foreach (var d in notUsed.OrderByDescending(x => x.Date))
+                    @foreach (var d in Model.ListDrawings.Where(x => !Model.Collection.Drawings.Any(y => y.Id == x.Id)).OrderByDescending(x => x.Date))
                     {
                         await Html.RenderPartialAsync("CollectionImageThumbnail", d);
                     }

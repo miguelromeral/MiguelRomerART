@@ -64,7 +64,7 @@
 
 
 .facet-container {
-    width: 100%;
+    /*width: 100%;*/
 }
 
 
@@ -74,12 +74,13 @@
     /* margin: 0; */
     padding: 0;
     /* margin-right: 10px; */
-    /* border: 1px solid var(--mr-text-color); */
+    border: 1px solid var(--mr-text-color);
     /* padding: 5px; */
     width: -webkit-fill-available;
     /* min-height: 1.5em; */
-    min-height: 20vh;
-    max-height: 50vh;
+    min-height: 40vh;
+    max-height: 80vh;
+    resize: vertical;
     font-size: 0.85em;
     overflow: auto;
 }
@@ -111,6 +112,7 @@
     flex-wrap: nowrap;
     flex-direction: row;
     gap: 8px;
+    touch-action: none;
 }
 
 .facet .detalles {
