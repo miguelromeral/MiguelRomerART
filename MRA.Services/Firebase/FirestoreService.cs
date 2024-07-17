@@ -1,11 +1,11 @@
 ﻿using Google.Cloud.Firestore;
 using Google.Type;
 using Microsoft.Extensions.Configuration;
+using MRA.DTO.ViewModels.Art;
 using MRA.Services.Firebase.Converters;
 using MRA.Services.Firebase.Documents;
 using MRA.Services.Firebase.Interfaces;
 using MRA.Services.Firebase.Models;
-using MRA.Web.Models.Art;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -296,7 +296,7 @@ namespace MRA.Services.Firebase
             }
         }
 
-        public async Task<List<Drawing>> Filter(FilterDrawingModel filter)
+        public async Task<List<Drawing>> Filter(DrawingFilter filter)
         {
             try
             {

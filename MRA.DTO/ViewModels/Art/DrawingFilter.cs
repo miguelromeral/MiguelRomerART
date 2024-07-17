@@ -1,26 +1,32 @@
-﻿namespace MRA.Web.Models.Art
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MRA.DTO.ViewModels.Art
 {
-    public class FilterDrawingModel
+    public class DrawingFilter
     {
         public int Type { get; set; }
         public int ProductType { get; set; }
-        public string ProductName { get; set; }
-        public string ModelName { get; set; }
-        public string CharacterName { get; set; }
-        public string Collection { get; set; }
+        public string? ProductName { get; set; }
+        public string? ModelName { get; set; }
+        public string? CharacterName { get; set; }
+        public string? Collection { get; set; }
         public int Software { get; set; }
         public int Paper { get; set; }
-        public string Sortby { get; set; }
+        public string? Sortby { get; set; }
         public bool? Spotify { get; set; }
-        public string TextQuery { get; set; }
+        public string? TextQuery { get; set; }
         public List<string> Tags { get { return (TextQuery ?? "").Split(" ").Select(x => x.ToLower()).ToList(); } }
         public bool Favorites { get; set; }
 
-        public string CacheKey { get => $"filter_{Type}_{ProductType}_{ProductName}_{ModelName}_{CharacterName}_{Collection}_{Software}_{Paper}_{Sortby}_{Spotify}_{string.Join("_",Tags)}_{Favorites}"; }
+        public string CacheKey { get => $"filter_{Type}_{ProductType}_{ProductName}_{ModelName}_{CharacterName}_{Collection}_{Software}_{Paper}_{Sortby}_{Spotify}_{string.Join("_", Tags)}_{Favorites}"; }
 
 
-        public static FilterDrawingModel GetModelNoFilters() =>
-            new FilterDrawingModel()
+        public static DrawingFilter GetModelNoFilters() =>
+            new DrawingFilter()
             {
                 Sortby = "date-desc",
                 TextQuery = "",
@@ -38,7 +44,7 @@
 
         public bool HasNoFilters()
         {
-            var nofilters = FilterDrawingModel.GetModelNoFilters();
+            var nofilters = DrawingFilter.GetModelNoFilters();
             return
                 (Sortby ?? "").Equals(nofilters.Sortby) &&
                 (TextQuery ?? "").Equals(nofilters.TextQuery) &&

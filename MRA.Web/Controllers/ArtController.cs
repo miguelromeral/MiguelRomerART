@@ -9,6 +9,7 @@ using MRA.Services.Firebase.Models;
 using Azure.Storage.Blobs.Models;
 using Google.Api;
 using MRA.Web.Utils;
+using MRA.DTO.ViewModels.Art;
 
 namespace MRA.Web.Controllers
 {
@@ -68,7 +69,7 @@ namespace MRA.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<List<Drawing>> Filter(FilterDrawingModel filters)
+        public async Task<List<Drawing>> Filter(DrawingFilter filters)
         {
             return await _drawingService.FilterDrawings(filters);
         }

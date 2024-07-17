@@ -1,11 +1,11 @@
 ﻿using Google.Cloud.Firestore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using MRA.DTO.ViewModels.Art;
 using MRA.DTO.ViewModels.Art.Select;
 using MRA.Services.AzureStorage;
 using MRA.Services.Firebase.Interfaces;
 using MRA.Services.Firebase.Models;
-using MRA.Web.Models.Art;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,7 +34,7 @@ namespace MRA.Services
         {
             return await GetOrSetAsync<List<Drawing>>(CACHE_ALL_DRAWINGS, async () =>
             {
-                return await FilterDrawings(FilterDrawingModel.GetModelNoFilters());
+                return await FilterDrawings(DrawingFilter.GetModelNoFilters());
             }, TimeSpan.FromSeconds(_secondsCache));
         }
 
@@ -107,7 +107,7 @@ namespace MRA.Services
             }, TimeSpan.FromSeconds(_secondsCache));
         }
 
-        public async Task<List<Drawing>> FilterDrawings(FilterDrawingModel filter)
+        public async Task<List<Drawing>> FilterDrawings(DrawingFilter filter)
         {
             return await GetOrSetAsync<List<Drawing>>(filter.CacheKey, async () => {
                 List<Drawing> drawings = new List<Drawing>();

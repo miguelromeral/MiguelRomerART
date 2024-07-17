@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MRA.DTO.ViewModels.Art;
 using MRA.DTO.ViewModels.Art.Select;
 using MRA.Services;
 using MRA.Services.Firebase.Models;
@@ -59,6 +60,26 @@ namespace MRA.WebApi.Controllers
         {
             //var model = new DetailsModel(id, SessionSettings.IsLogedAsAdmin(HttpContext.Session.GetString(SessionSettings.USER_ID)));
             return await _drawingService.FindDrawingById(id, updateViews: true, cache: false);
+        }
+
+
+        [HttpPost("filter")]
+        public async Task<List<Drawing>> Filter([FromBody] DrawingFilter filters)
+        {
+            return await _drawingService.FilterDrawings(filters);
+        }
+
+
+        [HttpPost("cheer")]
+        public async Task Cheer([FromBody] string id)
+        {
+            await _drawingService.UpdateLikes(id);
+        }
+
+        [HttpPost("vote/{id}")]
+        public async Task<VoteSubmittedModel> Vote(string id, [FromBody] int score)
+        {
+            return await _drawingService.Vote(id, score);
         }
     }
 }
