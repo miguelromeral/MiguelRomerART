@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MRA.DTO\MRA.DTO.csproj" />
     <ProjectReference Include="..\MRA.Services\MRA.Services.csproj" />
   </ItemGroup>
 

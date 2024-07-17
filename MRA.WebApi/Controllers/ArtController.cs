@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MRA.DTO.ViewModels.Art.Select;
 using MRA.Services;
 using MRA.Services.Firebase.Models;
 
@@ -18,16 +19,40 @@ namespace MRA.WebApi.Controllers
             _drawingService = drawingService;
         }
 
-        //public IEnumerable<WeatherForecast> Get()
-        //{
-        //    return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-        //    {
-        //        Date = DateTime.Now.AddDays(index),
-        //        TemperatureC = Random.Shared.Next(-20, 55),
-        //        Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-        //    })
-        //    .ToArray();
-        //}
+        [HttpGet("drawings")]
+        public async Task<List<Drawing>> Details()
+        {
+            return await _drawingService.GetAllDrawings();
+        }
+
+        [HttpGet("select/products")]
+        public async Task<List<ProductListItem>> Products()
+        {
+            var drawings = await _drawingService.GetAllDrawings();
+            return _drawingService.GetProducts(drawings);
+        }
+
+        [HttpGet("select/characters")]
+        public async Task<List<CharacterListItem>> Characters()
+        {
+            var drawings = await _drawingService.GetAllDrawings();
+            return _drawingService.GetCharacters(drawings);
+        }
+
+        [HttpGet("select/models")]
+        public async Task<List<string>> Models()
+        {
+            var drawings = await _drawingService.GetAllDrawings();
+            return _drawingService.GetModels(drawings);
+        }
+
+
+        [HttpGet("collections")]
+        public async Task<List<Collection>> Collections()
+        {
+            return await _drawingService.GetAllCollections();
+        }
+
 
         [HttpGet("details/{id}")]
         public async Task<Drawing> Details(string id)

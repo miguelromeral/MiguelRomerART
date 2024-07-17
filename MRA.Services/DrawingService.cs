@@ -1,6 +1,7 @@
 ﻿using Google.Cloud.Firestore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using MRA.DTO.ViewModels.Art.Select;
 using MRA.Services.AzureStorage;
 using MRA.Services.Firebase.Interfaces;
 using MRA.Services.Firebase.Models;
@@ -222,5 +223,60 @@ namespace MRA.Services
 
 
         public async Task<List<DocumentReference>> SetDrawingsReferences(string[] ids) => await _firestoreService.SetDrawingsReferences(ids);
+
+
+        public List<ProductListItem> GetProducts(List<Drawing> drawings)
+        {
+            var list = new List<ProductListItem>();
+
+            foreach (var product in drawings.Where(x => !String.IsNullOrEmpty(x.ProductName)).Select(x => new { x.ProductName, x.ProductType, x.ProductTypeName }).Distinct().ToList())
+            {
+                if (list.Count(x => x.ProductName == product.ProductName) == 0)
+                {
+                    list.Add(new ProductListItem()
+                    {
+                        ProductName = product.ProductName,
+                        ProductTypeId = product.ProductType,
+                        ProductType = product.ProductTypeName
+                    });
+                }
+            }
+
+            return list;
+        }
+        public List<CharacterListItem> GetCharacters(List<Drawing> drawings)
+        {
+            var list = new List<CharacterListItem>();
+
+            foreach (var character in drawings.Where(x => !String.IsNullOrEmpty(x.ProductName)).Select(x => new { x.Name, x.ProductType, x.ProductTypeName }).Distinct().ToList())
+            {
+                if (list.Count(x => x.CharacterName == character.Name) == 0)
+                {
+                    list.Add(new CharacterListItem()
+                    {
+                        CharacterName = character.Name,
+                        ProductTypeId = character.ProductType,
+                        ProductType = character.ProductTypeName
+                    });
+                }
+            }
+
+            return list;
+        }
+
+        public List<string> GetModels(List<Drawing> drawings)
+        {
+            var list = new List<string>();
+
+            foreach (var modelName in drawings.Where(x => !String.IsNullOrEmpty(x.ModelName)).Select(x => x.ModelName).Distinct().ToList())
+            {
+                if (!list.Contains(modelName))
+                {
+                    list.Add(modelName);
+                }
+            }
+
+            return list;
+        }
     }
 }

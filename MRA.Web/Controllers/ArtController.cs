@@ -47,37 +47,13 @@ namespace MRA.Web.Controllers
 
             model.Drawings = await _drawingService.GetAllDrawings();
 
-            model.ProductNameSelect = new Dictionary<string, int>();
-
-            foreach (var product in model.Drawings.Where(x => !String.IsNullOrEmpty(x.ProductName)).Select(x => new { x.ProductName, x.ProductType }).Distinct().ToList())
-            {
-                if (!model.ProductNameSelect.ContainsKey(product.ProductName))
-                {
-                    model.ProductNameSelect.Add(product.ProductName, product.ProductType);
-                }
-            }
+            model.ProductNameSelect = _drawingService.GetProducts(model.Drawings).ToDictionary(x => x.ProductName, x => x.ProductTypeId);
 
 
-            model.CharacterNameSelect = new Dictionary<string, int>();
-
-            foreach (var product in model.Drawings.Where(x => !String.IsNullOrEmpty(x.Name)).Select(x => new { x.Name, x.ProductType }).Distinct().ToList())
-            {
-                if (!model.CharacterNameSelect.ContainsKey(product.Name))
-                {
-                    model.CharacterNameSelect.Add(product.Name, product.ProductType);
-                }
-            }
+            model.CharacterNameSelect = _drawingService.GetCharacters(model.Drawings).ToDictionary(x => x.CharacterName, x => x.ProductTypeId);
 
 
-            model.ModelNameSelect = new List<string>();
-
-            foreach (var modelName in model.Drawings.Where(x => !String.IsNullOrEmpty(x.ModelName)).Select(x => x.ModelName).Distinct().ToList())
-            {
-                if (!model.ModelNameSelect.Contains(modelName))
-                {
-                    model.ModelNameSelect.Add(modelName);
-                }
-            }
+            model.ModelNameSelect = _drawingService.GetModels(model.Drawings);
 
             model.ListCollections = await _drawingService.GetAllCollections();
 
