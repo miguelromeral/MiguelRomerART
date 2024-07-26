@@ -373,6 +373,70 @@ namespace MRA.Services.Firebase
                     }
                 }
 
+                //// Aplicar la ordenación
+                //switch (filter.Sortby)
+                //{
+                //    case "date-asc":
+                //        query = query.OrderBy("date");
+                //        break;
+                //    case "date-desc":
+                //        query = query.OrderByDescending("date");
+                //        break;
+                //    case "name-asc":
+                //        query = query.OrderBy("name");
+                //        break;
+                //    case "name-desc":
+                //        query = query.OrderByDescending("name");
+                //        break;
+                //    case "kudos-asc":
+                //        query = query.OrderBy("likes");
+                //        break;
+                //    case "kudos-desc":
+                //        query = query.OrderByDescending("likes");
+                //        break;
+                //    case "views-asc":
+                //        query = query.OrderBy("views");
+                //        break;
+                //    case "views-desc":
+                //        query = query.OrderByDescending("views");
+                //        break;
+                //    case "scorem-asc":
+                //        query = query.OrderBy("score_critic");
+                //        break;
+                //    case "scorem-desc":
+                //        query = query.OrderByDescending("score_critic");
+                //        break;
+                //    case "scoreu-asc":
+                //        query = query.OrderBy("score_popular").OrderByDescending("votes_popular");
+                //        break;
+                //    case "scoreu-desc":
+                //        query = query.OrderByDescending("score_popular").OrderByDescending("votes_popular");
+                //        break;
+                //    case "time-asc":
+                //        query = query.OrderBy("time");
+                //        break;
+                //    case "time-desc":
+                //        query = query.OrderByDescending("time");
+                //        break;
+                //    default:
+                //        query = query.OrderByDescending("date");
+                //        break;
+                //}
+
+                if (filter.PageSize > 0 && filter.PageNumber > 0)
+                {
+                    query = query.Limit(filter.PageSize);
+
+                    // Obtener el documento de inicio basado en la página anterior
+                    var previousDocumentsQuery = query.Limit((filter.PageNumber- 1) * filter.PageSize);
+                    var previousDocuments = await previousDocumentsQuery.GetSnapshotAsync();
+                    var lastDocumentFromPreviousPage = previousDocuments.Documents.LastOrDefault();
+                    if (lastDocumentFromPreviousPage != null)
+                    {
+                        query = query.StartAfter(lastDocumentFromPreviousPage);
+                    }
+                }
+
                 var documents = (await query.GetSnapshotAsync()).Documents.Select(s => s.ConvertTo<DrawingDocument>()).ToList();
 
                 var list = documents.Select(_converterDrawing.ConvertToModel).ToList();

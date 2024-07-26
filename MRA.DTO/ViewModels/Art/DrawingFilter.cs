@@ -21,8 +21,10 @@ namespace MRA.DTO.ViewModels.Art
         public string? TextQuery { get; set; }
         public List<string> Tags { get { return (TextQuery ?? "").Split(" ").Select(x => x.ToLower()).ToList(); } }
         public bool Favorites { get; set; }
+        public int PageSize { get; set; }
+        public int PageNumber { get; set; }
 
-        public string CacheKey { get => $"filter_{Type}_{ProductType}_{ProductName}_{ModelName}_{CharacterName}_{Collection}_{Software}_{Paper}_{Sortby}_{Spotify}_{string.Join("_", Tags)}_{Favorites}"; }
+        public string CacheKey { get => $"filter_{Type}_{ProductType}_{ProductName}_{ModelName}_{CharacterName}_{Collection}_{Software}_{Paper}_{Sortby}_{Spotify}_{string.Join("_", Tags)}_{Favorites}_{PageSize}_{PageNumber}"; }
 
 
         public static DrawingFilter GetModelNoFilters() =>

@@ -146,11 +146,11 @@ namespace MRA.Services
                         drawings = drawings.Where(x => x.ScoreCritic > 0).OrderBy(x => x.ScoreCritic).ToList();
                         break;
                     case "scoreu-desc":
-                        drawings = drawings.Where(x => x.ScorePopular > 0).OrderByDescending(x => (int) x.ScorePopular)
+                        drawings = drawings.Where(x => x.ScorePopular > 0).OrderByDescending(x => (int)x.ScorePopular)
                             .ThenByDescending(x => x.VotesPopular).ToList();
                         break;
                     case "scoreu-asc":
-                        drawings = drawings.Where(x => x.ScorePopular > 0).OrderBy(x => (int) x.ScorePopular)
+                        drawings = drawings.Where(x => x.ScorePopular > 0).OrderBy(x => (int)x.ScorePopular)
                             .ThenByDescending(x => x.VotesPopular).ToList();
                         break;
                     case "time-asc":
