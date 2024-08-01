@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using MRA.DTO.Auth;
 using MRA.DTO.ViewModels.Account;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -29,9 +30,9 @@ namespace MRA.WebApi.Controllers
 
             var claims = new[]
             {
-            new Claim(JwtRegisteredClaimNames.Sub, loginDto.Username),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-        };
+                new Claim(JwtRegisteredClaimNames.Sub, loginDto.Username),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -40,15 +41,18 @@ namespace MRA.WebApi.Controllers
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(1),
+                expires: DateTime.Now.AddMinutes(30),
                 signingCredentials: creds);
 
-            return Ok(new
+            return Ok(new UserDto()
             {
-                token = new JwtSecurityTokenHandler().WriteToken(token)
-            });
+                Username = loginDto.Username,
+                Role = "admin",
+                Token = new JwtSecurityTokenHandler().WriteToken(token)
+            }
+            );
+            
         }
-
 
         [HttpPost("validate-token")]
         [Authorize]
