@@ -58,8 +58,8 @@ namespace MRA.WebApi.Controllers
         [HttpGet("details/{id}")]
         public async Task<Drawing> Details(string id)
         {
-            //var model = new DetailsModel(id, SessionSettings.IsLogedAsAdmin(HttpContext.Session.GetString(SessionSettings.USER_ID)));
-            return await _drawingService.FindDrawingById(id, updateViews: true, cache: false);
+            // TODO: VOLVER A PONER EL UPDATE VIEWS A TRUE Y EL CACHE A FALSE
+            return await _drawingService.FindDrawingById(id, updateViews: false, cache: true);
         }
 
 
