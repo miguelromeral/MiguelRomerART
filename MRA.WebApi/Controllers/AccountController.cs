@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using MRA.DTO.ViewModels.Account;
 using System.IdentityModel.Tokens.Jwt;
@@ -18,35 +19,12 @@ namespace MRA.WebApi.Controllers
             _configuration = configuration;
         }
 
-        [HttpPost("login")]
-        public IActionResult Login([FromBody] UserLoginDto loginDto)
+        [HttpGet("info")]
+        [Authorize]
+        public IActionResult GetInfo()
         {
-            // Aquí deberías validar las credenciales del usuario
-            if (loginDto.Username != "usuario" || loginDto.Password != "contraseña")
-            {
-                return Unauthorized();
-            }
-
-            var claims = new[]
-            {
-            new Claim(JwtRegisteredClaimNames.Sub, loginDto.Username),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-        };
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            var token = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
-                claims: claims,
-                expires: DateTime.Now.AddMinutes(30),
-                signingCredentials: creds);
-
-            return Ok(new
-            {
-                token = new JwtSecurityTokenHandler().WriteToken(token)
-            });
+            // Esta acción está protegida y solo puede ser accedida con un JWT válido
+            return Ok(new { message = "Este es un dato seguro." });
         }
     }
 }
