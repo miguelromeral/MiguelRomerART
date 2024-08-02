@@ -4,6 +4,7 @@ using MRA.DTO.ViewModels.Art;
 using MRA.DTO.ViewModels.Art.Select;
 using MRA.Services;
 using MRA.Services.Firebase.Models;
+using MRA.WebApi.Models.Responses;
 
 namespace MRA.WebApi.Controllers
 {
@@ -136,6 +137,14 @@ namespace MRA.WebApi.Controllers
         }
 
 
+        [HttpGet("checkdrawing/{id}")]
+        public async Task<bool> ExisteDrawingId(string id)
+        {
+            var drawing = await _drawingService.FindDrawingById(id);
+            return drawing != null;
+        }
+
+
         [Authorize]
         [HttpPost("checkazurepath")]
         public async Task<JsonResult> CheckAzurePath([FromBody] CheckAzurePathRequest request)
@@ -156,71 +165,59 @@ namespace MRA.WebApi.Controllers
             });
         }
 
-        //[HttpPost]
-        //[AutorizacionRequerida]
-        //public async Task<IActionResult> UploadAzureImage(int azureImageThumbnailSize, string path, IFormFile azureImage)
-        //{
-        //    try
-        //    {
-        //        if (azureImage == null || azureImage.Length == 0)
-        //        {
-        //            return new JsonResult(new
-        //            {
-        //                error = "No se ha proporcionado ninguna imagen",
-        //            });
-        //        }
+        [HttpPost("upload")]
+        [Authorize]
+        public async Task<UploadAzureImageResponse> UploadAzureImage([FromForm] IFormFile image, [FromForm] int size, [FromForm] string path)
+        {
+            try
+            {
+                if (image == null || image.Length == 0)
+                {
+                    return new UploadAzureImageResponse()
+                    {
+                        Ok = false,
+                        Error = "No se ha proporcionado ninguna imagen",
+                    };
+                }
 
-        //        var blobLocationThumbnail = _drawingService.CrearThumbnailName(path);
-        //        await UploadImage(azureImage, blobLocationThumbnail, azureImageThumbnailSize);
-        //        await UploadImage(azureImage, path, 0);
+                var blobLocationThumbnail = _drawingService.CrearThumbnailName(path);
+                await UploadImage(image, blobLocationThumbnail, size);
+                await UploadImage(image, path, 0);
 
-        //        var urlBase = _drawingService.GetAzureUrlBase();
-        //        var url = urlBase + path;
-        //        var url_tn = urlBase + blobLocationThumbnail;
+                var urlBase = _drawingService.GetAzureUrlBase();
+                var url = urlBase + path;
+                var url_tn = urlBase + blobLocationThumbnail;
 
 
-        //        return new JsonResult(new
-        //        {
-        //            error = "",
-        //            url = url,
-        //            url_tn = url_tn,
-        //            tn = blobLocationThumbnail
-        //        });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return new JsonResult(new
-        //        {
-        //            error = ex.Message,
-        //        });
-        //    }
-        //}
+                return new UploadAzureImageResponse()
+                {
+                    Ok = true,
+                    Error = "",
+                    Url = url,
+                    UrlThumbnail = url_tn,
+                    PathThumbnail = blobLocationThumbnail
+                };
+            }
+            catch (Exception ex)
+            {
+                return new UploadAzureImageResponse()
+                {
+                    Ok = false,
+                    Error = ex.Message,
+                };
+            }
+        }
 
-        //private async Task UploadImage(IFormFile azureImage, string path, int azureImageThumbnailSize)
-        //{
-        //    using (var imageStream = new MemoryStream())
-        //    {
-        //        await azureImage.CopyToAsync(imageStream);
-        //        imageStream.Position = 0;
+        private async Task UploadImage(IFormFile azureImage, string path, int azureImageThumbnailSize)
+        {
+            using (var imageStream = new MemoryStream())
+            {
+                await azureImage.CopyToAsync(imageStream);
+                imageStream.Position = 0;
 
-        //        await _drawingService.RedimensionarYGuardarEnAzureStorage(imageStream, path, azureImageThumbnailSize);
-        //    }
-        //}
-
-        //[HttpPost]
-        //[AutorizacionRequerida]
-        //public async Task<bool> ExisteDrawingId(string id)
-        //{
-        //    try
-        //    {
-        //        var drawing = await _drawingService.FindDrawingById(id);
-        //        return drawing != null;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return false;
-        //    }
-        //}
+                await _drawingService.RedimensionarYGuardarEnAzureStorage(imageStream, path, azureImageThumbnailSize);
+            }
+        }
 
     }
 }
