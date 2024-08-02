@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MRA.DTO.ViewModels.Art;
 using MRA.DTO.ViewModels.Art.Select;
 using MRA.Services;
@@ -81,5 +82,145 @@ namespace MRA.WebApi.Controllers
         {
             return await _drawingService.Vote(id, score);
         }
+
+
+
+
+        [Authorize]
+        [HttpPost("save/{id}")]
+        public async Task<SaveDrawingRequest> SaveDrawing(string id, [FromBody] SaveDrawingRequest request)
+        {
+            try
+            {
+                //Thread.Sleep(1000);
+                return request;
+
+                //var drawing = model.Drawing;
+                //var userId = HttpContext.Session.GetString(SessionSettings.USER_ID) ?? "";
+                //if (!SessionSettings.IsLogedAsAdmin(userId))
+                //{
+                //    ViewBag.Error = "No eres administrador y no tienes permiso para editarlo";
+                //    return null;
+                //}
+
+                //drawing.Name = drawing.Name ?? "";
+                //drawing.ModelName = drawing.ModelName ?? "";
+                //drawing.ProductName = drawing.ProductName ?? "";
+                //drawing.ReferenceUrl = drawing.ReferenceUrl ?? "";
+                //drawing.Path = drawing.Path ?? "";
+                //drawing.PathThumbnail = _drawingService.CrearThumbnailName(drawing.Path);
+                //drawing.Title = drawing.Title ?? "";
+                //drawing.SpotifyUrl = drawing.SpotifyUrl ?? "";
+                //drawing.Tags = (drawing.TagsText ?? "").Split(Drawing.SEPARATOR_TAGS).ToList();
+
+                //Drawing result = null;
+                //if (!String.IsNullOrEmpty(drawing.Id))
+                //{
+                //    result = await _drawingService.AddAsync(drawing);
+                //    return drawing;
+                //}
+
+                //if (result == null)
+                //{
+                //    ViewBag.Error = "Ha ocurrido un error por el que no se ha guardado el dibujo";
+                //    return null;
+                //}
+
+                //_drawingService.CleanAllCache();
+                //return result;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+
+        [Authorize]
+        [HttpPost("checkazurepath")]
+        public async Task<JsonResult> CheckAzurePath([FromBody] CheckAzurePathRequest request)
+        {
+            var existe = await _drawingService.ExistsBlob(request.Id);
+
+            var blobLocationThumbnail = _drawingService.CrearThumbnailName(request.Id);
+
+            var urlBase = _drawingService.GetAzureUrlBase();
+            var url = urlBase + request.Id;
+            var url_tn = urlBase + blobLocationThumbnail;
+
+            return new JsonResult(new
+            {
+                existe,
+                url,
+                url_tn
+            });
+        }
+
+        //[HttpPost]
+        //[AutorizacionRequerida]
+        //public async Task<IActionResult> UploadAzureImage(int azureImageThumbnailSize, string path, IFormFile azureImage)
+        //{
+        //    try
+        //    {
+        //        if (azureImage == null || azureImage.Length == 0)
+        //        {
+        //            return new JsonResult(new
+        //            {
+        //                error = "No se ha proporcionado ninguna imagen",
+        //            });
+        //        }
+
+        //        var blobLocationThumbnail = _drawingService.CrearThumbnailName(path);
+        //        await UploadImage(azureImage, blobLocationThumbnail, azureImageThumbnailSize);
+        //        await UploadImage(azureImage, path, 0);
+
+        //        var urlBase = _drawingService.GetAzureUrlBase();
+        //        var url = urlBase + path;
+        //        var url_tn = urlBase + blobLocationThumbnail;
+
+
+        //        return new JsonResult(new
+        //        {
+        //            error = "",
+        //            url = url,
+        //            url_tn = url_tn,
+        //            tn = blobLocationThumbnail
+        //        });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new JsonResult(new
+        //        {
+        //            error = ex.Message,
+        //        });
+        //    }
+        //}
+
+        //private async Task UploadImage(IFormFile azureImage, string path, int azureImageThumbnailSize)
+        //{
+        //    using (var imageStream = new MemoryStream())
+        //    {
+        //        await azureImage.CopyToAsync(imageStream);
+        //        imageStream.Position = 0;
+
+        //        await _drawingService.RedimensionarYGuardarEnAzureStorage(imageStream, path, azureImageThumbnailSize);
+        //    }
+        //}
+
+        //[HttpPost]
+        //[AutorizacionRequerida]
+        //public async Task<bool> ExisteDrawingId(string id)
+        //{
+        //    try
+        //    {
+        //        var drawing = await _drawingService.FindDrawingById(id);
+        //        return drawing != null;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return false;
+        //    }
+        //}
+
     }
 }

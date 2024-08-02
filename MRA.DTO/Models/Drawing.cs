@@ -1,5 +1,4 @@
 ﻿using Google.Protobuf;
-using MRA.DTO;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -9,7 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace MRA.Services.Firebase.Models
+namespace MRA.DTO.Models
 {
     public class Drawing
     {
@@ -17,8 +16,7 @@ namespace MRA.Services.Firebase.Models
         public static string SEPARATOR_TAGS = " ";
 
         public Drawing()
-        {
-            
+        {   
             Tags = new List<string>();
         }
 
