@@ -304,6 +304,10 @@ namespace MRA.Services.Firebase
 
                 //query = query.WhereNotEqualTo("visible", false);
 
+                //if (filter.OnlyVisible)
+                //{
+                //    query = query.WhereEqualTo("visible", true);
+                //}
                 if (filter.Favorites)
                 {
                     query = query.WhereEqualTo("favorite", true);

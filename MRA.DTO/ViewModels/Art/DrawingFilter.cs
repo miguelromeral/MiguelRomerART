@@ -23,8 +23,9 @@ namespace MRA.DTO.ViewModels.Art
         public bool Favorites { get; set; }
         public int PageSize { get; set; }
         public int PageNumber { get; set; }
+        public bool OnlyVisible { get; set; }
 
-        public string CacheKey { get => $"filter_{Type}_{ProductType}_{ProductName}_{ModelName}_{CharacterName}_{Collection}_{Software}_{Paper}_{Sortby}_{Spotify}_{string.Join("_", Tags)}_{Favorites}_{PageSize}_{PageNumber}"; }
+        public string CacheKey { get => $"filter_{Type}_{ProductType}_{ProductName}_{ModelName}_{CharacterName}_{Collection}_{Software}_{Paper}_{Sortby}_{Spotify}_{string.Join("_", Tags)}_{Favorites}_{PageSize}_{PageNumber}_{OnlyVisible}"; }
 
 
         public static DrawingFilter GetModelNoFilters() =>
@@ -42,6 +43,7 @@ namespace MRA.DTO.ViewModels.Art
                 Paper = 0,
                 Favorites = false,
                 Spotify = null,
+                OnlyVisible = true,
             };
 
         public bool HasNoFilters()
@@ -59,7 +61,8 @@ namespace MRA.DTO.ViewModels.Art
                 Software.Equals(nofilters.Software) &&
                 Paper.Equals(nofilters.Paper) &&
                 Spotify == nofilters.Spotify &&
-                Favorites.Equals(nofilters.Favorites);
+                Favorites.Equals(nofilters.Favorites) &&
+                OnlyVisible == true;
         }
     }
 }

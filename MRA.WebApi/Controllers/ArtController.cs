@@ -60,14 +60,14 @@ namespace MRA.WebApi.Controllers
         [HttpGet("details/{id}")]
         public async Task<Drawing> Details(string id)
         {
-            // TODO: VOLVER A PONER EL UPDATE VIEWS A TRUE Y EL CACHE A FALSE
-            return await _drawingService.FindDrawingById(id, updateViews: false, cache: true);
+            return await _drawingService.FindDrawingById(id, updateViews: true, cache: false);
         }
 
 
         [HttpPost("filter")]
         public async Task<List<Drawing>> Filter([FromBody] DrawingFilter filters)
         {
+            filters.OnlyVisible = true;
             return await _drawingService.FilterDrawings(filters);
         }
 
@@ -89,46 +89,41 @@ namespace MRA.WebApi.Controllers
 
         [Authorize]
         [HttpPost("save/{id}")]
-        public async Task<SaveDrawingRequest> SaveDrawing(string id, [FromBody] SaveDrawingRequest request)
+        public async Task<Drawing> SaveDrawing(string id, [FromBody] SaveDrawingRequest request)
         {
             try
             {
-                //Thread.Sleep(1000);
-                return request;
-
-                //var drawing = model.Drawing;
-                //var userId = HttpContext.Session.GetString(SessionSettings.USER_ID) ?? "";
-                //if (!SessionSettings.IsLogedAsAdmin(userId))
-                //{
-                //    ViewBag.Error = "No eres administrador y no tienes permiso para editarlo";
-                //    return null;
-                //}
-
-                //drawing.Name = drawing.Name ?? "";
-                //drawing.ModelName = drawing.ModelName ?? "";
-                //drawing.ProductName = drawing.ProductName ?? "";
-                //drawing.ReferenceUrl = drawing.ReferenceUrl ?? "";
-                //drawing.Path = drawing.Path ?? "";
-                //drawing.PathThumbnail = _drawingService.CrearThumbnailName(drawing.Path);
-                //drawing.Title = drawing.Title ?? "";
-                //drawing.SpotifyUrl = drawing.SpotifyUrl ?? "";
-                //drawing.Tags = (drawing.TagsText ?? "").Split(Drawing.SEPARATOR_TAGS).ToList();
-
-                //Drawing result = null;
-                //if (!String.IsNullOrEmpty(drawing.Id))
-                //{
-                //    result = await _drawingService.AddAsync(drawing);
-                //    return drawing;
-                //}
-
-                //if (result == null)
-                //{
-                //    ViewBag.Error = "Ha ocurrido un error por el que no se ha guardado el dibujo";
-                //    return null;
-                //}
-
-                //_drawingService.CleanAllCache();
-                //return result;
+                var drawing = new Drawing()
+                {
+                    Comment = string.Join(Drawing.SEPARATOR_COMMENTS, request.ListComments),
+                    CommentCons = string.Join(Drawing.SEPARATOR_COMMENTS, request.ListCommentCons),
+                    CommentPros = string.Join(Drawing.SEPARATOR_COMMENTS, request.ListCommentPros),
+                    Date = request.DateHyphen.Replace("-", "/"),
+                    DateHyphen = request.DateHyphen,
+                    Favorite = request.Favorite,
+                    Id = request.Id,
+                    ModelName = request.ModelName,
+                    Name = request.Name,
+                    Paper = request.Paper,
+                    Path = request.Path,
+                    PathThumbnail = request.PathThumbnail,
+                    ProductName = request.ProductName,
+                    ProductType = request.ProductType,
+                    ReferenceUrl = request.ReferenceUrl,
+                    ScoreCritic = request.ScoreCritic,
+                    Software = request.Software,
+                    SpotifyUrl = request.SpotifyUrl,
+                    Tags = request.TagsText.Split(Drawing.SEPARATOR_TAGS).ToList(),
+                    Time = request.Time,
+                    Title = request.Title,
+                    Type = request.Type,
+                    Visible = request.Visible
+                };
+               
+                Drawing result = await _drawingService.AddAsync(drawing);
+                result.TagsText = string.Join(Drawing.SEPARATOR_TAGS, result.Tags);
+                _drawingService.CleanAllCache();
+                return result;
             }
             catch (Exception ex)
             {
@@ -147,7 +142,7 @@ namespace MRA.WebApi.Controllers
 
         [Authorize]
         [HttpPost("checkazurepath")]
-        public async Task<JsonResult> CheckAzurePath([FromBody] CheckAzurePathRequest request)
+        public async Task<CheckAzurePathResponse> CheckAzurePath([FromBody] CheckAzurePathRequest request)
         {
             var existe = await _drawingService.ExistsBlob(request.Id);
 
@@ -157,12 +152,13 @@ namespace MRA.WebApi.Controllers
             var url = urlBase + request.Id;
             var url_tn = urlBase + blobLocationThumbnail;
 
-            return new JsonResult(new
+            return new CheckAzurePathResponse()
             {
-                existe,
-                url,
-                url_tn
-            });
+                Existe = existe,
+                Url = url,
+                UrlThumbnail = url_tn,
+                PathThumbnail = blobLocationThumbnail
+            };
         }
 
         [HttpPost("upload")]
