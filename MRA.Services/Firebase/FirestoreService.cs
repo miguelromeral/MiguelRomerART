@@ -783,15 +783,15 @@ namespace MRA.Services.Firebase
         public async Task<Collection> AddAsync(Collection document)
         {
             var collection = _firestoreDb.Collection(_collectionNameCollections);
-            var drawingDocument = _converterCollection.ConvertToDocument(document);
+            var collectionDocument = _converterCollection.ConvertToDocument(document);
 
             // Obtiene una referencia al documento específico en la colección
             DocumentReference docRef = collection.Document(document.Id);
 
             // Inserta o actualiza el documento con los datos especificados
-            await docRef.SetAsync(drawingDocument);
+            await docRef.SetAsync(collectionDocument);
 
-            return _converterCollection.ConvertToModel(drawingDocument);
+            return await HandleCollection(collectionDocument);
         }
 
         public DocumentReference GetDbDocument(string path)

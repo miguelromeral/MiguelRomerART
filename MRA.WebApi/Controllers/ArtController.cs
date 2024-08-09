@@ -243,7 +243,7 @@ namespace MRA.WebApi.Controllers
 
         [HttpPost("save/collection/{id}")]
         [Authorize]
-        public async Task<Collection> SaveCollection(string id, [FromBody] SaveCollectionRequest model)
+        public async Task<CollectionResponse> SaveCollection(string id, [FromBody] SaveCollectionRequest model)
         {
             try
             {
@@ -256,20 +256,14 @@ namespace MRA.WebApi.Controllers
                 };
                 collection.DrawingsReferences = await _drawingService.SetDrawingsReferences(model.DrawingsIds);
 
-                Collection result = null;
                 if (!String.IsNullOrEmpty(collection.Id))
                 {
-                    result = await _drawingService.AddAsync(collection);
-                    return result;
+                    Collection result = await _drawingService.AddAsync(collection);
+                    _drawingService.CleanAllCache();
+                    return new CollectionResponse(result);
                 }
 
-                if (result == null)
-                {
-                    return null;
-                }
-
-                _drawingService.CleanAllCache();
-                return result;
+                return null;
             }
             catch (Exception ex)
             {

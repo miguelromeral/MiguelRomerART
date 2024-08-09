@@ -10,7 +10,7 @@ namespace MRA.WebApi.Models.Responses
         public CollectionResponse(Collection collection)
         {
             this.Description = collection.Description;
-            if (collection?.Drawings.Count > 0)
+            if (collection?.Drawings?.Count > 0)
             {
                 this.Drawings = collection.Drawings;
                 this.DrawingsId = collection.Drawings.Select(x => x.Id).ToList();
