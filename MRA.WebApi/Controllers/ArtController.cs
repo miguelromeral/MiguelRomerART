@@ -4,6 +4,7 @@ using MRA.DTO.ViewModels.Art;
 using MRA.DTO.ViewModels.Art.Select;
 using MRA.Services;
 using MRA.Services.Firebase.Models;
+using MRA.WebApi.Models.Requests;
 using MRA.WebApi.Models.Responses;
 
 namespace MRA.WebApi.Controllers
@@ -51,9 +52,16 @@ namespace MRA.WebApi.Controllers
 
 
         [HttpGet("collections")]
-        public async Task<List<Collection>> Collections()
+        public async Task<List<CollectionResponse>> Collections()
         {
-            return await _drawingService.GetAllCollections();
+            return (await _drawingService.GetAllCollections()).Select(x => new CollectionResponse(x)).ToList();
+        }
+
+
+        [HttpGet("collection/details/{id}")]
+        public async Task<CollectionResponse> CollectionDetails(string id)
+        {
+            return new CollectionResponse(await _drawingService.FindCollectionById(id));
         }
 
 
@@ -139,7 +147,6 @@ namespace MRA.WebApi.Controllers
             return drawing != null;
         }
 
-
         [Authorize]
         [HttpPost("checkazurepath")]
         public async Task<CheckAzurePathResponse> CheckAzurePath([FromBody] CheckAzurePathRequest request)
@@ -215,5 +222,67 @@ namespace MRA.WebApi.Controllers
             }
         }
 
+
+
+
+
+
+        [HttpGet("check/collection/{id}")]
+        public async Task<bool> ExisteCollectionId(string id)
+        {
+            try
+            {
+                var collection = await _drawingService.FindCollectionById(id);
+                return collection != null;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        [HttpPost("save/collection/{id}")]
+        [Authorize]
+        public async Task<Collection> SaveCollection(string id, [FromBody] SaveCollectionRequest model)
+        {
+            try
+            {
+                var collection = new Collection()
+                {
+                    Id = model.Id,
+                    Description = model.Description,
+                    Name = model.Name,
+                    Order = model.Order
+                };
+                collection.DrawingsReferences = await _drawingService.SetDrawingsReferences(model.DrawingsIds);
+
+                Collection result = null;
+                if (!String.IsNullOrEmpty(collection.Id))
+                {
+                    result = await _drawingService.AddAsync(collection);
+                    return result;
+                }
+
+                if (result == null)
+                {
+                    return null;
+                }
+
+                _drawingService.CleanAllCache();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+
+        [HttpPost("collection/remove")]
+        [Authorize]
+        public async Task<bool> RemoveCollection([FromBody] string id)
+        {
+            return await _drawingService.RemoveCollection(id);
+        }
     }
 }
