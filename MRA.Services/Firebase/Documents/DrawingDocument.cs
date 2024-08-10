@@ -71,6 +71,12 @@ namespace MRA.Services.Firebase.Documents
         public string spotify_url { get; set; }
 
         [FirestoreProperty]
+        public string twitter_url { get; set; }
+
+        [FirestoreProperty]
+        public string instagram_url { get; set; }
+
+        [FirestoreProperty]
         public int software { get; set; }
 
         [FirestoreProperty]

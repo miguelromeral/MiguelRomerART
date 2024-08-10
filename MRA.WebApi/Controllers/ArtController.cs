@@ -125,6 +125,8 @@ namespace MRA.WebApi.Controllers
                     Time = request.Time,
                     Title = request.Title,
                     Type = request.Type,
+                    InstagramUrl = request.InstagramUrl,
+                    TwitterUrl = request.TwitterUrl,
                     Visible = request.Visible
                 };
                

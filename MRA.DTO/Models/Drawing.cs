@@ -84,6 +84,8 @@ namespace MRA.DTO.Models
         }
         public string Name { get; set; }
         public string ModelName { get; set; }
+        public string TwitterUrl { get; set; }
+        public string InstagramUrl { get; set; }
         public string SpotifyUrl { get; set; }
         public string SpotifyTrackId { 
             get

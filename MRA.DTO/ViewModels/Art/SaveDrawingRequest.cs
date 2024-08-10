@@ -29,6 +29,8 @@ namespace MRA.DTO.ViewModels.Art
         public string ProductName { get; set; }
         public bool Favorite { get; set; }
         public string ReferenceUrl { get; set; }
+        public string InstagramUrl { get; set; }
+        public string TwitterUrl { get; set; }
         public int ScoreCritic { get; set; }
         public List<string> ListComments { get; set; }
         public List<string> ListCommentPros { get; set; }
