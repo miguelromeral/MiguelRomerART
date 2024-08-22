@@ -68,14 +68,30 @@ namespace MRA.WebApi.Controllers
         [HttpGet("details/{id}")]
         public async Task<Drawing> Details(string id)
         {
-            return await _drawingService.FindDrawingById(id, updateViews: true, cache: false);
+            return await _drawingService.FindDrawingById(id, true, updateViews: true, cache: false); ;
         }
 
 
-        [HttpPost("filter")]
+        [HttpGet("details-admin/{id}")]
+        [Authorize]
+        public async Task<Drawing> DetailsAdmin(string id)
+        {
+            return await _drawingService.FindDrawingById(id, false, updateViews: false, cache: false);
+        }
+
+
+        [HttpPost("filter-public")]
         public async Task<List<Drawing>> Filter([FromBody] DrawingFilter filters)
         {
             filters.OnlyVisible = true;
+            return await _drawingService.FilterDrawings(filters);
+        }
+
+        [HttpPost("filter-admin")]
+        [Authorize]
+        public async Task<List<Drawing>> FilterAdmin([FromBody] DrawingFilter filters)
+        {
+            filters.OnlyVisible = false;
             return await _drawingService.FilterDrawings(filters);
         }
 
@@ -145,7 +161,7 @@ namespace MRA.WebApi.Controllers
         [HttpGet("checkdrawing/{id}")]
         public async Task<bool> ExisteDrawingId(string id)
         {
-            var drawing = await _drawingService.FindDrawingById(id);
+            var drawing = await _drawingService.FindDrawingById(id, false);
             return drawing != null;
         }
 

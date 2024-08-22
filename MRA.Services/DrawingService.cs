@@ -174,20 +174,30 @@ namespace MRA.Services
             drawings.ForEach(d => d.UrlBase = _azureStorageService.BlobURL);
         }
 
-        public async Task<Drawing> FindDrawingById(string documentId, bool updateViews = false, bool cache = true)
+        public async Task<Drawing> FindDrawingById(string documentId, bool onlyIfVisible, bool updateViews = false, bool cache = true)
         {
             //await _firestoreService.UpdateViews(documentId);
             if (cache)
             {
                 return await GetOrSetAsync<Drawing>($"drawing_{documentId}", async () =>
                 {
-                    return await _firestoreService.FindDrawingById(documentId, updateViews);
+                    return await FindDrawingByIdTask(documentId, onlyIfVisible, updateViews, cache);
                 }, TimeSpan.FromSeconds(_secondsCache));
             }
             else
             {
-                return await _firestoreService.FindDrawingById(documentId, updateViews);
+                return await FindDrawingByIdTask(documentId, onlyIfVisible, updateViews, cache);
             }
+        }
+
+        private async Task<Drawing> FindDrawingByIdTask(string documentId, bool onlyIfVisible, bool updateViews = false, bool cache = true)
+        {
+            var result = await _firestoreService.FindDrawingById(documentId, updateViews);
+            if (result != null && onlyIfVisible && !result.Visible)
+            {
+                return null;
+            }
+            return result;
         }
 
         public async Task UpdateViews(string documentId) => await _firestoreService.UpdateViews(documentId);
@@ -200,7 +210,7 @@ namespace MRA.Services
 
         public async Task<Drawing> AddAsync(Drawing document)
         {
-            Drawing current = await FindDrawingById(document.Id, false, false);
+            Drawing current = await FindDrawingById(document.Id, false, false, false);
             if(current != null)
             {
                 document.Likes = current.Likes;

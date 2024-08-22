@@ -458,6 +458,11 @@ namespace MRA.Services.Firebase
                     }
                 }
 
+                if (filter.OnlyVisible)
+                {
+                    list = list.Where(x => x.Visible).ToList();
+                }
+
                 return list;
             }
             catch(Exception ex)

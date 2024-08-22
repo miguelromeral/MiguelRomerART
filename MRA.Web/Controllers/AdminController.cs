@@ -130,7 +130,7 @@ namespace MRA.Web.Controllers
         public async Task<IActionResult> EditDrawing(string id)
         {
             var model = new EditDrawingViewModel();
-            model.Drawing = await _drawingService.FindDrawingById(id, false, false);
+            model.Drawing = await _drawingService.FindDrawingById(id, false, false, false);
             if(model.Drawing == null)
             {
                 return View("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
@@ -261,7 +261,7 @@ namespace MRA.Web.Controllers
         {
             try
             {
-                var drawing = await _drawingService.FindDrawingById(id);
+                var drawing = await _drawingService.FindDrawingById(id, false);
                 return drawing != null;
             }
             catch (Exception ex)

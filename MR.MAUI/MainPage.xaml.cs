@@ -128,7 +128,7 @@ namespace MR.MAUI
             string textoIngresado = tbDrawingId.Text;
 
 
-            drawing = await _drawingService.FindDrawingById(textoIngresado);
+            drawing = await _drawingService.FindDrawingById(textoIngresado, false);
 
             if(drawing == null)
             {
