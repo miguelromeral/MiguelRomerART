@@ -23,11 +23,11 @@ namespace MRA.WebApi.Controllers
             _drawingService = drawingService;
         }
 
-        [HttpGet("drawings")]
-        public async Task<List<Drawing>> Details()
-        {
-            return await _drawingService.GetAllDrawings();
-        }
+        //[HttpGet("drawings")]
+        //public async Task<List<Drawing>> Details()
+        //{
+        //    return await _drawingService.GetAllDrawings();
+        //}
 
         [HttpGet("select/products")]
         public async Task<List<ProductListItem>> Products()
@@ -51,15 +51,43 @@ namespace MRA.WebApi.Controllers
         }
 
 
-        [HttpGet("collections")]
+        [HttpGet("collections-public")]
         public async Task<List<CollectionResponse>> Collections()
+        {
+            var collections = (await _drawingService.GetAllCollections()).Select(x => new CollectionResponse(x)).ToList();
+            var newList = new List<CollectionResponse>();
+            foreach(var collection in collections)
+            {
+                newList.Add(FilterCollectionResponsePublic(collection));
+            }
+            return newList;
+        }
+
+        private CollectionResponse FilterCollectionResponsePublic(CollectionResponse collection)
+        {
+            collection.Drawings = collection.Drawings.Where(x => x.Visible).ToList();
+            collection.DrawingsId = collection.Drawings.Select(x => x.Id).ToList();
+            return collection;
+        }
+
+
+        [HttpGet("collections-admin")]
+        [Authorize]
+        public async Task<List<CollectionResponse>> CollectionsAdmin()
         {
             return (await _drawingService.GetAllCollections()).Select(x => new CollectionResponse(x)).ToList();
         }
 
 
-        [HttpGet("collection/details/{id}")]
+        [HttpGet("collection/details-public/{id}")]
         public async Task<CollectionResponse> CollectionDetails(string id)
+        {
+            return FilterCollectionResponsePublic(new CollectionResponse(await _drawingService.FindCollectionById(id)));
+        }
+
+        [HttpGet("collection/details-admin/{id}")]
+        [Authorize]
+        public async Task<CollectionResponse> CollectionDetailsAdmin(string id)
         {
             return new CollectionResponse(await _drawingService.FindCollectionById(id));
         }
