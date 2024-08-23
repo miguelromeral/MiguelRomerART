@@ -16,6 +16,7 @@ namespace MRA.WebApi.Models.Responses
             this.FilteredCollections = results.FilteredCollections;
             this.FilteredDrawingCharacters = results.FilteredDrawingCharacters;
             this.FilteredDrawingModels = results.FilteredDrawingModels;
+            this.NDrawingFavorites = results.NDrawingFavorites;
             this.FilteredDrawingPapers = results.FilteredDrawingPapers;
             this.FilteredDrawingProducts = results.FilteredDrawingProducts;
             this.FilteredDrawingProductTypes = results.FilteredDrawingProductTypes;
