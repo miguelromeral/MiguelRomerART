@@ -107,6 +107,17 @@ namespace MRA.Services
             }, TimeSpan.FromSeconds(_secondsCache));
         }
 
+
+        public List<Drawing> FilterDrawingsGivenList(DrawingFilter filter, List<Drawing> drawings, List<Collection> collections)
+        {
+            return GetOrSet<List<Drawing>>(filter.CacheKey, () =>
+            {
+                var list = _firestoreService.FilterGivenList(filter, drawings, collections);
+                SetBlobUrl(ref list);
+                return list;
+            }, TimeSpan.FromSeconds(_secondsCache));
+        }
+
         public async Task<List<Drawing>> FilterDrawings(DrawingFilter filter)
         {
             return await GetOrSetAsync<List<Drawing>>(filter.CacheKey, async () => {
@@ -232,15 +243,6 @@ namespace MRA.Services
         public string CrearThumbnailName(string rutaImagen) => _azureStorageService.CrearThumbnailName(rutaImagen);
 
         public DocumentReference GetDbDocumentDrawing(string id) => _firestoreService.GetDbDocumentDrawing(id);
-
-
-        public async Task<Resume> GetAllExperience()
-        {
-            return await GetOrSetAsync<Resume> ("all_experience", async () =>
-            {
-                return await _firestoreService.GetAllExperience();
-            }, TimeSpan.FromSeconds(_secondsCache));
-        }
 
 
         public async Task<List<DocumentReference>> SetDrawingsReferences(string[] ids) => await _firestoreService.SetDrawingsReferences(ids);

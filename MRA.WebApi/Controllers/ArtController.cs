@@ -111,16 +111,20 @@ namespace MRA.WebApi.Controllers
         [HttpPost("filter-public")]
         public async Task<List<Drawing>> Filter([FromBody] DrawingFilter filters)
         {
+            var allDrawings = await _drawingService.GetAllDrawings();
+            var allCollections = await _drawingService.GetAllCollections();
             filters.OnlyVisible = true;
-            return await _drawingService.FilterDrawings(filters);
+            return _drawingService.FilterDrawingsGivenList(filters, allDrawings, allCollections);
         }
 
         [HttpPost("filter-admin")]
         [Authorize]
         public async Task<List<Drawing>> FilterAdmin([FromBody] DrawingFilter filters)
         {
+            var allDrawings = await _drawingService.GetAllDrawings();
+            var allCollections = await _drawingService.GetAllCollections();
             filters.OnlyVisible = false;
-            return await _drawingService.FilterDrawings(filters);
+            return _drawingService.FilterDrawingsGivenList(filters, allDrawings, allCollections);
         }
 
 

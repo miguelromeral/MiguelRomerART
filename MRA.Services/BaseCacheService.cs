@@ -27,6 +27,25 @@ namespace MRA.Services
         }
 
 
+        public T GetOrSet<T>(string cacheKey, Func<T> getDataFunc, TimeSpan cacheDuration)
+        {
+            if (_cache.TryGetValue(cacheKey, out T cachedData))
+            {
+                return cachedData;
+            }
+
+            var data = getDataFunc();
+
+            var cacheEntryOptions = new MemoryCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = cacheDuration
+            };
+
+            _cache.Set(cacheKey, data, cacheEntryOptions);
+
+            return data;
+        }
+
         public async Task<T> GetOrSetAsync<T>(string cacheKey, Func<Task<T>> getDataFunc, TimeSpan cacheDuration)
         {
             if (_cache.TryGetValue(cacheKey, out T cachedData))

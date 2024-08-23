@@ -15,10 +15,10 @@ namespace MRA.Services.Firebase.Interfaces
         Task<List<Inspiration>> GetAllInspirations();
         Task<List<Collection>> GetAllCollections();
         Task<List<Collection>> GetAllCollectionsOrderPositive();
-        Task<Resume> GetAllExperience();
         Task<Drawing> AddAsync(Drawing document);
         Task<Collection> AddAsync(Collection document);
         Task<List<Drawing>> Filter(DrawingFilter filter);
+        List<Drawing> FilterGivenList(DrawingFilter filter, List<Drawing> drawings, List<Collection> collections);
         Task<Drawing> FindDrawingById(string documentId, bool updateViews);
         Task<Collection> FindCollectionById(string documentId);
         Task UpdateLikes(string documentId);

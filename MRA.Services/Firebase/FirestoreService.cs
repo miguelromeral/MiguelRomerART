@@ -1,5 +1,7 @@
 ﻿using Google.Cloud.Firestore;
+using Google.Protobuf.Collections;
 using Google.Type;
+using Microsoft.Azure.Storage;
 using Microsoft.Extensions.Configuration;
 using MRA.DTO.ViewModels.Art;
 using MRA.Services.Firebase.Converters;
@@ -70,132 +72,6 @@ namespace MRA.Services.Firebase
                 Console.WriteLine("Error when getting inspirations: " + ex.Message);
                 return new List<Inspiration>();
             }
-        }
-
-
-
-        public async Task<Resume> GetAllExperience()
-        {
-            //try
-            //{
-            //    var collection = _firestoreDb.Collection(_collectionNameExperience);
-            //    var snapshot = (await collection.GetSnapshotAsync());
-            //    var inspdocs = snapshot.Documents.Select(s => s.ConvertTo<ExperienceDocument>()).ToList();
-
-            //    return inspdocs.Select(_converterExperience.ConvertToModel).ToList();
-            //}
-            //catch (Exception ex)
-            //{
-            //    Console.WriteLine("Error when getting experience: " + ex.Message);
-            //    return new List<Experience>();
-            //}
-
-            return new Resume()
-            {
-                Experiences = new List<Services.Firebase.Models.Experience>()
-                {
-                    new Services.Firebase.Models.Experience()
-                    {
-                        Empresa = "Prodware España",
-                        Orden = 1,
-                        Address = "Av. del General Perón, 38, Tetuán, 28020 Madrid",
-                        Link = "https://www.prodwaregroup.com/es-es/",
-                        Aptitudes = new List<string>() { "C#", "Javascript" },
-                        BannerColor = "#6497f5",
-                        Descripcion = "Consultor Funcional y Técnico en sistemas Microsoft Dynamics 365 CRM con soporte Unified Service Desk.",
-                        Periodo = "Enero 2019 - Septiembre 2019",
-                        Tecnologias = new List<string>() { "Microsoft Dynamics 365 CRM", "Unified Service Desk" },
-                        ProyectosSubcontratados = new List<Experience>()
-                        {
-                            new Experience()
-                            {
-                                Empresa = "Openbank",
-                                BannerColor = "#ff336e",
-                                Link = "https://www.openbank.es/",
-                                Orden = 11,
-                                Aptitudes = new List<string>() { "Javascript" },
-                                Descripcion = "Consultor Funcional de USD",
-                                Periodo = "Marzo 2019 - Septiembre 2019",
-                                Tecnologias = new List<string>() { "Microsoft Dynamics 365 CRM", "Unified Service Desk" },
-                            }
-                        }
-                    },
-                    new Services.Firebase.Models.Experience()
-                    {
-                        Empresa = "Sopra Steria",
-                        LogoSrc = "/assets/images/logo_sopra.png",
-                        Orden = 2,
-                        Address = "Av. de Manoteras, 48, Hortaleza, 28050 Madrid",
-                        Link = "https://www.soprasteria.es/",
-                        Aptitudes = new List<string>() { "C#", "Javascript", "HTML" },
-                        BannerColor = "#e8662a",
-                        Descripcion = "Desarrollador Full Stack",
-                        Periodo = "Febrero 2021 - Octubre 2023",
-                        Tecnologias = new List<string>() { ".NET Framework 4.5", "Angular" },
-                        ProyectosSubcontratados = new List<Experience>()
-                        {
-                            new Experience()
-                            {
-                                Empresa = "Airbus Defence & Space",
-                                BannerColor = "#152845",
-                                Orden = 21,
-                                Link = "https://www.airbus.com/en/defence",
-                                Address = "P.º John Lennon, s/n, 28906 Getafe, Madrid",
-                                Aptitudes = new List<string>() { "C#", "Javascript", "HTML" },
-                                Descripcion = "Desarrollador Web Full Stack",
-                                Periodo = "Abril 2021 - Octubre 2022",
-                                Tecnologias = new List<string>() { ".NET Framework 4.5", "Jenkins" },
-                            },
-                            new Experience()
-                            {
-                                Empresa = "Servicio Andaluz de Salud",
-                                BannerColor = "#468258",
-                                Orden = 22,
-                                Link = "https://www.sspa.juntadeandalucia.es/servicioandaluzdesalud/",
-                                Aptitudes = new List<string>() { "C#", "Javascript", "HTML" },
-                                Descripcion = "Desarrollador Web Full Stack",
-                                Periodo = "Octubre 2022 - Octubre 2023",
-                                Tecnologias = new List<string>() { ".NET Core 3.1", "Jenkins", "Oracle SQL" },
-                            }
-                        }
-                    }
-                },
-                Certifications = new List<Certification>()
-                {
-                    new Certification()
-                    {
-                        IssuedBy = "Microsoft",
-                        Name = "MCSA: Cloud Platform",
-                        Link = "https://www.credly.com/badges/ed74d14c-8fb9-455c-bca8-d58eb387dbf8",
-                        BadgeSrc = "https://images.credly.com/size/680x680/images/0b0fcadf-8a3b-4087-8e36-97a1bdbdd2cd/MCSA-Cloud-Platform-2018.png",
-                        Date = new System.DateTime(2018, 12, 11)
-                    },
-                    new Certification()
-                    {
-                        IssuedBy = "Microsoft",
-                        Name = "MCSE: Cloud Platform and Infrastructure",
-                        Link = "https://www.credly.com/badges/323ecf01-ed0c-4c69-b3c2-3495f36987a4",
-                        BadgeSrc = "https://images.credly.com/size/680x680/images/807898ab-9f66-4387-a5e8-b0b59977f8c0/MCSE-Cloud-Platform-Infrastructure-2018.png",
-                        Date = new System.DateTime(2018, 12, 18)
-                    },
-                    new Certification()
-                    {
-                        IssuedBy = "Microsoft",
-                        Name = "MCSD: App Builder",
-                        Link = "https://www.credly.com/badges/82caebeb-d4b9-47c7-ad45-66ea92507688",
-                        BadgeSrc = "https://images.credly.com/size/680x680/images/a6135ae3-7f96-437e-84d9-d2ded474583c/MCSD-App-Builder-2018.png",
-                        Date = new System.DateTime(2018, 12, 11)
-                    },
-                    new Certification()
-                    {
-                        IssuedBy = "Microsoft",
-                        Name = "MCSA: Web Applications",
-                        Link = "https://www.credly.com/badges/3ceef6a2-5d97-4220-bfb4-ea25df2f4a83",
-                        BadgeSrc = "https://images.credly.com/size/680x680/images/887a1be1-7863-4e90-90c9-2bb3a13d9542/MCSA-Web-Applications-2018.png",
-                        Date = new System.DateTime(2018, 11, 23)
-                    },
-                }
-            };
         }
 
 
@@ -294,6 +170,165 @@ namespace MRA.Services.Firebase
                 Console.WriteLine("Error when getting collections: " + ex.Message);
                 return new List<Collection>();
             }
+        }
+
+        public List<Drawing> FilterGivenList(DrawingFilter filter, List<Drawing> drawings, List<Collection> collections)
+        {
+            if (filter.OnlyVisible)
+            {
+                drawings = drawings.Where(x => x.Visible).ToList();
+            }
+            if (filter.Favorites)
+            {
+                drawings = drawings.Where(x => x.Favorite).ToList();
+            }
+            if (!String.IsNullOrEmpty(filter.TextQuery))
+            {
+                var tags = DeleteAndAdjustTags(filter.Tags).Select(x => x.ToLower());
+                drawings = drawings.Where(x =>
+                    x.Tags.Join(tags, t1 => t1.ToLower(), t2 => t2, (t1, t2) => t1.Contains(t2)).Any()).ToList();
+            }
+            if (!String.IsNullOrEmpty(filter.ProductName))
+            {
+                if (filter.ProductName.Equals("none"))
+                {
+                    drawings = drawings.Where(x =>
+                        x.ProductName.Equals("")).ToList();
+                }
+                else
+                {
+                drawings = drawings.Where(x =>
+                    x.ProductName.Contains(filter.ProductName)).ToList();
+
+                }
+            }
+            if (!String.IsNullOrEmpty(filter.CharacterName))
+            {
+                if (filter.CharacterName.Equals("none"))
+                {
+                    drawings = drawings.Where(x =>
+                        x.Name.Equals("")).ToList();
+                }
+                else
+                {
+                    drawings = drawings.Where(x =>
+                        x.Name.Contains(filter.CharacterName)).ToList();
+
+                }
+            }
+            if (!String.IsNullOrEmpty(filter.ModelName))
+            {
+                if (filter.ModelName.Equals("none"))
+                {
+                    drawings = drawings.Where(x =>
+                        x.ModelName.Equals("")).ToList();
+                }
+                else
+                {
+                    drawings = drawings.Where(x =>
+                        x.ModelName.Contains(filter.ModelName)).ToList();
+
+                }
+            }
+            if(filter.Type > -1)
+            {
+                drawings = drawings.Where(x => x.Type == filter.Type).ToList();
+            }
+            if (filter.ProductType > -1)
+            {
+                drawings = drawings.Where(x => x.ProductType == filter.ProductType).ToList();
+            }
+            if (filter.Software > 0)
+            {
+                drawings = drawings.Where(x => x.Software == filter.Software).ToList();
+            }
+            if (filter.Paper > 0)
+            {
+                drawings = drawings.Where(x => x.Paper == filter.Paper).ToList();
+            }
+            if(filter.Spotify != null)
+            {
+
+                if (filter.Spotify ?? false)
+                {
+                    drawings = drawings.Where(x => !x.SpotifyUrl.Equals("")).ToList();
+                }
+                else
+                {
+                    drawings = drawings.Where(x => x.SpotifyUrl.Equals("")).ToList();
+                }
+            }
+            if (!String.IsNullOrEmpty(filter.Collection))
+            {
+                var collection = collections.Find(x => x.Id.Equals(filter.Collection));
+
+                if (collection != null)
+                {
+                    var idsCollection = collection.Drawings.Select(x => x.Id).ToList();
+                    drawings = drawings.Where(d => idsCollection.Contains(d.Id)).ToList();
+                }
+            }
+
+            // Aplicar la ordenación
+            switch (filter.Sortby)
+            {
+                case "date-asc":
+                    drawings = drawings.OrderBy(x => x.Date).ToList();
+                    break;
+                case "date-desc":
+                    drawings = drawings.OrderByDescending(x => x.Date).ToList();
+                    break;
+                case "name-asc":
+                    drawings = drawings.OrderBy(x => x.Name).ToList();
+                    break;
+                case "name-desc":
+                    drawings = drawings.OrderByDescending(x => x.Name).ToList();
+                    break;
+                case "kudos-asc":
+                    drawings = drawings.OrderBy(x => x.Likes).ToList();
+                    break;
+                case "kudos-desc":
+                    drawings = drawings.OrderByDescending(x => x.Likes).ToList();
+                    break;
+                case "views-asc":
+                    drawings = drawings.OrderBy(x => x.Views).ToList();
+                    break;
+                case "views-desc":
+                    drawings = drawings.OrderByDescending(x => x.Views).ToList();
+                    break;
+                case "scorem-asc":
+                    drawings = drawings.OrderBy(x => x.ScoreCritic).ThenBy(x => x.ScorePopular).ThenBy(x => x.VotesPopular).ToList();
+                    break;
+                case "scorem-desc":
+                    drawings = drawings.OrderByDescending(x => x.ScoreCritic).ThenByDescending(x => x.ScorePopular).ThenByDescending(x => x.VotesPopular).ToList();
+                    break;
+                case "scoreu-asc":
+                    drawings = drawings.OrderBy(x => x.ScorePopular).ThenBy(x => x.VotesPopular).ToList();
+                    break;
+                case "scoreu-desc":
+                    drawings = drawings.OrderByDescending(x => x.ScorePopular).ThenByDescending(x => x.VotesPopular).ToList();
+                    break;
+                case "time-asc":
+                    drawings = drawings.OrderBy(x => x.Time).ToList();
+                    break;
+                case "time-desc":
+                    drawings = drawings.OrderByDescending(x => x.Time).ToList();
+                    break;
+                default:
+                    drawings = drawings.OrderByDescending(x => x.Date).ToList();
+                    break;
+            }
+
+            if (filter.PageSize > 0 && filter.PageNumber > 0)
+            {
+                // Saltar los elementos de las páginas anteriores
+                drawings = drawings.Skip((filter.PageNumber - 1) * filter.PageSize)
+                    // Tomar solo los elementos de la página actual
+                    .Take(filter.PageSize)  
+                    .ToList();
+            }
+
+            return drawings;
         }
 
         public async Task<List<Drawing>> Filter(DrawingFilter filter)
