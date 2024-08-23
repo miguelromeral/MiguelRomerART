@@ -172,7 +172,7 @@ namespace MRA.Services.Firebase
             }
         }
 
-        public List<Drawing> FilterGivenList(DrawingFilter filter, List<Drawing> drawings, List<Collection> collections)
+        public MRA.DTO.Models.FilterResults FilterGivenList(DrawingFilter filter, List<Drawing> drawings, List<Collection> collections)
         {
             if (filter.OnlyVisible)
             {
@@ -303,10 +303,10 @@ namespace MRA.Services.Firebase
                     drawings = drawings.OrderByDescending(x => x.ScoreCritic).ThenByDescending(x => x.ScorePopular).ThenByDescending(x => x.VotesPopular).ToList();
                     break;
                 case "scoreu-asc":
-                    drawings = drawings.OrderBy(x => x.ScorePopular).ThenBy(x => x.VotesPopular).ToList();
+                    drawings = drawings.Where(x => x.VotesPopular > 0).OrderBy(x => x.ScorePopular).ThenBy(x => x.VotesPopular).ToList();
                     break;
                 case "scoreu-desc":
-                    drawings = drawings.OrderByDescending(x => x.ScorePopular).ThenByDescending(x => x.VotesPopular).ToList();
+                    drawings = drawings.Where(x => x.VotesPopular > 0).OrderByDescending(x => x.ScorePopular).ThenByDescending(x => x.VotesPopular).ToList();
                     break;
                 case "time-asc":
                     drawings = drawings.OrderBy(x => x.Time).ToList();
@@ -319,16 +319,65 @@ namespace MRA.Services.Firebase
                     break;
             }
 
+            var list = new List<MRA.DTO.Models.Drawing>();
+            foreach (var d in drawings)
+            {
+                list.Add(new MRA.DTO.Models.Drawing()
+                {
+                    Comment = d.Comment,
+                    CommentCons = d.CommentCons,
+                    CommentPros = d.CommentPros,
+                    Date = d.Date,
+                    DateHyphen = d.DateHyphen,
+                    Favorite = d.Favorite,
+                    Id = d.Id,
+                    InstagramUrl = d.InstagramUrl,
+                    Likes = d.Likes,
+                    ModelName = d.ModelName,
+                    Name = d.Name,
+                    Paper = d.Paper,
+                    Path = d.Path,
+                    PathThumbnail = d.PathThumbnail,
+                    ProductName = d.ProductName,
+                    ProductType = d.ProductType,
+                    ReferenceUrl = d.ReferenceUrl,
+                    ScoreCritic = d.ScoreCritic,
+                    ScorePopular = d.ScorePopular,
+                    VotesPopular = d.VotesPopular,
+                    Software = d.Software,
+                    SpotifyUrl = d.SpotifyUrl,
+                    TagsText = d.TagsText,
+                    Time = d.Time,
+                    Title = d.Title,
+                    TwitterUrl = d.TwitterUrl,
+                    Type = d.Type,
+                    UrlBase = d.UrlBase,
+                    Visible = d.Visible,
+                    Tags = d.Tags,
+                    Views = d.Views,
+
+                });
+            }
+
+            var results = new MRA.DTO.Models.FilterResults(list);
+            var ids = drawings.Select(x => x.Id).ToList();
+            results.FilteredCollections = collections
+                .Where(c => c.Drawings.Any(d => ids.Contains(d.Id)))
+                .Select(x => x.Id)
+                .ToList();
+
+
             if (filter.PageSize > 0 && filter.PageNumber > 0)
             {
                 // Saltar los elementos de las páginas anteriores
-                drawings = drawings.Skip((filter.PageNumber - 1) * filter.PageSize)
+                list = list.Skip((filter.PageNumber - 1) * filter.PageSize)
                     // Tomar solo los elementos de la página actual
                     .Take(filter.PageSize)  
                     .ToList();
             }
 
-            return drawings;
+            results.UpdatefilteredDrawings(list);
+            return results;
         }
 
         public async Task<List<Drawing>> Filter(DrawingFilter filter)

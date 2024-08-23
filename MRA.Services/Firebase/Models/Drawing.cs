@@ -163,13 +163,12 @@ namespace MRA.Services.Firebase.Models
         public int ProductType { get; set; }
         public string ProductTypeName { get
             {
-                try
-                {
+                    if (DRAWING_PRODUCT_TYPES.ContainsKey(ProductType))
+                    {
+
                     return DRAWING_PRODUCT_TYPES[ProductType];
-                }catch(Exception ex)
-                {
+                    }
                     return "Otros";
-                }
             } }
         public string ProductName { get; set; }
         public string Comment { get; set; }

@@ -43,7 +43,7 @@ namespace MRA.DTO.ViewModels.Art
                 Paper = 0,
                 Favorites = false,
                 Spotify = null,
-                OnlyVisible = true,
+                OnlyVisible = false,
             };
 
         public bool HasNoFilters()

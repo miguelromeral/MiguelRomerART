@@ -18,7 +18,7 @@ namespace MRA.Services.Firebase.Interfaces
         Task<Drawing> AddAsync(Drawing document);
         Task<Collection> AddAsync(Collection document);
         Task<List<Drawing>> Filter(DrawingFilter filter);
-        List<Drawing> FilterGivenList(DrawingFilter filter, List<Drawing> drawings, List<Collection> collections);
+        MRA.DTO.Models.FilterResults FilterGivenList(DrawingFilter filter, List<Drawing> drawings, List<Collection> collections);
         Task<Drawing> FindDrawingById(string documentId, bool updateViews);
         Task<Collection> FindCollectionById(string documentId);
         Task UpdateLikes(string documentId);

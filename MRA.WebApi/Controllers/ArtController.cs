@@ -109,7 +109,7 @@ namespace MRA.WebApi.Controllers
 
 
         [HttpPost("filter-public")]
-        public async Task<List<Drawing>> Filter([FromBody] DrawingFilter filters)
+        public async Task<MRA.DTO.Models.FilterResults> Filter([FromBody] DrawingFilter filters)
         {
             var allDrawings = await _drawingService.GetAllDrawings();
             var allCollections = await _drawingService.GetAllCollections();
@@ -119,7 +119,7 @@ namespace MRA.WebApi.Controllers
 
         [HttpPost("filter-admin")]
         [Authorize]
-        public async Task<List<Drawing>> FilterAdmin([FromBody] DrawingFilter filters)
+        public async Task<MRA.DTO.Models.FilterResults> FilterAdmin([FromBody] DrawingFilter filters)
         {
             var allDrawings = await _drawingService.GetAllDrawings();
             var allCollections = await _drawingService.GetAllCollections();

@@ -108,13 +108,15 @@ namespace MRA.Services
         }
 
 
-        public List<Drawing> FilterDrawingsGivenList(DrawingFilter filter, List<Drawing> drawings, List<Collection> collections)
+        public MRA.DTO.Models.FilterResults FilterDrawingsGivenList(DrawingFilter filter, List<Drawing> drawings, List<Collection> collections)
         {
-            return GetOrSet<List<Drawing>>(filter.CacheKey, () =>
+            return GetOrSet<MRA.DTO.Models.FilterResults>(filter.CacheKey, () =>
             {
-                var list = _firestoreService.FilterGivenList(filter, drawings, collections);
+                var results = _firestoreService.FilterGivenList(filter, drawings, collections);
+                var list = results.FilteredDrawings;
                 SetBlobUrl(ref list);
-                return list;
+                results.UpdatefilteredDrawings(list);
+                return results;
             }, TimeSpan.FromSeconds(_secondsCache));
         }
 
@@ -181,6 +183,10 @@ namespace MRA.Services
 
 
         private void SetBlobUrl(ref List<Drawing> drawings)
+        {
+            drawings.ForEach(d => d.UrlBase = _azureStorageService.BlobURL);
+        }
+        private void SetBlobUrl(ref List<MRA.DTO.Models.Drawing> drawings)
         {
             drawings.ForEach(d => d.UrlBase = _azureStorageService.BlobURL);
         }

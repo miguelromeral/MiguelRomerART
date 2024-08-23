@@ -72,14 +72,13 @@ namespace MRA.DTO.Models
         {
             get
             {
-                try
+
+                if (DRAWING_TYPES.ContainsKey(Type))
                 {
+
                     return DRAWING_TYPES[Type];
                 }
-                catch (Exception ex)
-                {
-                    return "Otros";
-                }
+                return "Otros";
             }
         }
         public string Name { get; set; }
@@ -120,14 +119,13 @@ namespace MRA.DTO.Models
         {
             get
             {
-                try
+
+                if (DRAWING_SOFTWARE.ContainsKey(Software))
                 {
+
                     return DRAWING_SOFTWARE[Software];
                 }
-                catch (Exception ex)
-                {
-                    return "Ninguno";
-                }
+                return "Ninguno";
             }
         }
         public int Paper { get; set; }
@@ -135,14 +133,12 @@ namespace MRA.DTO.Models
         {
             get
             {
-                try
+                if (DRAWING_PAPER_SIZE.ContainsKey(Paper))
                 {
+
                     return DRAWING_PAPER_SIZE[Paper];
                 }
-                catch (Exception ex)
-                {
-                    return "Otro";
-                }
+                return "Otro";
             }
         }
         public int Time { get; set; }
@@ -166,13 +162,12 @@ namespace MRA.DTO.Models
         public int ProductType { get; set; }
         public string ProductTypeName { get
             {
-                try
+                if (DRAWING_PRODUCT_TYPES.ContainsKey(ProductType))
                 {
+
                     return DRAWING_PRODUCT_TYPES[ProductType];
-                }catch(Exception ex)
-                {
-                    return "Otros";
                 }
+                return "Otros";
             } }
         public string ProductName { get; set; }
         public string Comment { get; set; }
