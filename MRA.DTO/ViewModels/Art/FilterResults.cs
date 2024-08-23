@@ -3,16 +3,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace MRA.DTO.ViewModels.Art
 {
     public class FilterResults
     {
+        [JsonIgnore]
         public List<Drawing> FilteredDrawings { get; set; }
-        public int FetchedCount { get { return FilteredDrawings.Count; } }
-        public int TotalCount { get; set; }
-        public int TotalTime { get; set; }
+        [JsonIgnore]
+        public List<Drawing> TotalDrawings { get; set; }
+        public int FetchedCount { get { return (FilteredDrawings != null ? FilteredDrawings.Count : 0); } }
+        public int TotalCount { get { return TotalDrawings.Count; } }
+        public int TotalTime { get { return TotalDrawings.Sum(x => x.Time); } }
         public bool MoreToFetch { get { return FetchedCount < TotalCount; } }
 
         public List<string> FilteredDrawingCharacters { get; set; }
@@ -35,21 +39,12 @@ namespace MRA.DTO.ViewModels.Art
 
         public FilterResults()
         {
-            FilteredDrawingCharacters = new List<string>();
-            FilteredDrawingModels = new List<string>();
-            FilteredDrawingStyles = new List<int>();
-            FilteredDrawingProductTypes = new List<int>();
-            FilteredDrawingProducts = new List<string>();
-            FilteredDrawingSoftwares = new List<int>();
-            FilteredDrawingPapers = new List<int>();
-            FilteredCollections = new List<string>();
-            FilteredDrawings = new List<Drawing>();
+
         }
 
         public FilterResults(List<Drawing> totalDrawings)
         {
-            TotalCount = totalDrawings.Count;
-            TotalTime = totalDrawings.Sum(x => x.Time);
+            TotalDrawings = totalDrawings;
             FilteredDrawingCharacters = totalDrawings.Select(x => x.Name).Distinct().Where(x => !string.IsNullOrEmpty(x)).ToList();
             FilteredDrawingModels = totalDrawings.Select(x => x.ModelName).Distinct().Where(x => !string.IsNullOrEmpty(x)).ToList();
             FilteredDrawingStyles = totalDrawings.Select(x => x.Type).Distinct().ToList();
@@ -62,7 +57,7 @@ namespace MRA.DTO.ViewModels.Art
             FilteredDrawings = new List<Drawing>();
         }
 
-        public void UpdatefilteredDrawings(List<Drawing> drawings)
+        public virtual void UpdatefilteredDrawings(List<Drawing> drawings)
         {
             FilteredDrawings = drawings;
         }
