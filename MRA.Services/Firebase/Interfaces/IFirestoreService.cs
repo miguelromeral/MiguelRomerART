@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Google.Cloud.Firestore;
 using MRA.DTO.ViewModels.Art;
-using MRA.Services.Firebase.Models;
+using MRA.DTO.Firebase.Models;
 
 namespace MRA.Services.Firebase.Interfaces
 {
@@ -18,7 +18,7 @@ namespace MRA.Services.Firebase.Interfaces
         Task<Drawing> AddAsync(Drawing document);
         Task<Collection> AddAsync(Collection document);
         Task<List<Drawing>> Filter(DrawingFilter filter);
-        MRA.DTO.Models.FilterResults FilterGivenList(DrawingFilter filter, List<Drawing> drawings, List<Collection> collections);
+        FilterResults FilterGivenList(DrawingFilter filter, List<Drawing> drawings, List<Collection> collections);
         Task<Drawing> FindDrawingById(string documentId, bool updateViews);
         Task<Collection> FindCollectionById(string documentId);
         Task UpdateLikes(string documentId);

@@ -1,10 +1,11 @@
-﻿using System;
+﻿using MRA.DTO.Firebase.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MRA.DTO.Models
+namespace MRA.DTO.ViewModels.Art
 {
     public class FilterResults
     {
@@ -45,15 +46,15 @@ namespace MRA.DTO.Models
             FilteredDrawings = new List<Drawing>();
         }
 
-        public FilterResults(List<Drawing> totalDrawings) 
+        public FilterResults(List<Drawing> totalDrawings)
         {
             TotalCount = totalDrawings.Count;
             TotalTime = totalDrawings.Sum(x => x.Time);
-            FilteredDrawingCharacters = totalDrawings.Select(x => x.Name).Distinct().Where(x => !String.IsNullOrEmpty(x)).ToList();
-            FilteredDrawingModels = totalDrawings.Select(x => x.ModelName).Distinct().Where(x => !String.IsNullOrEmpty(x)).ToList();
+            FilteredDrawingCharacters = totalDrawings.Select(x => x.Name).Distinct().Where(x => !string.IsNullOrEmpty(x)).ToList();
+            FilteredDrawingModels = totalDrawings.Select(x => x.ModelName).Distinct().Where(x => !string.IsNullOrEmpty(x)).ToList();
             FilteredDrawingStyles = totalDrawings.Select(x => x.Type).Distinct().ToList();
             FilteredDrawingProductTypes = totalDrawings.Select(x => x.ProductType).Distinct().ToList();
-            FilteredDrawingProducts = totalDrawings.Select(x => x.ProductName).Distinct().Where(x => !String.IsNullOrEmpty(x)).ToList();
+            FilteredDrawingProducts = totalDrawings.Select(x => x.ProductName).Distinct().Where(x => !string.IsNullOrEmpty(x)).ToList();
             FilteredDrawingSoftwares = totalDrawings.Select(x => x.Software).Distinct().Where(x => x > 0).ToList();
             FilteredDrawingPapers = totalDrawings.Select(x => x.Paper).Distinct().Where(x => x > 0).ToList();
             NDrawingFavorites = totalDrawings.Count(x => x.Favorite);

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MRA.Services.Firebase.Documents
+namespace MRA.DTO.Firebase.Documents
 {
     [FirestoreData]
     public class DrawingDocument

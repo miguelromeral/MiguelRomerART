@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MRA.Services.Firebase.Models
+namespace MRA.DTO.Firebase.Models
 {
     public class Inspiration
     {
@@ -28,14 +28,13 @@ namespace MRA.Services.Firebase.Models
         {
             get
             {
-                try
-                {
+                    if (INSPIRATION_TYPES.ContainsKey(Type))
+                    {
+
                     return INSPIRATION_TYPES[Type];
-                }
-                catch (Exception ex)
-                {
+                    }
                     return "Otros";
-                }
+                
             }
         }
     }

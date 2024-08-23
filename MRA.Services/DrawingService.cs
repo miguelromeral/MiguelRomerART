@@ -1,11 +1,11 @@
 ﻿using Google.Cloud.Firestore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using MRA.DTO.Firebase.Models;
 using MRA.DTO.ViewModels.Art;
 using MRA.DTO.ViewModels.Art.Select;
 using MRA.Services.AzureStorage;
 using MRA.Services.Firebase.Interfaces;
-using MRA.Services.Firebase.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -108,9 +108,9 @@ namespace MRA.Services
         }
 
 
-        public MRA.DTO.Models.FilterResults FilterDrawingsGivenList(DrawingFilter filter, List<Drawing> drawings, List<Collection> collections)
+        public FilterResults FilterDrawingsGivenList(DrawingFilter filter, List<Drawing> drawings, List<Collection> collections)
         {
-            return GetOrSet<MRA.DTO.Models.FilterResults>(filter.CacheKey, () =>
+            return GetOrSet<FilterResults>(filter.CacheKey, () =>
             {
                 var results = _firestoreService.FilterGivenList(filter, drawings, collections);
                 var list = results.FilteredDrawings;
@@ -183,10 +183,6 @@ namespace MRA.Services
 
 
         private void SetBlobUrl(ref List<Drawing> drawings)
-        {
-            drawings.ForEach(d => d.UrlBase = _azureStorageService.BlobURL);
-        }
-        private void SetBlobUrl(ref List<MRA.DTO.Models.Drawing> drawings)
         {
             drawings.ForEach(d => d.UrlBase = _azureStorageService.BlobURL);
         }

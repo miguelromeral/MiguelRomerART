@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace MRA.Services.Firebase.Models
+namespace MRA.DTO.Firebase.Models
 {
     public class Collection
     {

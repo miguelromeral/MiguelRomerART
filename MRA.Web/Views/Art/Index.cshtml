@@ -1,4 +1,5 @@
 ﻿@using MRA.Services
+@using MRA.DTO.Firebase.Models
 @using MRA.Web.Models.Images
 @model IndexModel
 
@@ -114,7 +115,7 @@
 
             <select id="sFilterType" class="mr-custom-select form-select form-select-sm mr-filter-item" name="Type" data-bs-theme="dark" onchange="sendFormFilterGallery()">
                 <option value="-1" selected>🖌 ESTILO</option>
-                @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_TYPES.Where(x => x.Key > 0).OrderBy(x => x.Value))
+                @foreach (var type in Drawing.DRAWING_TYPES.Where(x => x.Key > 0).OrderBy(x => x.Value))
                 {
                     <option value="@(type.Key)">@(type.Value)</option>
                 }
@@ -124,7 +125,7 @@
 
             <select id="sFilterProduct" class="mr-custom-select form-select form-select-sm mr-filter-item" name="ProductType" data-bs-theme="dark" onchange="sendFormFilterGallery()">
                 <option value="-1" selected>📺 TIPO</option>
-                @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_PRODUCT_TYPES.Where(x => x.Key > 0).OrderBy(x => x.Value))
+                @foreach (var type in Drawing.DRAWING_PRODUCT_TYPES.Where(x => x.Key > 0).OrderBy(x => x.Value))
                 {
                         switch (type.Key)
                         {
@@ -257,7 +258,7 @@
                 name="Software" data-bs-theme="dark" onchange="sendFormFilterGallery()">
                 <option value="0" selected>💻 SOFTWARE</option>
 
-                @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_SOFTWARE.Where(x => x.Key > 0).OrderBy(x => x.Value))
+                @foreach (var type in Drawing.DRAWING_SOFTWARE.Where(x => x.Key > 0).OrderBy(x => x.Value))
                 {
                     <option value="@(type.Key)">@(type.Value)</option>
                 }
@@ -268,7 +269,7 @@
                     name="Paper" data-bs-theme="dark" onchange="sendFormFilterGallery()">
                 <option value="0" selected>📄 TAMAÑO</option>
 
-                @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_PAPER_SIZE.Where(x => x.Key > 0 && x.Key > 3).OrderBy(x => x.Value))
+                @foreach (var type in Drawing.DRAWING_PAPER_SIZE.Where(x => x.Key > 0 && x.Key > 3).OrderBy(x => x.Value))
                 {
                     <option value="@(type.Key)">@(type.Value)</option>
                 }

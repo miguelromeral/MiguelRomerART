@@ -8,7 +8,7 @@ using System.Security.Claims;
 using SixLabors.ImageSharp;
 using MRA.Web.Models.Art;
 using MRA.Web.Models.Admin;
-using MRA.Services.Firebase.Models;
+using MRA.DTO.Firebase.Models;
 using System.IO;
 using SixLabors.ImageSharp.Processing;
 using System;

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MRA.Services.Firebase.Models;
+using MRA.DTO.Firebase.Models;
 #nullable disable
 namespace MRA.Web.Models.Admin
 {

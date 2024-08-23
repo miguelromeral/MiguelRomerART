@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MRA.DTO.ViewModels.Art;
 using MRA.DTO.ViewModels.Art.Select;
 using MRA.Services;
-using MRA.Services.Firebase.Models;
+using MRA.DTO.Firebase.Models;
 using MRA.WebApi.Models.Requests;
 using MRA.WebApi.Models.Responses;
 
@@ -109,7 +109,7 @@ namespace MRA.WebApi.Controllers
 
 
         [HttpPost("filter-public")]
-        public async Task<MRA.DTO.Models.FilterResults> Filter([FromBody] DrawingFilter filters)
+        public async Task<FilterResults> Filter([FromBody] DrawingFilter filters)
         {
             var allDrawings = await _drawingService.GetAllDrawings();
             var allCollections = await _drawingService.GetAllCollections();
@@ -119,7 +119,7 @@ namespace MRA.WebApi.Controllers
 
         [HttpPost("filter-admin")]
         [Authorize]
-        public async Task<MRA.DTO.Models.FilterResults> FilterAdmin([FromBody] DrawingFilter filters)
+        public async Task<FilterResults> FilterAdmin([FromBody] DrawingFilter filters)
         {
             var allDrawings = await _drawingService.GetAllDrawings();
             var allCollections = await _drawingService.GetAllCollections();

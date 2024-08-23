@@ -1,13 +1,13 @@
-﻿using MRA.Services.Firebase.Documents;
-using MRA.Services.Firebase.Interfaces;
-using MRA.Services.Firebase.Models;
+﻿using MRA.DTO.Firebase.Documents;
+using MRA.DTO.Firebase.Interfaces;
+using MRA.DTO.Firebase.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MRA.Services.Firebase.Converters
+namespace MRA.DTO.Firebase.Converters
 {
     public class ExperienceFirebaseConverter : IFirebaseConverter<Experience, ExperienceDocument>
     {

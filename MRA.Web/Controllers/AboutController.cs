@@ -34,11 +34,11 @@ namespace MRA.Web.Controllers
         {
             return RedirectToAction("Me");
 
-            var model = new ResumeModel()
-            {
-                Resume = await _drawingService.GetAllExperience()
-            };
-            return View(model);
+            //var model = new ResumeModel()
+            //{
+            //    Resume = await _drawingService.GetAllExperience()
+            //};
+            //return View(model);
         }
     }
 }

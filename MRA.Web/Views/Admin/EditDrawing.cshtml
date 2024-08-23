@@ -1,5 +1,5 @@
 ﻿@using MRA.Services
-@using MRA.Services.Firebase.Models
+@using MRA.DTO.Firebase.Models
 @using MRA.Web.Models.Admin
 @model EditDrawingViewModel
 @{
@@ -126,7 +126,7 @@
                                 <label>Tipo de Dibujo</label>
                                 <select asp-for="Drawing.Type" class="mr-custom-select form-select form-select-sm" data-bs-theme="dark">
                                     <option value="0"></option>
-                                    @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_TYPES.Where(x => x.Key > 0).OrderBy(x => x.Value))
+                                    @foreach (var type in Drawing.DRAWING_TYPES.Where(x => x.Key > 0).OrderBy(x => x.Value))
                                     {
                                         <option value="@(type.Key)">@(type.Value)</option>
                                     }
@@ -138,7 +138,7 @@
                                 <label>Software</label>
                                 <select asp-for="Drawing.Software" class="mr-custom-select form-select form-select-sm" data-bs-theme="dark">
                                     <option value="0"></option>
-                                    @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_SOFTWARE.Where(x => x.Key > 0).OrderBy(x => x.Value))
+                                    @foreach (var type in Drawing.DRAWING_SOFTWARE.Where(x => x.Key > 0).OrderBy(x => x.Value))
                                     {
                                         <option value="@(type.Key)">@(type.Value)</option>
                                     }
@@ -150,7 +150,7 @@
                                 <label>Tamaño de Papel</label>
                                 <select asp-for="Drawing.Paper" class="mr-custom-select form-select form-select-sm" data-bs-theme="dark">
                                     <option value="0"></option>
-                                    @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_PAPER_SIZE.Where(x => x.Key > 0 && x.Key > 3).OrderBy(x => x.Value))
+                                    @foreach (var type in Drawing.DRAWING_PAPER_SIZE.Where(x => x.Key > 0 && x.Key > 3).OrderBy(x => x.Value))
                                     {
                                         <option value="@(type.Key)">@(type.Value)</option>
                                     }
@@ -187,7 +187,7 @@
                                 <label>Tipo de Producto</label>
                                 <select asp-for="Drawing.ProductType" class="mr-custom-select form-select form-select-sm" data-bs-theme="dark">
                                     <option value="0"></option>
-                                    @foreach (var type in MRA.Services.Firebase.Models.Drawing.DRAWING_PRODUCT_TYPES.Where(x => x.Key > 0).OrderBy(x => x.Value))
+                                    @foreach (var type in Drawing.DRAWING_PRODUCT_TYPES.Where(x => x.Key > 0).OrderBy(x => x.Value))
                                     {
                                         <option value="@(type.Key)">@(type.Value)</option>
                                     }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MRA.Services;
-using MRA.Services.Firebase.Models;
+using MRA.DTO.Firebase.Models;
 
 namespace MRA.WebApi.Controllers
 {

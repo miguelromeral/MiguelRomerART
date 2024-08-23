@@ -4,8 +4,8 @@ using Google.Type;
 using MR.ConsoleMR;
 using MRA.Services.AzureStorage;
 using MRA.Services.Firebase;
-using MRA.Services.Firebase.Documents;
-using MRA.Services.Firebase.Models;
+using MRA.DTO.Firebase.Documents;
+using MRA.DTO.Firebase.Models;
 using System;
 using System.Diagnostics;
 using System.Runtime.Intrinsics.Arm;
@@ -74,7 +74,7 @@ try
                 helper.ShowMessageWarning("No drawing was found with ID '" + input + "'. Proceeding to register a new drawing.");
 
                 isNew = true;
-                drawing = new MRA.Services.Firebase.Models.Drawing()
+                drawing = new Drawing()
                 {
                     Id = input,
                     Views = 0,
@@ -211,7 +211,7 @@ try
                 helper.ShowMessageWarning("No inspiration was found with ID '" + input + "'. Proceeding to register a new inspiration.");
 
                 isNew = true;
-                inspiration = new MRA.Services.Firebase.Models.Inspiration()
+                inspiration = new Inspiration()
                 {
                     Id = input
                 };
@@ -270,7 +270,7 @@ try
                 helper.ShowMessageWarning("No collection was found with ID '" + input + "'. Proceeding to register a new collection.");
 
                 isNew = true;
-                col = new MRA.Services.Firebase.Models.Collection()
+                col = new Collection()
                 {
                     Id = input,
                     DrawingsReferences = new List<DocumentReference>()

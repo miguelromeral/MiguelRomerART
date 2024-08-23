@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
-using MRA.Services.Firebase.Interfaces;
-using MRA.Services.Firebase.Models;
-using MRA.Services.AzureStorage;
+using MRA.DTO.Firebase.Interfaces;
+using MRA.DTO.Firebase.Models;
+using MRA.DTO.AzureStorage;
 
 namespace MRA.Web.Models
 {

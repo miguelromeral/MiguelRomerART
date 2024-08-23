@@ -1,13 +1,13 @@
 ﻿using Google.Cloud.Firestore;
-using MRA.Services.Firebase.Documents;
-using MRA.Services.Firebase.Models;
+using MRA.DTO.Firebase.Documents;
+using MRA.DTO.Firebase.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MRA.Services.Firebase.Interfaces
+namespace MRA.DTO.Firebase.Interfaces
 {
     internal interface IFirebaseConverter<M, D>
     {

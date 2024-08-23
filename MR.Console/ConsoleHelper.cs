@@ -1,5 +1,5 @@
 ﻿using FirebaseAdmin.Messaging;
-using MRA.Services.Firebase.Models;
+using MRA.DTO.Firebase.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MRA.Services.Firebase.Interfaces;
+using MRA.DTO.Firebase.Interfaces;
 using MRA.Web.Models;
 using System.Diagnostics;
-using MRA.Services.AzureStorage;
+using MRA.DTO.AzureStorage;
 using MRA.Services;
 using MRA.Web.Models.Art;
-using MRA.Services.Firebase.Models;
+using MRA.DTO.Firebase.Models;
 using Azure.Storage.Blobs.Models;
 using Google.Api;
 using MRA.Web.Utils;

@@ -3,11 +3,11 @@ using Google.Protobuf.Collections;
 using Google.Type;
 using Microsoft.Azure.Storage;
 using Microsoft.Extensions.Configuration;
+using MRA.DTO.Firebase.Documents;
+using MRA.DTO.Firebase.Models;
 using MRA.DTO.ViewModels.Art;
-using MRA.Services.Firebase.Converters;
-using MRA.Services.Firebase.Documents;
-using MRA.Services.Firebase.Interfaces;
-using MRA.Services.Firebase.Models;
+using MRA.DTO.Firebase.Interfaces;
+using MRA.DTO.Firebase.Converters;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,6 +17,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using static Google.Cloud.Firestore.V1.StructuredQuery.Types;
+using MRA.Services.Firebase.Interfaces;
 
 namespace MRA.Services.Firebase
 {
@@ -172,7 +173,7 @@ namespace MRA.Services.Firebase
             }
         }
 
-        public MRA.DTO.Models.FilterResults FilterGivenList(DrawingFilter filter, List<Drawing> drawings, List<Collection> collections)
+        public FilterResults FilterGivenList(DrawingFilter filter, List<Drawing> drawings, List<Collection> collections)
         {
             if (filter.OnlyVisible)
             {
@@ -319,47 +320,8 @@ namespace MRA.Services.Firebase
                     break;
             }
 
-            var list = new List<MRA.DTO.Models.Drawing>();
-            foreach (var d in drawings)
-            {
-                list.Add(new MRA.DTO.Models.Drawing()
-                {
-                    Comment = d.Comment,
-                    CommentCons = d.CommentCons,
-                    CommentPros = d.CommentPros,
-                    Date = d.Date,
-                    DateHyphen = d.DateHyphen,
-                    Favorite = d.Favorite,
-                    Id = d.Id,
-                    InstagramUrl = d.InstagramUrl,
-                    Likes = d.Likes,
-                    ModelName = d.ModelName,
-                    Name = d.Name,
-                    Paper = d.Paper,
-                    Path = d.Path,
-                    PathThumbnail = d.PathThumbnail,
-                    ProductName = d.ProductName,
-                    ProductType = d.ProductType,
-                    ReferenceUrl = d.ReferenceUrl,
-                    ScoreCritic = d.ScoreCritic,
-                    ScorePopular = d.ScorePopular,
-                    VotesPopular = d.VotesPopular,
-                    Software = d.Software,
-                    SpotifyUrl = d.SpotifyUrl,
-                    TagsText = d.TagsText,
-                    Time = d.Time,
-                    Title = d.Title,
-                    TwitterUrl = d.TwitterUrl,
-                    Type = d.Type,
-                    UrlBase = d.UrlBase,
-                    Visible = d.Visible,
-                    Tags = d.Tags,
-                    Views = d.Views,
 
-                });
-            }
-
-            var results = new MRA.DTO.Models.FilterResults(list);
+            var results = new FilterResults(drawings);
             var ids = drawings.Select(x => x.Id).ToList();
             results.FilteredCollections = collections
                 .Where(c => c.Drawings.Any(d => ids.Contains(d.Id)))
@@ -370,13 +332,13 @@ namespace MRA.Services.Firebase
             if (filter.PageSize > 0 && filter.PageNumber > 0)
             {
                 // Saltar los elementos de las páginas anteriores
-                list = list.Skip((filter.PageNumber - 1) * filter.PageSize)
+                drawings = drawings.Skip((filter.PageNumber - 1) * filter.PageSize)
                     // Tomar solo los elementos de la página actual
                     .Take(filter.PageSize)  
                     .ToList();
             }
 
-            results.UpdatefilteredDrawings(list);
+            results.UpdatefilteredDrawings(drawings);
             return results;
         }
 
