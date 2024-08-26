@@ -271,55 +271,75 @@ namespace MRA.Services.Firebase
                 }
             }
 
-            // Aplicar la ordenación
-            switch (filter.Sortby)
+
+            if (filter.OnlyFilterCollection())
             {
-                case "date-asc":
-                    drawings = drawings.OrderBy(x => x.Date).ToList();
-                    break;
-                case "date-desc":
-                    drawings = drawings.OrderByDescending(x => x.Date).ToList();
-                    break;
-                case "name-asc":
-                    drawings = drawings.OrderBy(x => x.Name).ToList();
-                    break;
-                case "name-desc":
-                    drawings = drawings.OrderByDescending(x => x.Name).ToList();
-                    break;
-                case "kudos-asc":
-                    drawings = drawings.OrderBy(x => x.Likes).ToList();
-                    break;
-                case "kudos-desc":
-                    drawings = drawings.OrderByDescending(x => x.Likes).ToList();
-                    break;
-                case "views-asc":
-                    drawings = drawings.OrderBy(x => x.Views).ToList();
-                    break;
-                case "views-desc":
-                    drawings = drawings.OrderByDescending(x => x.Views).ToList();
-                    break;
-                case "scorem-asc":
-                    drawings = drawings.OrderBy(x => x.ScoreCritic).ThenBy(x => x.ScorePopular).ThenBy(x => x.VotesPopular).ToList();
-                    break;
-                case "scorem-desc":
-                    drawings = drawings.OrderByDescending(x => x.ScoreCritic).ThenByDescending(x => x.ScorePopular).ThenByDescending(x => x.VotesPopular).ToList();
-                    break;
-                case "scoreu-asc":
-                    drawings = drawings.Where(x => x.VotesPopular > 0).OrderBy(x => x.ScorePopular).ThenBy(x => x.VotesPopular).ToList();
-                    break;
-                case "scoreu-desc":
-                    drawings = drawings.Where(x => x.VotesPopular > 0).OrderByDescending(x => x.ScorePopular).ThenByDescending(x => x.VotesPopular).ToList();
-                    break;
-                case "time-asc":
-                    drawings = drawings.OrderBy(x => x.Time).ToList();
-                    break;
-                case "time-desc":
-                    drawings = drawings.OrderByDescending(x => x.Time).ToList();
-                    break;
-                default:
-                    drawings = drawings.OrderByDescending(x => x.Popularity).ToList();
-                    break;
+                var selectedCollection = collections.Find(x => x.Id == filter.Collection);
+                if (selectedCollection != null) {
+                    var list = new List<Drawing>();
+                    foreach (var id in selectedCollection.Drawings.Select(x => x.Id)) {
+                        var d = drawings.Find(x => x.Id == id);
+                        if (d != null)
+                        {
+                            list.Add(d);
+                        }
+                    }
+                    drawings = list;
+                }
             }
+            else
+            {
+
+                switch (filter.Sortby)
+                {
+                    case "date-asc":
+                        drawings = drawings.OrderBy(x => x.Date).ToList();
+                        break;
+                    case "date-desc":
+                        drawings = drawings.OrderByDescending(x => x.Date).ToList();
+                        break;
+                    case "name-asc":
+                        drawings = drawings.OrderBy(x => x.Name).ToList();
+                        break;
+                    case "name-desc":
+                        drawings = drawings.OrderByDescending(x => x.Name).ToList();
+                        break;
+                    case "kudos-asc":
+                        drawings = drawings.OrderBy(x => x.Likes).ToList();
+                        break;
+                    case "kudos-desc":
+                        drawings = drawings.OrderByDescending(x => x.Likes).ToList();
+                        break;
+                    case "views-asc":
+                        drawings = drawings.OrderBy(x => x.Views).ToList();
+                        break;
+                    case "views-desc":
+                        drawings = drawings.OrderByDescending(x => x.Views).ToList();
+                        break;
+                    case "scorem-asc":
+                        drawings = drawings.OrderBy(x => x.ScoreCritic).ThenBy(x => x.ScorePopular).ThenBy(x => x.VotesPopular).ToList();
+                        break;
+                    case "scorem-desc":
+                        drawings = drawings.OrderByDescending(x => x.ScoreCritic).ThenByDescending(x => x.ScorePopular).ThenByDescending(x => x.VotesPopular).ToList();
+                        break;
+                    case "scoreu-asc":
+                        drawings = drawings.Where(x => x.VotesPopular > 0).OrderBy(x => x.ScorePopular).ThenBy(x => x.VotesPopular).ToList();
+                        break;
+                    case "scoreu-desc":
+                        drawings = drawings.Where(x => x.VotesPopular > 0).OrderByDescending(x => x.ScorePopular).ThenByDescending(x => x.VotesPopular).ToList();
+                        break;
+                    case "time-asc":
+                        drawings = drawings.OrderBy(x => x.Time).ToList();
+                        break;
+                    case "time-desc":
+                        drawings = drawings.OrderByDescending(x => x.Time).ToList();
+                        break;
+                    default:
+                        drawings = drawings.OrderByDescending(x => x.Popularity).ToList();
+                        break;
+                }
+            }
+
             var results = new FilterResults(drawings);
             var ids = drawings.Select(x => x.Id).ToList();
             results.FilteredCollections = collections

@@ -31,7 +31,7 @@ namespace MRA.DTO.ViewModels.Art
         public static DrawingFilter GetModelNoFilters() =>
             new DrawingFilter()
             {
-                Sortby = "date-desc",
+                Sortby = "",
                 TextQuery = "",
                 Type = -1,
                 ProductType = -1,
@@ -45,6 +45,17 @@ namespace MRA.DTO.ViewModels.Art
                 Spotify = null,
                 OnlyVisible = false,
             };
+
+        public bool OnlyFilterCollection()
+        {
+            var noFilters = GetModelNoFilters();
+
+            return Sortby == noFilters.Sortby && TextQuery == noFilters.TextQuery && Type == noFilters.Type
+                && ProductType == noFilters.ProductType && ProductName == noFilters.ProductName
+                && Collection != noFilters.Collection && CharacterName == noFilters.CharacterName
+                && ModelName == noFilters.ModelName && Software == noFilters.Software
+                && Paper == noFilters.Paper;
+        }
 
         public bool HasNoFilters()
         {
