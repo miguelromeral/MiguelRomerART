@@ -326,7 +326,12 @@ namespace MRA.WebApi.Controllers
         [Authorize]
         public async Task<bool> RemoveCollection([FromBody] string id)
         {
-            return await _drawingService.RemoveCollection(id);
+            var result = await _drawingService.RemoveCollection(id);
+            if (result)
+            {
+                _drawingService.CleanAllCache();
+            }
+            return result;
         }
     }
 }
