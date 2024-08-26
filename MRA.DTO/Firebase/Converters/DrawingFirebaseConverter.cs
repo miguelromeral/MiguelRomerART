@@ -30,6 +30,7 @@ namespace MRA.DTO.Firebase.Converters
                 Title = drawingDocument.title,
                 Name = drawingDocument.name,
                 Date = drawingDocument.date,
+                DateObject = MRA.DTO.Utilities.ConvertirStringADateTime(drawingDocument.date),
                 DateHyphen = drawingDocument.date.Replace("/", "-"),
                 Time = drawingDocument.time ?? 0,
                 ProductType = drawingDocument.product_type,

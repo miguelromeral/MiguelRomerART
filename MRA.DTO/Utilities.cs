@@ -92,5 +92,34 @@ namespace MRA.DTO
 
             throw new InvalidOperationException("Unable to clear memory cache instance of type " + cache.GetType().FullName);
         }
+        public static double CalculatePopularity(double valor, double puntuacionMaxima, double min = 0, double max = 100)
+        {
+            if (valor < min || valor > max)
+            {
+                return 0;
+            }
+
+            double puntuacion = (valor - min) * puntuacionMaxima / (max - min);
+            return puntuacion;
+        }
+        public static double CalculatePopularity(DateTime fecha, double puntuacionMaxima, DateTime fechaMin, DateTime fechaMax)
+        {
+            if (fecha < fechaMin || fecha > fechaMax)
+            {
+                return 0;
+            }
+
+            long ticksFecha = fecha.Ticks;
+            long ticksMin = fechaMin.Ticks;
+            long ticksMax = fechaMax.Ticks;
+
+            return CalculatePopularity(ticksFecha, puntuacionMaxima, ticksMin, ticksMax);
+        }
+        public static DateTime ConvertirStringADateTime(string fechaString, string formato = "yyyy/MM/dd")
+        {
+            DateTime fecha = DateTime.ParseExact(fechaString, formato, CultureInfo.InvariantCulture);
+            return fecha;
+        }
     }
+
 }

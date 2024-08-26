@@ -18,6 +18,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static Google.Cloud.Firestore.V1.StructuredQuery.Types;
 using MRA.Services.Firebase.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace MRA.Services.Firebase
 {
@@ -316,11 +317,9 @@ namespace MRA.Services.Firebase
                     drawings = drawings.OrderByDescending(x => x.Time).ToList();
                     break;
                 default:
-                    drawings = drawings.OrderByDescending(x => x.Date).ToList();
+                    drawings = drawings.OrderByDescending(x => x.Popularity).ToList();
                     break;
             }
-
-
             var results = new FilterResults(drawings);
             var ids = drawings.Select(x => x.Id).ToList();
             results.FilteredCollections = collections
@@ -337,6 +336,16 @@ namespace MRA.Services.Firebase
                     .Take(filter.PageSize)  
                     .ToList();
             }
+
+
+
+            //foreach (var d in drawings)
+            //{
+            //    Debug.WriteLine($"{d.Id.PadRight(30)} ({d.Name.PadRight(30)}): [{d.Popularity.ToString("#.###").PadRight(5)} == " +
+            //        $"{d.PopularityDate.ToString("#.##").PadRight(5)} + {d.PopularityCritic.ToString("#.##").PadRight(5)} + {d.PopularityPopular.ToString("#.##").PadRight(5)}" +
+            //        $" + {d.PopularityFavorite.ToString("#.##").PadRight(5)} ]");
+            //}
+
 
             results.UpdatefilteredDrawings(drawings);
             return results;

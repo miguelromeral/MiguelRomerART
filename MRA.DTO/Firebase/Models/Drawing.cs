@@ -2,6 +2,7 @@
 using MRA.DTO;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -115,6 +116,7 @@ namespace MRA.DTO.Firebase.Models
 
         public string Title { get; set; }
         public string Date { get; set; }
+        public DateTime DateObject { get; set; }
         public string DateHyphen { get; set; }
         public int Software { get; set; }
         public string SoftwareName
@@ -224,7 +226,19 @@ namespace MRA.DTO.Firebase.Models
 
         public string Url { get { return UrlBase + Path; } }
         public string UrlThumbnail { get { return UrlBase + PathThumbnail; } }
-        public bool IsTraditional { get { return Type == 1; } }
+
+        private static readonly DateTime MinDatePopularity = new DateTime(2020, 4, 1);
+
+
+        public double PopularityDate { get { return Utilities.CalculatePopularity(DateObject, 6, MinDatePopularity, DateTime.Now); } }
+        public double PopularityCritic { get { return Utilities.CalculatePopularity(ScoreCritic, 3); } }
+        public double PopularityPopular { get { return Utilities.CalculatePopularity(ScorePopular, .5); } }
+        public double PopularityFavorite{ get { return Favorite ? 0.25 : 0; } }
+        public double Popularity { get {
+                return PopularityDate + PopularityCritic + PopularityPopular + PopularityFavorite;
+            }
+        }
+
 
         public string FormattedDate
         {
