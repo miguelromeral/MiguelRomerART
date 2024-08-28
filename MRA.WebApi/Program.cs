@@ -65,7 +65,16 @@ var azureStorageService = new AzureStorageService(connectionString, blobStorageC
 
 builder.Services.AddSingleton(azureStorageService);
 
-Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @".\Credentials\romerart-6a6c3-firebase-adminsdk-4yop5-839e7a0035.json");
+var serviceAccountPath = @".\Credentials\romerart-6a6c3-firebase-adminsdk-4yop5-839e7a0035.json";
+
+Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", serviceAccountPath);
+
+var firebaseProjectId = builder.Configuration.GetValue<string>("Firebase:ProjectID");
+var secondsCache = builder.Configuration.GetValue<int>("CacheSeconds");
+
+//var accessToken = await GoogleCredentialHelper.GetAccessTokenAsync(serviceAccountPath);
+var remoteConfigService = new RemoteConfigService(new MemoryCache(new MemoryCacheOptions()), firebaseProjectId, serviceAccountPath, secondsCache);
+builder.Services.AddSingleton(remoteConfigService);
 
 var firebaseService = new FirestoreService(
             builder.Configuration.GetValue<string>("Firebase:CollectionDrawings"),
@@ -73,11 +82,11 @@ var firebaseService = new FirestoreService(
             builder.Configuration.GetValue<string>("Firebase:CollectionCollections"),
             builder.Configuration.GetValue<string>("Firebase:CollectionExperience"),
             builder.Configuration.GetValue<string>("AzureStorage:BlobPath"),
-    FirestoreDb.Create(builder.Configuration.GetValue<string>("Firebase:ProjectID")));
-
+    FirestoreDb.Create(firebaseProjectId),
+    remoteConfigService);
 builder.Services.AddSingleton<IFirestoreService>(firebaseService);
 
-var drawingService = new DrawingService(builder.Configuration.GetValue<int>("CacheSeconds"), new MemoryCache(new MemoryCacheOptions()), azureStorageService, firebaseService);
+var drawingService = new DrawingService(secondsCache, new MemoryCache(new MemoryCacheOptions()), azureStorageService, firebaseService, remoteConfigService);
 
 builder.Services.AddSingleton(drawingService);
 

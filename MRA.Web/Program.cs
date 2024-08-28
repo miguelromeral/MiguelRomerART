@@ -35,11 +35,11 @@ var firebaseService = new FirestoreService(
             builder.Configuration.GetValue<string>("Firebase:CollectionExperience"),
             builder.Configuration.GetValue<string>("AzureStorage:BlobPath"),
 
-    FirestoreDb.Create(builder.Configuration.GetValue<string>("Firebase:ProjectID")));
+    FirestoreDb.Create(builder.Configuration.GetValue<string>("Firebase:ProjectID")), null);
 
 builder.Services.AddSingleton<IFirestoreService>(firebaseService);
 
-var drawingService = new DrawingService(builder.Configuration.GetValue<int>("CacheSeconds"), new MemoryCache(new MemoryCacheOptions()), azureStorageService, firebaseService);
+var drawingService = new DrawingService(builder.Configuration.GetValue<int>("CacheSeconds"), new MemoryCache(new MemoryCacheOptions()), azureStorageService, firebaseService, null);
 
 builder.Services.AddSingleton(drawingService);
 

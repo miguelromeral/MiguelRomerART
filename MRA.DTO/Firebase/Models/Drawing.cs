@@ -227,18 +227,27 @@ namespace MRA.DTO.Firebase.Models
         public string Url { get { return UrlBase + Path; } }
         public string UrlThumbnail { get { return UrlBase + PathThumbnail; } }
 
-        private static readonly DateTime MinDatePopularity = new DateTime(2020, 4, 1);
-
-
-        public double PopularityDate { get { return Utilities.CalculatePopularity(DateObject, 6, MinDatePopularity, DateTime.Now); } }
-        public double PopularityCritic { get { return Utilities.CalculatePopularity(ScoreCritic, 3); } }
-        public double PopularityPopular { get { return Utilities.CalculatePopularity(ScorePopular, .5); } }
-        public double PopularityFavorite{ get { return Favorite ? 0.25 : 0; } }
+        
+        public double PopularityDate { get; set; }
+        public double PopularityCritic { get; set; }
+        public double PopularityPopular { get; set; }
+        public double PopularityFavorite{ get; set; }
         public double Popularity { get {
                 return PopularityDate + PopularityCritic + PopularityPopular + PopularityFavorite;
             }
         }
 
+        public double CalculatePopularity(double dateWeight, int months, double criticWeight, double popularWeight, double favoriteWeight)
+        {
+            PopularityCritic = Utilities.CalculatePopularity(DateObject, dateWeight, DateTime.Now.AddMonths(- months), DateTime.Now);
+            PopularityDate = Utilities.CalculatePopularity(ScoreCritic, criticWeight);
+            PopularityPopular = Utilities.CalculatePopularity(ScorePopular, popularWeight);
+            PopularityFavorite = (Favorite ? favoriteWeight : 0);
+
+            Debug.WriteLine($"{dateWeight.ToString().PadRight(5)} {months.ToString().PadRight(5)} {criticWeight.ToString().PadRight(5)} " +
+                $"{popularWeight.ToString().PadRight(5)} {favoriteWeight.ToString().PadRight(5)} ");
+            return Popularity;
+        }
 
         public string FormattedDate
         {

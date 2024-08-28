@@ -5,6 +5,7 @@ using MRA.DTO.Firebase.Models;
 using MRA.DTO.ViewModels.Art;
 using MRA.DTO.ViewModels.Art.Select;
 using MRA.Services.AzureStorage;
+using MRA.Services.Firebase;
 using MRA.Services.Firebase.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -19,15 +20,18 @@ namespace MRA.Services
         private readonly int _secondsCache;
         private readonly AzureStorageService _azureStorageService;
         private readonly IFirestoreService _firestoreService;
+        private readonly RemoteConfigService _remoteConfigService;
 
         private readonly string CACHE_ALL_DRAWINGS = "all_drawings";
         private readonly string CACHE_ALL_COLLECTIONS = "all_collections";
 
-        public DrawingService(int secondsCache, IMemoryCache cache, AzureStorageService storageService, IFirestoreService firestoreService) : base(cache)
+        public DrawingService(int secondsCache, IMemoryCache cache, AzureStorageService storageService, IFirestoreService firestoreService, 
+            RemoteConfigService remoteConfigService) : base(cache)
         {
             _secondsCache = secondsCache;
             _azureStorageService = storageService;
             _firestoreService = firestoreService;
+            _remoteConfigService = remoteConfigService;
         }
 
         public async Task<List<Drawing>> GetAllDrawings()
@@ -108,11 +112,11 @@ namespace MRA.Services
         }
 
 
-        public FilterResults FilterDrawingsGivenList(DrawingFilter filter, List<Drawing> drawings, List<Collection> collections)
+        public async Task<FilterResults> FilterDrawingsGivenList(DrawingFilter filter, List<Drawing> drawings, List<Collection> collections)
         {
-            return GetOrSet<FilterResults>(filter.CacheKey, () =>
+            return await GetOrSetAsync<FilterResults>(filter.CacheKey, async () =>
             {
-                var results = _firestoreService.FilterGivenList(filter, drawings, collections);
+                var results = await _firestoreService.FilterGivenList(filter, drawings, collections);
                 var list = results.FilteredDrawings;
                 SetBlobUrl(ref list);
                 results.UpdatefilteredDrawings(list);

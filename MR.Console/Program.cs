@@ -31,7 +31,7 @@ try
     // Inicializa Firestore
     FirestoreDb db = FirestoreDb.Create(firebaseProjecTId);
 
-    var firebaseService = new FirestoreService(collectionNameDrawings, collectionNameInspirations, collectionNameCollections, collectionNameExperience, urlbase, db);
+    var firebaseService = new FirestoreService(collectionNameDrawings, collectionNameInspirations, collectionNameCollections, collectionNameExperience, urlbase, db, null);
 
     helper.ShowMessageInfo("Setting up AZURE STORAGE ACCOUNT.");
 

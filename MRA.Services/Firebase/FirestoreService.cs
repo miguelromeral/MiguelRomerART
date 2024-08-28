@@ -19,11 +19,13 @@ using System.Threading.Tasks;
 using static Google.Cloud.Firestore.V1.StructuredQuery.Types;
 using MRA.Services.Firebase.Interfaces;
 using System.ComponentModel.DataAnnotations;
+using MRA.DTO.Firebase.RemoteConfig;
 
 namespace MRA.Services.Firebase
 {
     public class FirestoreService : IFirestoreService
     {
+        private readonly RemoteConfigService _remoteConfigService;
         private readonly FirestoreDb _firestoreDb;
         private readonly string _urlBase;
         private readonly string _collectionNameDrawings;
@@ -36,8 +38,9 @@ namespace MRA.Services.Firebase
         private readonly ExperienceFirebaseConverter _converterExperience;
 
         public FirestoreService(string collectionNameDrawing, string collectionNameInspirations, string collectionNameCollections,
-            string collectionNameExperience, string urlBase, FirestoreDb firestoreDb)
+            string collectionNameExperience, string urlBase, FirestoreDb firestoreDb, RemoteConfigService remoteConfigService)
         {
+            _remoteConfigService = remoteConfigService;
             _firestoreDb = firestoreDb;
             _collectionNameDrawings = collectionNameDrawing;
             _collectionNameInspirations = collectionNameInspirations;
@@ -174,7 +177,7 @@ namespace MRA.Services.Firebase
             }
         }
 
-        public FilterResults FilterGivenList(DrawingFilter filter, List<Drawing> drawings, List<Collection> collections)
+        public async Task<FilterResults> FilterGivenList(DrawingFilter filter, List<Drawing> drawings, List<Collection> collections)
         {
             if (filter.OnlyVisible)
             {
@@ -335,6 +338,18 @@ namespace MRA.Services.Firebase
                         drawings = drawings.OrderByDescending(x => x.Time).ToList();
                         break;
                     default:
+
+                        foreach (var d in drawings)
+                        {
+                            d.CalculatePopularity(
+                                await _remoteConfigService.GetConfigValueAsync(RemoteConfigKeys.PopularityDateWeight),
+                                await _remoteConfigService.GetConfigValueAsync(RemoteConfigKeys.PopularityDateMonths),
+                                await _remoteConfigService.GetConfigValueAsync(RemoteConfigKeys.PopularityCriticWeight),
+                                await _remoteConfigService.GetConfigValueAsync(RemoteConfigKeys.PopularityPopularWeight),
+                                await _remoteConfigService.GetConfigValueAsync(RemoteConfigKeys.PopularityFavoriteWeight)
+                                );
+                        }
+
                         drawings = drawings.OrderByDescending(x => x.Popularity).ToList();
                         break;
                 }

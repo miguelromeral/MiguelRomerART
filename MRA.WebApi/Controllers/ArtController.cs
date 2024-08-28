@@ -114,7 +114,7 @@ namespace MRA.WebApi.Controllers
             var allDrawings = await _drawingService.GetAllDrawings();
             var allCollections = await _drawingService.GetAllCollections();
             filters.OnlyVisible = true;
-            return new DrawingFilterResultsResponse(_drawingService.FilterDrawingsGivenList(filters, allDrawings, allCollections));
+            return new DrawingFilterResultsResponse(await _drawingService.FilterDrawingsGivenList(filters, allDrawings, allCollections));
         }
 
         [HttpPost("filter-admin")]
@@ -124,7 +124,7 @@ namespace MRA.WebApi.Controllers
             var allDrawings = await _drawingService.GetAllDrawings();
             var allCollections = await _drawingService.GetAllCollections();
             filters.OnlyVisible = false;
-            return new DrawingFilterResultsResponse(_drawingService.FilterDrawingsGivenList(filters, allDrawings, allCollections));
+            return new DrawingFilterResultsResponse(await _drawingService.FilterDrawingsGivenList(filters, allDrawings, allCollections));
         }
 
 
