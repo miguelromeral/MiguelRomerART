@@ -50,6 +50,7 @@ namespace MRA.DTO.Firebase.Models
                 {1, "Medibang Paint"},
                 {2, "Clip Studio Paint"},
                 {3, "Adobe Photoshop"},
+                {4, "GIMP"},
             };
 
         public static Dictionary<int, string> DRAWING_PAPER_SIZE = new Dictionary<int, string>()
