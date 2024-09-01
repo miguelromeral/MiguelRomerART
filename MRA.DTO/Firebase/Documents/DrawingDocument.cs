@@ -56,6 +56,9 @@ namespace MRA.DTO.Firebase.Documents
         public string comment_cons { get; set; }
 
         [FirestoreProperty]
+        public List<string> comment_style { get; set; }
+
+        [FirestoreProperty]
         public long views { get; set; }
 
         [FirestoreProperty]

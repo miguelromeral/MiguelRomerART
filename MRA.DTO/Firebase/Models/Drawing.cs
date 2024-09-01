@@ -176,6 +176,7 @@ namespace MRA.DTO.Firebase.Models
         public string ProductName { get; set; }
         public string Comment { get; set; }
         public string CommentPros { get; set; }
+        public List<string> ListCommentsStyle { get; set; }
         public long Views { get; set; }
         public string ViewsHuman { get { return Drawing.FormatoLegible(Views); } }
         public long Likes { get; set; }
