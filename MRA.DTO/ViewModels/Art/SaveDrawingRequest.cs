@@ -31,8 +31,10 @@ namespace MRA.DTO.ViewModels.Art
         public string InstagramUrl { get; set; }
         public string TwitterUrl { get; set; }
         public int ScoreCritic { get; set; }
+        public int Filter { get; set; }
         public List<string> ListComments { get; set; }
         public List<string> ListCommentPros { get; set; }
         public List<string> ListCommentCons { get; set; }
+        public List<string> ListCommentStyle { get; set; }
     }
 }

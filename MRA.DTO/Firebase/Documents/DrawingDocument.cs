@@ -62,6 +62,9 @@ namespace MRA.DTO.Firebase.Documents
         public long views { get; set; }
 
         [FirestoreProperty]
+        public int filter{ get; set; }
+
+        [FirestoreProperty]
         public long likes { get; set; }
 
         [FirestoreProperty]

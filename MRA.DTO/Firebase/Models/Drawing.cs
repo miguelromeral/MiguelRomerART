@@ -32,6 +32,7 @@ namespace MRA.DTO.Firebase.Models
                 {4, "Marcadores"},
                 {5, "Lápices de Colores"},
                 {6, "Bolígrafo"},
+                {7, "Line Art"},
             };
 
         public static Dictionary<int, string> DRAWING_PRODUCT_TYPES = new Dictionary<int, string>()
@@ -62,6 +63,15 @@ namespace MRA.DTO.Firebase.Models
                 {4, "A4"},
                 {5, "A5"},
                 {6, "A6"},
+            };
+
+        public static Dictionary<int, string> DRAWING_FILTER = new Dictionary<int, string>()
+            {
+                {0, "Desconocido"},
+                {1, "Snapseed"},
+                {2, "Adobe Photoshop"},
+                {3, "Instagram"},
+                {4, "Samsung Galaxy"},
             };
 
         public string Id { get; set; }
@@ -132,6 +142,19 @@ namespace MRA.DTO.Firebase.Models
                 return "Ninguno";
             }
         }
+        public int Filter { get; set; }
+        public string FilterName
+        {
+            get
+            {
+                if (DRAWING_FILTER.ContainsKey(Filter))
+                {
+                    return DRAWING_FILTER[Filter];
+                }
+                return "Ninguno";
+            }
+        }
+
         public int Paper { get; set; }
         public string PaperHuman
         {

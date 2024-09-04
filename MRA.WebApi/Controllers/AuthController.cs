@@ -41,7 +41,7 @@ namespace MRA.WebApi.Controllers
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(120),
+                expires: DateTime.Now.AddMinutes(1440),
                 signingCredentials: creds);
 
             return Ok(new UserDto()
