@@ -269,8 +269,8 @@ namespace MRA.DTO.Firebase.Models
             PopularityPopular = Utilities.CalculatePopularity(ScorePopular, popularWeight);
             PopularityFavorite = (Favorite ? favoriteWeight : 0);
 
-            Debug.WriteLine($"{dateWeight.ToString().PadRight(5)} {months.ToString().PadRight(5)} {criticWeight.ToString().PadRight(5)} " +
-                $"{popularWeight.ToString().PadRight(5)} {favoriteWeight.ToString().PadRight(5)} ");
+            //Debug.WriteLine($"{dateWeight.ToString().PadRight(5)} {months.ToString().PadRight(5)} {criticWeight.ToString().PadRight(5)} " +
+                //$"{popularWeight.ToString().PadRight(5)} {favoriteWeight.ToString().PadRight(5)} ");
             return Popularity;
         }
 

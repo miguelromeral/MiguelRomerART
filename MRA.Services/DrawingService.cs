@@ -51,18 +51,18 @@ namespace MRA.Services
             }, TimeSpan.FromSeconds(_secondsCache));
         }
 
-        public async Task<List<Collection>> GetAllCollections(bool cache = true)
+        public async Task<List<Collection>> GetAllCollections(List<Drawing> drawings, bool cache = true)
         {
             if (cache)
             {
                 return await GetOrSetAsync<List<Collection>>(CACHE_ALL_COLLECTIONS, async () =>
                 {
-                    return await _firestoreService.GetAllCollections();
+                    return await _firestoreService.GetAllCollections(drawings);
                 }, TimeSpan.FromSeconds(_secondsCache));
             }
             else
             {
-                return await _firestoreService.GetAllCollections();
+                return await _firestoreService.GetAllCollections(drawings);
             }
         }
 
@@ -74,18 +74,18 @@ namespace MRA.Services
 
         }
 
-        public async Task<Collection> FindCollectionById(string documentId, bool cache = true)
+        public async Task<Collection> FindCollectionById(string documentId, List<Drawing> drawings, bool cache = true)
         {
             if (cache)
             {
                 return await GetOrSetAsync<Collection>($"collection_{documentId}", async () =>
                 {
-                    return await _firestoreService.FindCollectionById(documentId);
+                    return await _firestoreService.FindCollectionById(documentId, drawings);
                 }, TimeSpan.FromSeconds(_secondsCache));
             }
             else
             {
-                return await _firestoreService.FindCollectionById(documentId);
+                return await _firestoreService.FindCollectionById(documentId, drawings);
             }
         }
 
@@ -103,13 +103,13 @@ namespace MRA.Services
         }
 
 
-        public async Task<List<Collection>> GetAllCollectionsOrderPositive()
-        {
-            return await GetOrSetAsync<List<Collection>>("all_collections_positive", async () =>
-            {
-                return await _firestoreService.GetAllCollectionsOrderPositive();
-            }, TimeSpan.FromSeconds(_secondsCache));
-        }
+        //public async Task<List<Collection>> GetAllCollectionsOrderPositive()
+        //{
+        //    return await GetOrSetAsync<List<Collection>>("all_collections_positive", async () =>
+        //    {
+        //        return await _firestoreService.GetAllCollectionsOrderPositive();
+        //    }, TimeSpan.FromSeconds(_secondsCache));
+        //}
 
 
         public async Task<FilterResults> FilterDrawingsGivenList(DrawingFilter filter, List<Drawing> drawings, List<Collection> collections)
@@ -238,7 +238,7 @@ namespace MRA.Services
             return await _firestoreService.AddAsync(document);
         }
 
-        public async Task<Collection> AddAsync(Collection document) => await _firestoreService.AddAsync(document);
+        public async Task<Collection> AddAsync(Collection document, List<Drawing> drawings) => await _firestoreService.AddAsync(document, drawings);
 
         public async Task RedimensionarYGuardarEnAzureStorage(string rutaEntrada, string nombreBlob, int anchoDeseado) =>
             await _azureStorageService.RedimensionarYGuardarEnAzureStorage(rutaEntrada, nombreBlob, anchoDeseado);

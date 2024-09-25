@@ -80,32 +80,32 @@ namespace MRA.Services.Firebase
         }
 
 
-        public async Task<List<Collection>> GetAllCollectionsOrderPositive()
-        {
-            try
-            {
-                Query query = _firestoreDb.Collection(_collectionNameCollections);
-                query = query.WhereGreaterThanOrEqualTo("order", 0);
-                var snapshot = (await query.GetSnapshotAsync());
-                var collections = snapshot.Documents;
-                var collectionDocs = collections.Select(s => s.ConvertTo<CollectionDocument>()).ToList();
-                return await HandleAllCollections(collectionDocs);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error when getting collections: " + ex.Message);
-                return new List<Collection>();
-            }
-        }
+        //public async Task<List<Collection>> GetAllCollectionsOrderPositive()
+        //{
+        //    try
+        //    {
+        //        Query query = _firestoreDb.Collection(_collectionNameCollections);
+        //        query = query.WhereGreaterThanOrEqualTo("order", 0);
+        //        var snapshot = (await query.GetSnapshotAsync());
+        //        var collections = snapshot.Documents;
+        //        var collectionDocs = collections.Select(s => s.ConvertTo<CollectionDocument>()).ToList();
+        //        return await HandleAllCollections(collectionDocs);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine("Error when getting collections: " + ex.Message);
+        //        return new List<Collection>();
+        //    }
+        //}
 
-        public async Task<List<Collection>> GetAllCollections()
+        public async Task<List<Collection>> GetAllCollections(List<Drawing> drawings)
         {
             try
             {
                 var snapshot = (await _firestoreDb.Collection(_collectionNameCollections).GetSnapshotAsync());
                 var collections = snapshot.Documents;
                 var collectionDocs = collections.Select(s => s.ConvertTo<CollectionDocument>()).ToList();
-                return await HandleAllCollections(collectionDocs);
+                return await HandleAllCollections(collectionDocs, drawings);
             }
             catch (Exception ex)
             {
@@ -114,7 +114,7 @@ namespace MRA.Services.Firebase
             }
         }
 
-        public async Task<Collection> HandleCollection(CollectionDocument collection)
+        public async Task<Collection> HandleCollection(CollectionDocument collection, List<Drawing> drawings)
         {
             var c = new Collection()
             {
@@ -131,10 +131,10 @@ namespace MRA.Services.Firebase
             {
                 foreach (var reference in collection.drawings)
                 {
-                    var documentoReferenciadoSnapshot = await reference.GetSnapshotAsync();
-                    if (documentoReferenciadoSnapshot.Exists)
+                    var drawing = drawings.Find(x => x.Id == reference.Id);
+                    if (drawing != null)
                     {
-                        c.Drawings.Add(_converterDrawing.ConvertToModel(documentoReferenciadoSnapshot.ConvertTo<DrawingDocument>()));
+                        c.Drawings.Add(drawing);
                     }
                 }
             }
@@ -158,7 +158,7 @@ namespace MRA.Services.Firebase
             return list;
         }
 
-        public async Task<List<Collection>> HandleAllCollections(List<CollectionDocument> collectionDocs)
+        public async Task<List<Collection>> HandleAllCollections(List<CollectionDocument> collectionDocs, List<Drawing> drawings)
         {
             try
             {
@@ -166,7 +166,7 @@ namespace MRA.Services.Firebase
 
                 foreach(var collection in collectionDocs)
                 {
-                    listCollections.Add(await HandleCollection(collection));
+                    listCollections.Add(await HandleCollection(collection, drawings));
                 }
                 return listCollections;
             }
@@ -339,15 +339,15 @@ namespace MRA.Services.Firebase
                         break;
                     default:
 
+                        var wDate = await _remoteConfigService.GetConfigValueAsync(RemoteConfigKeys.PopularityDateWeight);
+                        var wMonths = await _remoteConfigService.GetConfigValueAsync(RemoteConfigKeys.PopularityDateMonths);
+                        var wCritic = await _remoteConfigService.GetConfigValueAsync(RemoteConfigKeys.PopularityCriticWeight);
+                        var wPopular = await _remoteConfigService.GetConfigValueAsync(RemoteConfigKeys.PopularityPopularWeight);
+                        var wFavorite = await _remoteConfigService.GetConfigValueAsync(RemoteConfigKeys.PopularityFavoriteWeight);
+
                         foreach (var d in drawings)
                         {
-                            d.CalculatePopularity(
-                                await _remoteConfigService.GetConfigValueAsync(RemoteConfigKeys.PopularityDateWeight),
-                                await _remoteConfigService.GetConfigValueAsync(RemoteConfigKeys.PopularityDateMonths),
-                                await _remoteConfigService.GetConfigValueAsync(RemoteConfigKeys.PopularityCriticWeight),
-                                await _remoteConfigService.GetConfigValueAsync(RemoteConfigKeys.PopularityPopularWeight),
-                                await _remoteConfigService.GetConfigValueAsync(RemoteConfigKeys.PopularityFavoriteWeight)
-                                );
+                            d.CalculatePopularity(wDate, wMonths, wCritic, wPopular, wFavorite);
                         }
 
                         drawings = drawings.OrderByDescending(x => x.Popularity).ToList();
@@ -538,7 +538,7 @@ namespace MRA.Services.Firebase
 
                 if (!String.IsNullOrEmpty(filter.Collection))
                 {
-                    var collection = (await GetAllCollections()).Find(x => x.Id.Equals(filter.Collection));
+                    var collection = (await GetAllCollections(list)).Find(x => x.Id.Equals(filter.Collection));
 
                     if(collection != null)
                     {
@@ -611,7 +611,7 @@ namespace MRA.Services.Firebase
             return null;
         }
 
-        public async Task<Collection> FindCollectionById(string documentId)
+        public async Task<Collection> FindCollectionById(string documentId, List<Drawing> drawings)
         {
             try
             {
@@ -623,7 +623,7 @@ namespace MRA.Services.Firebase
                 {
                     var converter = new CollectionFirebaseConverter();
                     var tmp = snapshot.ConvertTo<CollectionDocument>();
-                    return await HandleCollection(tmp);
+                    return await HandleCollection(tmp, drawings);
                 }
 
                 return null;
@@ -875,7 +875,7 @@ namespace MRA.Services.Firebase
         }
 
 
-        public async Task<Collection> AddAsync(Collection document)
+        public async Task<Collection> AddAsync(Collection document, List<Drawing> drawings)
         {
             var collection = _firestoreDb.Collection(_collectionNameCollections);
             var collectionDocument = _converterCollection.ConvertToDocument(document);
@@ -886,7 +886,7 @@ namespace MRA.Services.Firebase
             // Inserta o actualiza el documento con los datos especificados
             await docRef.SetAsync(collectionDocument);
 
-            return await HandleCollection(collectionDocument);
+            return await HandleCollection(collectionDocument, drawings);
         }
 
         public DocumentReference GetDbDocument(string path)

@@ -54,7 +54,8 @@ namespace MRA.WebApi.Controllers
         [HttpGet("collections-public")]
         public async Task<List<CollectionResponse>> Collections()
         {
-            var collections = (await _drawingService.GetAllCollections()).Select(x => new CollectionResponse(x)).ToList();
+            var drawings = await _drawingService.GetAllDrawings();
+            var collections = (await _drawingService.GetAllCollections(drawings)).Select(x => new CollectionResponse(x)).ToList();
             var newList = new List<CollectionResponse>();
             foreach(var collection in collections)
             {
@@ -75,21 +76,24 @@ namespace MRA.WebApi.Controllers
         [Authorize]
         public async Task<List<CollectionResponse>> CollectionsAdmin()
         {
-            return (await _drawingService.GetAllCollections()).Select(x => new CollectionResponse(x)).ToList();
+            var drawings = await _drawingService.GetAllDrawings();
+            return (await _drawingService.GetAllCollections(drawings)).Select(x => new CollectionResponse(x)).ToList();
         }
 
 
         [HttpGet("collection/details-public/{id}")]
         public async Task<CollectionResponse> CollectionDetails(string id)
         {
-            return FilterCollectionResponsePublic(new CollectionResponse(await _drawingService.FindCollectionById(id)));
+            var drawings = await _drawingService.GetAllDrawings();
+            return FilterCollectionResponsePublic(new CollectionResponse(await _drawingService.FindCollectionById(id, drawings)));
         }
 
         [HttpGet("collection/details-admin/{id}")]
         [Authorize]
         public async Task<CollectionResponse> CollectionDetailsAdmin(string id)
         {
-            return new CollectionResponse(await _drawingService.FindCollectionById(id));
+            var drawings = await _drawingService.GetAllDrawings();
+            return new CollectionResponse(await _drawingService.FindCollectionById(id, drawings));
         }
 
 
@@ -112,7 +116,7 @@ namespace MRA.WebApi.Controllers
         public async Task<DrawingFilterResultsResponse> Filter([FromBody] DrawingFilter filters)
         {
             var allDrawings = await _drawingService.GetAllDrawings();
-            var allCollections = await _drawingService.GetAllCollections();
+            var allCollections = await _drawingService.GetAllCollections(allDrawings);
             filters.OnlyVisible = true;
             return new DrawingFilterResultsResponse(await _drawingService.FilterDrawingsGivenList(filters, allDrawings, allCollections));
         }
@@ -122,7 +126,7 @@ namespace MRA.WebApi.Controllers
         public async Task<DrawingFilterResultsResponse> FilterAdmin([FromBody] DrawingFilter filters)
         {
             var allDrawings = await _drawingService.GetAllDrawings();
-            var allCollections = await _drawingService.GetAllCollections();
+            var allCollections = await _drawingService.GetAllCollections(allDrawings);
             filters.OnlyVisible = false;
             return new DrawingFilterResultsResponse(await _drawingService.FilterDrawingsGivenList(filters, allDrawings, allCollections));
         }
@@ -284,7 +288,8 @@ namespace MRA.WebApi.Controllers
         {
             try
             {
-                var collection = await _drawingService.FindCollectionById(id);
+                var drawings = await _drawingService.GetAllDrawings();
+                var collection = await _drawingService.FindCollectionById(id, drawings);
                 return collection != null;
             }
             catch (Exception ex)
@@ -310,7 +315,8 @@ namespace MRA.WebApi.Controllers
 
                 if (!String.IsNullOrEmpty(collection.Id))
                 {
-                    Collection result = await _drawingService.AddAsync(collection);
+                    var drawings = await _drawingService.GetAllDrawings();
+                    Collection result = await _drawingService.AddAsync(collection, drawings);
                     _drawingService.CleanAllCache();
                     return new CollectionResponse(result);
                 }

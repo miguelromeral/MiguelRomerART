@@ -276,7 +276,8 @@ namespace MRA.Web.Controllers
         public async Task<IActionResult> ListCollections()
         {
             var model = new ListCollectionsViewModel();
-            model.Collections = await _drawingService.GetAllCollections(false);
+            var drawings = await _drawingService.GetAllDrawings();
+            model.Collections = await _drawingService.GetAllCollections(drawings, false);
             return View(model);
         }
 
@@ -284,7 +285,7 @@ namespace MRA.Web.Controllers
         public async Task<IActionResult> EditCollection(string id)
         {
             var list = await _drawingService.GetAllDrawings();
-            var col = await _drawingService.FindCollectionById(id, false);
+            var col = await _drawingService.FindCollectionById(id, list, false);
             var model = new EditCollectionsViewModel()
             {
                 ListDrawings = list,
@@ -302,7 +303,8 @@ namespace MRA.Web.Controllers
         {
             try
             {
-                var collection = await _drawingService.FindCollectionById(id);
+                var drawings = await _drawingService.GetAllDrawings();
+                var collection = await _drawingService.FindCollectionById(id, drawings);
                 return collection != null;
             }
             catch (Exception ex)
@@ -335,10 +337,13 @@ namespace MRA.Web.Controllers
                     model["DrawingList"]
                     ));
 
+                var drawings = await _drawingService.GetAllDrawings();
+
+
                 Collection result = null;
                 if (!String.IsNullOrEmpty(collection.Id))
                 {
-                    result = await _drawingService.AddAsync(collection);
+                    result = await _drawingService.AddAsync(collection, drawings);
                     return result;
                 }
 

@@ -13,14 +13,14 @@ namespace MRA.Services.Firebase.Interfaces
     {
         Task<List<Drawing>> GetAll();
         Task<List<Inspiration>> GetAllInspirations();
-        Task<List<Collection>> GetAllCollections();
-        Task<List<Collection>> GetAllCollectionsOrderPositive();
+        Task<List<Collection>> GetAllCollections(List<Drawing> drawings);
+        //Task<List<Collection>> GetAllCollectionsOrderPositive();
         Task<Drawing> AddAsync(Drawing document);
-        Task<Collection> AddAsync(Collection document);
+        Task<Collection> AddAsync(Collection document, List<Drawing> drawings);
         Task<List<Drawing>> Filter(DrawingFilter filter);
         Task<FilterResults> FilterGivenList(DrawingFilter filter, List<Drawing> drawings, List<Collection> collections);
         Task<Drawing> FindDrawingById(string documentId, bool updateViews);
-        Task<Collection> FindCollectionById(string documentId);
+        Task<Collection> FindCollectionById(string documentId, List<Drawing> drawings);
         Task UpdateLikes(string documentId);
         Task<VoteSubmittedModel> Vote(string documentId, int score);
         DocumentReference GetDbDocumentDrawing(string id);
