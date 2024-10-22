@@ -55,7 +55,7 @@ namespace MRA.WebApi.Controllers
         }
 
         [HttpPost("validate-token")]
-        [Authorize]
+        //[Authorize]
         public IActionResult ValidateToken([FromBody] TokenDto tokenDto)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
