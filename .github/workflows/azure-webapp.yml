@@ -55,6 +55,12 @@ jobs:
 
       - name: Publish
         run: dotnet publish ${{env.CSPROJ_PATH}} -c Release -o ${{github.workspace}}/publish --no-build
+    
+      - name: Copy Credentials directory
+        run: cp -r ./MRA.WebApi/Credentials ${{github.workspace}}/publish/
+
+      - name: Verify Credentials folder
+        run: dir ${{github.workspace}}/publish/Credentials
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
