@@ -53,4 +53,4 @@ jobs:
           app-name: 'MRAWebApi20240716105924'
           slot-name: 'Production'
           package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E94037F350EB4B5B8F2C35DA9F86FE4E }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D1D130CAA314434397A8292D25DA7297 }}
