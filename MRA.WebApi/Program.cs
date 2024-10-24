@@ -65,9 +65,9 @@ var azureStorageService = new AzureStorageService(connectionString, blobStorageC
 
 builder.Services.AddSingleton(azureStorageService);
 
-
+var serviceAccountPath = "";
 #if DEBUG
-var serviceAccountPath = @".\Credentials\romerart-6a6c3-firebase-adminsdk-4yop5-839e7a0035.json";
+serviceAccountPath = @".\Credentials\romerart-6a6c3-firebase-adminsdk-4yop5-839e7a0035.json";
 Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", serviceAccountPath);
 #endif
 

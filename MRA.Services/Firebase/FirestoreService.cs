@@ -339,11 +339,11 @@ namespace MRA.Services.Firebase
                         break;
                     default:
 
-                        var wDate = await _remoteConfigService.GetConfigValueAsync(RemoteConfigKeys.PopularityDateWeight);
-                        var wMonths = await _remoteConfigService.GetConfigValueAsync(RemoteConfigKeys.PopularityDateMonths);
-                        var wCritic = await _remoteConfigService.GetConfigValueAsync(RemoteConfigKeys.PopularityCriticWeight);
-                        var wPopular = await _remoteConfigService.GetConfigValueAsync(RemoteConfigKeys.PopularityPopularWeight);
-                        var wFavorite = await _remoteConfigService.GetConfigValueAsync(RemoteConfigKeys.PopularityFavoriteWeight);
+                        var wDate = /*await*/ _remoteConfigService.GetConfigValueAsync(RemoteConfigKeys.PopularityDateWeight);
+                        var wMonths = /*await*/ _remoteConfigService.GetConfigValueAsync(RemoteConfigKeys.PopularityDateMonths);
+                        var wCritic = /*await*/ _remoteConfigService.GetConfigValueAsync(RemoteConfigKeys.PopularityCriticWeight);
+                        var wPopular = /*await */_remoteConfigService.GetConfigValueAsync(RemoteConfigKeys.PopularityPopularWeight);
+                        var wFavorite = /*await*/ _remoteConfigService.GetConfigValueAsync(RemoteConfigKeys.PopularityFavoriteWeight);
 
                         foreach (var d in drawings)
                         {

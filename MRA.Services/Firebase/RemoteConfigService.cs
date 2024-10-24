@@ -29,20 +29,6 @@ namespace MRA.Services.Firebase
             };
         }
 
-        public async Task<RemoteConfigResponse> GetRemoteConfig()
-        {
-            return await GetOrSetAsync<RemoteConfigResponse>(CACHE_REMOTE_CONFIG, async () =>
-            {
-                var httpClient = await GetHttpClientAsync();
-
-                var response = await httpClient.GetAsync("");
-                response.EnsureSuccessStatusCode();
-                var jsonResponse = await response.Content.ReadAsStringAsync();
-
-                return JsonSerializer.Deserialize<RemoteConfigResponse>(jsonResponse);
-            }, TimeSpan.FromSeconds(_secondsCache));
-        }
-
         private async Task<HttpClient> GetHttpClientAsync()
         {
             var accessToken = await GoogleCredentialHelper.GetAccessTokenAsync(_serviceAccountPath);
@@ -57,10 +43,26 @@ namespace MRA.Services.Firebase
             return httpClient;
         }
 
-        public async Task<T> GetConfigValueAsync<T>(RemoteConfigKey<T> key)
+        public async Task<RemoteConfigResponse> GetRemoteConfig()
         {
-            var remoteConfig = await GetRemoteConfig();
-            return remoteConfig.GetParameter(key);
+            return await GetOrSetAsync<RemoteConfigResponse>(CACHE_REMOTE_CONFIG, async () =>
+            {
+                var httpClient = await GetHttpClientAsync();
+
+                var response = await httpClient.GetAsync("");
+                response.EnsureSuccessStatusCode();
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+
+                return JsonSerializer.Deserialize<RemoteConfigResponse>(jsonResponse);
+            }, TimeSpan.FromSeconds(_secondsCache));
+        }
+
+
+        public /*async Task<T>*/ T GetConfigValueAsync<T>(RemoteConfigKey<T> key)
+        {
+            //var remoteConfig = await GetRemoteConfig();
+            //return remoteConfig.GetParameter(key);
+            return default(T);
         }
     }
 }
