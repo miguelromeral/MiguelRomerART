@@ -58,11 +58,10 @@ namespace MRA.Services.Firebase
         }
 
 
-        public /*async Task<T>*/ T GetConfigValueAsync<T>(RemoteConfigKey<T> key)
+        public async Task<T> GetConfigValueAsync<T>(RemoteConfigKey<T> key)
         {
-            //var remoteConfig = await GetRemoteConfig();
-            //return remoteConfig.GetParameter(key);
-            return default(T);
+            var remoteConfig = await GetRemoteConfig();
+            return remoteConfig.GetParameter(key);
         }
     }
 }

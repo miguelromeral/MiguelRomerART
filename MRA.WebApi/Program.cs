@@ -89,6 +89,7 @@ if (!string.IsNullOrEmpty(googleCredentialsJson))
 
     // Establecer la variable de entorno GOOGLE_APPLICATION_CREDENTIALS para que apunte al archivo temporal
     Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", tempCredentialPath);
+    serviceAccountPath = tempCredentialPath;
 }
 else
 {
