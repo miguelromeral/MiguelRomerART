@@ -19,6 +19,15 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//// Configurar logging
+//builder.Logging.ClearProviders();  // Limpia los proveedores de logging preexistentes
+//builder.Logging.AddConsole();      // Agrega logging en consola (visible en Kudu)
+//builder.Logging.AddDebug();        // Agrega logging de depuración
+
+//// Si necesitas logs de mayor detalle en producción, ajusta el nivel de logging
+//builder.Logging.SetMinimumLevel(LogLevel.Information);  // Cambia a Debug o Trace si necesitas más detalle
+
+
 // Agregar JWT
 
 var jwtSettings = builder.Configuration.GetSection("Jwt");
@@ -66,10 +75,27 @@ var azureStorageService = new AzureStorageService(connectionString, blobStorageC
 builder.Services.AddSingleton(azureStorageService);
 
 var serviceAccountPath = "";
-#if DEBUG
-serviceAccountPath = @".\Credentials\romerart-6a6c3-firebase-adminsdk-4yop5-839e7a0035.json";
-Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", serviceAccountPath);
-#endif
+//#if DEBUG
+//serviceAccountPath = @".\Credentials\romerart-6a6c3-firebase-adminsdk-4yop5-839e7a0035.json";
+//Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", serviceAccountPath);
+//#endif
+
+// Si estás en Azure, crea el archivo temporal desde la variable de entorno
+var googleCredentialsJson = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS_JSON");
+if (!string.IsNullOrEmpty(googleCredentialsJson))
+{
+    var tempCredentialPath = Path.Combine(Path.GetTempPath(), "firebase-credentials.json");
+    File.WriteAllText(tempCredentialPath, googleCredentialsJson);
+
+    // Establecer la variable de entorno GOOGLE_APPLICATION_CREDENTIALS para que apunte al archivo temporal
+    Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", tempCredentialPath);
+}
+else
+{
+    // Si estoy en local
+    serviceAccountPath = @".\Credentials\romerart-6a6c3-firebase-adminsdk-4yop5-839e7a0035.json";
+    Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", serviceAccountPath);
+}
 
 var firebaseProjectId = builder.Configuration.GetValue<string>("Firebase:ProjectID");
 var secondsCache = builder.Configuration.GetValue<int>("CacheSeconds");
