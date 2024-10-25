@@ -11,21 +11,20 @@ namespace MRA.Services.Firebase.Interfaces
 {
     public interface IFirestoreService
     {
-        Task<List<Drawing>> GetAll();
-        Task<List<Inspiration>> GetAllInspirations();
-        Task<List<Collection>> GetAllCollections(List<Drawing> drawings);
-        //Task<List<Collection>> GetAllCollectionsOrderPositive();
-        Task<Drawing> AddAsync(Drawing document);
-        Task<Collection> AddAsync(Collection document, List<Drawing> drawings);
+        Task<List<Drawing>> GetDrawingsAsync();
+        Task<List<Inspiration>> GetInspirationsAsync();
+        Task<List<Collection>> GetCollectionsAsync(List<Drawing> drawings);
+        Task<Drawing> AddDrawingAsync(Drawing document);
+        Task<Collection> AddCollectionAsync(Collection document, List<Drawing> drawings);
         Task<List<Drawing>> Filter(DrawingFilter filter);
         Task<FilterResults> FilterGivenList(DrawingFilter filter, List<Drawing> drawings, List<Collection> collections);
-        Task<Drawing> FindDrawingById(string documentId, bool updateViews);
-        Task<Collection> FindCollectionById(string documentId, List<Drawing> drawings);
-        Task UpdateLikes(string documentId);
-        Task<VoteSubmittedModel> Vote(string documentId, int score);
+        Task<Drawing> FindDrawingByIdAsync(string documentId, bool updateViews);
+        Task<Collection> FindCollectionByIdAsync(string documentId, List<Drawing> drawings);
+        Task UpdateLikesAsync(string documentId);
+        Task<VoteSubmittedModel> VoteAsync(string documentId, int score);
         DocumentReference GetDbDocumentDrawing(string id);
-        Task UpdateViews(string documentId);
-        Task RemoveCollection(string id);
-        Task<List<DocumentReference>> SetDrawingsReferences(string[] ids);
+        Task UpdateViewsAsync(string documentId);
+        Task RemoveCollectionAsync(string id);
+        Task<List<DocumentReference>> SetDrawingsReferencesAsync(string[] ids);
     }
 }

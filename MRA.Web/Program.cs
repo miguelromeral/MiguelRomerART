@@ -28,14 +28,12 @@ builder.Services.AddSingleton(azureStorageService);
 
 Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @".\Credentials\romerart-6a6c3-firebase-adminsdk-4yop5-839e7a0035.json");
 
-var firebaseService = new FirestoreService(
-            builder.Configuration.GetValue<string>("Firebase:CollectionDrawings"),
-            builder.Configuration.GetValue<string>("Firebase:CollectionInspirations"),
-            builder.Configuration.GetValue<string>("Firebase:CollectionCollections"),
-            builder.Configuration.GetValue<string>("Firebase:CollectionExperience"),
-            builder.Configuration.GetValue<string>("AzureStorage:BlobPath"),
 
-    FirestoreDb.Create(builder.Configuration.GetValue<string>("Firebase:ProjectID")), null);
+var firebaseService = new FirestoreService(builder.Configuration.GetValue<string>("Firebase:ProjectID"), builder.Configuration.GetValue<string>("AzureStorage:BlobPath"));
+firebaseService.SetCollectionNames(
+    builder.Configuration.GetValue<string>("Firebase:CollectionDrawings"),
+    builder.Configuration.GetValue<string>("Firebase:CollectionCollections"),
+    builder.Configuration.GetValue<string>("Firebase:CollectionInspirations"));
 
 builder.Services.AddSingleton<IFirestoreService>(firebaseService);
 

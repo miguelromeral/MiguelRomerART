@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Runtime.Intrinsics.Arm;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -112,14 +113,13 @@ var remoteConfigService = new RemoteConfigService(new MemoryCache(new MemoryCach
 builder.Services.AddSingleton(remoteConfigService);
 
 logger.LogInformation("Creando servicio de Firebase");
-var firebaseService = new FirestoreService(
-            builder.Configuration.GetValue<string>("Firebase:CollectionDrawings"),
-            builder.Configuration.GetValue<string>("Firebase:CollectionInspirations"),
-            builder.Configuration.GetValue<string>("Firebase:CollectionCollections"),
-            builder.Configuration.GetValue<string>("Firebase:CollectionExperience"),
-            builder.Configuration.GetValue<string>("AzureStorage:BlobPath"),
-    FirestoreDb.Create(firebaseProjectId),
-    remoteConfigService);
+var firebaseService = new FirestoreService(firebaseProjectId, builder.Configuration.GetValue<string>("AzureStorage:BlobPath"));
+firebaseService.SetCollectionNames(
+    builder.Configuration.GetValue<string>("Firebase:CollectionDrawings"),
+    builder.Configuration.GetValue<string>("Firebase:CollectionCollections"),
+    builder.Configuration.GetValue<string>("Firebase:CollectionInspirations"));
+firebaseService.SetRemoteConfigService(remoteConfigService);
+
 builder.Services.AddSingleton<IFirestoreService>(firebaseService);
 
 var drawingService = new DrawingService(secondsCache, new MemoryCache(new MemoryCacheOptions()), azureStorageService, firebaseService, remoteConfigService);

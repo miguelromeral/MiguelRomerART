@@ -47,7 +47,7 @@ namespace MRA.Services
         {
             return await GetOrSetAsync<List<Inspiration>>("all_inspirations", async () =>
             {
-                return await _firestoreService.GetAllInspirations();
+                return await _firestoreService.GetInspirationsAsync();
             }, TimeSpan.FromSeconds(_secondsCache));
         }
 
@@ -57,12 +57,12 @@ namespace MRA.Services
             {
                 return await GetOrSetAsync<List<Collection>>(CACHE_ALL_COLLECTIONS, async () =>
                 {
-                    return await _firestoreService.GetAllCollections(drawings);
+                    return await _firestoreService.GetCollectionsAsync(drawings);
                 }, TimeSpan.FromSeconds(_secondsCache));
             }
             else
             {
-                return await _firestoreService.GetAllCollections(drawings);
+                return await _firestoreService.GetCollectionsAsync(drawings);
             }
         }
 
@@ -80,12 +80,12 @@ namespace MRA.Services
             {
                 return await GetOrSetAsync<Collection>($"collection_{documentId}", async () =>
                 {
-                    return await _firestoreService.FindCollectionById(documentId, drawings);
+                    return await _firestoreService.FindCollectionByIdAsync(documentId, drawings);
                 }, TimeSpan.FromSeconds(_secondsCache));
             }
             else
             {
-                return await _firestoreService.FindCollectionById(documentId, drawings);
+                return await _firestoreService.FindCollectionByIdAsync(documentId, drawings);
             }
         }
 
@@ -93,7 +93,7 @@ namespace MRA.Services
         {
             try
             {
-                await _firestoreService.RemoveCollection(id);
+                await _firestoreService.RemoveCollectionAsync(id);
                 return true;
             }
             catch(Exception ex)
@@ -209,7 +209,7 @@ namespace MRA.Services
 
         private async Task<Drawing> FindDrawingByIdTask(string documentId, bool onlyIfVisible, bool updateViews = false, bool cache = true)
         {
-            var result = await _firestoreService.FindDrawingById(documentId, updateViews);
+            var result = await _firestoreService.FindDrawingByIdAsync(documentId, updateViews);
             if (result != null && onlyIfVisible && !result.Visible)
             {
                 return null;
@@ -217,11 +217,11 @@ namespace MRA.Services
             return result;
         }
 
-        public async Task UpdateViews(string documentId) => await _firestoreService.UpdateViews(documentId);
+        public async Task UpdateViews(string documentId) => await _firestoreService.UpdateViewsAsync(documentId);
 
 
-        public async Task UpdateLikes(string documentId) => await _firestoreService.UpdateLikes(documentId);
-        public async Task<VoteSubmittedModel> Vote(string documentId, int score) => await _firestoreService.Vote(documentId, score);
+        public async Task UpdateLikes(string documentId) => await _firestoreService.UpdateLikesAsync(documentId);
+        public async Task<VoteSubmittedModel> Vote(string documentId, int score) => await _firestoreService.VoteAsync(documentId, score);
 
         public async Task<bool> ExistsBlob(string rutaBlob) => await _azureStorageService.ExistsBlob(rutaBlob);
 
@@ -235,10 +235,10 @@ namespace MRA.Services
                 document.Views = current.Views;
                 document.VotesPopular = current.VotesPopular;
             } 
-            return await _firestoreService.AddAsync(document);
+            return await _firestoreService.AddDrawingAsync(document);
         }
 
-        public async Task<Collection> AddAsync(Collection document, List<Drawing> drawings) => await _firestoreService.AddAsync(document, drawings);
+        public async Task<Collection> AddAsync(Collection document, List<Drawing> drawings) => await _firestoreService.AddCollectionAsync(document, drawings);
 
         public async Task RedimensionarYGuardarEnAzureStorage(string rutaEntrada, string nombreBlob, int anchoDeseado) =>
             await _azureStorageService.RedimensionarYGuardarEnAzureStorage(rutaEntrada, nombreBlob, anchoDeseado);
@@ -251,7 +251,7 @@ namespace MRA.Services
         public DocumentReference GetDbDocumentDrawing(string id) => _firestoreService.GetDbDocumentDrawing(id);
 
 
-        public async Task<List<DocumentReference>> SetDrawingsReferences(string[] ids) => await _firestoreService.SetDrawingsReferences(ids);
+        public async Task<List<DocumentReference>> SetDrawingsReferences(string[] ids) => await _firestoreService.SetDrawingsReferencesAsync(ids);
 
 
         public List<ProductListItem> GetProducts(List<Drawing> drawings)

@@ -31,7 +31,8 @@ try
     // Inicializa Firestore
     FirestoreDb db = FirestoreDb.Create(firebaseProjecTId);
 
-    var firebaseService = new FirestoreService(collectionNameDrawings, collectionNameInspirations, collectionNameCollections, collectionNameExperience, urlbase, db, null);
+    var firebaseService = new FirestoreService(db, urlbase);
+    firebaseService.SetCollectionNames(collectionNameDrawings, collectionNameCollections, collectionNameInspirations);
 
     helper.ShowMessageInfo("Setting up AZURE STORAGE ACCOUNT.");
 
@@ -67,7 +68,7 @@ try
             bool isNew = false;
 
             helper.ShowMessageInfo("Looking for drawing with  ID '" + input + "'");
-            Drawing drawing = await firebaseService.FindDrawingById(input);
+            Drawing drawing = await firebaseService.FindDrawingByIdAsync(input);
 
             if (drawing == null)
             {
@@ -189,7 +190,7 @@ try
 
             helper.ShowMessageInfo("Please wait...");
 
-            await firebaseService.AddAsync(drawing);
+            await firebaseService.AddDrawingAsync(drawing);
 
 
             helper.ShowMessageInfo("Inserted drawing with ID '" + drawing.Id + "' into Firestore.");
@@ -263,7 +264,7 @@ try
             isNew = false;
 
             helper.ShowMessageInfo("Looking for collection with  ID '" + input + "'");
-            Collection col = await firebaseService.FindCollectionById(input, new List<Drawing>());
+            Collection col = await firebaseService.FindCollectionByIdAsync(input, new List<Drawing>());
 
             if (col == null)
             {
@@ -330,7 +331,7 @@ try
 
             helper.ShowMessageInfo("Please wait...");
 
-            await firebaseService.AddAsync(col, new List<Drawing>());
+            await firebaseService.AddCollectionAsync(col, new List<Drawing>());
 
 
             helper.ShowMessageInfo("Inserted collection with ID '" + col.Id + "' into Firestore.");

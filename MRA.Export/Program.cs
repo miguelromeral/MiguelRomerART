@@ -1,11 +1,11 @@
-﻿// Configura Firestore
-using Google.Cloud.Firestore;
+﻿using Google.Cloud.Firestore;
 using Microsoft.Extensions.Configuration;
 using OfficeOpenXml;
 using MRA.Services.Helpers;
 using OfficeOpenXml.Style;
 using OfficeOpenXml.Table;
 using System.Drawing;
+using MRA.Services.Firebase;
 
 class Program
 {
@@ -17,7 +17,6 @@ class Program
         helper.ShowMessageInfo("Cargando la configuración de la aplicación");
         try
         {
-
             // Configuración de la aplicación
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -33,12 +32,12 @@ class Program
 
             // Configuración de Firestore
             helper.ShowMessageInfo("Registrando credenciales de Firebase");
-            string firebaseCredentialsPath = @".\Credentials\romerart-6a6c3-firebase-adminsdk-4yop5-839e7a0035.json";
-            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", firebaseCredentialsPath);
+            FirebaseHelper.SetCredentialsLocally(@".\Credentials\romerart-6a6c3-firebase-adminsdk-4yop5-839e7a0035.json");
 
             var projectId = _configuration["Firebase:ProjectID"];
             string collectionName = _configuration["Firebase:CollectionDrawings"];
             FirestoreDb db = FirestoreDb.Create(projectId);
+            //var firestoreService = new FirestoreService(projectId, _configuration["AzureStorage:BlobPath"]);
 
             helper.ShowMessageInfo("Recuperando documentos desde Firestore");
 
@@ -76,15 +75,7 @@ class Program
                 table.TableStyle = TableStyles.Medium6;
 
                 // Dar formato de color a la primera fila (encabezado)
-                using (var range = workSheet.Cells[1, 1, 1, 3])
-                {
-                    range.Style.Fill.PatternType = ExcelFillStyle.Solid;
-                    range.Style.Fill.BackgroundColor.SetColor(Color.Purple);
-                    range.Style.Font.Color.SetColor(Color.White);
-                    range.Style.Font.Bold = true;
-                }
-                // Ajustar automáticamente el ancho de las columnas al contenido
-                workSheet.Cells[workSheet.Dimension.Address].AutoFitColumns();
+                ExcelHelper.StyleCellsHeader(ref workSheet, 1, 1, 1, 3);
 
                 helper.ShowMessageInfo("Preparando fichero para guardar");
 
