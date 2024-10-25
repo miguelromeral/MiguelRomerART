@@ -1,7 +1,7 @@
 ﻿using Google.Api.Gax.ResourceNames;
 using Google.Cloud.Firestore;
 using Google.Type;
-using MR.ConsoleMR;
+using MRA.Services.Helpers;
 using MRA.Services.AzureStorage;
 using MRA.Services.Firebase;
 using MRA.DTO.Firebase.Documents;
@@ -263,7 +263,7 @@ try
             isNew = false;
 
             helper.ShowMessageInfo("Looking for collection with  ID '" + input + "'");
-            Collection col = await firebaseService.FindCollectionById(input);
+            Collection col = await firebaseService.FindCollectionById(input, new List<Drawing>());
 
             if (col == null)
             {
@@ -330,7 +330,7 @@ try
 
             helper.ShowMessageInfo("Please wait...");
 
-            await firebaseService.AddAsync(col);
+            await firebaseService.AddAsync(col, new List<Drawing>());
 
 
             helper.ShowMessageInfo("Inserted collection with ID '" + col.Id + "' into Firestore.");

@@ -7,34 +7,34 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MR.ConsoleMR
+namespace MRA.Services.Helpers
 {
-    internal class ConsoleHelper
+    public class ConsoleHelper
     {
 
-        private static int PAD_RIGHT = 10;
+        private int PAD_RIGHT = 10;
 
-        internal void ShowMessageInfo(string message)
+        public void ShowMessageInfo(string message)
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("INFO: ".PadRight(PAD_RIGHT) + message);
             Console.ForegroundColor = ConsoleColor.White;
         }
 
-        internal void ShowMessageWarning(string message)
+        public void ShowMessageWarning(string message)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("WARNING: ".PadRight(PAD_RIGHT) + message);
             Console.ForegroundColor = ConsoleColor.White;
         }
-        internal void ShowMessageError(string message)
+        public void ShowMessageError(string message)
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("DANGER: ".PadRight(PAD_RIGHT) + message);
             Console.ForegroundColor = ConsoleColor.White;
         }
 
-        internal void ShowMessagePrevious(bool isNew, string previous)
+        public void ShowMessagePrevious(bool isNew, string previous)
         {
             if (!isNew)
             {
@@ -52,7 +52,7 @@ namespace MR.ConsoleMR
             }
         }
 
-        internal void ShowMessage(bool isNew, string previous, string field)
+        public void ShowMessage(bool isNew, string previous, string field)
         {
             Console.ForegroundColor = ConsoleColor.White;
             ShowMessageInfo("------------------------------------------------------");
@@ -60,14 +60,14 @@ namespace MR.ConsoleMR
             ShowMessagePrevious(isNew, previous);
         }
 
-        internal string ReadValueFromConsole()
+        public string ReadValueFromConsole()
         {
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write("> ");
             return Console.ReadLine();
         }
 
-        internal string ReadValue(bool isNew, string previous)
+        public string ReadValue(bool isNew, string previous)
         {
 
             var input = ReadValueFromConsole();
@@ -79,14 +79,14 @@ namespace MR.ConsoleMR
             return input;
         }
 
-        internal int FillIntValue(bool isNew, int previous, string field, Dictionary<int, string> dictionary)
+        public int FillIntValue(bool isNew, int previous, string field, Dictionary<int, string> dictionary)
         {
             ShowMessageInfo("------------------------------------------------------");
             ShowMessageInfo(field.ToUpper() + ":");
 
             foreach (var type in dictionary)
             {
-                ShowMessageInfo(type.Key.ToString().PadRight(5)+"= "+type.Value);
+                ShowMessageInfo(type.Key.ToString().PadRight(5) + "= " + type.Value);
             }
 
             if (!isNew)
@@ -109,7 +109,7 @@ namespace MR.ConsoleMR
             }
         }
 
-        internal int FillFreeIntValue(bool isNew, int previous, string field)
+        public int FillFreeIntValue(bool isNew, int previous, string field)
         {
             ShowMessage(isNew, previous.ToString(), field);
 
@@ -128,7 +128,7 @@ namespace MR.ConsoleMR
         }
 
 
-        internal bool FillBoolValue(bool isNew, bool previous, string field)
+        public bool FillBoolValue(bool isNew, bool previous, string field)
         {
             ShowMessage(isNew, previous.ToString(), field);
             Console.ForegroundColor = ConsoleColor.DarkGray;
@@ -155,7 +155,7 @@ namespace MR.ConsoleMR
             }
         }
 
-        internal void ShowValueSet(string value)
+        public void ShowValueSet(string value)
         {
             Console.WriteLine("");
             Console.ForegroundColor = ConsoleColor.Green;
@@ -165,13 +165,13 @@ namespace MR.ConsoleMR
             Console.WriteLine("");
         }
 
-        internal string FillStringValue(bool isNew, string previous, string field)
+        public string FillStringValue(bool isNew, string previous, string field)
         {
             ShowMessage(isNew, previous, field);
             return ReadValue(isNew, previous);
         }
 
-        internal void PrintPropreties(object obj)
+        public void PrintPropreties(object obj)
         {
             // Obtener todas las propiedades
             PropertyDescriptorCollection propiedades = TypeDescriptor.GetProperties(obj);
