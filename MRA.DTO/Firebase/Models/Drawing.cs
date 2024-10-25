@@ -1,5 +1,6 @@
 ﻿using Google.Protobuf;
 using MRA.DTO;
+using MRA.DTO.Excel.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -74,14 +75,27 @@ namespace MRA.DTO.Firebase.Models
                 {4, "Samsung Galaxy"},
             };
 
+        [ExcelColumn("ID", 1)]
         public string Id { get; set; }
+        
+        [ExcelColumn("Path", 10)]
         public string Path { get; set; }
+
+        [ExcelColumn("Path Thumbnail", 10)]
         public string PathThumbnail { get; set; }
         public string UrlBase { get; set; }
+
+        [ExcelColumn("Visible", 20)]
         public bool Visible { get; set; }
+
+        [ExcelColumn("#Type", 10)]
         public int Type { get; set; }
+
+        [ExcelColumn("Tags", 10)]
         public string TagsText { get; set; }
         public List<string> Tags { get; set; }
+        
+        [ExcelColumn("Type", 10)]
         public string TypeName
         {
             get
@@ -95,11 +109,23 @@ namespace MRA.DTO.Firebase.Models
                 return "Otros";
             }
         }
+
+        [ExcelColumn("Name", 2)]
         public string Name { get; set; }
+        
+        [ExcelColumn("Model Name", 3)]
         public string ModelName { get; set; }
+
+        [ExcelColumn("Twitter URL", 10)]
         public string TwitterUrl { get; set; }
+
+        [ExcelColumn("Instagram URL", 10)]
         public string InstagramUrl { get; set; }
+        
+        [ExcelColumn("Spotify URL", 10)]
         public string SpotifyUrl { get; set; }
+
+        [ExcelColumn("Spotify Track ID", 10)]
         public string SpotifyTrackId { 
             get
             {
@@ -125,11 +151,22 @@ namespace MRA.DTO.Firebase.Models
             }
         }
 
+        [ExcelColumn("Title", 10)]
         public string Title { get; set; }
+
+        [ExcelColumn("Date", 10)]
         public string Date { get; set; }
+
+        [ExcelColumn("Date Object", 10)]
         public DateTime DateObject { get; set; }
+
+        [ExcelColumn("Date Hyphen", 10)]
         public string DateHyphen { get; set; }
+        
+        [ExcelColumn("#Software", 10)]
         public int Software { get; set; }
+
+        [ExcelColumn("Software", 10)]
         public string SoftwareName
         {
             get
@@ -142,7 +179,11 @@ namespace MRA.DTO.Firebase.Models
                 return "Ninguno";
             }
         }
+
+        [ExcelColumn("#Filter", 10)]
         public int Filter { get; set; }
+
+        [ExcelColumn("Filter", 10)]
         public string FilterName
         {
             get
@@ -155,7 +196,10 @@ namespace MRA.DTO.Firebase.Models
             }
         }
 
+        [ExcelColumn("#Paper", 10)]
         public int Paper { get; set; }
+
+        [ExcelColumn("Paper", 10)]
         public string PaperHuman
         {
             get
@@ -168,8 +212,13 @@ namespace MRA.DTO.Firebase.Models
                     return "Otro";
             }
         }
+
+        [ExcelColumn("Time (Minutes)", 10)]
         public int Time { get; set; }
-        public string TimeHuman { get
+
+        [ExcelColumn("Time", 10)]
+        public string TimeHuman {
+            get
             {
                 if (Time > 0)
                 {
@@ -186,8 +235,13 @@ namespace MRA.DTO.Firebase.Models
                 }
             } 
         }
+
+        [ExcelColumn("#Product Type", 10)]
         public int ProductType { get; set; }
-        public string ProductTypeName { get
+
+        [ExcelColumn("Product Type", 10)]
+        public string ProductTypeName {
+            get
             {
                     if (DRAWING_PRODUCT_TYPES.ContainsKey(ProductType))
                     {
@@ -196,25 +250,51 @@ namespace MRA.DTO.Firebase.Models
                     }
                     return "Otros";
             } }
+
+        [ExcelColumn("Product", 10)]
         public string ProductName { get; set; }
+
+        [ExcelColumn("Comments", 10)]
         public string Comment { get; set; }
+
+        [ExcelColumn("Positive Comments", 10)]
         public string CommentPros { get; set; }
         public List<string> ListCommentsStyle { get; set; }
+
+        [ExcelColumn("#Views", 10)]
         public long Views { get; set; }
+
+        [ExcelColumn("Views", 10)]
         public string ViewsHuman { get { return Drawing.FormatoLegible(Views); } }
+        
+        [ExcelColumn("#Likes", 10)]
         public long Likes { get; set; }
+        
+        [ExcelColumn("Likes", 10)]
         public string LikesHuman { get { return Drawing.FormatoLegible(Likes); } }
+        
+        [ExcelColumn("Favorite", 10)]
         public bool Favorite { get; set; }
+        
+        [ExcelColumn("Reference URL", 10)]
         public string ReferenceUrl { get; set; }
 
+        [ExcelColumn("Score Critic", 10)]
         public int ScoreCritic { get; set; }
+        
+        [ExcelColumn("Score Popular", 10)]
         public double ScorePopular { get; set; }
+        
+        [ExcelColumn("Votes Popular", 10)]
         public int VotesPopular { get; set; }
+        
+        [ExcelColumn("Score Popular (Readable)", 10)]
         public int ScorePopularHuman { get { return CalculateScorePopular(ScorePopular); } }
 
 
         public static int CalculateScorePopular(double score) => (int)Math.Round(score);
 
+        [ExcelColumn("List Comments", 10)]
         public List<string> ListComments
         {
             get
@@ -236,6 +316,8 @@ namespace MRA.DTO.Firebase.Models
                     return CommentPros.Split(SEPARATOR_COMMENTS).ToList();
             }
         }
+
+        [ExcelColumn("Negative Comments", 10)]
         public string CommentCons { get; set; }
 
         public List<string> ListCommentCons
@@ -249,14 +331,26 @@ namespace MRA.DTO.Firebase.Models
             }
         }
 
+        [ExcelColumn("URL", 10)]
         public string Url { get { return UrlBase + Path; } }
+        
+        [ExcelColumn("URL Thumbnail", 10)]
         public string UrlThumbnail { get { return UrlBase + PathThumbnail; } }
 
         
+        [ExcelColumn("Popularity Date", 10)]
         public double PopularityDate { get; set; }
+
+        [ExcelColumn("Popularity Critic", 10)]
         public double PopularityCritic { get; set; }
+        
+        [ExcelColumn("Popularity Popular", 10)]
         public double PopularityPopular { get; set; }
+
+        [ExcelColumn("Popularity Favorite", 10)]
         public double PopularityFavorite{ get; set; }
+
+        [ExcelColumn("Popularity", 10)]
         public double Popularity { get {
                 return PopularityDate + PopularityCritic + PopularityPopular + PopularityFavorite;
             }
@@ -274,6 +368,7 @@ namespace MRA.DTO.Firebase.Models
             return Popularity;
         }
 
+        [ExcelColumn("Formatted Date", 10)]
         public string FormattedDate
         {
             get
@@ -282,6 +377,7 @@ namespace MRA.DTO.Firebase.Models
             }
         }
 
+        [ExcelColumn("Formatted Date (Mini)", 10)]
         public string FormattedDateMini
         {
             get

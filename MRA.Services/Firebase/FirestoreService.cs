@@ -376,25 +376,7 @@ namespace MRA.Services.Firebase
                         drawings = drawings.OrderByDescending(x => x.Time).ToList();
                         break;
                     default:
-
-                        double wDate = 0, wCritic = 0, wPopular = 0, wFavorite = 0;
-                        int wMonths = 0;
-
-                        if (_remoteConfigService != null)
-                        {
-                            wDate = await _remoteConfigService.GetConfigValueAsync(RemoteConfigKeys.PopularityDateWeight);
-                            wMonths = await _remoteConfigService.GetConfigValueAsync(RemoteConfigKeys.PopularityDateMonths);
-                            wCritic = await _remoteConfigService.GetConfigValueAsync(RemoteConfigKeys.PopularityCriticWeight);
-                            wPopular = await _remoteConfigService.GetConfigValueAsync(RemoteConfigKeys.PopularityPopularWeight);
-                            wFavorite = await _remoteConfigService.GetConfigValueAsync(RemoteConfigKeys.PopularityFavoriteWeight);
-                        }
-
-                        foreach (var d in drawings)
-                        {
-                            d.CalculatePopularity(wDate, wMonths, wCritic, wPopular, wFavorite);
-                        }
-
-                        drawings = drawings.OrderByDescending(x => x.Popularity).ToList();
+                        drawings = (await CalculatePopularityOfListDrawings(drawings)).OrderByDescending(x => x.Popularity).ToList();
                         break;
                 }
             }
@@ -428,6 +410,28 @@ namespace MRA.Services.Firebase
 
             results.UpdatefilteredDrawings(drawings);
             return results;
+        }
+
+        public async Task<List<Drawing>> CalculatePopularityOfListDrawings(List<Drawing> drawings)
+        {
+            double wDate = 0, wCritic = 0, wPopular = 0, wFavorite = 0;
+            int wMonths = 0;
+
+            if (_remoteConfigService != null)
+            {
+                wDate = await _remoteConfigService.GetConfigValueAsync(RemoteConfigKeys.PopularityDateWeight);
+                wMonths = await _remoteConfigService.GetConfigValueAsync(RemoteConfigKeys.PopularityDateMonths);
+                wCritic = await _remoteConfigService.GetConfigValueAsync(RemoteConfigKeys.PopularityCriticWeight);
+                wPopular = await _remoteConfigService.GetConfigValueAsync(RemoteConfigKeys.PopularityPopularWeight);
+                wFavorite = await _remoteConfigService.GetConfigValueAsync(RemoteConfigKeys.PopularityFavoriteWeight);
+            }
+
+            foreach (var d in drawings)
+            {
+                d.CalculatePopularity(wDate, wMonths, wCritic, wPopular, wFavorite);
+            }
+
+            return drawings;
         }
 
         public async Task<List<Drawing>> Filter(DrawingFilter filter)

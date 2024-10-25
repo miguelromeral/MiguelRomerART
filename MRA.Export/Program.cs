@@ -6,6 +6,9 @@ using OfficeOpenXml.Style;
 using OfficeOpenXml.Table;
 using System.Drawing;
 using MRA.Services.Firebase;
+using MRA.DTO.Excel.Attributes;
+using MRA.DTO.Firebase.Models;
+using Microsoft.Extensions.Caching.Memory;
 
 class Program
 {
@@ -29,53 +32,61 @@ class Program
             var epplusLicenseContext = _configuration["EPPlus:ExcelPackage:LicenseContext"];
             ExcelPackage.LicenseContext = (LicenseContext)Enum.Parse(typeof(LicenseContext), epplusLicenseContext);
 
-
             // Configuración de Firestore
             helper.ShowMessageInfo("Registrando credenciales de Firebase");
-            FirebaseHelper.SetCredentialsLocally(@".\Credentials\romerart-6a6c3-firebase-adminsdk-4yop5-839e7a0035.json");
+            var credentialsPath = @".\Credentials\romerart-6a6c3-firebase-adminsdk-4yop5-839e7a0035.json";
+            FirebaseHelper.SetCredentialsLocally(credentialsPath);
 
             var projectId = _configuration["Firebase:ProjectID"];
             string collectionName = _configuration["Firebase:CollectionDrawings"];
-            FirestoreDb db = FirestoreDb.Create(projectId);
-            //var firestoreService = new FirestoreService(projectId, _configuration["AzureStorage:BlobPath"]);
+            //FirestoreDb db = FirestoreDb.Create(projectId);
+            var firestoreService = new FirestoreService(projectId, _configuration["AzureStorage:BlobPath"]);
+            firestoreService.SetCollectionNames(
+                _configuration["Firebase:CollectionDrawings"],
+                _configuration["Firebase:CollectionCollections"],
+                _configuration["Firebase:CollectionInspirations"]
+                );
+            
+            var remoteConfigService = new RemoteConfigService(new MemoryCache(new MemoryCacheOptions()), projectId, credentialsPath, 60000);
+            firestoreService.SetRemoteConfigService(remoteConfigService);
 
             helper.ShowMessageInfo("Recuperando documentos desde Firestore");
-
-            // Obtener documentos de Firestore
-            Query query = db.Collection(collectionName);
-            QuerySnapshot snapshot = await query.GetSnapshotAsync();
+            var listDrawings = await firestoreService.GetDrawingsAsync();
+            listDrawings = await firestoreService.CalculatePopularityOfListDrawings(listDrawings);
 
             // Crear un nuevo archivo Excel
             using (ExcelPackage excel = new ExcelPackage())
             {
                 var sheetName = _configuration["Excel:SheetName"];
                 var workSheet = excel.Workbook.Worksheets.Add(sheetName);
-                workSheet.Cells[1, 1].Value = "ID";
-                workSheet.Cells[1, 2].Value = "Name";
-                workSheet.Cells[1, 3].Value = "Path";
-                // Agrega más encabezados según tus propiedades
+                workSheet.View.FreezePanes(2, 2);
 
-                int row = 2;
-                int numberDocuments = snapshot.Documents.Count;
-                foreach (var document in snapshot.Documents)
+                var drawingProperties = ExcelHelper.GetPropertiesAttributes<Drawing>();
+
+                int col = 1;
+                foreach (var prop in drawingProperties)
                 {
-                    helper.ShowMessageInfo($"Procesando documento ({row - 1}/{numberDocuments}): "+document.Id);
-                    workSheet.Cells[row, 1].Value = document.Id;
-                    workSheet.Cells[row, 2].Value = document.GetValue<string>("name");
-                    workSheet.Cells[row, 3].Value = document.GetValue<string>("path");
+                    workSheet.Cells[1, col].Value = prop.Attribute.Name;
+                    col++;
+                }
+
+                int numberDocuments = listDrawings.Count;
+                int row = 2;
+                foreach (var drawing in listDrawings.OrderBy(x => x.Id)) // drawingsList es la lista de tus objetos Drawing
+                {
+                    helper.ShowMessageInfo($"Procesando documento ({row - 1}/{numberDocuments}): "+drawing.Id);
+                    col = 1;
+                    foreach (var prop in drawingProperties)
+                    {
+                        workSheet.Cells[row, col].Value = prop.Property.GetValue(drawing); // Obtener el valor de la propiedad
+                        col++;
+                    }
                     row++;
                 }
-                
+
                 helper.ShowMessageInfo("Preparando formato de Tabla");
-
-                // Crear el rango de la tabla
-                var dataRange = workSheet.Cells[1, 1, row - 1, 3];
-                var tableName = _configuration["Excel:Table:Name"];
-                var table = workSheet.Tables.Add(dataRange, tableName);
-                table.TableStyle = TableStyles.Medium6;
-
-                // Dar formato de color a la primera fila (encabezado)
-                ExcelHelper.StyleCellsHeader(ref workSheet, 1, 1, 1, 3);
+                ExcelHelper.CreateTable(ref workSheet, _configuration["Excel:Table:Name"], 1, 1, row - 1, drawingProperties.Count);
+                ExcelHelper.StyleCellsHeader(ref workSheet, 1, 1, 1, drawingProperties.Count);
 
                 helper.ShowMessageInfo("Preparando fichero para guardar");
 
