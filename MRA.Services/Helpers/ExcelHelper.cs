@@ -35,6 +35,14 @@ namespace MRA.Services.Helpers
             table.TableStyle = TableStyles.Light6;
         }
 
+        public static void SetBold(ref ExcelWorksheet workSheet, int beginRow, int beginColumn, int endRow, int endColumn)
+        {
+            using (var range = workSheet.Cells[beginRow, beginColumn, endRow, endColumn])
+            {
+                range.Style.Font.Bold = true;
+            }
+        }
+
         public static void StyleCellsHeader(ref ExcelWorksheet workSheet, int beginRow, int beginColumn, int endRow, int endColumn)
         {
             // Dar formato de color a la primera fila (encabezado)

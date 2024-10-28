@@ -38,7 +38,7 @@ namespace MRA.DTO.Firebase.Converters
                 Comment = drawingDocument.comment,
                 CommentPros = drawingDocument.comment_pros,
                 CommentCons = drawingDocument.comment_cons,
-                ListCommentsStyle = drawingDocument.comment_style,
+                ListCommentsStyle = drawingDocument.comment_style ?? new List<string>(),
                 Filter = drawingDocument.filter,
                 Views = drawingDocument.views,
                 Likes = drawingDocument.likes,

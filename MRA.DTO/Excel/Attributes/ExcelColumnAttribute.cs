@@ -1,4 +1,6 @@
 ﻿
+using MRA.DTO.Firebase.Models;
+
 namespace MRA.DTO.Excel.Attributes;
 
 [AttributeUsage(AttributeTargets.Property)]
@@ -7,9 +9,12 @@ public class ExcelColumnAttribute : Attribute
     public string Name { get; }
     public int Order { get; }
 
-    public ExcelColumnAttribute(string name, int order)
+    public bool WrapText = false;
+
+    public ExcelColumnAttribute(string name, int order, bool wrapText = false)
     {
         Name = name;
         Order = order;
+        WrapText = wrapText;
     }
 }

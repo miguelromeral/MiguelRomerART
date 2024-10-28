@@ -75,27 +75,73 @@ namespace MRA.DTO.Firebase.Models
                 {4, "Samsung Galaxy"},
             };
 
+        #region Document Data
         [ExcelColumn("ID", 1)]
         public string Id { get; set; }
-        
+        #endregion
+
+        #region Azure Image
+        public string UrlBase { get; set; }
+
         [ExcelColumn("Path", 10)]
         public string Path { get; set; }
 
-        [ExcelColumn("Path Thumbnail", 10)]
+        [ExcelColumn("URL", 11)]
+        public string Url { get { return UrlBase + Path; } }
+
+        [ExcelColumn("Path Thumbnail", 15)]
         public string PathThumbnail { get; set; }
-        public string UrlBase { get; set; }
 
-        [ExcelColumn("Visible", 20)]
-        public bool Visible { get; set; }
+        [ExcelColumn("URL Thumbnail", 16)]
+        public string UrlThumbnail { get { return UrlBase + PathThumbnail; } }
+        #endregion
 
-        [ExcelColumn("#Type", 10)]
+        #region Title
+        [ExcelColumn("Title", 20)]
+        public string Title { get; set; }
+
+        public bool Favorite { get; set; }
+
+        [ExcelColumn("Favorite", 21)]
+        public string FavoriteExcel { get { return Favorite ? "Favorite" : "";  } }
+        #endregion
+
+        #region Character
+
+        [ExcelColumn("Name", 30)]
+        public string Name { get; set; }
+
+        [ExcelColumn("Model Name", 31)]
+        public string ModelName { get; set; }
+        #endregion
+
+        #region Product
+        [ExcelColumn("#Product Type", 40)]
+        public int ProductType { get; set; }
+
+        [ExcelColumn("Product Type", 41)]
+        public string ProductTypeName
+        {
+            get
+            {
+                if (DRAWING_PRODUCT_TYPES.ContainsKey(ProductType))
+                {
+
+                    return DRAWING_PRODUCT_TYPES[ProductType];
+                }
+                return "Otros";
+            }
+        }
+
+        [ExcelColumn("Product", 42)]
+        public string ProductName { get; set; }
+        #endregion
+
+        #region Style
+        [ExcelColumn("#Type", 50)]
         public int Type { get; set; }
 
-        [ExcelColumn("Tags", 10)]
-        public string TagsText { get; set; }
-        public List<string> Tags { get; set; }
-        
-        [ExcelColumn("Type", 10)]
+        [ExcelColumn("Type", 51)]
         public string TypeName
         {
             get
@@ -110,23 +156,230 @@ namespace MRA.DTO.Firebase.Models
             }
         }
 
-        [ExcelColumn("Name", 2)]
-        public string Name { get; set; }
-        
-        [ExcelColumn("Model Name", 3)]
-        public string ModelName { get; set; }
+        [ExcelColumn("#Software", 52)]
+        public int Software { get; set; }
 
-        [ExcelColumn("Twitter URL", 10)]
-        public string TwitterUrl { get; set; }
+        [ExcelColumn("Software", 53)]
+        public string SoftwareName
+        {
+            get
+            {
+                if (DRAWING_SOFTWARE.ContainsKey(Software))
+                {
 
-        [ExcelColumn("Instagram URL", 10)]
-        public string InstagramUrl { get; set; }
-        
-        [ExcelColumn("Spotify URL", 10)]
+                    return DRAWING_SOFTWARE[Software];
+                }
+                return "Ninguno";
+            }
+        }
+
+        [ExcelColumn("#Paper", 54)]
+        public int Paper { get; set; }
+
+        [ExcelColumn("Paper", 55)]
+        public string PaperHuman
+        {
+            get
+            {
+                if (DRAWING_PAPER_SIZE.ContainsKey(Paper))
+                {
+
+                    return DRAWING_PAPER_SIZE[Paper];
+                }
+                return "Otro";
+            }
+        }
+
+        [ExcelColumn("#Filter", 56)]
+        public int Filter { get; set; }
+
+        [ExcelColumn("Filter", 57)]
+        public string FilterName
+        {
+            get
+            {
+                if (DRAWING_FILTER.ContainsKey(Filter))
+                {
+                    return DRAWING_FILTER[Filter];
+                }
+                return "Ninguno";
+            }
+        }
+        #endregion
+
+        #region Details
+        [ExcelColumn("Date", 60)]
+        public string Date { get; set; }
+
+        public DateTime DateObject { get; set; }
+
+        public string DateHyphen { get; set; }
+
+        [ExcelColumn("Formatted Date", 63)]
+        public string FormattedDate
+        {
+            get
+            {
+                return Utilities.FormattedDate(Date);
+            }
+        }
+
+        public string FormattedDateMini
+        {
+            get
+            {
+                return Utilities.FormattedDateMini(Date);
+            }
+        }
+
+        [ExcelColumn("Time (Minutes)", 65)]
+        public int Time { get; set; }
+
+        [ExcelColumn("Time", 66)]
+        public string TimeHuman
+        {
+            get
+            {
+                if (Time > 0)
+                {
+                    int horas = Time / 60;
+                    int minutosRestantes = Time % 60;
+
+                    string resultado = (horas > 0 ? horas + "h " : "") + (minutosRestantes > 0 ? minutosRestantes + "min" : "");
+
+                    return resultado;
+                }
+                else
+                {
+                    return "Sin Estimación";
+                }
+            }
+        }
+
+        [ExcelColumn("Views", 67)]
+        public long Views { get; set; }
+
+        public string ViewsHuman { get { return Drawing.FormatoLegible(Views); } }
+
+        [ExcelColumn("Likes", 69)]
+        public long Likes { get; set; }
+
+        public string LikesHuman { get { return Drawing.FormatoLegible(Likes); } }
+        #endregion
+
+        #region Scores
+        [ExcelColumn("Score Critic", 70)]
+        public int ScoreCritic { get; set; }
+
+        [ExcelColumn("Score Popular", 71)]
+        public double ScorePopular { get; set; }
+
+        [ExcelColumn("Votes Popular", 72)]
+        public int VotesPopular { get; set; }
+
+        [ExcelColumn("Score Popular (Readable)", 73)]
+        public int ScorePopularHuman { get { return CalculateScorePopular(ScorePopular); } }
+        public static int CalculateScorePopular(double score) => (int)Math.Round(score);
+        #endregion
+
+        #region Comments
+        public string Comment { get; set; }
+
+        public List<string> ListComments
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(Comment))
+                    return new List<string>();
+                else
+                    return Comment.Split(SEPARATOR_COMMENTS).ToList();
+            }
+        }
+
+        [ExcelColumn("List Comments", 81, true)]
+        public string ListCommentsExcel
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(Comment))
+                    return string.Empty;
+                else
+                    return String.Join("\n", Comment.Split(SEPARATOR_COMMENTS));
+            }
+        }
+        #endregion
+
+        #region Style Comments
+        public List<string> ListCommentsStyle { get; set; }
+
+        [ExcelColumn("Style Comment", 91, true)]
+        public string ListStyleCommentsExcel
+        {
+            get
+            {
+                return ListCommentsStyle.Count == 0 ? "" : String.Join("\n", ListCommentsStyle);
+            }
+        }
+        #endregion
+
+        #region Positive Comments
+        public string CommentPros { get; set; }
+
+        public List<string> ListCommentPros
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(CommentPros))
+                    return new List<string>();
+                else
+                    return CommentPros.Split(SEPARATOR_COMMENTS).ToList();
+            }
+        }
+
+        [ExcelColumn("Positive Comments", 100, true)]
+        public string ListPositiveCommentsExcel
+        {
+            get
+            {
+                return ListCommentPros.Count == 0 ? "" : String.Join("\n", ListCommentPros);
+            }
+        }
+        #endregion
+
+        #region Negative Comments
+        public string CommentCons { get; set; }
+
+        public List<string> ListCommentCons
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(CommentCons))
+                    return new List<string>();
+                else
+                    return CommentCons.Split(SEPARATOR_COMMENTS).ToList();
+            }
+        }
+
+        [ExcelColumn("Negative Comments", 100, true)]
+        public string ListNegativeCommentsExcel
+        {
+            get
+            {
+                return ListCommentCons.Count == 0 ? "" : String.Join("\n", ListCommentCons);
+            }
+        }
+        #endregion
+
+        #region References
+        [ExcelColumn("Reference URL", 120)]
+        public string ReferenceUrl { get; set; }
+
+        [ExcelColumn("Spotify URL", 121)]
         public string SpotifyUrl { get; set; }
 
-        [ExcelColumn("Spotify Track ID", 10)]
-        public string SpotifyTrackId { 
+        [ExcelColumn("Spotify Track ID", 122)]
+        public string SpotifyTrackId
+        {
             get
             {
                 return String.IsNullOrEmpty(SpotifyUrl) ? "" : GetSpotifyTrackByUrl(SpotifyUrl);
@@ -151,240 +404,69 @@ namespace MRA.DTO.Firebase.Models
             }
         }
 
-        [ExcelColumn("Title", 10)]
-        public string Title { get; set; }
+        public bool Visible { get; set; }
 
-        [ExcelColumn("Date", 10)]
-        public string Date { get; set; }
+        [ExcelColumn("Visible", 123)]
+        public string VisibleExcel { get { return Visible ? "Visible" : "Oculto"; } }
+        #endregion
 
-        [ExcelColumn("Date Object", 10)]
-        public DateTime DateObject { get; set; }
+        #region Social Networks
+        [ExcelColumn("Twitter URL", 130)]
+        public string TwitterUrl { get; set; }
 
-        [ExcelColumn("Date Hyphen", 10)]
-        public string DateHyphen { get; set; }
-        
-        [ExcelColumn("#Software", 10)]
-        public int Software { get; set; }
+        [ExcelColumn("Instagram URL", 131)]
+        public string InstagramUrl { get; set; }
+        #endregion
 
-        [ExcelColumn("Software", 10)]
-        public string SoftwareName
+        #region Tags
+        public string TagsText { get; set; }
+
+        public List<string> Tags { get; set; }
+
+        [ExcelColumn("Tags", 140)]
+        public string TagsExcel
         {
             get
             {
-                if (DRAWING_SOFTWARE.ContainsKey(Software))
-                {
-
-                    return DRAWING_SOFTWARE[Software];
-                }
-                return "Ninguno";
+                return Tags.Count == 0 ? "" : String.Join(", ", Tags);
             }
         }
+        #endregion
 
-        [ExcelColumn("#Filter", 10)]
-        public int Filter { get; set; }
-
-        [ExcelColumn("Filter", 10)]
-        public string FilterName
+        #region Popularity
+        [ExcelColumn("Popularity", 150)]
+        public double Popularity
         {
             get
             {
-                if (DRAWING_FILTER.ContainsKey(Filter))
-                {
-                    return DRAWING_FILTER[Filter];
-                }
-                return "Ninguno";
-            }
-        }
-
-        [ExcelColumn("#Paper", 10)]
-        public int Paper { get; set; }
-
-        [ExcelColumn("Paper", 10)]
-        public string PaperHuman
-        {
-            get
-            {
-                    if (DRAWING_PAPER_SIZE.ContainsKey(Paper))
-                    {
-
-                    return DRAWING_PAPER_SIZE[Paper];
-                    }
-                    return "Otro";
-            }
-        }
-
-        [ExcelColumn("Time (Minutes)", 10)]
-        public int Time { get; set; }
-
-        [ExcelColumn("Time", 10)]
-        public string TimeHuman {
-            get
-            {
-                if (Time > 0)
-                {
-                    int horas = Time / 60;
-                    int minutosRestantes = Time % 60;
-
-                    string resultado = (horas > 0 ? horas+"h " : "")+(minutosRestantes > 0 ? minutosRestantes+"min" : "");
-
-                    return resultado;
-                }
-                else
-                {
-                    return "Sin Estimación";
-                }
-            } 
-        }
-
-        [ExcelColumn("#Product Type", 10)]
-        public int ProductType { get; set; }
-
-        [ExcelColumn("Product Type", 10)]
-        public string ProductTypeName {
-            get
-            {
-                    if (DRAWING_PRODUCT_TYPES.ContainsKey(ProductType))
-                    {
-
-                    return DRAWING_PRODUCT_TYPES[ProductType];
-                    }
-                    return "Otros";
-            } }
-
-        [ExcelColumn("Product", 10)]
-        public string ProductName { get; set; }
-
-        [ExcelColumn("Comments", 10)]
-        public string Comment { get; set; }
-
-        [ExcelColumn("Positive Comments", 10)]
-        public string CommentPros { get; set; }
-        public List<string> ListCommentsStyle { get; set; }
-
-        [ExcelColumn("#Views", 10)]
-        public long Views { get; set; }
-
-        [ExcelColumn("Views", 10)]
-        public string ViewsHuman { get { return Drawing.FormatoLegible(Views); } }
-        
-        [ExcelColumn("#Likes", 10)]
-        public long Likes { get; set; }
-        
-        [ExcelColumn("Likes", 10)]
-        public string LikesHuman { get { return Drawing.FormatoLegible(Likes); } }
-        
-        [ExcelColumn("Favorite", 10)]
-        public bool Favorite { get; set; }
-        
-        [ExcelColumn("Reference URL", 10)]
-        public string ReferenceUrl { get; set; }
-
-        [ExcelColumn("Score Critic", 10)]
-        public int ScoreCritic { get; set; }
-        
-        [ExcelColumn("Score Popular", 10)]
-        public double ScorePopular { get; set; }
-        
-        [ExcelColumn("Votes Popular", 10)]
-        public int VotesPopular { get; set; }
-        
-        [ExcelColumn("Score Popular (Readable)", 10)]
-        public int ScorePopularHuman { get { return CalculateScorePopular(ScorePopular); } }
-
-
-        public static int CalculateScorePopular(double score) => (int)Math.Round(score);
-
-        [ExcelColumn("List Comments", 10)]
-        public List<string> ListComments
-        {
-            get
-            {
-                if (String.IsNullOrEmpty(Comment))
-                    return new List<string>();
-                else
-                    return Comment.Split(SEPARATOR_COMMENTS).ToList();
-            }
-        }
-
-        public List<string> ListCommentPros
-        {
-            get
-            {
-                if (String.IsNullOrEmpty(CommentPros))
-                    return new List<string>();
-                else
-                    return CommentPros.Split(SEPARATOR_COMMENTS).ToList();
-            }
-        }
-
-        [ExcelColumn("Negative Comments", 10)]
-        public string CommentCons { get; set; }
-
-        public List<string> ListCommentCons
-        {
-            get
-            {
-                if (String.IsNullOrEmpty(CommentCons))
-                    return new List<string>();
-                else
-                    return CommentCons.Split(SEPARATOR_COMMENTS).ToList();
-            }
-        }
-
-        [ExcelColumn("URL", 10)]
-        public string Url { get { return UrlBase + Path; } }
-        
-        [ExcelColumn("URL Thumbnail", 10)]
-        public string UrlThumbnail { get { return UrlBase + PathThumbnail; } }
-
-        
-        [ExcelColumn("Popularity Date", 10)]
-        public double PopularityDate { get; set; }
-
-        [ExcelColumn("Popularity Critic", 10)]
-        public double PopularityCritic { get; set; }
-        
-        [ExcelColumn("Popularity Popular", 10)]
-        public double PopularityPopular { get; set; }
-
-        [ExcelColumn("Popularity Favorite", 10)]
-        public double PopularityFavorite{ get; set; }
-
-        [ExcelColumn("Popularity", 10)]
-        public double Popularity { get {
                 return PopularityDate + PopularityCritic + PopularityPopular + PopularityFavorite;
             }
         }
 
+        [ExcelColumn("Popularity Date", 151)]
+        public double PopularityDate { get; set; }
+
+        [ExcelColumn("Popularity Critic", 152)]
+        public double PopularityCritic { get; set; }
+
+        [ExcelColumn("Popularity Popular", 153)]
+        public double PopularityPopular { get; set; }
+
+        [ExcelColumn("Popularity Favorite", 154)]
+        public double PopularityFavorite { get; set; }
+
         public double CalculatePopularity(double dateWeight, int months, double criticWeight, double popularWeight, double favoriteWeight)
         {
-            PopularityCritic = Utilities.CalculatePopularity(DateObject, dateWeight, DateTime.Now.AddMonths(- months), DateTime.Now);
+            PopularityCritic = Utilities.CalculatePopularity(DateObject, dateWeight, DateTime.Now.AddMonths(-months), DateTime.Now);
             PopularityDate = Utilities.CalculatePopularity(ScoreCritic, criticWeight);
             PopularityPopular = Utilities.CalculatePopularity(ScorePopular, popularWeight);
             PopularityFavorite = (Favorite ? favoriteWeight : 0);
 
             //Debug.WriteLine($"{dateWeight.ToString().PadRight(5)} {months.ToString().PadRight(5)} {criticWeight.ToString().PadRight(5)} " +
-                //$"{popularWeight.ToString().PadRight(5)} {favoriteWeight.ToString().PadRight(5)} ");
+            //$"{popularWeight.ToString().PadRight(5)} {favoriteWeight.ToString().PadRight(5)} ");
             return Popularity;
         }
-
-        [ExcelColumn("Formatted Date", 10)]
-        public string FormattedDate
-        {
-            get
-            {
-                return Utilities.FormattedDate(Date);
-            }
-        }
-
-        [ExcelColumn("Formatted Date (Mini)", 10)]
-        public string FormattedDateMini
-        {
-            get
-            {
-                return Utilities.FormattedDateMini(Date);
-            }
-        }
+        #endregion
 
         public override string ToString()
         {

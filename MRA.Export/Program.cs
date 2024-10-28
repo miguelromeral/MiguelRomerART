@@ -78,7 +78,16 @@ class Program
                     col = 1;
                     foreach (var prop in drawingProperties)
                     {
-                        workSheet.Cells[row, col].Value = prop.Property.GetValue(drawing); // Obtener el valor de la propiedad
+                        var cell = workSheet.Cells[row, col];
+                        cell.Value = prop.Property.GetValue(drawing); // Obtener el valor de la propiedad
+                        //helper.ShowMessageWarning($"{prop.Attribute.Name} => {prop.Attribute.WrapText}");
+                        if (prop.Attribute.WrapText)
+                        {
+                            cell.Style.WrapText = true;
+                            cell.Style.VerticalAlignment = ExcelVerticalAlignment.Top;
+                            workSheet.Row(row).Height = 60;
+                            //workSheet.Column(col).Width = 200;
+                        }
                         col++;
                     }
                     row++;
@@ -87,6 +96,7 @@ class Program
                 helper.ShowMessageInfo("Preparando formato de Tabla");
                 ExcelHelper.CreateTable(ref workSheet, _configuration["Excel:Table:Name"], 1, 1, row - 1, drawingProperties.Count);
                 ExcelHelper.StyleCellsHeader(ref workSheet, 1, 1, 1, drawingProperties.Count);
+                ExcelHelper.SetBold(ref workSheet, 2, 1, listDrawings.Count + 1, 1);
 
                 helper.ShowMessageInfo("Preparando fichero para guardar");
 
