@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Runtime.Intrinsics.Arm;
+using MRA.Services.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -69,6 +70,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+var firebaseHelper = new FirebaseHelper(builder.Configuration);
 
 // Configuración de Azure
 logger.LogInformation("Configurando conexión con Azure Storage");
@@ -83,41 +85,23 @@ builder.Services.AddSingleton(azureStorageService);
 logger.LogInformation("Configurando credenciales de Google Firebase");
 var serviceAccountPath = "";
 
-// Si estás en Azure, crea el archivo temporal desde la variable de entorno
-var googleCredentialsJson = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS_JSON");
-if (!string.IsNullOrEmpty(googleCredentialsJson))
-{
-    logger.LogInformation("Detectada variable de entorno para las credenciales. Creando fichero temporal");
-    var tempCredentialPath = Path.Combine(Path.GetTempPath(), "firebase-credentials.json");
-    File.WriteAllText(tempCredentialPath, googleCredentialsJson);
-
-    // Establecer la variable de entorno GOOGLE_APPLICATION_CREDENTIALS para que apunte al archivo temporal
-    serviceAccountPath = tempCredentialPath;
-}
-else
-{
-    // Si estoy en local
-    logger.LogInformation("Obteniendo credenciales desde fichero almacenado en el sistema de archivos");
-    serviceAccountPath = @".\Credentials\romerart-6a6c3-firebase-adminsdk-4yop5-839e7a0035.json";
-}
-Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", serviceAccountPath);
+firebaseHelper.LoadCredentials();
 
 // Configuración de Firebase
 logger.LogInformation("Configurando credenciales de Google Firebase");
-var firebaseProjectId = builder.Configuration.GetValue<string>("Firebase:ProjectID");
 var secondsCache = builder.Configuration.GetValue<int>("CacheSeconds");
 
 //var accessToken = await GoogleCredentialHelper.GetAccessTokenAsync(serviceAccountPath);
 logger.LogInformation("Creando servicio de Remote Config");
-var remoteConfigService = new RemoteConfigService(new MemoryCache(new MemoryCacheOptions()), firebaseProjectId, serviceAccountPath, secondsCache);
+var remoteConfigService = new RemoteConfigService(new MemoryCache(new MemoryCacheOptions()), firebaseHelper.ProjectId, serviceAccountPath, secondsCache);
 builder.Services.AddSingleton(remoteConfigService);
 
 logger.LogInformation("Creando servicio de Firebase");
-var firebaseService = new FirestoreService(firebaseProjectId, builder.Configuration.GetValue<string>("AzureStorage:BlobPath"));
+var firebaseService = new FirestoreService(firebaseHelper.ProjectId, builder.Configuration.GetValue<string>("AzureStorage:BlobPath"));
 firebaseService.SetCollectionNames(
-    builder.Configuration.GetValue<string>("Firebase:CollectionDrawings"),
-    builder.Configuration.GetValue<string>("Firebase:CollectionCollections"),
-    builder.Configuration.GetValue<string>("Firebase:CollectionInspirations"));
+    firebaseHelper.CollectionDrawings,
+    firebaseHelper.CollectionCollections,
+    firebaseHelper.CollectionInspirations);
 firebaseService.SetRemoteConfigService(remoteConfigService);
 
 builder.Services.AddSingleton<IFirestoreService>(firebaseService);
