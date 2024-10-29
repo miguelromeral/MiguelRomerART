@@ -86,13 +86,13 @@ namespace MRA.DTO.Firebase.Models
         [ExcelColumn("Path", 10)]
         public string Path { get; set; }
 
-        [ExcelColumn("URL", 11, hidden: true)]
+        [ExcelColumn("URL", 11, hidden: true, url: true)]
         public string Url { get { return UrlBase + Path; } }
 
         [ExcelColumn("Path Thumbnail", 15)]
         public string PathThumbnail { get; set; }
 
-        [ExcelColumn("URL Thumbnail", 16, hidden: true)]
+        [ExcelColumn("URL Thumbnail", 16, hidden: true, url: true)]
         public string UrlThumbnail { get { return UrlBase + PathThumbnail; } }
         #endregion
 
@@ -208,9 +208,9 @@ namespace MRA.DTO.Firebase.Models
         #endregion
 
         #region Details
-        [ExcelColumn("Date", 60, hidden: true)]
         public string Date { get; set; }
 
+        [ExcelColumn("Date", 60)]
         public DateTime DateObject { get; set; }
 
         public string DateHyphen { get; set; }
@@ -284,6 +284,7 @@ namespace MRA.DTO.Firebase.Models
         #region Comments
         public string Comment { get; set; }
 
+        [ExcelColumn("List Comments", 81)]
         public List<string> ListComments
         {
             get
@@ -294,36 +295,17 @@ namespace MRA.DTO.Firebase.Models
                     return Comment.Split(SEPARATOR_COMMENTS).ToList();
             }
         }
-
-        [ExcelColumn("List Comments", 81, true)]
-        public string ListCommentsExcel
-        {
-            get
-            {
-                if (String.IsNullOrEmpty(Comment))
-                    return string.Empty;
-                else
-                    return String.Join("\n", Comment.Split(SEPARATOR_COMMENTS));
-            }
-        }
         #endregion
 
         #region Style Comments
+        [ExcelColumn("Style Comment", 91)]
         public List<string> ListCommentsStyle { get; set; }
-
-        [ExcelColumn("Style Comment", 91, true)]
-        public string ListStyleCommentsExcel
-        {
-            get
-            {
-                return ListCommentsStyle.Count == 0 ? "" : String.Join("\n", ListCommentsStyle);
-            }
-        }
         #endregion
 
         #region Positive Comments
         public string CommentPros { get; set; }
 
+        [ExcelColumn("Positive Comments", 100)]
         public List<string> ListCommentPros
         {
             get
@@ -334,20 +316,12 @@ namespace MRA.DTO.Firebase.Models
                     return CommentPros.Split(SEPARATOR_COMMENTS).ToList();
             }
         }
-
-        [ExcelColumn("Positive Comments", 100, true)]
-        public string ListPositiveCommentsExcel
-        {
-            get
-            {
-                return ListCommentPros.Count == 0 ? "" : String.Join("\n", ListCommentPros);
-            }
-        }
         #endregion
 
         #region Negative Comments
         public string CommentCons { get; set; }
 
+        [ExcelColumn("Negative Comments", 100)]
         public List<string> ListCommentCons
         {
             get
@@ -358,22 +332,13 @@ namespace MRA.DTO.Firebase.Models
                     return CommentCons.Split(SEPARATOR_COMMENTS).ToList();
             }
         }
-
-        [ExcelColumn("Negative Comments", 100, true)]
-        public string ListNegativeCommentsExcel
-        {
-            get
-            {
-                return ListCommentCons.Count == 0 ? "" : String.Join("\n", ListCommentCons);
-            }
-        }
         #endregion
 
         #region References
-        [ExcelColumn("Reference URL", 120, hidden: true)]
+        [ExcelColumn("Reference URL", 120, hidden: true, url: true)]
         public string ReferenceUrl { get; set; }
 
-        [ExcelColumn("Spotify URL", 121, hidden: true)]
+        [ExcelColumn("Spotify URL", 121, hidden: true, url: true)]
         public string SpotifyUrl { get; set; }
 
         [ExcelColumn("Spotify Track ID", 122)]
@@ -410,10 +375,10 @@ namespace MRA.DTO.Firebase.Models
         #endregion
 
         #region Social Networks
-        [ExcelColumn("Twitter URL", 130)]
+        [ExcelColumn("Twitter URL", 130, url: true)]
         public string TwitterUrl { get; set; }
 
-        [ExcelColumn("Instagram URL", 131)]
+        [ExcelColumn("Instagram URL", 131, url: true)]
         public string InstagramUrl { get; set; }
         #endregion
 

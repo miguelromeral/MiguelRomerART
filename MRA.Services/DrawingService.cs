@@ -22,8 +22,8 @@ namespace MRA.Services
         private readonly IFirestoreService _firestoreService;
         private readonly RemoteConfigService _remoteConfigService;
 
-        private readonly string CACHE_ALL_DRAWINGS = "all_drawings";
-        private readonly string CACHE_ALL_COLLECTIONS = "all_collections";
+        private const string CACHE_ALL_DRAWINGS = "all_drawings";
+        private const string CACHE_ALL_COLLECTIONS = "all_collections";
 
         public DrawingService(int secondsCache, IMemoryCache cache, AzureStorageService storageService, IFirestoreService firestoreService, 
             RemoteConfigService remoteConfigService) : base(cache)

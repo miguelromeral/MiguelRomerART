@@ -73,11 +73,8 @@ builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnC
 
 // Configuración de Azure
 logger.LogInformation("Configurando conexión con Azure Storage");
-var connectionString = builder.Configuration.GetValue<string>("AzureStorage:ConnectionString");
-var blobStorageContainer = builder.Configuration.GetValue<string>("AzureStorage:BlobStorageContainer");
-var blobURL = builder.Configuration.GetValue<string>("AzureStorage:BlobPath");
 
-var azureStorageService = new AzureStorageService(connectionString, blobStorageContainer, blobURL);
+var azureStorageService = new AzureStorageService(builder.Configuration);
 builder.Services.AddSingleton(azureStorageService);
 
 // Configuración de Credenciales de Firebase
@@ -89,7 +86,7 @@ var secondsCache = builder.Configuration.GetValue<int>("CacheSeconds");
 
 
 logger.LogInformation("Creando servicio de Firebase");
-var firebaseService = new FirestoreService(builder.Configuration, builder.Configuration.GetValue<string>("AzureStorage:BlobPath"));
+var firebaseService = new FirestoreService(builder.Configuration);
 
 //var accessToken = await GoogleCredentialHelper.GetAccessTokenAsync(serviceAccountPath);
 logger.LogInformation("Creando servicio de Remote Config");

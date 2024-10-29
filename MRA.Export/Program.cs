@@ -30,7 +30,7 @@ try
     // Configuración de Firestore
     helper.ShowMessageInfo("Registrando credenciales de Firebase");
 
-    var firestoreService = new FirestoreService(configuration, configuration["AzureStorage:BlobPath"]);
+    var firestoreService = new FirestoreService(configuration);
 
     var remoteConfigService = new RemoteConfigService(new MemoryCache(new MemoryCacheOptions()), firestoreService.ProjectId, firestoreService.CredentialsPath, 60000);
     firestoreService.SetRemoteConfigService(remoteConfigService);

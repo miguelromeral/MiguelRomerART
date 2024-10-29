@@ -33,6 +33,7 @@ namespace MRA.Services.Firebase
         private const string APPSETTING_FIREBASE_COLLECTION_DRAWINGS = "Firebase:CollectionDrawings";
         private const string APPSETTING_FIREBASE_COLLECTION_COLLECTIONS = "Firebase:CollectionCollections";
         private const string APPSETTING_FIREBASE_COLLECTION_INSPIRATIONS = "Firebase:CollectionInspirations";
+        private const string APPSETTING_AZURE_URL_BASE = "AzureStorage:BlobPath";
 
         private const string ENV_GOOGLE_CREDENTIALS_AZURE = "GOOGLE_APPLICATION_CREDENTIALS_JSON";
         private const string ENV_GOOGLE_CREDENTIALS = "GOOGLE_APPLICATION_CREDENTIALS";
@@ -50,6 +51,7 @@ namespace MRA.Services.Firebase
         public string CollectionDrawings { get { return _configuration[APPSETTING_FIREBASE_COLLECTION_DRAWINGS]; } }
         public string CollectionCollections { get { return _configuration[APPSETTING_FIREBASE_COLLECTION_COLLECTIONS]; } }
         public string CollectionInspirations { get { return _configuration[APPSETTING_FIREBASE_COLLECTION_INSPIRATIONS]; } }
+        public string AzureUrlBase { get { return _configuration[APPSETTING_AZURE_URL_BASE]; } }
         public string CredentialsPath
         {
             get
@@ -63,12 +65,12 @@ namespace MRA.Services.Firebase
             }
         }
 
-        public FirestoreService(IConfiguration configuration, string urlBase)
+        public FirestoreService(IConfiguration configuration)
         {
             _configuration = configuration;
             LoadCredentials();
             _firestoreDb = FirestoreDb.Create(ProjectId);
-            SetConverters(urlBase);
+            SetConverters(AzureUrlBase);
         }
 
         public void LoadCredentials()

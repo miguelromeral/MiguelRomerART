@@ -16,15 +16,20 @@ namespace MRA.Services.AzureStorage
 {
     public class AzureStorageService
     {
-        private readonly BlobServiceClient _blobServiceClient;
-        private readonly string BlobStorageContainer;
-        public readonly string BlobURL;
+        private const string APPSETTING_AZURE_URL_BASE = "AzureStorage:BlobPath";
+        private const string APPSETTING_AZURE_BLOB_STORAGE_CONTAINER = "AzureStorage:BlobStorageContainer";
+        private const string APPSETTING_AZURE_BLOB_STORAGE_CONNECTION_STRING = "AzureStorage:ConnectionString";
+        public string BlobURL { get { return _configuration[APPSETTING_AZURE_URL_BASE]; } }
+        public string BlobStorageContainer { get { return _configuration[APPSETTING_AZURE_BLOB_STORAGE_CONTAINER]; } }
+        public string ConnectionString { get { return _configuration[APPSETTING_AZURE_BLOB_STORAGE_CONNECTION_STRING]; } }
 
-        public AzureStorageService(string connectionString, string blobStorageContainer, string blobUrl)
+        private readonly IConfiguration _configuration;
+        private readonly BlobServiceClient _blobServiceClient;
+
+        public AzureStorageService(IConfiguration configuration)
         {
-            BlobStorageContainer = blobStorageContainer;
-            _blobServiceClient = new BlobServiceClient(connectionString);
-            BlobURL = blobUrl;
+            _configuration = configuration;
+            _blobServiceClient = new BlobServiceClient(ConnectionString);
         }
 
         public async Task<List<BlobFileInfo>> ListBlobFilesAsync()

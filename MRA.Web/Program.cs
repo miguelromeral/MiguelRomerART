@@ -17,15 +17,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
-
-var connectionString = builder.Configuration.GetValue<string>("AzureStorage:ConnectionString");
-var blobStorageContainer = builder.Configuration.GetValue<string>("AzureStorage:BlobStorageContainer");
-var blobURL = builder.Configuration.GetValue<string>("AzureStorage:BlobPath");
-
-var azureStorageService = new AzureStorageService(connectionString, blobStorageContainer, blobURL);
+var azureStorageService = new AzureStorageService(builder.Configuration);
 builder.Services.AddSingleton(azureStorageService);
 
-var firebaseService = new FirestoreService(builder.Configuration, builder.Configuration.GetValue<string>("AzureStorage:BlobPath"));
+var firebaseService = new FirestoreService(builder.Configuration);
 
 builder.Services.AddSingleton<IFirestoreService>(firebaseService);
 

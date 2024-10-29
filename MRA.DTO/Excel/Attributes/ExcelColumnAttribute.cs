@@ -9,14 +9,14 @@ public class ExcelColumnAttribute : Attribute
     public string Name { get; }
     public int Order { get; }
 
-    public bool WrapText = false;
+    public bool URL = false;
     public bool Hidden = false;
 
-    public ExcelColumnAttribute(string name, int order, bool wrapText = false, bool hidden = false)
+    public ExcelColumnAttribute(string name, int order, bool hidden = false, bool url = false)
     {
         Name = name;
         Order = order;
-        WrapText = wrapText;
         Hidden = hidden;
+        URL = url;
     }
 }

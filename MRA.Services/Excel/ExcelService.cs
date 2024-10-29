@@ -83,13 +83,31 @@ namespace MRA.Services.Excel
             foreach (var prop in properties)
             {
                 var cell = workSheet.Cells[row, col];
-                cell.Value = prop.Property.GetValue(drawing);
-                if (prop.Attribute.WrapText)
+                object value = prop.Property.GetValue(drawing);
+                cell.Value = value;
+
+
+                if(value is double || value is float || value is decimal)
                 {
+                    cell.Style.Numberformat.Format = "#,##0.00";
+                }else if(value is int)
+                {
+                    cell.Style.Numberformat.Format = "#,##0";
+                }else if(value is DateTime)
+                {
+                    cell.Style.Numberformat.Format = "yyyy/mm/dd";
+                }else if(value is List<string> stringList)
+                {
+                    cell.Value = String.Join("\n", stringList);
                     cell.Style.WrapText = true;
                     cell.Style.VerticalAlignment = ExcelVerticalAlignment.Top;
                     workSheet.Row(row).Height = 60;
-                    //workSheet.Column(col).Width = 200;
+                }
+                if (prop.Attribute.URL && value is string valueUrl && !String.IsNullOrEmpty(valueUrl))
+                {
+                    cell.Hyperlink = new Uri(valueUrl);
+                    cell.Style.Font.UnderLine = true;
+                    cell.Style.Font.Color.SetColor(Color.Blue);
                 }
                 if (prop.Attribute.Hidden && !workSheet.Column(col).Hidden)
                 {

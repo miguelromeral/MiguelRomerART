@@ -24,18 +24,12 @@ try
 
     // Inicializa Firestore
     helper.ShowMessageInfo("Setting up FIRESTORE.");
-    var firebaseService = new FirestoreService(configuration, configuration.GetValue<string>("AzureStorage:BlobPath"));
+    var firebaseService = new FirestoreService(configuration);
 
     helper.ShowMessageInfo("Setting up AZURE STORAGE ACCOUNT.");
-
-    var azureStorageService = new AzureStorageService(
-        configuration.GetValue<string>("AzureStorage:ConnectionString"),
-        configuration.GetValue<string>("AzureStorage:BlobContainer"), 
-        configuration.GetValue<string>("AzureStorage:BlobPath"));
+    var azureStorageService = new AzureStorageService(configuration);
 
     helper.ShowMessageInfo("Everything's working fine!");
-
-
 
     var TIPOS_FIRESTORE = new Dictionary<int, string>()
         {
