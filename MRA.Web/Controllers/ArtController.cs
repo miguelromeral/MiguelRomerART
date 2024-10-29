@@ -56,7 +56,7 @@ namespace MRA.Web.Controllers
 
             model.ModelNameSelect = _drawingService.GetModels(model.Drawings);
 
-            model.ListCollections = await _drawingService.GetAllCollections();
+            model.ListCollections = await _drawingService.GetAllCollections(model.Drawings);
 
             return View(model);
         }

@@ -22,9 +22,10 @@ namespace MRA.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
+            var drawings = await _drawingService.GetAllDrawings();
             var model = new IndexViewModel()
             {
-                Collections = await _drawingService.GetAllCollectionsOrderPositive()
+                Collections = await _drawingService.GetAllCollections(drawings)
             };
 
             return View(model);

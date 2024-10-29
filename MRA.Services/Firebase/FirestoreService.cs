@@ -27,26 +27,72 @@ namespace MRA.Services.Firebase
 {
     public class FirestoreService : IFirestoreService
     {
+        #region App Settings
+        private const string APPSETTING_FIREBASE_CREDENTIALS_PATH = "Firebase:CredentialsPath";
+        private const string APPSETTING_FIREBASE_PROJECTID = "Firebase:ProjectID";
+        private const string APPSETTING_FIREBASE_COLLECTION_DRAWINGS = "Firebase:CollectionDrawings";
+        private const string APPSETTING_FIREBASE_COLLECTION_COLLECTIONS = "Firebase:CollectionCollections";
+        private const string APPSETTING_FIREBASE_COLLECTION_INSPIRATIONS = "Firebase:CollectionInspirations";
+
+        private const string ENV_GOOGLE_CREDENTIALS_AZURE = "GOOGLE_APPLICATION_CREDENTIALS_JSON";
+        private const string ENV_GOOGLE_CREDENTIALS = "GOOGLE_APPLICATION_CREDENTIALS";
+        #endregion
+
+        private readonly IConfiguration _configuration;
         private readonly FirestoreDb _firestoreDb;
-        private string _collectionNameDrawings;
-        private string _collectionNameInspirations;
-        private string _collectionNameCollections;
+        private string _serviceAccountPath = "";
         private DrawingFirebaseConverter _converterDrawing;
         private InspirationFirebaseConverter _converterInspiration;
         private CollectionFirebaseConverter _converterCollection;
         private RemoteConfigService? _remoteConfigService;
 
-        public FirestoreService(string projectId, string urlBase)
+        public string ProjectId { get { return _configuration[APPSETTING_FIREBASE_PROJECTID]; } }
+        public string CollectionDrawings { get { return _configuration[APPSETTING_FIREBASE_COLLECTION_DRAWINGS]; } }
+        public string CollectionCollections { get { return _configuration[APPSETTING_FIREBASE_COLLECTION_COLLECTIONS]; } }
+        public string CollectionInspirations { get { return _configuration[APPSETTING_FIREBASE_COLLECTION_INSPIRATIONS]; } }
+        public string CredentialsPath
         {
-            _firestoreDb = FirestoreDb.Create(projectId);
+            get
+            {
+                if (String.IsNullOrEmpty(_serviceAccountPath))
+                {
+                    throw new Exception("The Google Credentials Path is empty. You should call FirebaseHelper.SetCredentials() first");
+                }
+
+                return _serviceAccountPath;
+            }
+        }
+
+        public FirestoreService(IConfiguration configuration, string urlBase)
+        {
+            _configuration = configuration;
+            LoadCredentials();
+            _firestoreDb = FirestoreDb.Create(ProjectId);
             SetConverters(urlBase);
         }
 
-        public FirestoreService(FirestoreDb db, string urlBase)
+        public void LoadCredentials()
         {
-            _firestoreDb = db;
-            SetConverters(urlBase);
+            _serviceAccountPath = "";
+
+            // Si estás en Azure, crea el archivo temporal desde la variable de entorno
+            var googleCredentialsJson = Environment.GetEnvironmentVariable(ENV_GOOGLE_CREDENTIALS_AZURE);
+            if (!string.IsNullOrEmpty(googleCredentialsJson))
+            {
+                var tempCredentialPath = Path.Combine(Path.GetTempPath(), "firebase-credentials.json");
+                File.WriteAllText(tempCredentialPath, googleCredentialsJson);
+
+                _serviceAccountPath = tempCredentialPath;
+            }
+            else
+            {
+                // Si estoy en local
+                _serviceAccountPath = _configuration[APPSETTING_FIREBASE_CREDENTIALS_PATH];
+            }
+
+            Environment.SetEnvironmentVariable(ENV_GOOGLE_CREDENTIALS, _serviceAccountPath);
         }
+
 
         private void SetConverters(string urlBase)
         {
@@ -60,25 +106,19 @@ namespace MRA.Services.Firebase
             _remoteConfigService = service;
         }
 
-        public void SetCollectionNames(string collectionNameDrawing, string collectionNameCollections, string collectionNameInspirations)
+        public DocumentReference DocumentReference(string collection, string id)
         {
-            SetCollectionNameDrawing(collectionNameDrawing);
-            SetCollectionNameCollections(collectionNameCollections);
-            SetCollectionNameInspirations(collectionNameInspirations);
+            return _firestoreDb.Document($"{collection}/{id}");
         }
-
-        public void SetCollectionNameDrawing(string name) => _collectionNameDrawings = name;
-        public void SetCollectionNameCollections(string name) => _collectionNameCollections = name;
-        public void SetCollectionNameInspirations(string name) => _collectionNameInspirations = name;
 
         public async Task<List<Drawing>> GetDrawingsAsync()
         {
-            if (String.IsNullOrEmpty(_collectionNameDrawings))
+            if (String.IsNullOrEmpty(CollectionDrawings))
             {
                 throw new CollectionNameNotProvidedException("Drawings");
             }
 
-            var collection = _firestoreDb.Collection(_collectionNameDrawings);
+            var collection = _firestoreDb.Collection(CollectionDrawings);
             var documents = (await collection.OrderByDescending("date").GetSnapshotAsync())
                 .Documents.Select(s => s.ConvertTo<DrawingDocument>()).ToList();
 
@@ -88,14 +128,14 @@ namespace MRA.Services.Firebase
 
         public async Task<List<Inspiration>> GetInspirationsAsync()
         {
-            if (String.IsNullOrEmpty(_collectionNameInspirations))
+            if (String.IsNullOrEmpty(CollectionInspirations))
             {
                 throw new CollectionNameNotProvidedException("Inspirations");
             }
 
             try
             {
-                var collection = _firestoreDb.Collection(_collectionNameInspirations);
+                var collection = _firestoreDb.Collection(CollectionInspirations);
                 var snapshot = (await collection.GetSnapshotAsync());
                 var inspdocs = snapshot.Documents.Select(s => s.ConvertTo<InspirationDocument>()).ToList();
 
@@ -128,14 +168,14 @@ namespace MRA.Services.Firebase
 
         public async Task<List<Collection>> GetCollectionsAsync(List<Drawing> drawings)
         {
-            if (String.IsNullOrEmpty(_collectionNameCollections))
+            if (String.IsNullOrEmpty(CollectionCollections))
             {
                 throw new CollectionNameNotProvidedException("Collections");
             }
 
             try
             {
-                var snapshot = (await _firestoreDb.Collection(_collectionNameCollections).GetSnapshotAsync());
+                var snapshot = (await _firestoreDb.Collection(CollectionCollections).GetSnapshotAsync());
                 var collections = snapshot.Documents;
                 var collectionDocs = collections.Select(s => s.ConvertTo<CollectionDocument>()).ToList();
                 return await HandleAllCollections(collectionDocs, drawings);
@@ -177,7 +217,7 @@ namespace MRA.Services.Firebase
 
         public async Task<List<DocumentReference>> SetDrawingsReferencesAsync(string[] ids)
         {
-            if (String.IsNullOrEmpty(_collectionNameDrawings))
+            if (String.IsNullOrEmpty(CollectionDrawings))
             {
                 throw new CollectionNameNotProvidedException("Drawings");
             }
@@ -188,7 +228,7 @@ namespace MRA.Services.Firebase
             {
                 foreach (var id in ids)
                 {
-                    var tmp = _firestoreDb.Document(_collectionNameDrawings + "/" + id);
+                    var tmp = _firestoreDb.Document(CollectionDrawings + "/" + id);
                     list.Add(tmp);
                 }
             }
@@ -436,14 +476,14 @@ namespace MRA.Services.Firebase
 
         public async Task<List<Drawing>> Filter(DrawingFilter filter)
         {
-            if (String.IsNullOrEmpty(_collectionNameDrawings))
+            if (String.IsNullOrEmpty(CollectionDrawings))
             {
                 throw new CollectionNameNotProvidedException("Drawings");
             }
 
             try
             {
-                Query query = _firestoreDb.Collection(_collectionNameDrawings);
+                Query query = _firestoreDb.Collection(CollectionDrawings);
 
                 //query = query.WhereNotEqualTo("visible", false);
 
@@ -617,14 +657,14 @@ namespace MRA.Services.Firebase
 
         public async Task<Drawing> FindDrawingByIdAsync(string documentId, bool updateViews = false)
         {
-            if (String.IsNullOrEmpty(_collectionNameDrawings))
+            if (String.IsNullOrEmpty(CollectionDrawings))
             {
                 throw new CollectionNameNotProvidedException("Drawings");
             }
 
             try
             {
-                DocumentReference docRef = _firestoreDb.Collection(_collectionNameDrawings).Document(documentId);
+                DocumentReference docRef = _firestoreDb.Collection(CollectionDrawings).Document(documentId);
 
                 DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
 
@@ -648,14 +688,14 @@ namespace MRA.Services.Firebase
 
         public async Task<Inspiration> FindInspirationById(string documentId)
         {
-            if (String.IsNullOrEmpty(_collectionNameInspirations))
+            if (String.IsNullOrEmpty(CollectionInspirations))
             {
                 throw new CollectionNameNotProvidedException("Inspirations");
             }
 
             try
             {
-                DocumentReference docRef = _firestoreDb.Collection(_collectionNameInspirations).Document(documentId);
+                DocumentReference docRef = _firestoreDb.Collection(CollectionInspirations).Document(documentId);
 
                 DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
 
@@ -676,14 +716,14 @@ namespace MRA.Services.Firebase
 
         public async Task<Collection> FindCollectionByIdAsync(string documentId, List<Drawing> drawings)
         {
-            if (String.IsNullOrEmpty(_collectionNameCollections))
+            if (String.IsNullOrEmpty(CollectionCollections))
             {
                 throw new CollectionNameNotProvidedException("Collections");
             }
 
             try
             {
-                DocumentReference docRef = _firestoreDb.Collection(_collectionNameCollections).Document(documentId);
+                DocumentReference docRef = _firestoreDb.Collection(CollectionCollections).Document(documentId);
 
                 DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
 
@@ -705,19 +745,19 @@ namespace MRA.Services.Firebase
 
         public async Task RemoveCollectionAsync(string id)
         {
-            if (String.IsNullOrEmpty(_collectionNameCollections))
+            if (String.IsNullOrEmpty(CollectionCollections))
             {
                 throw new CollectionNameNotProvidedException("Collections");
             }
 
-            DocumentReference docRef = _firestoreDb.Collection(_collectionNameCollections).Document(id);
+            DocumentReference docRef = _firestoreDb.Collection(CollectionCollections).Document(id);
             await docRef.DeleteAsync();
         }
 
 
         public async Task UpdateViewsAsync(string documentId)
         {
-            if (String.IsNullOrEmpty(_collectionNameDrawings))
+            if (String.IsNullOrEmpty(CollectionDrawings))
             {
                 throw new CollectionNameNotProvidedException("Drawings");
             }
@@ -727,7 +767,7 @@ namespace MRA.Services.Firebase
             {
                 try
                 {
-                    DocumentReference docRef = _firestoreDb.Collection(_collectionNameDrawings).Document(documentId);
+                    DocumentReference docRef = _firestoreDb.Collection(CollectionDrawings).Document(documentId);
 
                     // Obtiene el documento actual
                     DocumentSnapshot snapshot = await transaction.GetSnapshotAsync(docRef);
@@ -757,7 +797,7 @@ namespace MRA.Services.Firebase
 
         public async Task UpdateLikesAsync(string documentId)
         {
-            if (String.IsNullOrEmpty(_collectionNameDrawings))
+            if (String.IsNullOrEmpty(CollectionDrawings))
             {
                 throw new CollectionNameNotProvidedException("Drawings");
             }
@@ -767,7 +807,7 @@ namespace MRA.Services.Firebase
             {
                 try
                 {
-                    DocumentReference docRef = _firestoreDb.Collection(_collectionNameDrawings).Document(documentId);
+                    DocumentReference docRef = _firestoreDb.Collection(CollectionDrawings).Document(documentId);
 
                     // Obtiene el documento actual
                     DocumentSnapshot snapshot = await transaction.GetSnapshotAsync(docRef);
@@ -797,7 +837,7 @@ namespace MRA.Services.Firebase
 
         public async Task<VoteSubmittedModel> VoteAsync(string documentId, int score)
         {
-            if (String.IsNullOrEmpty(_collectionNameDrawings))
+            if (String.IsNullOrEmpty(CollectionDrawings))
             {
                 throw new CollectionNameNotProvidedException("Drawings");
             }
@@ -811,7 +851,7 @@ namespace MRA.Services.Firebase
                     if (score > 100) score = 100;
                     if (score < 0) score = 0;
 
-                    DocumentReference docRef = _firestoreDb.Collection(_collectionNameDrawings).Document(documentId);
+                    DocumentReference docRef = _firestoreDb.Collection(CollectionDrawings).Document(documentId);
 
                     // Obtiene el documento actual
                     DocumentSnapshot snapshot = await transaction.GetSnapshotAsync(docRef);
@@ -948,14 +988,14 @@ namespace MRA.Services.Firebase
 
         public async Task<Drawing> AddDrawingAsync(Drawing document)
         {
-            if (String.IsNullOrEmpty(_collectionNameDrawings))
+            if (String.IsNullOrEmpty(CollectionDrawings))
             {
                 throw new CollectionNameNotProvidedException("Drawings");
             }
 
             SetAutomaticTags(ref document);
             
-            var collection = _firestoreDb.Collection(_collectionNameDrawings);
+            var collection = _firestoreDb.Collection(CollectionDrawings);
             var drawingDocument = _converterDrawing.ConvertToDocument(document);
 
             // Obtiene una referencia al documento específico en la colección
@@ -970,12 +1010,12 @@ namespace MRA.Services.Firebase
 
         public async Task<Collection> AddCollectionAsync(Collection document, List<Drawing> drawings)
         {
-            if (String.IsNullOrEmpty(_collectionNameCollections))
+            if (String.IsNullOrEmpty(CollectionCollections))
             {
                 throw new CollectionNameNotProvidedException("Drawings");
             }
 
-            var collection = _firestoreDb.Collection(_collectionNameCollections);
+            var collection = _firestoreDb.Collection(CollectionCollections);
             var collectionDocument = _converterCollection.ConvertToDocument(document);
 
             // Obtiene una referencia al documento específico en la colección
@@ -994,23 +1034,23 @@ namespace MRA.Services.Firebase
 
         public DocumentReference GetDbDocumentDrawing(string id)
         {
-            if (String.IsNullOrEmpty(_collectionNameDrawings))
+            if (String.IsNullOrEmpty(CollectionDrawings))
             {
                 throw new CollectionNameNotProvidedException("Drawings");
             }
 
-            return _firestoreDb.Document(_collectionNameDrawings + "/" + id);
+            return _firestoreDb.Document(CollectionDrawings + "/" + id);
         }
 
 
         public async Task AddAsync(Inspiration document)
         {
-            if (String.IsNullOrEmpty(_collectionNameInspirations))
+            if (String.IsNullOrEmpty(CollectionInspirations))
             {
                 throw new CollectionNameNotProvidedException("Inspirations");
             }
 
-            var collection = _firestoreDb.Collection(_collectionNameInspirations);
+            var collection = _firestoreDb.Collection(CollectionInspirations);
             var drawingDocument = _converterInspiration.ConvertToDocument(document);
 
             // Obtiene una referencia al documento específico en la colección

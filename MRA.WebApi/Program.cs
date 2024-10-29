@@ -70,7 +70,6 @@ builder.Services.AddCors(options =>
 });
 
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-var firebaseHelper = new FirebaseHelper(builder.Configuration);
 
 // Configuración de Azure
 logger.LogInformation("Configurando conexión con Azure Storage");
@@ -83,25 +82,20 @@ builder.Services.AddSingleton(azureStorageService);
 
 // Configuración de Credenciales de Firebase
 logger.LogInformation("Configurando credenciales de Google Firebase");
-var serviceAccountPath = "";
-
-firebaseHelper.LoadCredentials();
 
 // Configuración de Firebase
 logger.LogInformation("Configurando credenciales de Google Firebase");
 var secondsCache = builder.Configuration.GetValue<int>("CacheSeconds");
 
-//var accessToken = await GoogleCredentialHelper.GetAccessTokenAsync(serviceAccountPath);
-logger.LogInformation("Creando servicio de Remote Config");
-var remoteConfigService = new RemoteConfigService(new MemoryCache(new MemoryCacheOptions()), firebaseHelper.ProjectId, serviceAccountPath, secondsCache);
-builder.Services.AddSingleton(remoteConfigService);
 
 logger.LogInformation("Creando servicio de Firebase");
-var firebaseService = new FirestoreService(firebaseHelper.ProjectId, builder.Configuration.GetValue<string>("AzureStorage:BlobPath"));
-firebaseService.SetCollectionNames(
-    firebaseHelper.CollectionDrawings,
-    firebaseHelper.CollectionCollections,
-    firebaseHelper.CollectionInspirations);
+var firebaseService = new FirestoreService(builder.Configuration, builder.Configuration.GetValue<string>("AzureStorage:BlobPath"));
+
+//var accessToken = await GoogleCredentialHelper.GetAccessTokenAsync(serviceAccountPath);
+logger.LogInformation("Creando servicio de Remote Config");
+var remoteConfigService = new RemoteConfigService(new MemoryCache(new MemoryCacheOptions()), firebaseService.ProjectId, firebaseService.CredentialsPath, secondsCache);
+builder.Services.AddSingleton(remoteConfigService);
+
 firebaseService.SetRemoteConfigService(remoteConfigService);
 
 builder.Services.AddSingleton<IFirestoreService>(firebaseService);

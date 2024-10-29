@@ -10,37 +10,28 @@ using System;
 using System.Diagnostics;
 using System.Runtime.Intrinsics.Arm;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 var helper = new ConsoleHelper();
 
 try
 {
-    helper.ShowMessageInfo("Setting up FIRESTORE.");
-
-    // Configura Firestore con el archivo de configuración JSON descargado
-    Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @".\Credentials\romerart-6a6c3-firebase-adminsdk-4yop5-839e7a0035.json");
-
-    var firebaseProjecTId = "romerart-6a6c3";
-    var collectionNameDrawings = "drawings";
-    var collectionNameInspirations = "inspirations";
-    var collectionNameCollections = "collections";
-    var collectionNameExperience = "experience";
-    var urlbase = "https://romerartstorageaccount.blob.core.windows.net/romerartblobcontainer/";
-
+    // Configuración de la aplicación
+    var builder = new ConfigurationBuilder()
+        .SetBasePath(Directory.GetCurrentDirectory())
+        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+    var configuration = builder.Build();
 
     // Inicializa Firestore
-    FirestoreDb db = FirestoreDb.Create(firebaseProjecTId);
-
-    var firebaseService = new FirestoreService(db, urlbase);
-    firebaseService.SetCollectionNames(collectionNameDrawings, collectionNameCollections, collectionNameInspirations);
+    helper.ShowMessageInfo("Setting up FIRESTORE.");
+    var firebaseService = new FirestoreService(configuration, configuration.GetValue<string>("AzureStorage:BlobPath"));
 
     helper.ShowMessageInfo("Setting up AZURE STORAGE ACCOUNT.");
 
-    var connectionString = "DefaultEndpointsProtocol=https;AccountName=romerartstorageaccount;AccountKey=yCxyi7V17daYKT6qRSKtc4DyGD4lhxgHSAFD2AXayjDPZW1qtey3Et1bx+bYbdkgn9TCyen82g0q+AStdx4Xmw==;EndpointSuffix=core.windows.net";
-    var blobStorageContainer = "romerartblobcontainer";
-    var blobURL = "https://romerartstorageaccount.blob.core.windows.net/romerartblobcontainer/";
-
-    var azureStorageService = new AzureStorageService(connectionString, blobStorageContainer, blobURL);
+    var azureStorageService = new AzureStorageService(
+        configuration.GetValue<string>("AzureStorage:ConnectionString"),
+        configuration.GetValue<string>("AzureStorage:BlobContainer"), 
+        configuration.GetValue<string>("AzureStorage:BlobPath"));
 
     helper.ShowMessageInfo("Everything's working fine!");
 
@@ -80,7 +71,7 @@ try
                     Id = input,
                     Views = 0,
                     Likes = 0,
-                    UrlBase = urlbase
+                    UrlBase = configuration.GetValue<string>("AzureStorage:BlobPath")
                 };
             }
             else
@@ -306,7 +297,7 @@ try
                 input = helper.FillStringValue(true, "", "New reference [empty if exit]:");
                 if (!String.IsNullOrEmpty(input))
                 {
-                    var tmp = db.Document(collectionNameDrawings+"/" +input);
+                    var tmp = firebaseService.DocumentReference(firebaseService.CollectionDrawings, input);
                     col.DrawingsReferences.Add(tmp);
                 }
             } while (!String.IsNullOrEmpty(input));

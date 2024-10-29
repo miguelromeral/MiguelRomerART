@@ -22,23 +22,11 @@ namespace MRA.Web.Controllers
         public IActionResult Index()
         {
             return RedirectToAction("Me");
-            return View();
         }
 
         public async Task<IActionResult> Me()
         {
             return View(new AboutViewModel() { Inspirations = await _drawingService.GetAllInspirations() });
-        }
-
-        public async Task<IActionResult> Hire()
-        {
-            return RedirectToAction("Me");
-
-            //var model = new ResumeModel()
-            //{
-            //    Resume = await _drawingService.GetAllExperience()
-            //};
-            //return View(model);
         }
     }
 }

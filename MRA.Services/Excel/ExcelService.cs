@@ -91,7 +91,7 @@ namespace MRA.Services.Excel
                     workSheet.Row(row).Height = 60;
                     //workSheet.Column(col).Width = 200;
                 }
-                if (prop.Attribute.Hidden)
+                if (prop.Attribute.Hidden && !workSheet.Column(col).Hidden)
                 {
                     workSheet.Column(col).Hidden = true;
                 }
