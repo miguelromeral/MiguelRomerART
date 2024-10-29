@@ -46,17 +46,30 @@ namespace MRA.DTO.Firebase.Documents
         [FirestoreProperty]
         public string product_name { get; set; }
 
-        [FirestoreProperty]
-        public string comment { get; set; }
+        //[FirestoreProperty]
+        //public string comment { get; set; }
 
         [FirestoreProperty]
-        public string comment_pros { get; set; }
+        public List<string> list_comments { get; set; }
+
+        //[FirestoreProperty]
+        //public List<string> comment_style { get; set; }
 
         [FirestoreProperty]
-        public string comment_cons { get; set; }
+        public List<string> list_comments_style { get; set; }
+
+        //[FirestoreProperty]
+        //public string comment_pros { get; set; }
 
         [FirestoreProperty]
-        public List<string> comment_style { get; set; }
+        public List<string> list_comments_pros { get; set; }
+
+        //[FirestoreProperty]
+        //public string comment_cons { get; set; }
+
+        [FirestoreProperty]
+        public List<string> list_comments_cons { get; set; }
+
 
         [FirestoreProperty]
         public long views { get; set; }

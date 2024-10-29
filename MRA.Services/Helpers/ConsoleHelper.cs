@@ -11,7 +11,6 @@ namespace MRA.Services.Helpers
 {
     public class ConsoleHelper
     {
-
         private int PAD_RIGHT = 10;
 
         public void ShowMessageInfo(string message)
@@ -60,6 +59,13 @@ namespace MRA.Services.Helpers
             ShowMessagePrevious(isNew, previous);
         }
 
+        public void ShowMessage(string field)
+        {
+            Console.ForegroundColor = ConsoleColor.White;
+            ShowMessageInfo("------------------------------------------------------");
+            System.Console.WriteLine("INPUT:".PadRight(PAD_RIGHT) + field.ToUpper());
+        }
+
         public string ReadValueFromConsole()
         {
             Console.ForegroundColor = ConsoleColor.White;
@@ -75,6 +81,14 @@ namespace MRA.Services.Helpers
             {
                 input = previous;
             }
+            ShowValueSet(input.ToString());
+            return input;
+        }
+
+        public string ReadValue()
+        {
+
+            var input = ReadValueFromConsole();
             ShowValueSet(input.ToString());
             return input;
         }
@@ -169,6 +183,12 @@ namespace MRA.Services.Helpers
         {
             ShowMessage(isNew, previous, field);
             return ReadValue(isNew, previous);
+        }
+
+        public string FillStringValue(string field)
+        {
+            ShowMessage(field);
+            return ReadValue();
         }
 
         public void PrintPropreties(object obj)

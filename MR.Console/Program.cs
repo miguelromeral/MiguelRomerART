@@ -235,7 +235,7 @@ try
 
             helper.ShowMessageInfo("Please wait...");
 
-            await firebaseService.AddAsync(inspiration);
+            await firebaseService.AddInspirationAsync(inspiration);
 
 
             helper.ShowMessageInfo("Inserted inspiration with ID '" + inspiration.Id + "' into Firestore.");

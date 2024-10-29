@@ -15,8 +15,12 @@ namespace MRA.DTO.Firebase.Models
 {
     public class Drawing
     {
-        public static string SEPARATOR_COMMENTS = "#";
-        public static string SEPARATOR_TAGS = " ";
+        public const string SEPARATOR_COMMENTS = "#";
+        public const string SEPARATOR_TAGS = " ";
+
+        public const string EXCEL_FAVORITE_VALUE = "Favorite";
+        public const string EXCEL_VISIBLE_VALUE = "Visible";
+        public const string EXCEL_SEPARATOR_COMMENTS = "\n";
 
         public Drawing()
         {
@@ -100,10 +104,8 @@ namespace MRA.DTO.Firebase.Models
         [ExcelColumn("Title", 20)]
         public string Title { get; set; }
 
-        public bool Favorite { get; set; }
-
         [ExcelColumn("Favorite", 21)]
-        public string FavoriteExcel { get { return Favorite ? "Favorite" : "";  } }
+        public bool Favorite { get; set; }
         #endregion
 
         #region Character
@@ -282,19 +284,10 @@ namespace MRA.DTO.Firebase.Models
         #endregion
 
         #region Comments
-        public string Comment { get; set; }
+        //public string Comment { get; set; }
 
         [ExcelColumn("List Comments", 81)]
-        public List<string> ListComments
-        {
-            get
-            {
-                if (String.IsNullOrEmpty(Comment))
-                    return new List<string>();
-                else
-                    return Comment.Split(SEPARATOR_COMMENTS).ToList();
-            }
-        }
+        public List<string> ListComments { get; set; }
         #endregion
 
         #region Style Comments
@@ -303,35 +296,17 @@ namespace MRA.DTO.Firebase.Models
         #endregion
 
         #region Positive Comments
-        public string CommentPros { get; set; }
+        //public string CommentPros { get; set; }
 
         [ExcelColumn("Positive Comments", 100)]
-        public List<string> ListCommentPros
-        {
-            get
-            {
-                if (String.IsNullOrEmpty(CommentPros))
-                    return new List<string>();
-                else
-                    return CommentPros.Split(SEPARATOR_COMMENTS).ToList();
-            }
-        }
+        public List<string> ListCommentsPros { get; set; }
         #endregion
 
         #region Negative Comments
-        public string CommentCons { get; set; }
+        //public string CommentCons { get; set; }
 
         [ExcelColumn("Negative Comments", 100)]
-        public List<string> ListCommentCons
-        {
-            get
-            {
-                if (String.IsNullOrEmpty(CommentCons))
-                    return new List<string>();
-                else
-                    return CommentCons.Split(SEPARATOR_COMMENTS).ToList();
-            }
-        }
+        public List<string> ListCommentsCons { get; set; }
         #endregion
 
         #region References
@@ -368,10 +343,8 @@ namespace MRA.DTO.Firebase.Models
             }
         }
 
-        public bool Visible { get; set; }
-
         [ExcelColumn("Visible", 123)]
-        public string VisibleExcel { get { return Visible ? "Visible" : "Oculto"; } }
+        public bool Visible { get; set; }
         #endregion
 
         #region Social Networks
@@ -385,16 +358,8 @@ namespace MRA.DTO.Firebase.Models
         #region Tags
         public string TagsText { get; set; }
 
-        public List<string> Tags { get; set; }
-
         [ExcelColumn("Tags", 140, hidden: true)]
-        public string TagsExcel
-        {
-            get
-            {
-                return Tags.Count == 0 ? "" : String.Join(", ", Tags);
-            }
-        }
+        public List<string> Tags { get; set; }
         #endregion
 
         #region Popularity

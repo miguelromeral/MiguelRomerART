@@ -224,7 +224,7 @@
                     {
                         <div class="mr-chat-row likes">
                             <div class="mr-chat-message-container slide-top delay1s">
-                                @foreach (var comment in drawing.ListCommentPros)
+                                @foreach (var comment in drawing.ListCommentsPros)
                                 {
                                     <div class="mr-chat-message">
                                         <span>@Html.Raw(comment)</span>
@@ -246,7 +246,7 @@
                     {
                         <div class="mr-chat-row dislikes">
                             <div class="mr-chat-message-container slide-top delay2s">
-                                @foreach (var comment in drawing.ListCommentCons)
+                                @foreach (var comment in drawing.ListCommentsCons)
                                 {
                                     <div class="mr-chat-message">
                                         <span>@comment</span>

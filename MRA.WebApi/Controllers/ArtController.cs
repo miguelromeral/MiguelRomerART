@@ -155,10 +155,10 @@ namespace MRA.WebApi.Controllers
             {
                 var drawing = new Drawing()
                 {
-                    Comment = string.Join(Drawing.SEPARATOR_COMMENTS, request.ListComments),
-                    CommentCons = string.Join(Drawing.SEPARATOR_COMMENTS, request.ListCommentCons),
-                    CommentPros = string.Join(Drawing.SEPARATOR_COMMENTS, request.ListCommentPros),
-                    ListCommentsStyle = request.ListCommentStyle,
+                    ListComments = request.ListComments,
+                    ListCommentsStyle = request.ListCommentsStyle,
+                    ListCommentsPros = request.ListCommentsPros,
+                    ListCommentsCons = request.ListCommentsCons,
                     Date = request.DateHyphen.Replace("-", "/"),
                     DateHyphen = request.DateHyphen,
                     Favorite = request.Favorite,

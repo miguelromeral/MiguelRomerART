@@ -12,5 +12,10 @@ namespace MRA.DTO.Excel.Attributes
     {
         public PropertyInfo Property { get; set; }
         public ExcelColumnAttribute Attribute { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Attribute.Name} => {Property.PropertyType}";
+        }
     }
 }

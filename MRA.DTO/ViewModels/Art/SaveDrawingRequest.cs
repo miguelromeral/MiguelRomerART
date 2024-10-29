@@ -33,8 +33,8 @@ namespace MRA.DTO.ViewModels.Art
         public int ScoreCritic { get; set; }
         public int Filter { get; set; }
         public List<string> ListComments { get; set; }
-        public List<string> ListCommentPros { get; set; }
-        public List<string> ListCommentCons { get; set; }
-        public List<string> ListCommentStyle { get; set; }
+        public List<string> ListCommentsPros { get; set; }
+        public List<string> ListCommentsCons { get; set; }
+        public List<string> ListCommentsStyle { get; set; }
     }
 }

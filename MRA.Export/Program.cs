@@ -11,8 +11,8 @@ using MRA.DTO.Firebase.Models;
 using Microsoft.Extensions.Caching.Memory;
 using MRA.Services.Excel;
 
-var helper = new ConsoleHelper();
-helper.ShowMessageInfo("Cargando la configuración de la aplicación");
+var console = new ConsoleHelper();
+console.ShowMessageInfo("Cargando la configuración de la aplicación");
 try
 {
     // Configuración de la aplicación
@@ -21,21 +21,21 @@ try
         .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
     var configuration = builder.Build();
 
-    var excelService = new ExcelService(configuration);
+    var excelService = new ExcelService(configuration, console);
 
     // Configuración de EPPlus
-    helper.ShowMessageInfo("Configurando EPPlus");
+    console.ShowMessageInfo("Configurando EPPlus");
     ExcelPackage.LicenseContext = (LicenseContext)Enum.Parse(typeof(LicenseContext), excelService.License);
 
     // Configuración de Firestore
-    helper.ShowMessageInfo("Registrando credenciales de Firebase");
+    console.ShowMessageInfo("Registrando credenciales de Firebase");
 
     var firestoreService = new FirestoreService(configuration);
 
     var remoteConfigService = new RemoteConfigService(new MemoryCache(new MemoryCacheOptions()), firestoreService.ProjectId, firestoreService.CredentialsPath, 60000);
     firestoreService.SetRemoteConfigService(remoteConfigService);
 
-    helper.ShowMessageInfo("Recuperando documentos desde Firestore");
+    console.ShowMessageInfo("Recuperando documentos desde Firestore");
     var listDrawings = await firestoreService.GetDrawingsAsync();
     listDrawings = await firestoreService.CalculatePopularityOfListDrawings(listDrawings);
 
@@ -50,22 +50,21 @@ try
         excelService.SetTableHeaders(ref workSheet, drawingProperties);
         excelService.FillTable(ref workSheet, drawingProperties, listDrawings.OrderBy(x => x.Id).ToList());
 
-        helper.ShowMessageInfo("Preparando formato de Tabla");
+        console.ShowMessageInfo("Preparando formato de Tabla");
         ExcelService.CreateTable(ref workSheet, excelService.TableName, 1, 1, listDrawings.Count + 1, drawingProperties.Count);
         ExcelService.StyleCellsHeader(ref workSheet, 1, 1, 1, drawingProperties.Count);
         ExcelService.SetBold(ref workSheet, 2, 1, listDrawings.Count + 1, 1);
 
-        helper.ShowMessageInfo("Preparando fichero para guardar");
+        console.ShowMessageInfo("Preparando fichero para guardar");
         var fileInfo = excelService.GetFileInfo();
         excel.SaveAs(fileInfo);
 
-        helper.ShowMessageInfo("Archivo Excel creado: " + fileInfo.FullName);
+        console.ShowMessageInfo("Archivo Excel creado: " + fileInfo.FullName);
     }
-
 }
 catch (Exception ex)
 {
-    helper.ShowMessageError("Ha ocurrido un error: " + ex.Message);
-    helper.ShowMessageInfo("Pulse cualquier tecla para continuar");
+    console.ShowMessageError("Ha ocurrido un error: " + ex.Message);
+    console.ShowMessageInfo("Pulse cualquier tecla para continuar");
     Console.ReadKey();
 }

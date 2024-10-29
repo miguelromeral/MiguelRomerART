@@ -1045,7 +1045,7 @@ namespace MRA.Services.Firebase
         }
 
 
-        public async Task AddAsync(Inspiration document)
+        public async Task AddInspirationAsync(Inspiration document)
         {
             if (String.IsNullOrEmpty(CollectionInspirations))
             {
