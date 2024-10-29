@@ -86,13 +86,13 @@ namespace MRA.DTO.Firebase.Models
         [ExcelColumn("Path", 10)]
         public string Path { get; set; }
 
-        [ExcelColumn("URL", 11)]
+        [ExcelColumn("URL", 11, hidden: true)]
         public string Url { get { return UrlBase + Path; } }
 
         [ExcelColumn("Path Thumbnail", 15)]
         public string PathThumbnail { get; set; }
 
-        [ExcelColumn("URL Thumbnail", 16)]
+        [ExcelColumn("URL Thumbnail", 16, hidden: true)]
         public string UrlThumbnail { get { return UrlBase + PathThumbnail; } }
         #endregion
 
@@ -116,7 +116,7 @@ namespace MRA.DTO.Firebase.Models
         #endregion
 
         #region Product
-        [ExcelColumn("#Product Type", 40)]
+        [ExcelColumn("#Product Type", 40, hidden: true)]
         public int ProductType { get; set; }
 
         [ExcelColumn("Product Type", 41)]
@@ -138,7 +138,7 @@ namespace MRA.DTO.Firebase.Models
         #endregion
 
         #region Style
-        [ExcelColumn("#Type", 50)]
+        [ExcelColumn("#Type", 50, hidden: true)]
         public int Type { get; set; }
 
         [ExcelColumn("Type", 51)]
@@ -156,7 +156,7 @@ namespace MRA.DTO.Firebase.Models
             }
         }
 
-        [ExcelColumn("#Software", 52)]
+        [ExcelColumn("#Software", 52, hidden: true)]
         public int Software { get; set; }
 
         [ExcelColumn("Software", 53)]
@@ -173,7 +173,7 @@ namespace MRA.DTO.Firebase.Models
             }
         }
 
-        [ExcelColumn("#Paper", 54)]
+        [ExcelColumn("#Paper", 54, hidden: true)]
         public int Paper { get; set; }
 
         [ExcelColumn("Paper", 55)]
@@ -190,7 +190,7 @@ namespace MRA.DTO.Firebase.Models
             }
         }
 
-        [ExcelColumn("#Filter", 56)]
+        [ExcelColumn("#Filter", 56, hidden: true)]
         public int Filter { get; set; }
 
         [ExcelColumn("Filter", 57)]
@@ -208,7 +208,7 @@ namespace MRA.DTO.Firebase.Models
         #endregion
 
         #region Details
-        [ExcelColumn("Date", 60)]
+        [ExcelColumn("Date", 60, hidden: true)]
         public string Date { get; set; }
 
         public DateTime DateObject { get; set; }
@@ -277,7 +277,6 @@ namespace MRA.DTO.Firebase.Models
         [ExcelColumn("Votes Popular", 72)]
         public int VotesPopular { get; set; }
 
-        [ExcelColumn("Score Popular (Readable)", 73)]
         public int ScorePopularHuman { get { return CalculateScorePopular(ScorePopular); } }
         public static int CalculateScorePopular(double score) => (int)Math.Round(score);
         #endregion
@@ -371,10 +370,10 @@ namespace MRA.DTO.Firebase.Models
         #endregion
 
         #region References
-        [ExcelColumn("Reference URL", 120)]
+        [ExcelColumn("Reference URL", 120, hidden: true)]
         public string ReferenceUrl { get; set; }
 
-        [ExcelColumn("Spotify URL", 121)]
+        [ExcelColumn("Spotify URL", 121, hidden: true)]
         public string SpotifyUrl { get; set; }
 
         [ExcelColumn("Spotify Track ID", 122)]
@@ -423,7 +422,7 @@ namespace MRA.DTO.Firebase.Models
 
         public List<string> Tags { get; set; }
 
-        [ExcelColumn("Tags", 140)]
+        [ExcelColumn("Tags", 140, hidden: true)]
         public string TagsExcel
         {
             get
@@ -443,16 +442,16 @@ namespace MRA.DTO.Firebase.Models
             }
         }
 
-        [ExcelColumn("Popularity Date", 151)]
+        [ExcelColumn("Popularity Date", 151, hidden: true)]
         public double PopularityDate { get; set; }
 
-        [ExcelColumn("Popularity Critic", 152)]
+        [ExcelColumn("Popularity Critic", 152, hidden: true)]
         public double PopularityCritic { get; set; }
 
-        [ExcelColumn("Popularity Popular", 153)]
+        [ExcelColumn("Popularity Popular", 153, hidden: true)]
         public double PopularityPopular { get; set; }
 
-        [ExcelColumn("Popularity Favorite", 154)]
+        [ExcelColumn("Popularity Favorite", 154, hidden: true)]
         public double PopularityFavorite { get; set; }
 
         public double CalculatePopularity(double dateWeight, int months, double criticWeight, double popularWeight, double favoriteWeight)

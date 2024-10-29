@@ -10,11 +10,13 @@ public class ExcelColumnAttribute : Attribute
     public int Order { get; }
 
     public bool WrapText = false;
+    public bool Hidden = false;
 
-    public ExcelColumnAttribute(string name, int order, bool wrapText = false)
+    public ExcelColumnAttribute(string name, int order, bool wrapText = false, bool hidden = false)
     {
         Name = name;
         Order = order;
         WrapText = wrapText;
+        Hidden = hidden;
     }
 }
