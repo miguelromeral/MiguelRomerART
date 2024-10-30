@@ -9,14 +9,21 @@ public class ExcelColumnAttribute : Attribute
     public string Name { get; }
     public int Order { get; }
 
-    public bool URL = false;
-    public bool Hidden = false;
+    public bool URL;
+    public bool Hidden;
+    public bool IgnoreOnImport;
 
-    public ExcelColumnAttribute(string name, int order, bool hidden = false, bool url = false)
+    public ExcelColumnAttribute(
+        string name, 
+        int order, 
+        bool hidden = false, 
+        bool url = false, 
+        bool ignoreOnImport = false)
     {
         Name = name;
         Order = order;
         Hidden = hidden;
         URL = url;
+        IgnoreOnImport = ignoreOnImport;
     }
 }

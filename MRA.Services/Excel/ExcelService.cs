@@ -51,7 +51,7 @@ namespace MRA.Services.Excel
             _console = consoleHelper;
         }
 
-        public static List<ExcelColumnInfo> GetPropertiesAttributes<T>()
+        public List<ExcelColumnInfo> GetPropertiesAttributes<T>()
         {
             return typeof(T)
                 .GetProperties()
@@ -197,61 +197,43 @@ namespace MRA.Services.Excel
             return new FileInfo(filePath);
         }
 
-        public List<Drawing> ImportDrawingsFromExcel(FileInfo fileInfo)
+        public Dictionary<string, int> GetColumnMapDrawing(ExcelWorksheet workSheet)
         {
-            var listDrawings = new List<Drawing>();
-
-            using (var package = new ExcelPackage(fileInfo))
+            // Construir un mapeo entre los nombres de encabezado y la posición de columna
+            var nameToColumnMap = new Dictionary<string, int>();
+            for (int col = 1; col <= workSheet.Dimension.End.Column; col++)
             {
-                var workSheet = package.Workbook.Worksheets[SheetName];
-                if (workSheet == null)
+                var headerValue = workSheet.Cells[1, col].Text;
+                if (!string.IsNullOrWhiteSpace(headerValue))
                 {
-                    throw new Exception($"Worksheet '{SheetName}' not found in the file.");
-                }
-
-                // Obtener propiedades de Drawing con atributos de Excel
-                var drawingProperties = GetPropertiesAttributes<Drawing>();
-
-                // Construir un mapeo entre los nombres de encabezado y la posición de columna
-                var nameToColumnMap = new Dictionary<string, int>();
-                for (int col = 1; col <= workSheet.Dimension.End.Column; col++)
-                {
-                    var headerValue = workSheet.Cells[1, col].Text;
-                    if (!string.IsNullOrWhiteSpace(headerValue))
-                    {
-                        nameToColumnMap[headerValue] = col;
-                    }
-                }
-
-                // Leer cada fila (comenzando en la segunda fila, asumiendo encabezado en la primera)
-                int row = 2;
-                while (workSheet.Cells[row, 1].Value != null) // Suponiendo que siempre hay un valor en la primera columna
-                {
-                    var drawing = new Drawing();
-
-                    foreach (var propInfo in drawingProperties.Where(x => x.Property.CanWrite))
-                    {
-                        if (!nameToColumnMap.TryGetValue(propInfo.Attribute.Name, out int col))
-                        {
-                            // Si el nombre de la columna no existe en el mapeo, continuar
-                            continue;
-                        }
-
-                        var cell = workSheet.Cells[row, col];
-                        var cellValue = cell.Value;
-
-                        // Mapear el valor de la celda al tipo de la propiedad
-                        SetPropertyValue(drawing, propInfo.Property, cellValue);
-                    }
-
-                    listDrawings.Add(drawing);
-                    row++;
+                    nameToColumnMap[headerValue] = col;
                 }
             }
 
-            return listDrawings;
+            return nameToColumnMap;
         }
 
+        public Drawing ReadDrawingFromRow(ExcelWorksheet workSheet, List<ExcelColumnInfo> drawingProperties, Dictionary<string, int> nameToColumnMap, int row)
+        {
+            var drawing = new Drawing();
+
+            foreach (var propInfo in drawingProperties.Where(x => x.Property.CanWrite))
+            {
+                if (!nameToColumnMap.TryGetValue(propInfo.Attribute.Name, out int col))
+                {
+                    // Si el nombre de la columna no existe en el mapeo, continuar
+                    continue;
+                }
+
+                var cell = workSheet.Cells[row, col];
+                var cellValue = cell.Value;
+
+                // Mapear el valor de la celda al tipo de la propiedad
+                SetPropertyValue(drawing, propInfo.Property, cellValue);
+            }
+
+            return drawing;
+        }
 
         private void SetPropertyValue(Drawing drawing, PropertyInfo property, object cellValue)
         {

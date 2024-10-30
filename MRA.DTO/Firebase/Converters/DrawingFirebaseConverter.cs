@@ -69,6 +69,7 @@ namespace MRA.DTO.Firebase.Converters
                 type = drawing.Type,
                 title = drawing.Title ?? "",
                 date = drawing.Date,
+                drawingAt = drawing.DateObject.ToUniversalTime(),
                 time = drawing.Time,
                 name = drawing.Name ?? "",
                 product_type = drawing.ProductType,

@@ -23,6 +23,13 @@ namespace MRA.DTO
             
         }
 
+        public static string GetStringFromDate(DateTime date)
+        {
+            var cultureInfo = CultureInfo.GetCultureInfo("es-ES");
+            return date.ToString("yyyy/MM/dd", cultureInfo);
+        }
+
+
         public static string FormattedDateMini(string Date)
         {
             if (String.IsNullOrEmpty(Date))

@@ -45,7 +45,7 @@ try
         var workSheet = excel.Workbook.Worksheets.Add(excelService.SheetName);
         workSheet.View.FreezePanes(2, 2);
 
-        var drawingProperties = ExcelService.GetPropertiesAttributes<Drawing>();
+        var drawingProperties = excelService.GetPropertiesAttributes<Drawing>();
 
         excelService.SetTableHeaders(ref workSheet, drawingProperties);
         excelService.FillTable(ref workSheet, drawingProperties, listDrawings.OrderBy(x => x.Id).ToList());

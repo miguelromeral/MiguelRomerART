@@ -363,7 +363,7 @@ namespace MRA.DTO.Firebase.Models
         #endregion
 
         #region Popularity
-        [ExcelColumn("Popularity", 150)]
+        [ExcelColumn("Popularity", 150, ignoreOnImport: true)]
         public double Popularity
         {
             get
@@ -372,16 +372,16 @@ namespace MRA.DTO.Firebase.Models
             }
         }
 
-        [ExcelColumn("Popularity Date", 151, hidden: true)]
+        [ExcelColumn("Popularity Date", 151, hidden: true, ignoreOnImport: true)]
         public double PopularityDate { get; set; }
 
-        [ExcelColumn("Popularity Critic", 152, hidden: true)]
+        [ExcelColumn("Popularity Critic", 152, hidden: true, ignoreOnImport: true)]
         public double PopularityCritic { get; set; }
 
-        [ExcelColumn("Popularity Popular", 153, hidden: true)]
+        [ExcelColumn("Popularity Popular", 153, hidden: true, ignoreOnImport: true)]
         public double PopularityPopular { get; set; }
 
-        [ExcelColumn("Popularity Favorite", 154, hidden: true)]
+        [ExcelColumn("Popularity Favorite", 154, hidden: true, ignoreOnImport: true)]
         public double PopularityFavorite { get; set; }
 
         public double CalculatePopularity(double dateWeight, int months, double criticWeight, double popularWeight, double favoriteWeight)

@@ -38,6 +38,9 @@ namespace MRA.DTO.Firebase.Documents
         public string date { get; set; }
 
         [FirestoreProperty]
+        public DateTime drawingAt { get; set; }
+
+        [FirestoreProperty]
         public int? time { get; set; }
 
         [FirestoreProperty]

@@ -12,6 +12,7 @@ namespace MRA.Services.Helpers
     public class ConsoleHelper
     {
         private int PAD_RIGHT = 10;
+        public bool ShowMessageType = true;
 
         public void ShowMessageInfo(string message)
         {
@@ -23,7 +24,14 @@ namespace MRA.Services.Helpers
         public void ShowMessageWarning(string message)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("WARNING: ".PadRight(PAD_RIGHT) + message);
+            Console.WriteLine((ShowMessageType ? "WARNING: ".PadRight(PAD_RIGHT) : "") + message);
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+
+        public void ShowMessageSuccess(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine((ShowMessageType ? "SUCCESS: ".PadRight(PAD_RIGHT) : "") + message);
             Console.ForegroundColor = ConsoleColor.White;
         }
         public void ShowMessageError(string message)
@@ -141,6 +149,25 @@ namespace MRA.Services.Helpers
             }
         }
 
+
+        public bool FillBoolValue(string field)
+        {
+            ShowMessage(field);
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            System.Console.WriteLine("".PadRight(PAD_RIGHT) + "[Y|y: 'True']");
+            Console.ForegroundColor = ConsoleColor.White;
+
+            var input = ReadValueFromConsole();
+
+            bool value = false;
+            if (input.ToLower().Equals("y"))
+            {
+                value = true;
+            }
+
+            ShowValueSet(value.ToString());
+            return value;
+        }
 
         public bool FillBoolValue(bool isNew, bool previous, string field)
         {
