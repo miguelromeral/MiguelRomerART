@@ -3,11 +3,13 @@ using MRA.DTO.Excel.Attributes;
 using MRA.DTO.Firebase.Models;
 using MRA.Services.Helpers;
 using OfficeOpenXml;
+using OfficeOpenXml.DataValidation;
 using OfficeOpenXml.Style;
 using OfficeOpenXml.Table;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
@@ -29,6 +31,9 @@ namespace MRA.Services.Excel
 
         private const string APPSETTING_EXCEL_SHEET_NAME = "Excel:Sheet:Name";
         private const string APPSETTING_EXCEL_TABLE_NAME = "Excel:Table:Name";
+
+        private const string DICTIONARY_COLUMN_INDEX = "Index";
+        private const string DICTIONARY_COLUMN_NAME = "Name";
 
         public string License { get { return _configuration[APPSETTING_EPPLUS_LICENSE]; } }
         public string FilePath { get { return _configuration[APPSETTING_EXCEL_FILE_PATH]; } }
@@ -92,10 +97,10 @@ namespace MRA.Services.Excel
             int col = 1;
             foreach (var prop in properties)
             {
+                workSheet.Column(col).Width = prop.Attribute.Width;
                 var cell = workSheet.Cells[row, col];
-                object value = prop.Property.GetValue(drawing);
+                object value = prop.GetValue(drawing);
                 cell.Value = value;
-
 
                 if(value is bool valueBool)
                 {
@@ -145,6 +150,10 @@ namespace MRA.Services.Excel
                     cell.Style.Font.UnderLine = true;
                     cell.Style.Font.Color.SetColor(Color.Blue);
                 }
+                if (prop.Attribute.WrapText)
+                {
+                    cell.Style.WrapText = true;
+                }
                 if (prop.Attribute.Hidden && !workSheet.Column(col).Hidden)
                 {
                     workSheet.Column(col).Hidden = true;
@@ -154,11 +163,82 @@ namespace MRA.Services.Excel
         }
 
 
+        public static void CreateWorksheetDictionary(ExcelPackage excel, string name, Dictionary<int, string> dictionary, 
+            List<ExcelColumnInfo> properties, ExcelWorksheet main, string nameColumnDropdown, string nameColumnIndex)
+        {
+            var tableName = "Table" + name;
+            var wsTypes = FillWorksheetDictionary(excel, name: name, tableName: tableName, dictionary);
+
+            AddDropdownColumn(main, wsTypes, tableName, 
+                dataRowStart: 2, 
+                dropdownColumn: FindColumnNumberOf(properties, nameColumnDropdown), 
+                indexColumn: FindColumnNumberOf(properties, nameColumnIndex));
+        }
+
+        public static int FindColumnNumberOf(List<ExcelColumnInfo> properties, string name)
+        {
+            var index = properties.FindIndex(x => x.Attribute.Name.Equals(name)) + 1;
+            if (index < 0) throw new Exception($"Column with name \"{name}\" was not found");
+            return index;
+        }
+
+        public static ExcelWorksheet FillWorksheetDictionary(ExcelPackage excel, string name, string tableName, Dictionary<int, string> dictionary)
+        {
+            var worksheet = excel.Workbook.Worksheets.Add(name);
+
+            worksheet.Cells[1, 1].Value = DICTIONARY_COLUMN_NAME;
+            worksheet.Cells[1, 2].Value = DICTIONARY_COLUMN_INDEX;
+
+            int row = 1;
+            foreach(var item in dictionary)
+            {
+                row++;
+                worksheet.Cells[row, 1].Value = item.Value;
+                worksheet.Cells[row, 2].Value = item.Key;
+                worksheet.Cells[row, 2].Style.Numberformat.Format = "#,##0";
+            }
+
+            CreateTable(ref worksheet, tableName, 1, 1, row, 2);
+            return worksheet;
+        }
+
+        public static void AddDropdownColumn(ExcelWorksheet mainSheet, ExcelWorksheet dictionarySheet, string tableName, int dataRowStart, int dropdownColumn, int indexColumn)
+        {
+            // Obtener la tabla desde el worksheet del diccionario
+            var dictionaryTable = dictionarySheet.Tables[tableName];
+            if (dictionaryTable == null)
+                throw new Exception($"La tabla '{tableName}' no fue encontrada en la hoja '{dictionarySheet.Name}'.");
+
+            // Definir el nombre de rango dinámico para la columna "Name" en la tabla del diccionario
+            string dynamicRangeName = $"{tableName}_NameRange";
+
+            // Obtener la columna de "Name" en la tabla de diccionario
+            int nameColumnIndex = dictionaryTable.Columns[DICTIONARY_COLUMN_NAME].Position + dictionaryTable.Address.Start.Column;
+
+            // Crear el rango dinámico usando un rango estructurado
+            dictionarySheet.Workbook.Names.Add(dynamicRangeName, dictionarySheet.Cells[dictionaryTable.Address.Start.Row + 1, nameColumnIndex, dictionaryTable.Address.End.Row, nameColumnIndex]);
+
+            // Agregar validación de lista en cada celda de la columna de dropdown en la hoja principal usando el nombre del rango
+            for (int row = dataRowStart; row <= mainSheet.Dimension.End.Row; row++)
+            {
+                var validation = mainSheet.DataValidations.AddListValidation(mainSheet.Cells[row, dropdownColumn].Address);
+                validation.Formula.ExcelFormula = dynamicRangeName;
+
+                // Obtener la dirección de la celda del dropdown para referencia en VLOOKUP
+                string dropdownCellAddress = mainSheet.Cells[row, dropdownColumn].Address;
+
+                // Asignar la fórmula VLOOKUP en cada celda de indexColumn
+                mainSheet.Cells[row, indexColumn].Formula = $"VLOOKUP({dropdownCellAddress}, '{dictionarySheet.Name}'!A:B, 2, FALSE)";
+            }
+        }
+
+
         public static void CreateTable(ref ExcelWorksheet workSheet, string name, int beginRow, int beginColumn, int endRow, int endColumn)
         {
             var dataRange = workSheet.Cells[beginRow, beginColumn, endRow, endColumn];
             var table = workSheet.Tables.Add(dataRange, name);
             table.TableStyle = TableStyles.Light6;
+            ExcelService.StyleCellsHeader(ref workSheet, 1, 1, 1, endColumn);
         }
 
         public static void SetBold(ref ExcelWorksheet workSheet, int beginRow, int beginColumn, int endRow, int endColumn)
@@ -171,7 +251,6 @@ namespace MRA.Services.Excel
 
         public static void StyleCellsHeader(ref ExcelWorksheet workSheet, int beginRow, int beginColumn, int endRow, int endColumn)
         {
-            // Dar formato de color a la primera fila (encabezado)
             using (var range = workSheet.Cells[beginRow, beginColumn, endRow, endColumn])
             {
                 range.Style.Fill.PatternType = ExcelFillStyle.Solid;
@@ -180,8 +259,7 @@ namespace MRA.Services.Excel
                 range.Style.Font.Bold = true;
             }
 
-            // Ajustar automáticamente el ancho de las columnas al contenido
-            workSheet.Cells[workSheet.Dimension.Address].AutoFitColumns();
+            //workSheet.Cells[workSheet.Dimension.Address].AutoFitColumns();
         }
 
         public FileInfo GetFileInfo()

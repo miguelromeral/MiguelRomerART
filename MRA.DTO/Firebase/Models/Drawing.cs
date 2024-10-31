@@ -26,6 +26,10 @@ namespace MRA.DTO.Firebase.Models
         {
             
             Tags = new List<string>();
+            ListComments = new List<string>();
+            ListCommentsStyle = new List<string>();
+            ListCommentsPros = new List<string>();
+            ListCommentsCons = new List<string>();
         }
 
         public static Dictionary<int, string> DRAWING_TYPES = new Dictionary<int, string>()
@@ -80,7 +84,7 @@ namespace MRA.DTO.Firebase.Models
             };
 
         #region Document Data
-        [ExcelColumn("ID", 1)]
+        [ExcelColumn("ID", 1, width: 30)]
         public string Id { get; set; }
         #endregion
 
@@ -90,13 +94,13 @@ namespace MRA.DTO.Firebase.Models
         [ExcelColumn("Path", 10)]
         public string Path { get; set; }
 
-        [ExcelColumn("URL", 11, hidden: true, url: true)]
+        [ExcelColumn("URL", 11, hidden: true, url: true, wrapText: true)]
         public string Url { get { return UrlBase + Path; } }
 
         [ExcelColumn("Path Thumbnail", 15)]
         public string PathThumbnail { get; set; }
 
-        [ExcelColumn("URL Thumbnail", 16, hidden: true, url: true)]
+        [ExcelColumn("URL Thumbnail", 16, hidden: true, url: true, wrapText: true)]
         public string UrlThumbnail { get { return UrlBase + PathThumbnail; } }
         #endregion
 
@@ -104,24 +108,24 @@ namespace MRA.DTO.Firebase.Models
         [ExcelColumn("Title", 20)]
         public string Title { get; set; }
 
-        [ExcelColumn("Favorite", 21)]
+        [ExcelColumn("Favorite", 21, width: 10)]
         public bool Favorite { get; set; }
         #endregion
 
         #region Character
 
-        [ExcelColumn("Name", 30)]
+        [ExcelColumn("Name", 30, width: 20)]
         public string Name { get; set; }
 
-        [ExcelColumn("Model Name", 31)]
+        [ExcelColumn("Model Name", 31, width: 20)]
         public string ModelName { get; set; }
         #endregion
 
         #region Product
-        [ExcelColumn("#Product Type", 40, hidden: true)]
+        [ExcelColumn("#Product Type", 40, hidden: true, width: 5)]
         public int ProductType { get; set; }
 
-        [ExcelColumn("Product Type", 41)]
+        [ExcelColumn("Product Type", 41, width: 15)]
         public string ProductTypeName
         {
             get
@@ -135,15 +139,15 @@ namespace MRA.DTO.Firebase.Models
             }
         }
 
-        [ExcelColumn("Product", 42)]
+        [ExcelColumn("Product", 42, width: 30)]
         public string ProductName { get; set; }
         #endregion
 
         #region Style
-        [ExcelColumn("#Type", 50, hidden: true)]
+        [ExcelColumn("#Type", 50, hidden: true, width: 5)]
         public int Type { get; set; }
 
-        [ExcelColumn("Type", 51)]
+        [ExcelColumn("Type", 51, width: 20)]
         public string TypeName
         {
             get
@@ -158,10 +162,10 @@ namespace MRA.DTO.Firebase.Models
             }
         }
 
-        [ExcelColumn("#Software", 52, hidden: true)]
+        [ExcelColumn("#Software", 52, hidden: true, width: 5)]
         public int Software { get; set; }
 
-        [ExcelColumn("Software", 53)]
+        [ExcelColumn("Software", 53, width: 20)]
         public string SoftwareName
         {
             get
@@ -175,10 +179,10 @@ namespace MRA.DTO.Firebase.Models
             }
         }
 
-        [ExcelColumn("#Paper", 54, hidden: true)]
+        [ExcelColumn("#Paper", 54, hidden: true, width: 5)]
         public int Paper { get; set; }
 
-        [ExcelColumn("Paper", 55)]
+        [ExcelColumn("Paper", 55, width: 10)]
         public string PaperHuman
         {
             get
@@ -192,10 +196,10 @@ namespace MRA.DTO.Firebase.Models
             }
         }
 
-        [ExcelColumn("#Filter", 56, hidden: true)]
+        [ExcelColumn("#Filter", 56, hidden: true, width: 5)]
         public int Filter { get; set; }
 
-        [ExcelColumn("Filter", 57)]
+        [ExcelColumn("Filter", 57, width: 20)]
         public string FilterName
         {
             get
@@ -212,12 +216,12 @@ namespace MRA.DTO.Firebase.Models
         #region Details
         public string Date { get; set; }
 
-        [ExcelColumn("Date", 60)]
+        [ExcelColumn("Date", 60, width: 15)]
         public DateTime DateObject { get; set; }
 
         public string DateHyphen { get; set; }
 
-        [ExcelColumn("Formatted Date", 63)]
+        [ExcelColumn("Formatted Date", 63, width: 20)]
         public string FormattedDate
         {
             get
@@ -234,10 +238,10 @@ namespace MRA.DTO.Firebase.Models
             }
         }
 
-        [ExcelColumn("Time (Minutes)", 65)]
+        [ExcelColumn("Time (Minutes)", 65, width: 8)]
         public int Time { get; set; }
 
-        [ExcelColumn("Time", 66)]
+        [ExcelColumn("Time", 66, width: 12)]
         public string TimeHuman
         {
             get
@@ -258,25 +262,25 @@ namespace MRA.DTO.Firebase.Models
             }
         }
 
-        [ExcelColumn("Views", 67)]
+        [ExcelColumn("Views", 67, width: 8)]
         public long Views { get; set; }
 
         public string ViewsHuman { get { return Drawing.FormatoLegible(Views); } }
 
-        [ExcelColumn("Likes", 69)]
+        [ExcelColumn("Likes", 69, width: 8)]
         public long Likes { get; set; }
 
         public string LikesHuman { get { return Drawing.FormatoLegible(Likes); } }
         #endregion
 
         #region Scores
-        [ExcelColumn("Score Critic", 70)]
+        [ExcelColumn("Score Critic", 70, width: 10)]
         public int ScoreCritic { get; set; }
 
-        [ExcelColumn("Score Popular", 71)]
+        [ExcelColumn("Score Popular", 71, width: 10)]
         public double ScorePopular { get; set; }
 
-        [ExcelColumn("Votes Popular", 72)]
+        [ExcelColumn("Votes Popular", 72, width: 10)]
         public int VotesPopular { get; set; }
 
         public int ScorePopularHuman { get { return CalculateScorePopular(ScorePopular); } }
@@ -284,8 +288,6 @@ namespace MRA.DTO.Firebase.Models
         #endregion
 
         #region Comments
-        //public string Comment { get; set; }
-
         [ExcelColumn("List Comments", 81)]
         public List<string> ListComments { get; set; }
         #endregion
@@ -310,13 +312,13 @@ namespace MRA.DTO.Firebase.Models
         #endregion
 
         #region References
-        [ExcelColumn("Reference URL", 120, hidden: true, url: true)]
+        [ExcelColumn("Reference URL", 120, hidden: true, url: true, wrapText: true)]
         public string ReferenceUrl { get; set; }
 
-        [ExcelColumn("Spotify URL", 121, hidden: true, url: true)]
+        [ExcelColumn("Spotify URL", 121, hidden: true, url: true, wrapText: true)]
         public string SpotifyUrl { get; set; }
 
-        [ExcelColumn("Spotify Track ID", 122)]
+        [ExcelColumn("Spotify Track ID", 122, width: 30)]
         public string SpotifyTrackId
         {
             get
@@ -343,15 +345,15 @@ namespace MRA.DTO.Firebase.Models
             }
         }
 
-        [ExcelColumn("Visible", 123)]
+        [ExcelColumn("Visible", 123, width: 10)]
         public bool Visible { get; set; }
         #endregion
 
         #region Social Networks
-        [ExcelColumn("Twitter URL", 130, url: true)]
+        [ExcelColumn("Twitter URL", 130, url: true, wrapText: true)]
         public string TwitterUrl { get; set; }
 
-        [ExcelColumn("Instagram URL", 131, url: true)]
+        [ExcelColumn("Instagram URL", 131, url: true, wrapText: true)]
         public string InstagramUrl { get; set; }
         #endregion
 
@@ -363,7 +365,7 @@ namespace MRA.DTO.Firebase.Models
         #endregion
 
         #region Popularity
-        [ExcelColumn("Popularity", 150, ignoreOnImport: true)]
+        [ExcelColumn("Popularity", 150, ignoreOnImport: true, width: 10)]
         public double Popularity
         {
             get
@@ -372,16 +374,16 @@ namespace MRA.DTO.Firebase.Models
             }
         }
 
-        [ExcelColumn("Popularity Date", 151, hidden: true, ignoreOnImport: true)]
+        [ExcelColumn("Popularity Date", 151, hidden: true, ignoreOnImport: true, width: 5)]
         public double PopularityDate { get; set; }
 
-        [ExcelColumn("Popularity Critic", 152, hidden: true, ignoreOnImport: true)]
+        [ExcelColumn("Popularity Critic", 152, hidden: true, ignoreOnImport: true, width: 5)]
         public double PopularityCritic { get; set; }
 
-        [ExcelColumn("Popularity Popular", 153, hidden: true, ignoreOnImport: true)]
+        [ExcelColumn("Popularity Popular", 153, hidden: true, ignoreOnImport: true, width: 5)]
         public double PopularityPopular { get; set; }
 
-        [ExcelColumn("Popularity Favorite", 154, hidden: true, ignoreOnImport: true)]
+        [ExcelColumn("Popularity Favorite", 154, hidden: true, ignoreOnImport: true, width: 5)]
         public double PopularityFavorite { get; set; }
 
         public double CalculatePopularity(double dateWeight, int months, double criticWeight, double popularWeight, double favoriteWeight)

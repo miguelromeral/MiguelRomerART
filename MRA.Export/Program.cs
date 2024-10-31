@@ -52,8 +52,34 @@ try
 
         console.ShowMessageInfo("Preparando formato de Tabla");
         ExcelService.CreateTable(ref workSheet, excelService.TableName, 1, 1, listDrawings.Count + 1, drawingProperties.Count);
-        ExcelService.StyleCellsHeader(ref workSheet, 1, 1, 1, drawingProperties.Count);
         ExcelService.SetBold(ref workSheet, 2, 1, listDrawings.Count + 1, 1);
+        
+        console.ShowMessageInfo("Preparando hojas de diccionarios");
+        ExcelService.CreateWorksheetDictionary(
+            excel,
+            name: "Styles", Drawing.DRAWING_TYPES, drawingProperties, workSheet,
+            nameColumnDropdown: "Type",
+            nameColumnIndex: "#Type");
+        ExcelService.CreateWorksheetDictionary(
+            excel,
+            name: "Products", Drawing.DRAWING_PRODUCT_TYPES, drawingProperties, workSheet,
+            nameColumnDropdown: "Product Type",
+            nameColumnIndex: "#Product Type");
+        ExcelService.CreateWorksheetDictionary(
+            excel,
+            name: "Software", Drawing.DRAWING_SOFTWARE, drawingProperties, workSheet,
+            nameColumnDropdown: "Software",
+            nameColumnIndex: "#Software");
+        ExcelService.CreateWorksheetDictionary(
+            excel,
+            name: "Papers", Drawing.DRAWING_PAPER_SIZE, drawingProperties, workSheet,
+            nameColumnDropdown: "Paper",
+            nameColumnIndex: "#Paper");
+        ExcelService.CreateWorksheetDictionary(
+            excel,
+            name: "Filters", Drawing.DRAWING_FILTER, drawingProperties, workSheet,
+            nameColumnDropdown: "Filter",
+            nameColumnIndex: "#Filter");
 
         console.ShowMessageInfo("Preparando fichero para guardar");
         var fileInfo = excelService.GetFileInfo();
