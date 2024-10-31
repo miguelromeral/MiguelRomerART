@@ -17,27 +17,27 @@ namespace MRA.Services.Helpers
         public void ShowMessageInfo(string message)
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("INFO: ".PadRight(PAD_RIGHT) + message);
+            Console.WriteLine(message);
             Console.ForegroundColor = ConsoleColor.White;
         }
 
         public void ShowMessageWarning(string message)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine((ShowMessageType ? "WARNING: ".PadRight(PAD_RIGHT) : "") + message);
+            Console.WriteLine(message);
             Console.ForegroundColor = ConsoleColor.White;
         }
 
         public void ShowMessageSuccess(string message)
         {
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine((ShowMessageType ? "SUCCESS: ".PadRight(PAD_RIGHT) : "") + message);
+            Console.WriteLine(message);
             Console.ForegroundColor = ConsoleColor.White;
         }
         public void ShowMessageError(string message)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("DANGER: ".PadRight(PAD_RIGHT) + message);
+            Console.WriteLine(message);
             Console.ForegroundColor = ConsoleColor.White;
         }
 
@@ -70,8 +70,7 @@ namespace MRA.Services.Helpers
         public void ShowMessage(string field)
         {
             Console.ForegroundColor = ConsoleColor.White;
-            ShowMessageInfo("------------------------------------------------------");
-            System.Console.WriteLine("INPUT:".PadRight(PAD_RIGHT) + field.ToUpper());
+            System.Console.WriteLine(field);
         }
 
         public string ReadValueFromConsole()
