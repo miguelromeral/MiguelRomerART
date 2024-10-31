@@ -361,16 +361,16 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-/MRA.Web/Properties/romerart-6a6c3-firebase-adminsdk-4yop5-839e7a0035.json
-/MRA.Web/Credentials/romerart-6a6c3-firebase-adminsdk-4yop5-839e7a0035.json
-/MR.Console/Credentials/romerart-6a6c3-firebase-adminsdk-4yop5-839e7a0035.json
+/MRA.Web/Properties/
+/MRA.Web/Credentials/
+/MR.Console/Credentials/
 /MR.MAUI/google-services.json
 /MR.MAUI/Resources/google-services.json
 /MR.MAUI/appsettings.json
-/MR.MAUI/Credentials/romerart-6a6c3-firebase-adminsdk-4yop5-839e7a0035.json
-/MR.MAUI/Resources/romerart-6a6c3-firebase-adminsdk-4yop5-839e7a0035.json
-/MR.MAUI/Resources/Raw/romerart-6a6c3-firebase-adminsdk-4yop5-839e7a0035.json
-/MRA.WebApi/Credentials/romerart-6a6c3-firebase-adminsdk-4yop5-839e7a0035.json
+/MR.MAUI/Credentials/
+/MR.MAUI/Resources/
+/MR.MAUI/Resources/Raw/
+/MRA.WebApi/Credentials/
 /.vs/MiguelRomerART/v17/.suo
-/MRA.Export/Credentials/romerart-6a6c3-firebase-adminsdk-4yop5-839e7a0035.json
-/MRA.Import/Credentials/romerart-6a6c3-firebase-adminsdk-4yop5-839e7a0035.json
+/MRA.Export/Credentials/
+/MRA.Import/Credentials/

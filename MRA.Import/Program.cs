@@ -41,8 +41,8 @@ try
     //listDrawingsFirestore = await firestoreService.CalculatePopularityOfListDrawings(listDrawings);
 
     console.ShowMessageInfo("Recuperando documentos desde documento Excel");
-    //var filePath = console.FillStringValue("File to Read");
-    var filePath = "M:\\Descargas\\Excels_MiguelRomerART\\test_add.xlsx";
+    var filePath = console.FillStringValue("File to Read");
+    //var filePath = "M:\\Descargas\\Excels_MiguelRomerART\\FirestoreDrawings_20241031_1038.xlsx";
 
     var fileInfo = new FileInfo(filePath);
     //var listDrawings = excelService.ImportDrawingsFromExcel(fileInfo);
@@ -51,6 +51,25 @@ try
     console.ShowMessageInfo("Reading Automatic Commands");
     bool updateEverythingFromExcel = configuration.GetValue<bool>("Commands:UpdateEverythingFromExcel");
     console.ShowMessageInfo($"Update Everything From Excel: {(updateEverythingFromExcel ? "Yes" : "No")}");
+
+    console.ShowMessageInfo($"Environment: {(firestoreService.IsInProduction ? "PRODUCTION" : "PREproduction")}");
+
+    if (firestoreService.IsInProduction)
+    {
+        console.ShowMessageWarning("This import is set to be performed at Production environment.");
+        var response = console.FillBoolValue("Are you sure you want to execute this in production?");
+        if(!response)
+        {
+            console.ShowMessageInfo("Aborted execution due to user interaction");
+            return;
+        }
+        response = console.FillBoolValue("Are you really sure? This action can not be undone after this.");
+        if (!response)
+        {
+            console.ShowMessageInfo("Aborted execution due to user interaction");
+            return;
+        }
+    }
 
     using (var package = new ExcelPackage(fileInfo))
     {
@@ -154,8 +173,11 @@ try
                 listDrawingsProcessed.Add(drawingExcel);
             }
 
-            console.ShowMessageInfo($"Press any key to continue reading file.");
-            Console.ReadKey();
+            if (!updateEverythingFromExcel)
+            {
+                console.ShowMessageInfo($"Press any key to continue reading file.");
+                Console.ReadKey();
+            }
 
             row++;
         }

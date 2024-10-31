@@ -30,6 +30,7 @@ namespace MRA.Services.Firebase
         #region App Settings
         private const string APPSETTING_FIREBASE_CREDENTIALS_PATH = "Firebase:CredentialsPath";
         private const string APPSETTING_FIREBASE_PROJECTID = "Firebase:ProjectID";
+        private const string APPSETTING_FIREBASE_ENVIRONMENT = "Firebase:Environment";
         private const string APPSETTING_FIREBASE_COLLECTION_DRAWINGS = "Firebase:CollectionDrawings";
         private const string APPSETTING_FIREBASE_COLLECTION_COLLECTIONS = "Firebase:CollectionCollections";
         private const string APPSETTING_FIREBASE_COLLECTION_INSPIRATIONS = "Firebase:CollectionInspirations";
@@ -52,6 +53,7 @@ namespace MRA.Services.Firebase
         public string CollectionCollections { get { return _configuration[APPSETTING_FIREBASE_COLLECTION_COLLECTIONS]; } }
         public string CollectionInspirations { get { return _configuration[APPSETTING_FIREBASE_COLLECTION_INSPIRATIONS]; } }
         public string AzureUrlBase { get { return _configuration[APPSETTING_AZURE_URL_BASE]; } }
+        public bool IsInProduction { get { return _configuration[APPSETTING_FIREBASE_ENVIRONMENT].Equals("production"); } }
         public string CredentialsPath
         {
             get
