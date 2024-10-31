@@ -10,9 +10,10 @@ using MRA.DTO.Excel.Attributes;
 using MRA.DTO.Firebase.Models;
 using Microsoft.Extensions.Caching.Memory;
 using MRA.Services.Excel;
+using MRA.DTO.Logger;
 
 var console = new ConsoleHelper();
-console.ShowMessageInfo("Cargando la configuración de la aplicación");
+Logger logger = null;
 try
 {
     // Configuración de la aplicación
@@ -21,40 +22,45 @@ try
         .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
     var configuration = builder.Build();
 
-    var excelService = new ExcelService(configuration, console);
+    logger = new Logger(configuration, console);
+    logger.Info("Iniciando Aplicación de Exportación");
 
-    // Configuración de EPPlus
-    console.ShowMessageInfo("Configurando EPPlus");
+    var excelService = new ExcelService(configuration, logger);
+
+    logger.Log("Configurando EPPlus");
     ExcelPackage.LicenseContext = (LicenseContext)Enum.Parse(typeof(LicenseContext), excelService.License);
 
-    // Configuración de Firestore
-    console.ShowMessageInfo("Registrando credenciales de Firebase");
-
+    logger.Log("Registrando credenciales de Firebase");
     var firestoreService = new FirestoreService(configuration);
 
     var remoteConfigService = new RemoteConfigService(new MemoryCache(new MemoryCacheOptions()), firestoreService.ProjectId, firestoreService.CredentialsPath, 60000);
     firestoreService.SetRemoteConfigService(remoteConfigService);
+    
+    if (!logger.ProductionEnvironmentAlert(firestoreService.IsInProduction))
+    {
+        return;
+    }
 
-    console.ShowMessageInfo("Recuperando documentos desde Firestore");
+    logger.Log("Leyendo documentos desde Firestore");
     var listDrawings = await firestoreService.GetDrawingsAsync();
     listDrawings = await firestoreService.CalculatePopularityOfListDrawings(listDrawings);
 
     // Crear un nuevo archivo Excel
     using (ExcelPackage excel = new ExcelPackage())
     {
+        logger.Log($"Creando hoja principal \"{excelService.SheetName}\"");
         var workSheet = excel.Workbook.Worksheets.Add(excelService.SheetName);
         workSheet.View.FreezePanes(2, 2);
 
+        logger.Log("Obteniendo propiedades del DTO de Drawing");
         var drawingProperties = excelService.GetPropertiesAttributes<Drawing>();
 
         excelService.SetTableHeaders(ref workSheet, drawingProperties);
-        excelService.FillTable(ref workSheet, drawingProperties, listDrawings.OrderBy(x => x.Id).ToList());
 
-        console.ShowMessageInfo("Preparando formato de Tabla");
-        ExcelService.CreateTable(ref workSheet, excelService.TableName, 1, 1, listDrawings.Count + 1, drawingProperties.Count);
-        ExcelService.SetBold(ref workSheet, 2, 1, listDrawings.Count + 1, 1);
+        logger.Log("Rellenando tabla principal");
+        excelService.FillTable(ref workSheet, drawingProperties, listDrawings.OrderBy(x => x.Id).ToList());
         
-        console.ShowMessageInfo("Preparando hojas de diccionarios");
+        logger.Log("Preparando hojas de diccionarios");
         ExcelService.CreateWorksheetDictionary(
             excel,
             name: "Styles", Drawing.DRAWING_TYPES, drawingProperties, workSheet,
@@ -81,16 +87,16 @@ try
             nameColumnDropdown: "Filter",
             nameColumnIndex: "#Filter");
 
-        console.ShowMessageInfo("Preparando fichero para guardar");
+        logger.Log("Preparando fichero para guardar");
         var fileInfo = excelService.GetFileInfo();
         excel.SaveAs(fileInfo);
 
-        console.ShowMessageInfo("Archivo Excel creado: " + fileInfo.FullName);
+        logger.Success($"Archivo Excel creado: \"{fileInfo.FullName}\"");
     }
 }
 catch (Exception ex)
 {
-    console.ShowMessageError("Ha ocurrido un error: " + ex.Message);
+    logger?.Error("Error durante la exportación: " + ex.Message);
     console.ShowMessageInfo("Pulse cualquier tecla para continuar");
     Console.ReadKey();
 }

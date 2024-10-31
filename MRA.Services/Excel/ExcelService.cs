@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using MRA.DTO.Excel.Attributes;
 using MRA.DTO.Firebase.Models;
+using MRA.DTO.Logger;
 using MRA.Services.Helpers;
 using OfficeOpenXml;
 using OfficeOpenXml.DataValidation;
@@ -21,7 +22,7 @@ namespace MRA.Services.Excel
     public class ExcelService
     {
         private readonly IConfiguration _configuration;
-        private readonly ConsoleHelper? _console;
+        private readonly Logger? _logger;
 
         private const string APPSETTING_EPPLUS_LICENSE = "EPPlus:ExcelPackage:LicenseContext";
         private const string APPSETTING_EXCEL_FILE_PATH = "Excel:File:Path";
@@ -50,10 +51,10 @@ namespace MRA.Services.Excel
             _configuration = configuration;
         }
 
-        public ExcelService(IConfiguration configuration, ConsoleHelper consoleHelper)
+        public ExcelService(IConfiguration configuration, Logger logger)
         {
             _configuration = configuration;
-            _console = consoleHelper;
+            _logger = logger;
         }
 
         public List<ExcelColumnInfo> GetPropertiesAttributes<T>()
@@ -86,10 +87,13 @@ namespace MRA.Services.Excel
             int row = 2;
             foreach (var drawing in listDrawings)
             {
-                _console?.ShowMessageInfo($"Procesando documento ({row - 1}/{numberDocuments}): " + drawing.Id);
+                _logger?.Log($"Procesando \"{drawing.Id}\" ({row - 1}/{numberDocuments})");
                 FillTableRow(ref workSheet, properties, drawing, row);
                 row++;
             }
+
+            CreateTable(ref workSheet, TableName, 1, 1, listDrawings.Count + 1, properties.Count);
+            SetBold(ref workSheet, 2, 1, listDrawings.Count + 1, 1);
         }
 
         public void FillTableRow(ref ExcelWorksheet workSheet, List<ExcelColumnInfo> properties, Drawing drawing, int row)
@@ -199,6 +203,7 @@ namespace MRA.Services.Excel
             }
 
             CreateTable(ref worksheet, tableName, 1, 1, row, 2);
+            worksheet.Column(1).Width = 60;
             return worksheet;
         }
 

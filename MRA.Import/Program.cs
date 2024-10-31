@@ -26,7 +26,7 @@ try
     logger = new Logger(configuration, console);
     logger.Log("Iniciando Aplicación de Importación");
 
-    var excelService = new ExcelService(configuration);
+    var excelService = new ExcelService(configuration, logger);
 
     logger.Log("Configurando EPPlus");
     ExcelPackage.LicenseContext = (LicenseContext)Enum.Parse(typeof(LicenseContext), excelService.License);
@@ -34,15 +34,10 @@ try
     logger.Log("Registrando credenciales de Firebase");
     var firestoreService = new FirestoreService(configuration);
 
-    if (firestoreService.IsInProduction)
+    if (!logger.ProductionEnvironmentAlert(firestoreService.IsInProduction))
     {
-        logger.Warning($"Ejecutando proceso para PRODUCCIÓN");
+        return;
     }
-    else
-    {
-        logger.Info($"Ejecutando proceso para PRE-producción");
-    }
-
 
     //var remoteConfigService = new RemoteConfigService(new MemoryCache(new MemoryCacheOptions()), firestoreService.ProjectId, firestoreService.CredentialsPath, 60000);
     //firestoreService.SetRemoteConfigService(remoteConfigService);
@@ -51,13 +46,15 @@ try
     var listDrawingsFirestore = await firestoreService.GetDrawingsAsync();
     //listDrawingsFirestore = await firestoreService.CalculatePopularityOfListDrawings(listDrawings);
 
-    //var filePath = console.FillStringValue("File to Read");
+    var filePath = console.FillStringValue("Ruta del Fichero a Procesar");
     //var filePath = "M:\\Descargas\\Excels_MiguelRomerART\\FirestoreDrawings_20241031_1038.xlsx";
-    var filePath = "M:\\Descargas\\Excels_MiguelRomerART\\test_add.xlsx";
+    //var filePath = "M:\\Descargas\\Excels_MiguelRomerART\\test_add.xlsx";
     logger.Log($"Recuperando documentos desde Excel \"{filePath}\"");
 
     var fileInfo = new FileInfo(filePath);
     var listDrawingsProcessed = new List<Drawing>();
+    var listDrawingsSaved = new List<Drawing>();
+    var listDrawingsError = new Dictionary<int, Drawing>();
 
     logger.Log("Leyendo comandos automáticos");
     bool updateEverythingFromExcel = configuration.GetValue<bool>("Commands:UpdateEverythingFromExcel");
@@ -68,24 +65,6 @@ try
     else
     {
         logger.Info("Se preguntará al usuario en caso de cambios");
-    }
-
-    if (firestoreService.IsInProduction)
-    {
-        console.ShowMessageWarning("This import is set to be performed at Production environment.");
-        var response = console.FillBoolValue("Are you sure you want to execute this in production?");
-        if (!response)
-        {
-            console.ShowMessageInfo("Aborted execution due to user interaction");
-            return;
-        }
-        response = console.FillBoolValue("Are you really sure? This action can not be undone after this.");
-        if (!response)
-        {
-            console.ShowMessageInfo("Aborted execution due to user interaction");
-            return;
-        }
-        logger.Info("El usuario es consciente de que la ejecución será en PRODUCCIÓN");
     }
 
     using (var package = new ExcelPackage(fileInfo))
@@ -108,7 +87,7 @@ try
         while (workSheet.Cells[row, 1].Value != null) // Suponiendo que siempre hay un valor en la primera columna
         {
             bool error = false;
-            logger.Info($"Leyendo fila {row}");
+            logger.Log($"Leyendo fila {row}");
             Drawing drawingExcel = excelService.ReadDrawingFromRow(workSheet, drawingProperties, nameToColumnMap, row);
 
             logger.Log($"Dibujo \"{drawingExcel.Id}\" leído desde Excel");
@@ -118,9 +97,9 @@ try
 
             if (drawingFirestore != null)
             {
-                // Edit document
                 try
                 {
+                    bool existenCambios = false;
                     logger.Info($"Existe un dibujo \"{drawingFirestore.Id}\" en Firestore. Procediendo a EDITAR");
 
                     foreach (var prop in drawingProperties.Where(x => x.Property.CanWrite))
@@ -129,7 +108,8 @@ try
                         {
                             bool updateValue = false;
                             logger.CleanLog("-------------------------");
-                            logger.Warning($"{drawingExcel.Id} tiene diferentes valores para {prop.Attribute.Name.ToUpper()}.");
+                            logger.Warning($"\"{drawingExcel.Id}\" tiene diferentes valores para \"{prop.Attribute.Name.ToUpper()}\".");
+
                             logger.Error("En FIRESTORE:", showTime: false, showPrefix: false);
                             logger.Error(prop.GetValueToPrint(drawingFirestore), showTime: false, showPrefix: false);
                             logger.CleanLog(".........................");
@@ -142,6 +122,7 @@ try
 
                             if (updateValue)
                             {
+                                existenCambios = true;
                                 logger.Info("Actualizando valor con EXCEL:");
                                 logger.Success(prop.GetValueToPrint(drawingExcel), showTime: false, showPrefix: false);
                                 prop.Property.SetValue(drawingFirestore, prop.GetValue(drawingExcel));
@@ -154,9 +135,20 @@ try
                         }
                     }
 
-                    logger.Info($"Actualizando \"{drawingFirestore.Id}\" en BBDD");
-                    var newDrawingSaved = await firestoreService.AddDrawingAsync(drawingFirestore);
-                    logger.Success($"\"{newDrawingSaved.Id}\" guardado con éxito");
+                    if (existenCambios) { 
+                        logger.Info($"Actualizando \"{drawingFirestore.Id}\" en BBDD");
+                        var updatedDrawingSaved = await firestoreService.AddDrawingAsync(drawingFirestore);
+                        logger.Success($"\"{updatedDrawingSaved.Id}\" guardado con éxito");
+
+                        if (!listDrawingsSaved.Any(x => x.Id == updatedDrawingSaved.Id))
+                        {
+                            listDrawingsSaved.Add(updatedDrawingSaved);
+                        }
+                    }
+                    else
+                    {
+                        logger.Info($"No se han detectado cambios en \"{drawingFirestore.Id}\" respecto al Excel. Se ignora");
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -172,6 +164,11 @@ try
                     logger.Warning($"No existe ningún dibujo con ID \"{drawingExcel.Id}\"");
                     var newDrawingSaved = await firestoreService.AddDrawingAsync(drawingExcel);
                     logger.Success($"Dibujo \"{newDrawingSaved.Id}\" creado con éxito");
+
+                    if (!listDrawingsSaved.Any(x => x.Id == newDrawingSaved.Id))
+                    {
+                        listDrawingsSaved.Add(newDrawingSaved);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -185,6 +182,11 @@ try
                 listDrawingsProcessed.Add(drawingExcel);
             }
 
+            if (error)
+            {
+                listDrawingsError.Add(row, drawingExcel);
+            }
+
             if (!updateEverythingFromExcel)
             {
                 console.ShowMessageInfo($"Pulsa cualquier tecla para continuar con la siguiente línea. Actual: {row}.");
@@ -195,7 +197,17 @@ try
         }
     }
 
-    logger.Info($"Se han procesado correctamente {listDrawingsProcessed.Count} dibujos.");
+    logger.Info($"Dibujos En Firestore: {listDrawingsFirestore.Count}.");
+    logger.Info($"Dibujos Procesados: {listDrawingsProcessed.Count}.");
+    logger.Success($"Guardados: {listDrawingsSaved.Count}.");
+    logger.Error($"Errores: {listDrawingsError.Count}.");
+    if (listDrawingsError.Any())
+    {
+        foreach (var error in listDrawingsError)
+        {
+            logger.Error($"Fila {error.Key}, \"{error.Value.Id}", showTime: false);
+        }
+    }
 }
 catch (Exception ex)
 {

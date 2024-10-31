@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using MRA.Services.Firebase;
 using MRA.Services.Helpers;
 using OfficeOpenXml.Table.PivotTable;
 using System;
@@ -57,6 +59,32 @@ namespace MRA.DTO.Logger
             };
         }
 
+        public bool ProductionEnvironmentAlert(bool isInProduction)
+        {
+            if (isInProduction)
+            {
+                _console.ShowMessageWarning("Este proceso va a ser ejecutado en PRODUCCIÓN.");
+                var response = _console.FillBoolValue("¿Estás seguro de que quieres que se ejecute en PRODUCCIÓN?");
+                if (!response)
+                {
+                    Info("Ejecución abortada por 1º interacción de usuario");
+                    return false;
+                }
+                response = _console.FillBoolValue("¿Estás realmente seguro? Esta acción se podrá deshacer.");
+                if (!response)
+                {
+                    Info("Ejecución abortada por 2ª interacción de usuario");
+                    return false;
+                }
+                Info("El usuario es consciente de que la ejecución será en PRODUCCIÓN");
+            }
+            else
+            {
+                Info("El proceso será ejecutado en PRE-producción");
+            }
+            return true;
+        }
+
         public void Log(string message) => Log(message, LogLevel.Default);
         public void CleanLog(string message) => Log(message, LogLevel.Default, false);
         public void Info(string message, bool showTime = true, bool showPrefix = true) => Log(message, LogLevel.Info, showTime, showPrefix);
@@ -68,7 +96,7 @@ namespace MRA.DTO.Logger
             string prefix = level switch
             {
                 LogLevel.Info =>    "ℹ INFO ",
-                LogLevel.Warning => "⚠ WARNING ",
+                LogLevel.Warning => "⚠ WARN ",
                 LogLevel.Error =>   "❌ ERROR ",
                 LogLevel.Success => "✅ SUCCESS ",
                 _ =>                "",
