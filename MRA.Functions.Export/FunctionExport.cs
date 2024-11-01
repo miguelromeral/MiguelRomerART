@@ -7,10 +7,17 @@ namespace MRA.Functions.Export
 {
     public class FunctionExport
     {
-        [FunctionName("FunctionExport")]
-        public void Run([TimerTrigger("0 */1 * * * *")]TimerInfo myTimer, ILogger log)
+        private readonly ILogger<FunctionExport> _logger;
+
+        public FunctionExport(ILogger<FunctionExport> logger)
         {
-            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+            _logger = logger;
+        }
+
+        [FunctionName("FunctionExport")]
+        public void Run([TimerTrigger("*/15 * * * * *")]TimerInfo myTimer)
+        {
+            _logger.LogInformation($"EJECUCIÓN DE FUNCIÓN {DateTime.Now}");
         }
     }
 }
