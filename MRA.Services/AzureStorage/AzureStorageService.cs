@@ -153,6 +153,10 @@ namespace MRA.Services.AzureStorage
 
         public async Task GuardarExcelEnAzureStorage(FileInfo archivoExcel, string blobLocation)
         {
+            if (String.IsNullOrEmpty(blobLocation))
+            {
+                throw new ArgumentException("No se ha especificado la localización del blob a guardar");
+            }
             if (archivoExcel.Extension.ToLower() != ".xlsx")
             {
                 throw new ArgumentException("El archivo proporcionado no es un archivo Excel (.xlsx)");
@@ -160,7 +164,7 @@ namespace MRA.Services.AzureStorage
 
             BlobContainerClient containerClient = _blobServiceClient.GetBlobContainerClient(BlobStorageContainer);
 
-            BlobClient blobClient = containerClient.GetBlobClient($"{blobLocation}/{archivoExcel.Name}.{archivoExcel.Extension}");
+            BlobClient blobClient = containerClient.GetBlobClient($"{blobLocation}/{archivoExcel.Name}");
 
             // Abrir el archivo y cargarlo en un flujo de memoria
             using (var rutaEntrada = archivoExcel.OpenRead())

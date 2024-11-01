@@ -18,10 +18,10 @@ namespace MRA.DTO.Logger
         private const string APPSETTING_LOG_DATE_FORMAT = "Logger:DateFormat";
         private const string APPSETTING_LOG_FILE_PREFIX = "Logger:FilePrefix";
         
-        private readonly string _logDirectory;
-        private readonly string _logFilePath;
-        private readonly string _logFileNameDateFormat;
-        private readonly string _logDateFormat;
+        private string _logDirectory;
+        private string _logFilePath;
+        private string _logFileNameDateFormat;
+        private string _logDateFormat;
         private StreamWriter _streamWriter;
         private ConsoleHelper _console;
 
@@ -34,9 +34,19 @@ namespace MRA.DTO.Logger
             Success,
         }
 
+        public Logger(IConfiguration configuration)
+        {
+            Init(configuration);
+        }
+
         public Logger(IConfiguration configuration, ConsoleHelper console)
         {
             _console = console;
+            Init(configuration);
+        }
+
+        private void Init(IConfiguration configuration)
+        {
             _logDirectory = configuration[APPSETTING_LOG_PATH] ?? "Logs";
 
             if (!Directory.Exists(_logDirectory))

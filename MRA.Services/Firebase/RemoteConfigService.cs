@@ -45,18 +45,29 @@ namespace MRA.Services.Firebase
 
         public async Task<RemoteConfigResponse> GetRemoteConfig()
         {
-            return await GetOrSetAsync<RemoteConfigResponse>(CACHE_REMOTE_CONFIG, async () =>
+            if (_secondsCache > 10)
             {
-                var httpClient = await GetHttpClientAsync();
-
-                var response = await httpClient.GetAsync("");
-                response.EnsureSuccessStatusCode();
-                var jsonResponse = await response.Content.ReadAsStringAsync();
-
-                return JsonSerializer.Deserialize<RemoteConfigResponse>(jsonResponse);
-            }, TimeSpan.FromSeconds(_secondsCache));
+                return await GetOrSetAsync(CACHE_REMOTE_CONFIG, async () =>
+                {
+                    return await GetRemoteConfigInfo();
+                }, TimeSpan.FromSeconds(_secondsCache));
+            }
+            else
+            {
+                return await GetRemoteConfigInfo();
+            }
         }
 
+        private async Task<RemoteConfigResponse> GetRemoteConfigInfo()
+        {
+            var httpClient = await GetHttpClientAsync();
+
+            var response = await httpClient.GetAsync("");
+            response.EnsureSuccessStatusCode();
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+
+            return JsonSerializer.Deserialize<RemoteConfigResponse>(jsonResponse);
+        }
 
         public async Task<T> GetConfigValueAsync<T>(RemoteConfigKey<T> key)
         {

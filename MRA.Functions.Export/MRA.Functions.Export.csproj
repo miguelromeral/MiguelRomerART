@@ -1,10 +1,31 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <AzureFunctionsVersion>v4</AzureFunctionsVersion>
+    <Isolated>true</Isolated>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Credentials\romerart-6a6c3-firebase-adminsdk-4yop5-839e7a0035.json" />
+    <None Remove="Credentials\romerart-pre-firebase-adminsdk-2oaeo-a60a5d593b.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Credentials\romerart-6a6c3-firebase-adminsdk-4yop5-839e7a0035.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Credentials\romerart-pre-firebase-adminsdk-2oaeo-a60a5d593b.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="4.5.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MRA.Services\MRA.Services.csproj">
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">
