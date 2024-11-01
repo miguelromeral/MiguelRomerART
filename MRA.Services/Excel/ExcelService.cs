@@ -37,7 +37,7 @@ namespace MRA.Services.Excel
 
         public const string EXCEL_PRODUCT_SHEET_NAME = "Products";
         public const string EXCEL_PRODUCT_TABLE_NAME = "TableProducts";
-        public const string EXCEL_PRODUCT_COLUMN_NAME = "#Product Type";
+        public const string EXCEL_PRODUCT_COLUMN_NAME = "Product Type";
         public const string EXCEL_PRODUCT_COLUMN_INDEX = "#Product Type";
 
         public const string EXCEL_SOFTWARE_SHEET_NAME = "Software";
