@@ -11,6 +11,7 @@ using MRA.DTO.Firebase.Models;
 using Microsoft.Extensions.Caching.Memory;
 using MRA.Services.Excel;
 using MRA.DTO.Logger;
+using MRA.Services.AzureStorage;
 
 var console = new ConsoleHelper();
 Logger logger = null;
@@ -25,20 +26,33 @@ try
     logger = new Logger(configuration, console);
     logger.Info("Iniciando Aplicación de Exportación");
 
+    var automated = configuration.GetValue<bool>("Commands:Automated");
+    logger.Info($"Automatizado: {(automated ? "SÍ" : "NO")}");
+
     var excelService = new ExcelService(configuration, logger);
 
     logger.Log("Configurando EPPlus");
     ExcelPackage.LicenseContext = (LicenseContext)Enum.Parse(typeof(LicenseContext), excelService.License);
+
+    logger.Log("Configurando Azure Service");
+    var azureStorageService = new AzureStorageService(configuration);
 
     logger.Log("Registrando credenciales de Firebase");
     var firestoreService = new FirestoreService(configuration);
 
     var remoteConfigService = new RemoteConfigService(new MemoryCache(new MemoryCacheOptions()), firestoreService.ProjectId, firestoreService.CredentialsPath, 60000);
     firestoreService.SetRemoteConfigService(remoteConfigService);
-    
-    if (!logger.ProductionEnvironmentAlert(firestoreService.IsInProduction))
+
+    if (automated)
     {
-        return;
+        logger.Info($"Ejecución AUTOMATIZADA en entorno de {(firestoreService.IsInProduction ? "PRODUCCIÓN" : "PRE")}");
+    }
+    else
+    {
+        if (!logger.ProductionEnvironmentAlert(firestoreService.IsInProduction))
+        {
+            return;
+        }
     }
 
     logger.Log("Leyendo documentos desde Firestore");
@@ -87,9 +101,12 @@ try
             nameColumnDropdown: "Filter",
             nameColumnIndex: "#Filter");
 
-        logger.Log("Preparando fichero para guardar");
+        logger.Log("Preparando fichero para guardar en sistema de archivos");
         var fileInfo = excelService.GetFileInfo();
         excel.SaveAs(fileInfo);
+
+        logger.Log("Preparando fichero para guardar en Azure Storage");
+        await azureStorageService.GuardarExcelEnAzureStorage(fileInfo, azureStorageService.ExportLocation);
 
         logger.Success($"Archivo Excel creado: \"{fileInfo.FullName}\"");
     }

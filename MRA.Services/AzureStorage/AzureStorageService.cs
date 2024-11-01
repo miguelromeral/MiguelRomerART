@@ -19,9 +19,11 @@ namespace MRA.Services.AzureStorage
         private const string APPSETTING_AZURE_URL_BASE = "AzureStorage:BlobPath";
         private const string APPSETTING_AZURE_BLOB_STORAGE_CONTAINER = "AzureStorage:BlobStorageContainer";
         private const string APPSETTING_AZURE_BLOB_STORAGE_CONNECTION_STRING = "AzureStorage:ConnectionString";
+        private const string APPSETTING_AZURE_BLOB_STORAGE_EXPORT_LOCATION = "AzureStorage:Backup:Export:Location";
         public string BlobURL { get { return _configuration[APPSETTING_AZURE_URL_BASE]; } }
         public string BlobStorageContainer { get { return _configuration[APPSETTING_AZURE_BLOB_STORAGE_CONTAINER]; } }
         public string ConnectionString { get { return _configuration[APPSETTING_AZURE_BLOB_STORAGE_CONNECTION_STRING]; } }
+        public string ExportLocation { get { return _configuration[APPSETTING_AZURE_BLOB_STORAGE_EXPORT_LOCATION]; } }
 
         private readonly IConfiguration _configuration;
         private readonly BlobServiceClient _blobServiceClient;
@@ -148,6 +150,38 @@ namespace MRA.Services.AzureStorage
                 }
             }
         }
+
+        public async Task GuardarExcelEnAzureStorage(FileInfo archivoExcel, string blobLocation)
+        {
+            if (archivoExcel.Extension.ToLower() != ".xlsx")
+            {
+                throw new ArgumentException("El archivo proporcionado no es un archivo Excel (.xlsx)");
+            }
+
+            BlobContainerClient containerClient = _blobServiceClient.GetBlobContainerClient(BlobStorageContainer);
+
+            BlobClient blobClient = containerClient.GetBlobClient($"{blobLocation}/{archivoExcel.Name}.{archivoExcel.Extension}");
+
+            // Abrir el archivo y cargarlo en un flujo de memoria
+            using (var rutaEntrada = archivoExcel.OpenRead())
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    // Copiar el archivo Excel al flujo de memoria
+                    await rutaEntrada.CopyToAsync(memoryStream);
+                    memoryStream.Seek(0, SeekOrigin.Begin);
+
+                    await blobClient.UploadAsync(memoryStream, new BlobUploadOptions()
+                    {
+                        HttpHeaders = new BlobHttpHeaders
+                        {
+                            ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                        }
+                    });
+                }
+            }
+        }
+
 
         public string CrearThumbnailName(string rutaImagen)
         {
