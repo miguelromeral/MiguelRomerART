@@ -33,7 +33,13 @@ namespace MRA.Functions.Export
 
 
         [FunctionName("FunctionExport")]
-        public async Task Run([TimerTrigger("0 */1 * * * *")] TimerInfo myTimer)
+        public async Task Run(
+#if DEBUG
+        [TimerTrigger("0 */1 * * * *")]
+#else
+        [TimerTrigger("30 12 * * *")] // Every day at 12:30 UTC
+#endif
+         TimerInfo myTimer)
         {
             var console = new ConsoleHelper();
             MRLogger logger = null;
@@ -58,14 +64,18 @@ namespace MRA.Functions.Export
 
                 logger.Info($"Ejecución AUTOMATIZADA en entorno de {(firestoreService.IsInProduction ? "PRODUCCIÓN" : "PRE")}");
 
-                //logger.Log("Leyendo documentos desde Firestore");
-                ////var listDrawings = await firestoreService.GetDrawingsAsync();
-                var listDrawings = new List<Drawing>(){
+                logger.Log("Leyendo documentos desde Firestore");
+                List<Drawing> listDrawings;
+
+#if DEBUG
+                listDrawings = new List<Drawing>(){
                     await firestoreService.FindDrawingByIdAsync("cloud")
                 };
+#else
+                listDrawings = await firestoreService.GetDrawingsAsync();
+#endif
                 listDrawings = await firestoreService.CalculatePopularityOfListDrawings(listDrawings);
 
-                logger.Warning($"Popularidad de Cloud: {listDrawings[0].Popularity}");
 
                 // Crear un nuevo archivo Excel
                 using (ExcelPackage excel = new ExcelPackage())
