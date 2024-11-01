@@ -14,7 +14,7 @@ using MRA.DTO;
 using MRA.DTO.Logger;
 
 var console = new ConsoleHelper();
-Logger? logger = null;
+MRLogger? logger = null;
 try
 {
     // Configuración de la aplicación
@@ -23,7 +23,7 @@ try
         .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
     var configuration = builder.Build();
 
-    logger = new Logger(configuration, console);
+    logger = new MRLogger(configuration, console);
     logger.Log("Iniciando Aplicación de Importación");
 
     var excelService = new ExcelService(configuration, logger);

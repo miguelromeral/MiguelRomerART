@@ -21,17 +21,39 @@ namespace MRA.Services.Excel
 {
     public class ExcelService
     {
-        private readonly IConfiguration _configuration;
-        private readonly Logger? _logger;
-
         private const string APPSETTING_EPPLUS_LICENSE = "EPPlus:ExcelPackage:LicenseContext";
         private const string APPSETTING_EXCEL_FILE_PATH = "Excel:File:Path";
         private const string APPSETTING_EXCEL_FILE_NAME = "Excel:File:Name";
         private const string APPSETTING_EXCEL_FILE_DATE_FORMAT = "Excel:File:DateFormat";
         private const string APPSETTING_EXCEL_FILE_EXTENSION = "Excel:File:Extension";
 
-        private const string APPSETTING_EXCEL_SHEET_NAME = "Excel:Sheet:Name";
-        private const string APPSETTING_EXCEL_TABLE_NAME = "Excel:Table:Name";
+        public const string EXCEL_DRAWING_SHEET_NAME = "Drawings";
+        public const string EXCEL_DRAWING_TABLE_NAME = "TableDrawings";
+
+        public const string EXCEL_STYLE_SHEET_NAME = "Styles";
+        public const string EXCEL_STYLE_TABLE_NAME = "TableStyles";
+        public const string EXCEL_STYLE_COLUMN_NAME = "Type";
+        public const string EXCEL_STYLE_COLUMN_INDEX = "#Type";
+
+        public const string EXCEL_PRODUCT_SHEET_NAME = "Products";
+        public const string EXCEL_PRODUCT_TABLE_NAME = "TableProducts";
+        public const string EXCEL_PRODUCT_COLUMN_NAME = "#Product Type";
+        public const string EXCEL_PRODUCT_COLUMN_INDEX = "#Product Type";
+
+        public const string EXCEL_SOFTWARE_SHEET_NAME = "Software";
+        public const string EXCEL_SOFTWARE_TABLE_NAME = "TableSoftware";
+        public const string EXCEL_SOFTWARE_COLUMN_NAME = "Software";
+        public const string EXCEL_SOFTWARE_COLUMN_INDEX = "#Software";
+
+        public const string EXCEL_PAPER_SHEET_NAME = "Papers";
+        public const string EXCEL_PAPER_TABLE_NAME = "TablePapers";
+        public const string EXCEL_PAPER_COLUMN_NAME = "Paper";
+        public const string EXCEL_PAPER_COLUMN_INDEX = "#Paper";
+
+        public const string EXCEL_FILTER_SHEET_NAME = "Filters";
+        public const string EXCEL_FILTER_TABLE_NAME = "TableFilters";
+        public const string EXCEL_FILTER_COLUMN_NAME = "Filter";
+        public const string EXCEL_FILTER_COLUMN_INDEX = "#Filter";
 
         private const string DICTIONARY_COLUMN_INDEX = "Index";
         private const string DICTIONARY_COLUMN_NAME = "Name";
@@ -41,17 +63,17 @@ namespace MRA.Services.Excel
         public string FileName { get { return _configuration[APPSETTING_EXCEL_FILE_NAME]; } }
         public string FileDateFormat { get { return _configuration[APPSETTING_EXCEL_FILE_DATE_FORMAT]; } }
         public string FileExtension { get { return _configuration[APPSETTING_EXCEL_FILE_EXTENSION]; } }
-        public string SheetName { get { return _configuration[APPSETTING_EXCEL_SHEET_NAME]; } }
-        public string TableName { get { return _configuration[APPSETTING_EXCEL_TABLE_NAME]; } }
+        public bool SaveFileLocally { get { return FilePath != null && FileName != null; } }
 
-
+        private readonly IConfiguration _configuration;
+        private readonly MRLogger? _logger;
 
         public ExcelService(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
-        public ExcelService(IConfiguration configuration, Logger logger)
+        public ExcelService(IConfiguration configuration, MRLogger logger)
         {
             _configuration = configuration;
             _logger = logger;
@@ -81,22 +103,23 @@ namespace MRA.Services.Excel
             }
         }
 
-        public void FillTable(ref ExcelWorksheet workSheet, List<ExcelColumnInfo> properties, List<Drawing> listDrawings)
+        public void FillDrawingTable(ref ExcelWorksheet workSheet, List<ExcelColumnInfo> properties, List<Drawing> listDrawings)
         {
+            SetTableHeaders(ref workSheet, properties);
             int numberDocuments = listDrawings.Count;
             int row = 2;
             foreach (var drawing in listDrawings)
             {
                 _logger?.Log($"Procesando \"{drawing.Id}\" ({row - 1}/{numberDocuments})");
-                FillTableRow(ref workSheet, properties, drawing, row);
+                FillDrawingRow(ref workSheet, properties, drawing, row);
                 row++;
             }
 
-            CreateTable(ref workSheet, TableName, 1, 1, listDrawings.Count + 1, properties.Count);
+            CreateTable(ref workSheet, EXCEL_DRAWING_TABLE_NAME, 1, 1, listDrawings.Count + 1, properties.Count);
             SetBold(ref workSheet, 2, 1, listDrawings.Count + 1, 1);
         }
 
-        public void FillTableRow(ref ExcelWorksheet workSheet, List<ExcelColumnInfo> properties, Drawing drawing, int row)
+        public void FillDrawingRow(ref ExcelWorksheet workSheet, List<ExcelColumnInfo> properties, Drawing drawing, int row)
         {
             int col = 1;
             foreach (var prop in properties)
@@ -167,13 +190,52 @@ namespace MRA.Services.Excel
         }
 
 
-        public static void CreateWorksheetDictionary(ExcelPackage excel, string name, Dictionary<int, string> dictionary, 
-            List<ExcelColumnInfo> properties, ExcelWorksheet main, string nameColumnDropdown, string nameColumnIndex)
-        {
-            var tableName = "Table" + name;
-            var wsTypes = FillWorksheetDictionary(excel, name: name, tableName: tableName, dictionary);
 
-            AddDropdownColumn(main, wsTypes, tableName, 
+        public void FillSheetsDictionary(ExcelPackage excel, List<ExcelColumnInfo> drawingProperties, ExcelWorksheet workSheet)
+        {
+            CreateWorksheetDictionary(
+                excel,
+                sheetName: EXCEL_STYLE_SHEET_NAME, 
+                tableName: EXCEL_STYLE_TABLE_NAME,
+                Drawing.DRAWING_TYPES, drawingProperties, workSheet,
+                nameColumnDropdown: EXCEL_STYLE_COLUMN_NAME,
+                nameColumnIndex: EXCEL_STYLE_COLUMN_INDEX);
+            CreateWorksheetDictionary(
+                excel,
+                sheetName: EXCEL_PRODUCT_SHEET_NAME,
+                tableName: EXCEL_PRODUCT_TABLE_NAME,
+                Drawing.DRAWING_PRODUCT_TYPES, drawingProperties, workSheet,
+                nameColumnDropdown: EXCEL_PRODUCT_COLUMN_NAME,
+                nameColumnIndex: EXCEL_PRODUCT_COLUMN_INDEX);
+            CreateWorksheetDictionary(
+                excel,
+                sheetName: EXCEL_SOFTWARE_SHEET_NAME,
+                tableName: EXCEL_SOFTWARE_TABLE_NAME, 
+                Drawing.DRAWING_SOFTWARE, drawingProperties, workSheet,
+                nameColumnDropdown: EXCEL_SOFTWARE_COLUMN_NAME,
+                nameColumnIndex: EXCEL_SOFTWARE_COLUMN_INDEX);
+            CreateWorksheetDictionary(
+                excel,
+                sheetName: EXCEL_PAPER_SHEET_NAME,
+                tableName: EXCEL_PAPER_TABLE_NAME, 
+                Drawing.DRAWING_PAPER_SIZE, drawingProperties, workSheet,
+                nameColumnDropdown: EXCEL_PAPER_COLUMN_NAME,
+                nameColumnIndex: EXCEL_PAPER_COLUMN_INDEX);
+            CreateWorksheetDictionary(
+                excel,
+                sheetName: EXCEL_FILTER_SHEET_NAME,
+                tableName: EXCEL_FILTER_TABLE_NAME, 
+                Drawing.DRAWING_FILTER, drawingProperties, workSheet,
+                nameColumnDropdown: EXCEL_FILTER_COLUMN_NAME,
+                nameColumnIndex: EXCEL_FILTER_COLUMN_INDEX);
+        }
+
+        public static void CreateWorksheetDictionary(ExcelPackage excel, string sheetName, string tableName, Dictionary<int, string> dictionary, 
+            List<ExcelColumnInfo> properties, ExcelWorksheet mainSheet, string nameColumnDropdown, string nameColumnIndex)
+        {
+            var wsTypes = FillWorksheetDictionary(excel, name: sheetName, tableName: tableName, dictionary);
+
+            AddDropdownColumn(mainSheet, wsTypes, tableName, 
                 dataRowStart: 2, 
                 dropdownColumn: FindColumnNumberOf(properties, nameColumnDropdown), 
                 indexColumn: FindColumnNumberOf(properties, nameColumnIndex));
@@ -267,9 +329,11 @@ namespace MRA.Services.Excel
             //workSheet.Cells[workSheet.Dimension.Address].AutoFitColumns();
         }
 
+        public string GetFileName() => $"{FileName}" + $"_{DateTime.Now.ToString(FileDateFormat)}" + $".{FileExtension}";
+
         public FileInfo GetFileInfo()
         {
-            var fileName = $"{FileName}" + $"_{DateTime.Now.ToString(FileDateFormat)}" + $".{FileExtension}";
+            var fileName = GetFileName();
             var filePath = Path.Combine(FilePath, fileName);
 
             if (!Directory.Exists(FilePath))

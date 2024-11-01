@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace MRA.DTO.Logger
 {
-    public class Logger : IDisposable
+    public class MRLogger : IDisposable
     {
         private const string APPSETTING_LOG_PATH = "Logger:Location";
         private const string APPSETTING_LOG_DATE_NAME = "Logger:DateNameFormat";
@@ -34,12 +34,12 @@ namespace MRA.DTO.Logger
             Success,
         }
 
-        public Logger(IConfiguration configuration)
+        public MRLogger(IConfiguration configuration)
         {
             Init(configuration);
         }
 
-        public Logger(IConfiguration configuration, ConsoleHelper console)
+        public MRLogger(IConfiguration configuration, ConsoleHelper console)
         {
             _console = console;
             Init(configuration);
@@ -47,26 +47,29 @@ namespace MRA.DTO.Logger
 
         private void Init(IConfiguration configuration)
         {
-            _logDirectory = configuration[APPSETTING_LOG_PATH] ?? "Logs";
+            _logDirectory = configuration[APPSETTING_LOG_PATH];
 
-            if (!Directory.Exists(_logDirectory))
+            if (_logDirectory != null)
             {
-                Directory.CreateDirectory(_logDirectory);
+                if (!Directory.Exists(_logDirectory))
+                {
+                    Directory.CreateDirectory(_logDirectory);
+                }
+
+                _logFileNameDateFormat = configuration[APPSETTING_LOG_DATE_NAME] ?? "yyyyMMdd_HHmmss";
+                var logPrefix = configuration[APPSETTING_LOG_FILE_PREFIX] ?? "";
+
+                // Configura el nombre del archivo con fecha y hora al inicio de la instancia de Logger
+                _logFilePath = Path.Combine(_logDirectory, $"{logPrefix}_{DateTime.Now.ToString(_logFileNameDateFormat)}.log");
+
+                // Abre el archivo de log con StreamWriter en modo Append
+                _streamWriter = new StreamWriter(_logFilePath, append: true)
+                {
+                    AutoFlush = true // Para que se escriba inmediatamente en el archivo
+                };
             }
 
-            _logFileNameDateFormat = configuration[APPSETTING_LOG_DATE_NAME] ?? "yyyyMMdd_HHmmss";
-            var logPrefix = configuration[APPSETTING_LOG_FILE_PREFIX] ?? "";
-
-            // Configura el nombre del archivo con fecha y hora al inicio de la instancia de Logger
-            _logFilePath = Path.Combine(_logDirectory, $"{logPrefix}_{DateTime.Now.ToString(_logFileNameDateFormat)}.log");
-
             _logDateFormat = configuration[APPSETTING_LOG_DATE_FORMAT] ?? "yyyy-MM-dd HH:mm:ss";
-
-            // Abre el archivo de log con StreamWriter en modo Append
-            _streamWriter = new StreamWriter(_logFilePath, append: true)
-            {
-                AutoFlush = true // Para que se escriba inmediatamente en el archivo
-            };
         }
 
         public bool ProductionEnvironmentAlert(bool isInProduction)
@@ -115,7 +118,7 @@ namespace MRA.DTO.Logger
             string logMessage = (showTime ? $"{DateTime.Now.ToString(_logDateFormat)} " : "")
                                 + (showPrefix ? prefix : "") + message;
 
-            _streamWriter.WriteLine(logMessage);
+            _streamWriter?.WriteLine(logMessage);
 
             switch(level)
             {

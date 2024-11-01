@@ -14,7 +14,7 @@ using MRA.DTO.Logger;
 using MRA.Services.AzureStorage;
 
 var console = new ConsoleHelper();
-Logger logger = null;
+MRLogger logger = null;
 try
 {
     // Configuración de la aplicación
@@ -23,7 +23,7 @@ try
         .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
     var configuration = builder.Build();
 
-    logger = new Logger(configuration, console);
+    logger = new MRLogger(configuration, console);
     logger.Info("Iniciando Aplicación de Exportación");
 
     var automated = configuration.GetValue<bool>("Commands:Automated");
@@ -62,48 +62,26 @@ try
     // Crear un nuevo archivo Excel
     using (ExcelPackage excel = new ExcelPackage())
     {
-        logger.Log($"Creando hoja principal \"{excelService.SheetName}\"");
-        var workSheet = excel.Workbook.Worksheets.Add(excelService.SheetName);
+        logger.Log($"Creando hoja principal \"{ExcelService.EXCEL_DRAWING_SHEET_NAME}\"");
+        var workSheet = excel.Workbook.Worksheets.Add(ExcelService.EXCEL_DRAWING_SHEET_NAME);
         workSheet.View.FreezePanes(2, 2);
 
         logger.Log("Obteniendo propiedades del DTO de Drawing");
         var drawingProperties = excelService.GetPropertiesAttributes<Drawing>();
 
-        excelService.SetTableHeaders(ref workSheet, drawingProperties);
-
         logger.Log("Rellenando tabla principal");
-        excelService.FillTable(ref workSheet, drawingProperties, listDrawings.OrderBy(x => x.Id).ToList());
-        
+        excelService.FillDrawingTable(ref workSheet, drawingProperties, listDrawings.OrderBy(x => x.Id).ToList());
+
         logger.Log("Preparando hojas de diccionarios");
-        ExcelService.CreateWorksheetDictionary(
-            excel,
-            name: "Styles", Drawing.DRAWING_TYPES, drawingProperties, workSheet,
-            nameColumnDropdown: "Type",
-            nameColumnIndex: "#Type");
-        ExcelService.CreateWorksheetDictionary(
-            excel,
-            name: "Products", Drawing.DRAWING_PRODUCT_TYPES, drawingProperties, workSheet,
-            nameColumnDropdown: "Product Type",
-            nameColumnIndex: "#Product Type");
-        ExcelService.CreateWorksheetDictionary(
-            excel,
-            name: "Software", Drawing.DRAWING_SOFTWARE, drawingProperties, workSheet,
-            nameColumnDropdown: "Software",
-            nameColumnIndex: "#Software");
-        ExcelService.CreateWorksheetDictionary(
-            excel,
-            name: "Papers", Drawing.DRAWING_PAPER_SIZE, drawingProperties, workSheet,
-            nameColumnDropdown: "Paper",
-            nameColumnIndex: "#Paper");
-        ExcelService.CreateWorksheetDictionary(
-            excel,
-            name: "Filters", Drawing.DRAWING_FILTER, drawingProperties, workSheet,
-            nameColumnDropdown: "Filter",
-            nameColumnIndex: "#Filter");
+        excelService.FillSheetsDictionary(excel, drawingProperties, workSheet);
 
         logger.Log("Preparando fichero para guardar en sistema de archivos");
         var fileInfo = excelService.GetFileInfo();
-        excel.SaveAs(fileInfo);
+
+        if (excelService.SaveFileLocally)
+        {
+            excel.SaveAs(fileInfo);
+        }
 
         logger.Log("Preparando fichero para guardar en Azure Storage");
         await azureStorageService.GuardarExcelEnAzureStorage(fileInfo, azureStorageService.ExportLocation);

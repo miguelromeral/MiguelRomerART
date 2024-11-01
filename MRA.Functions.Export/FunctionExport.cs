@@ -36,10 +36,10 @@ namespace MRA.Functions.Export
         public async Task Run([TimerTrigger("0 */1 * * * *")] TimerInfo myTimer)
         {
             var console = new ConsoleHelper();
-            Logger logger = null;
+            MRLogger logger = null;
             try
             {
-                logger = new Logger(_configuration, console);
+                logger = new MRLogger(_configuration, console);
                 logger.Info("Iniciando Aplicación de Exportación");
 
                 var excelService = new ExcelService(_configuration, logger);
@@ -70,57 +70,39 @@ namespace MRA.Functions.Export
                 // Crear un nuevo archivo Excel
                 using (ExcelPackage excel = new ExcelPackage())
                 {
-                    logger.Log($"Creando hoja principal \"{excelService.SheetName}\"");
-                    var workSheet = excel.Workbook.Worksheets.Add(excelService.SheetName);
+                    logger.Log($"Creando hoja principal \"{ExcelService.EXCEL_DRAWING_SHEET_NAME}\"");
+                    var workSheet = excel.Workbook.Worksheets.Add(ExcelService.EXCEL_DRAWING_SHEET_NAME);
                     workSheet.View.FreezePanes(2, 2);
 
                     logger.Log("Obteniendo propiedades del DTO de Drawing");
                     var drawingProperties = excelService.GetPropertiesAttributes<Drawing>();
 
-                    excelService.SetTableHeaders(ref workSheet, drawingProperties);
-
                     logger.Log("Rellenando tabla principal");
-                    excelService.FillTable(ref workSheet, drawingProperties, listDrawings.OrderBy(x => x.Id).ToList());
+                    excelService.FillDrawingTable(ref workSheet, drawingProperties, listDrawings.OrderBy(x => x.Id).ToList());
 
                     logger.Log("Preparando hojas de diccionarios");
-                    ExcelService.CreateWorksheetDictionary(
-                        excel,
-                        name: "Styles", Drawing.DRAWING_TYPES, drawingProperties, workSheet,
-                        nameColumnDropdown: "Type",
-                        nameColumnIndex: "#Type");
-                    ExcelService.CreateWorksheetDictionary(
-                        excel,
-                        name: "Products", Drawing.DRAWING_PRODUCT_TYPES, drawingProperties, workSheet,
-                        nameColumnDropdown: "Product Type",
-                        nameColumnIndex: "#Product Type");
-                    ExcelService.CreateWorksheetDictionary(
-                        excel,
-                        name: "Software", Drawing.DRAWING_SOFTWARE, drawingProperties, workSheet,
-                        nameColumnDropdown: "Software",
-                        nameColumnIndex: "#Software");
-                    ExcelService.CreateWorksheetDictionary(
-                        excel,
-                        name: "Papers", Drawing.DRAWING_PAPER_SIZE, drawingProperties, workSheet,
-                        nameColumnDropdown: "Paper",
-                        nameColumnIndex: "#Paper");
-                    ExcelService.CreateWorksheetDictionary(
-                        excel,
-                        name: "Filters", Drawing.DRAWING_FILTER, drawingProperties, workSheet,
-                        nameColumnDropdown: "Filter",
-                        nameColumnIndex: "#Filter");
-
-                    logger.Log("Preparando fichero para guardar en sistema de archivos");
-                    var fileInfo = excelService.GetFileInfo();
-                    excel.SaveAs(fileInfo);
-                    logger.Success($"Archivo Excel creado: \"{fileInfo.FullName}\"");
+                    excelService.FillSheetsDictionary(excel, drawingProperties, workSheet);
 
                     logger.Log("Preparando fichero para guardar en Azure Storage");
-                    try
+                    // Crear un MemoryStream para guardar el archivo en memoria
+                    using (var memoryStream = new MemoryStream())
                     {
-                        await azureStorageService.GuardarExcelEnAzureStorage(fileInfo, azureStorageService.ExportLocation);
-                    }catch(Exception ex)
-                    {
-                        logger.Error("Error al guardar el archivo en Azure Storage: " + ex.Message);
+                        var fileName = excelService.GetFileName();
+                        // Guardar el contenido del ExcelPackage en el MemoryStream
+                        excel.SaveAs(memoryStream);
+
+                        // Restablecer la posición del Stream al inicio
+                        memoryStream.Position = 0;
+
+                        try
+                        {
+                            // Llamar a la función para subir a Azure, pasando el MemoryStream
+                            await azureStorageService.GuardarExcelEnAzureStorage(memoryStream, azureStorageService.ExportLocation, fileName);
+                        }
+                        catch (Exception ex)
+                        {
+                            logger.Error($"Error al guardar el archivo \"{fileName}\" en Azure Storage: " + ex.Message);
+                        }
                     }
                 }
             }

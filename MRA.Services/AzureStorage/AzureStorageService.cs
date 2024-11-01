@@ -187,6 +187,18 @@ namespace MRA.Services.AzureStorage
         }
 
 
+        public async Task GuardarExcelEnAzureStorage(Stream stream, string blobLocation, string blobName)
+        {
+            // Crear un cliente de Blob para el contenedor
+            var blobServiceClient = new BlobServiceClient(ConnectionString);
+            var containerClient = blobServiceClient.GetBlobContainerClient(BlobStorageContainer);
+
+            // Subir el archivo al contenedor
+            BlobClient blobClient = containerClient.GetBlobClient($"{blobLocation}/{blobName}");
+            await blobClient.UploadAsync(stream, overwrite: true);
+        }
+
+
         public string CrearThumbnailName(string rutaImagen)
         {
             // Obtener el nombre del archivo sin la extensión
