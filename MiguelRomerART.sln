@@ -28,6 +28,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MRA.Export", "MRA.Export\MR
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MRA.Import", "MRA.Import\MRA.Import.csproj", "{AE4E6A3C-1656-4932-B427-963C1F491F00}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MRA.Functions.Export", "MRA.Functions.Export\MRA.Functions.Export.csproj", "{665CD878-DFB2-49F2-85CB-A389C9559F78}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +64,10 @@ Global
 		{AE4E6A3C-1656-4932-B427-963C1F491F00}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE4E6A3C-1656-4932-B427-963C1F491F00}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE4E6A3C-1656-4932-B427-963C1F491F00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{665CD878-DFB2-49F2-85CB-A389C9559F78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{665CD878-DFB2-49F2-85CB-A389C9559F78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{665CD878-DFB2-49F2-85CB-A389C9559F78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{665CD878-DFB2-49F2-85CB-A389C9559F78}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
