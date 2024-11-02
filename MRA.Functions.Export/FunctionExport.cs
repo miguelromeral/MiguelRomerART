@@ -20,14 +20,14 @@ namespace MRA.Functions.Export
 {
     public class FunctionExport
     {
-        //private readonly ILogger<FunctionExport> _logger;
+        private readonly ILogger<FunctionExport> _logger;
         private readonly IConfiguration _configuration;
 
         public FunctionExport(
-            //ILogger<FunctionExport> logger, 
+            ILogger<FunctionExport> logger,
             IConfiguration configuration)
         {
-            //_logger = logger;
+            _logger = logger;
             _configuration = configuration;
         }
 
@@ -39,13 +39,12 @@ namespace MRA.Functions.Export
 #else
         [TimerTrigger("0 30 12 */1 * *")] // Every day at 12:30 UTC
 #endif
-         TimerInfo myTimer)
+         TimerInfo myTimer/*, ILogger log*/)
         {
-            var console = new ConsoleHelper();
             MRLogger logger = null;
             try
             {
-                logger = new MRLogger(_configuration, console);
+                logger = new MRLogger(_logger, _configuration);
                 logger.Info("Iniciando Aplicación de Exportación");
 
                 var excelService = new ExcelService(_configuration, logger);

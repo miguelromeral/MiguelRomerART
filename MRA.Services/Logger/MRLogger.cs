@@ -24,6 +24,7 @@ namespace MRA.DTO.Logger
         private string _logDateFormat;
         private StreamWriter _streamWriter;
         private ConsoleHelper _console;
+        private ILogger _logger;
 
         public enum LogLevel
         {
@@ -34,14 +35,14 @@ namespace MRA.DTO.Logger
             Success,
         }
 
-        public MRLogger(IConfiguration configuration)
-        {
-            Init(configuration);
-        }
-
         public MRLogger(IConfiguration configuration, ConsoleHelper console)
         {
             _console = console;
+            Init(configuration);
+        }
+        public MRLogger(ILogger logger, IConfiguration configuration)
+        {
+            _logger = logger;
             Init(configuration);
         }
 
@@ -123,19 +124,24 @@ namespace MRA.DTO.Logger
             switch(level)
             {
                 case LogLevel.Info: 
-                    _console.ShowMessageInfo(logMessage);
+                    _console?.ShowMessageInfo(logMessage);
+                    _logger?.LogInformation(message);
                     break;
                 case LogLevel.Warning: 
-                    _console.ShowMessageWarning(logMessage);
+                    _console?.ShowMessageWarning(logMessage);
+                    _logger?.LogWarning(message);
                     break;
                 case LogLevel.Error:
-                    _console.ShowMessageError(logMessage);
+                    _console?.ShowMessageError(logMessage);
+                    _logger?.LogError(message);
                     break;
                 case LogLevel.Success:
-                    _console.ShowMessageSuccess(logMessage);
+                    _console?.ShowMessageSuccess(logMessage);
+                    _logger?.LogInformation("SUCCESS "+message);
                     break;
                 default:
-                    _console.ShowMessage(logMessage);
+                    _console?.ShowMessage(logMessage);
+                    _logger?.LogInformation(message);
                     break;
             };
         }
