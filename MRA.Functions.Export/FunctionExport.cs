@@ -37,7 +37,7 @@ namespace MRA.Functions.Export
 #if DEBUG
         [TimerTrigger("0 */1 * * * *")]
 #else
-        [TimerTrigger("30 12 * * *")] // Every day at 12:30 UTC
+        [TimerTrigger("0 30 12 */1 * *")] // Every day at 12:30 UTC
 #endif
          TimerInfo myTimer)
         {
