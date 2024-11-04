@@ -58,8 +58,8 @@ namespace MRA.Functions.Export
                 logger.Log("Registrando credenciales de Firebase");
                 var firestoreService = new FirestoreService(_configuration);
 
-                //var remoteConfigService = new RemoteConfigService(null, firestoreService.ProjectId, firestoreService.CredentialsPath, 1);
-                //firestoreService.SetRemoteConfigService(remoteConfigService);
+                var remoteConfigService = new RemoteConfigService(null, firestoreService.ProjectId, firestoreService.CredentialsPath, 3600);
+                firestoreService.SetRemoteConfigService(remoteConfigService);
 
                 logger.Info($"Ejecución AUTOMATIZADA en entorno de {(firestoreService.IsInProduction ? "PRODUCCIÓN" : "PRE")}");
 
@@ -73,6 +73,8 @@ namespace MRA.Functions.Export
 #else
                 listDrawings = await firestoreService.GetDrawingsAsync();
 #endif
+
+                logger.Log("Calculando Popularidad");
                 listDrawings = await firestoreService.CalculatePopularityOfListDrawings(listDrawings);
 
 
