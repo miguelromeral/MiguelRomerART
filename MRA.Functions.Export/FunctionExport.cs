@@ -56,7 +56,7 @@ namespace MRA.Functions.Export
                 var azureStorageService = new AzureStorageService(_configuration);
 
                 logger.Log("Registrando credenciales de Firebase");
-                var firestoreService = new FirestoreService(_configuration, _logger);
+                var firestoreService = new FirestoreService(_configuration);
 
                 var remoteConfigService = new RemoteConfigService(null, firestoreService.ProjectId, firestoreService.CredentialsPath, 3600);
                 firestoreService.SetRemoteConfigService(remoteConfigService);
