@@ -22,6 +22,7 @@ using System.ComponentModel.DataAnnotations;
 using MRA.DTO.Firebase.RemoteConfig;
 using Google.Cloud.Firestore.V1;
 using MRA.DTO.Exceptions;
+using Microsoft.Extensions.Logging;
 
 namespace MRA.Services.Firebase
 {
@@ -40,6 +41,7 @@ namespace MRA.Services.Firebase
         private const string ENV_GOOGLE_CREDENTIALS = "GOOGLE_APPLICATION_CREDENTIALS";
         #endregion
 
+        private readonly ILogger _logger;
         private readonly IConfiguration _configuration;
         private readonly FirestoreDb _firestoreDb;
         private string _serviceAccountPath = "";
@@ -67,9 +69,10 @@ namespace MRA.Services.Firebase
             }
         }
 
-        public FirestoreService(IConfiguration configuration)
+        public FirestoreService(IConfiguration configuration, ILogger logger)
         {
             _configuration = configuration;
+            _logger = logger;
             LoadCredentials();
             _firestoreDb = FirestoreDb.Create(ProjectId);
             SetConverters(AzureUrlBase);
@@ -83,6 +86,7 @@ namespace MRA.Services.Firebase
             var googleCredentialsJson = Environment.GetEnvironmentVariable(ENV_GOOGLE_CREDENTIALS_AZURE);
             if (!string.IsNullOrEmpty(googleCredentialsJson))
             {
+                _logger.LogTrace("Ejecución en Azure. Creando fichero temporal con valor de credenciales");
                 var tempCredentialPath = Path.Combine(Path.GetTempPath(), "firebase-credentials.json");
                 File.WriteAllText(tempCredentialPath, googleCredentialsJson);
 
@@ -90,11 +94,13 @@ namespace MRA.Services.Firebase
             }
             else
             {
+                _logger.LogTrace("Ejecución local. Leyendo fichero de credenciales");
                 // Si estoy en local
                 _serviceAccountPath = _configuration[APPSETTING_FIREBASE_CREDENTIALS_PATH];
             }
 
             Environment.SetEnvironmentVariable(ENV_GOOGLE_CREDENTIALS, _serviceAccountPath);
+            _logger.LogInformation($"Creada variable de entorno \"{ENV_GOOGLE_CREDENTIALS}\"");
         }
 
 

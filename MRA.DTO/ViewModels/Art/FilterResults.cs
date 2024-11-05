@@ -39,7 +39,8 @@ namespace MRA.DTO.ViewModels.Art
 
         public FilterResults()
         {
-
+            FilteredDrawings = new List<Drawing>();
+            TotalDrawings = new List<Drawing>();
         }
 
         public FilterResults(List<Drawing> totalDrawings)

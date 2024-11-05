@@ -25,7 +25,7 @@ namespace MRA.DTO.ViewModels.Art
         public int PageNumber { get; set; }
         public bool OnlyVisible { get; set; }
 
-        public string CacheKey { get => $"filter_{Type}_{ProductType}_{ProductName}_{ModelName}_{CharacterName}_{Collection}_{Software}_{Paper}_{Sortby}_{Spotify}_{string.Join("_", Tags)}_{Favorites}_{PageSize}_{PageNumber}_{OnlyVisible}"; }
+        public string CacheKey { get => $"filter_type:{Type}_productType:{ProductType}_product:{ProductName}_model:{ModelName}_character:{CharacterName}_collection:{Collection}_sw:{Software}_paper:{Paper}_sort:{Sortby}_spotify:{Spotify}_tags:{string.Join("|", Tags)}_fav:{Favorites}_psize:{PageSize}_pnumber:{PageNumber}_visible:{OnlyVisible}"; }
 
 
         public static DrawingFilter GetModelNoFilters() =>

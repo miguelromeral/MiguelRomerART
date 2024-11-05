@@ -18,18 +18,15 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Runtime.Intrinsics.Arm;
 using MRA.Services.Helpers;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configurar logging
-builder.Logging.ClearProviders();  // Limpia los proveedores de logging preexistentes
-builder.Logging.AddConsole();      // Agrega logging en consola (visible en Kudu)
-builder.Logging.AddDebug();        // Agrega logging de depuración
+// Configurar Serilog para que lea la configuración desde appsettings.json
+builder.Host.UseSerilog((context, services, configuration) =>
+    configuration.ReadFrom.Configuration(context.Configuration));
 
-// Si necesitas logs de mayor detalle en producción, ajusta el nivel de logging
-builder.Logging.SetMinimumLevel(LogLevel.Information);  // Cambia a Debug o Trace si necesitas más detalle
-
-var logger = builder.Logging.Services.BuildServiceProvider().GetRequiredService<ILogger<Program>>(); // Obtener el logger
+var logger = builder.Logging.Services.BuildServiceProvider().GetRequiredService<ILogger<Program>>();
 logger.LogInformation("Iniciando la aplicación...");
 
 // Añadimos Autenticación por JWT
@@ -77,16 +74,12 @@ logger.LogInformation("Configurando conexión con Azure Storage");
 var azureStorageService = new AzureStorageService(builder.Configuration);
 builder.Services.AddSingleton(azureStorageService);
 
-// Configuración de Credenciales de Firebase
-logger.LogInformation("Configurando credenciales de Google Firebase");
-
 // Configuración de Firebase
 logger.LogInformation("Configurando credenciales de Google Firebase");
 var secondsCache = builder.Configuration.GetValue<int>("CacheSeconds");
 
-
 logger.LogInformation("Creando servicio de Firebase");
-var firebaseService = new FirestoreService(builder.Configuration);
+var firebaseService = new FirestoreService(builder.Configuration, logger);
 
 //var accessToken = await GoogleCredentialHelper.GetAccessTokenAsync(serviceAccountPath);
 logger.LogInformation("Creando servicio de Remote Config");
