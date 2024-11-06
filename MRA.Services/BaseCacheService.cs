@@ -10,7 +10,7 @@ namespace MRA.Services
 {
     public class BaseCacheService
     {
-        private readonly IMemoryCache _cache;
+        internal readonly IMemoryCache _cache;
 
         public BaseCacheService(IMemoryCache cache)
         {
@@ -48,21 +48,28 @@ namespace MRA.Services
 
         public async Task<T> GetOrSetAsync<T>(string cacheKey, Func<Task<T>> getDataFunc, TimeSpan cacheDuration)
         {
-            if (_cache.TryGetValue(cacheKey, out T cachedData))
+            if (_cache != null)
             {
-                return cachedData;
+                if (_cache.TryGetValue(cacheKey, out T cachedData))
+                {
+                    return cachedData;
+                }
+
+                var data = await getDataFunc();
+
+                var cacheEntryOptions = new MemoryCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = cacheDuration
+                };
+
+                _cache.Set(cacheKey, data, cacheEntryOptions);
+
+                return data;
             }
-
-            var data = await getDataFunc();
-
-            var cacheEntryOptions = new MemoryCacheEntryOptions
+            else
             {
-                AbsoluteExpirationRelativeToNow = cacheDuration
-            };
-
-            _cache.Set(cacheKey, data, cacheEntryOptions);
-
-            return data;
+                return await getDataFunc();
+            }
         }
 
     }

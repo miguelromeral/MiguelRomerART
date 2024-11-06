@@ -9,7 +9,6 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MRA.DTO.Firebase.Models;
-using MRA.DTO.Logger;
 using MRA.Services.AzureStorage;
 using MRA.Services.Excel;
 using MRA.Services.Firebase;
@@ -41,29 +40,27 @@ namespace MRA.Functions.Export
 #endif
          TimerInfo myTimer/*, ILogger log*/)
         {
-            MRLogger logger = null;
             try
             {
-                logger = new MRLogger(_logger, _configuration);
-                logger.Info("Iniciando Aplicación de Exportación");
+                _logger.LogInformation("Iniciando Aplicación de Exportación");
 
-                var excelService = new ExcelService(_configuration, logger);
+                var excelService = new ExcelService(_configuration, _logger);
 
-                logger.Log("Configurando EPPlus");
+                _logger.LogInformation("Configurando EPPlus");
                 ExcelPackage.LicenseContext = (LicenseContext)Enum.Parse(typeof(LicenseContext), excelService.License);
 
-                logger.Log("Configurando Azure Service");
+                _logger.LogInformation("Configurando Azure Service");
                 var azureStorageService = new AzureStorageService(_configuration);
 
-                logger.Log("Registrando credenciales de Firebase");
+                _logger.LogInformation("Registrando credenciales de Firebase");
                 var firestoreService = new FirestoreService(_configuration);
 
                 var remoteConfigService = new RemoteConfigService(null, firestoreService.ProjectId, firestoreService.CredentialsPath, 3600);
                 firestoreService.SetRemoteConfigService(remoteConfigService);
 
-                logger.Info($"Ejecución AUTOMATIZADA en entorno de {(firestoreService.IsInProduction ? "PRODUCCIÓN" : "PRE")}");
+                _logger.LogInformation($"Ejecución AUTOMATIZADA en entorno de {(firestoreService.IsInProduction ? "PRODUCCIÓN" : "PRE")}");
 
-                logger.Log("Leyendo documentos desde Firestore");
+                _logger.LogInformation("Leyendo documentos desde Firestore");
                 List<Drawing> listDrawings;
 
 #if DEBUG
@@ -74,27 +71,27 @@ namespace MRA.Functions.Export
                 listDrawings = await firestoreService.GetDrawingsAsync();
 #endif
 
-                logger.Log("Calculando Popularidad");
+                _logger.LogInformation("Calculando Popularidad");
                 listDrawings = await firestoreService.CalculatePopularityOfListDrawings(listDrawings);
 
 
                 // Crear un nuevo archivo Excel
                 using (ExcelPackage excel = new ExcelPackage())
                 {
-                    logger.Log($"Creando hoja principal \"{ExcelService.EXCEL_DRAWING_SHEET_NAME}\"");
+                    _logger.LogInformation($"Creando hoja principal \"{ExcelService.EXCEL_DRAWING_SHEET_NAME}\"");
                     var workSheet = excel.Workbook.Worksheets.Add(ExcelService.EXCEL_DRAWING_SHEET_NAME);
                     workSheet.View.FreezePanes(2, 2);
 
-                    logger.Log("Obteniendo propiedades del DTO de Drawing");
+                    _logger.LogInformation("Obteniendo propiedades del DTO de Drawing");
                     var drawingProperties = excelService.GetPropertiesAttributes<Drawing>();
 
-                    logger.Log("Rellenando tabla principal");
+                    _logger.LogInformation("Rellenando tabla principal");
                     excelService.FillDrawingTable(ref workSheet, drawingProperties, listDrawings.OrderBy(x => x.Id).ToList());
 
-                    logger.Log("Preparando hojas de diccionarios");
+                    _logger.LogInformation("Preparando hojas de diccionarios");
                     excelService.FillSheetsDictionary(excel, drawingProperties, workSheet);
 
-                    logger.Log("Preparando fichero para guardar en Azure Storage");
+                    _logger.LogInformation("Preparando fichero para guardar en Azure Storage");
                     // Crear un MemoryStream para guardar el archivo en memoria
                     using (var memoryStream = new MemoryStream())
                     {
@@ -112,16 +109,16 @@ namespace MRA.Functions.Export
                         }
                         catch (Exception ex)
                         {
-                            logger.Error($"Error al guardar el archivo \"{fileName}\" en Azure Storage: " + ex.Message);
+                            _logger.LogError(ex, $"Error al guardar el archivo \"{fileName}\" en Azure Storage");
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                logger?.Error("Error durante la exportación: " + ex.Message);
+                _logger?.LogError(ex, "Error durante la exportación");
             }
-            logger.Log("Fin de la Exportación en Azure Functions");
+            _logger.LogInformation("Fin de la Exportación en Azure Functions");
         }
     }
 }

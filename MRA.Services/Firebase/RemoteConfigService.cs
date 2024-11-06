@@ -45,17 +45,10 @@ namespace MRA.Services.Firebase
 
         public async Task<RemoteConfigResponse> GetRemoteConfig()
         {
-            if (_secondsCache > 10)
-            {
-                return await GetOrSetAsync(CACHE_REMOTE_CONFIG, async () =>
-                {
-                    return await GetRemoteConfigInfo();
-                }, TimeSpan.FromSeconds(_secondsCache));
-            }
-            else
+            return await GetOrSetAsync(CACHE_REMOTE_CONFIG, async () =>
             {
                 return await GetRemoteConfigInfo();
-            }
+            }, TimeSpan.FromSeconds(_secondsCache));
         }
 
         private async Task<RemoteConfigResponse> GetRemoteConfigInfo()
