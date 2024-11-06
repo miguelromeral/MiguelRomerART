@@ -19,15 +19,6 @@ namespace MRA.DTO.Logger
         private string _logDateFormat;
         private StreamWriter _streamWriter;
 
-        public enum LogLevel
-        {
-            Default,
-            Info,
-            Warning,
-            Error,
-            Success,
-        }
-
         public MRLogger(IConfiguration configuration)
         {
             _logDirectory = configuration[APPSETTING_LOG_PATH];
@@ -52,20 +43,19 @@ namespace MRA.DTO.Logger
             _logDateFormat = configuration[APPSETTING_LOG_DATE_FORMAT] ?? "yyyy-MM-dd HH:mm:ss";
         }
 
-        public void Log<TState>(Microsoft.Extensions.Logging.LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
+        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
         {
             if (!IsEnabled(logLevel))
                 return;
 
             string message = formatter(state, exception);
-            LogLevel customLogLevel = ConvertToCustomLogLevel(logLevel);
-            Log(message, customLogLevel);
+            Log(message, logLevel);
         }
 
-        public bool IsEnabled(Microsoft.Extensions.Logging.LogLevel logLevel)
+        public bool IsEnabled(LogLevel logLevel)
         {
             // Implementación para habilitar los niveles de logging según tus necesidades
-            return logLevel >= Microsoft.Extensions.Logging.LogLevel.Information;
+            return logLevel >= LogLevel.Information;
         }
 
         public IDisposable BeginScope<TState>(TState state)
@@ -74,30 +64,19 @@ namespace MRA.DTO.Logger
             return null;
         }
 
-        private LogLevel ConvertToCustomLogLevel(Microsoft.Extensions.Logging.LogLevel logLevel) =>
-            logLevel switch
-            {
-                Microsoft.Extensions.Logging.LogLevel.Information => LogLevel.Info,
-                Microsoft.Extensions.Logging.LogLevel.Warning => LogLevel.Warning,
-                Microsoft.Extensions.Logging.LogLevel.Error => LogLevel.Error,
-                _ => LogLevel.Default,
-            };
+        public void Log(string message) => Log(message, LogLevel.Information);
+        public void CleanLog(string message) => Log(message, LogLevel.Information, false);
+        public void LogInformation(string message, bool showTime = true, bool showPrefix = true) => Log(message, LogLevel.Information, showTime, showPrefix);
+        public void LogWarning(string message, bool showTime = true, bool showPrefix = true) => Log(message, LogLevel.Warning, showTime, showPrefix);
+        public void LogError(string message, bool showTime = true, bool showPrefix = true) => Log(message, LogLevel.Error, showTime, showPrefix);
 
-        public void Log(string message) => Log(message, LogLevel.Default);
-        public void CleanLog(string message) => Log(message, LogLevel.Default, false);
-        public void Info(string message, bool showTime = true, bool showPrefix = true) => Log(message, LogLevel.Info, showTime, showPrefix);
-        public void Warning(string message, bool showTime = true, bool showPrefix = true) => Log(message, LogLevel.Warning, showTime, showPrefix);
-        public void Error(string message, bool showTime = true, bool showPrefix = true) => Log(message, LogLevel.Error, showTime, showPrefix);
-        public void Success(string message, bool showTime = true, bool showPrefix = true) => Log(message, LogLevel.Success, showTime, showPrefix);
-
-        public void Log(string message, LogLevel level = LogLevel.Default, bool showTime = true, bool showPrefix = true)
+        public void Log(string message, LogLevel level = LogLevel.Information, bool showTime = true, bool showPrefix = true)
         {
             string prefix = level switch
             {
-                LogLevel.Info => "ℹ INFO ",
+                LogLevel.Information => "INFO ",
                 LogLevel.Warning => "⚠ WARN ",
                 LogLevel.Error => "❌ ERROR ",
-                LogLevel.Success => "✅ SUCCESS ",
                 _ => ""
             };
 
@@ -108,7 +87,7 @@ namespace MRA.DTO.Logger
 
             switch (level)
             {
-                case LogLevel.Info:
+                case LogLevel.Information:
                     ShowMessageInfo(logMessage);
                     break;
                 case LogLevel.Warning:
@@ -116,9 +95,6 @@ namespace MRA.DTO.Logger
                     break;
                 case LogLevel.Error:
                     ShowMessageError(logMessage);
-                    break;
-                case LogLevel.Success:
-                    ShowMessageSuccess(logMessage);
                     break;
                 default:
                     ShowMessage(logMessage);

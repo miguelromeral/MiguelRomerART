@@ -24,10 +24,10 @@ try
     var configuration = builder.Build();
 
     logger = new MRLogger(configuration, console);
-    logger.Info("Iniciando Aplicación de Exportación");
+    logger.LogInformation("Iniciando Aplicación de Exportación");
 
     var automated = configuration.GetValue<bool>("Commands:Automated");
-    logger.Info($"Automatizado: {(automated ? "SÍ" : "NO")}");
+    logger.LogInformation($"Automatizado: {(automated ? "SÍ" : "NO")}");
 
     var excelService = new ExcelService(configuration, logger);
 
@@ -45,7 +45,7 @@ try
 
     if (automated)
     {
-        logger.Info($"Ejecución AUTOMATIZADA en entorno de {(firestoreService.IsInProduction ? "PRODUCCIÓN" : "PRE")}");
+        logger.LogInformation($"Ejecución AUTOMATIZADA en entorno de {(firestoreService.IsInProduction ? "PRODUCCIÓN" : "PRE")}");
     }
     else
     {
@@ -91,7 +91,7 @@ try
 }
 catch (Exception ex)
 {
-    logger?.Error("Error durante la exportación: " + ex.Message);
+    logger?.LogError("Error durante la exportación: " + ex.Message);
     console.ShowMessageInfo("Pulse cualquier tecla para continuar");
     Console.ReadKey();
 }

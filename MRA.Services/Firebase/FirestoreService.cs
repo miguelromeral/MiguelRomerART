@@ -22,6 +22,7 @@ using System.ComponentModel.DataAnnotations;
 using MRA.DTO.Firebase.RemoteConfig;
 using Google.Cloud.Firestore.V1;
 using MRA.DTO.Exceptions;
+using System.Runtime.Intrinsics.Arm;
 
 namespace MRA.Services.Firebase
 {
@@ -72,7 +73,9 @@ namespace MRA.Services.Firebase
             _configuration = configuration;
             LoadCredentials();
             _firestoreDb = FirestoreDb.Create(ProjectId);
-            SetConverters(AzureUrlBase);
+            _converterDrawing = new DrawingFirebaseConverter(AzureUrlBase);
+            _converterInspiration = new InspirationFirebaseConverter();
+            _converterCollection = new CollectionFirebaseConverter();
         }
 
         public void LoadCredentials()
@@ -95,14 +98,6 @@ namespace MRA.Services.Firebase
             }
 
             Environment.SetEnvironmentVariable(ENV_GOOGLE_CREDENTIALS, _serviceAccountPath);
-        }
-
-
-        private void SetConverters(string urlBase)
-        {
-            _converterDrawing = new DrawingFirebaseConverter(urlBase);
-            _converterInspiration = new InspirationFirebaseConverter();
-            _converterCollection = new CollectionFirebaseConverter();
         }
 
         public void SetRemoteConfigService(RemoteConfigService service)

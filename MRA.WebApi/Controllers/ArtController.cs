@@ -29,15 +29,15 @@ namespace MRA.WebApi.Controllers
         {
             try
             {
-                _logger.Info("Solicitados Productos");
+                _logger.LogInformation("Solicitados Productos");
                 var drawings = await _drawingService.GetAllDrawings();
                 var products = _drawingService.GetProducts(drawings);
-                _logger.Success("Productos recuperados: " + products.Count);
+                _logger.LogInformation("Productos recuperados: " + products.Count);
                 return products;
             }
             catch(Exception ex)
             {
-                _logger.Error("Error al recuperar los productos: "+ex.Message);
+                _logger.LogError("Error al recuperar los productos: "+ex.Message);
                 return new List<ProductListItem>();
             }
         }
