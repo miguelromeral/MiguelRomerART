@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using MRA.DTO.Excel.Attributes;
 using MRA.DTO.Firebase.Models;
-using MRA.DTO.Logger;
 using MRA.Services.Helpers;
 using OfficeOpenXml;
 using OfficeOpenXml.DataValidation;
@@ -66,14 +66,14 @@ namespace MRA.Services.Excel
         public bool SaveFileLocally { get { return FilePath != null && FileName != null; } }
 
         private readonly IConfiguration _configuration;
-        private readonly MRLogger? _logger;
+        private readonly ILogger? _logger;
 
         public ExcelService(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
-        public ExcelService(IConfiguration configuration, MRLogger logger)
+        public ExcelService(IConfiguration configuration, ILogger logger)
         {
             _configuration = configuration;
             _logger = logger;
@@ -110,7 +110,7 @@ namespace MRA.Services.Excel
             int row = 2;
             foreach (var drawing in listDrawings)
             {
-                _logger?.Log($"Procesando \"{drawing.Id}\" ({row - 1}/{numberDocuments})");
+                _logger?.LogInformation($"Procesando \"{drawing.Id}\" ({row - 1}/{numberDocuments})");
                 FillDrawingRow(ref workSheet, properties, drawing, row);
                 row++;
             }

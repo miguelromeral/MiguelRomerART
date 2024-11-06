@@ -18,6 +18,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Runtime.Intrinsics.Arm;
 using MRA.Services.Helpers;
+using MRA.DTO.Logger;
+using MRA.WebApi.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,15 +27,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();  // Limpia los proveedores de logging preexistentes
 builder.Logging.AddConsole();      // Agrega logging en consola (visible en Kudu)
 builder.Logging.AddDebug();        // Agrega logging de depuración
-
-// Si necesitas logs de mayor detalle en producción, ajusta el nivel de logging
 builder.Logging.SetMinimumLevel(LogLevel.Information);  // Cambia a Debug o Trace si necesitas más detalle
 
-var logger = builder.Logging.Services.BuildServiceProvider().GetRequiredService<ILogger<Program>>(); // Obtener el logger
-logger.LogInformation("Iniciando la aplicación...");
-
 // Añadimos Autenticación por JWT
-logger.LogInformation("Iniciando la configuración de JWT");
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 var key = Encoding.ASCII.GetBytes(jwtSettings["Key"]);
 
@@ -57,7 +53,6 @@ builder.Services.AddAuthentication(options =>
 });
 
 // Agrega servicios CORS
-logger.LogInformation("Agregando servicios CORS");
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
@@ -71,25 +66,19 @@ builder.Services.AddCors(options =>
 
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
-// Configuración de Azure
-logger.LogInformation("Configurando conexión con Azure Storage");
+var logger = new MRLogger(builder.Configuration);
+builder.Services.AddSingleton(logger);
 
+// Configuración de Azure
 var azureStorageService = new AzureStorageService(builder.Configuration);
 builder.Services.AddSingleton(azureStorageService);
 
-// Configuración de Credenciales de Firebase
-logger.LogInformation("Configurando credenciales de Google Firebase");
-
 // Configuración de Firebase
-logger.LogInformation("Configurando credenciales de Google Firebase");
 var secondsCache = builder.Configuration.GetValue<int>("CacheSeconds");
 
-
-logger.LogInformation("Creando servicio de Firebase");
 var firebaseService = new FirestoreService(builder.Configuration);
 
 //var accessToken = await GoogleCredentialHelper.GetAccessTokenAsync(serviceAccountPath);
-logger.LogInformation("Creando servicio de Remote Config");
 var remoteConfigService = new RemoteConfigService(new MemoryCache(new MemoryCacheOptions()), firebaseService.ProjectId, firebaseService.CredentialsPath, secondsCache);
 builder.Services.AddSingleton(remoteConfigService);
 
@@ -123,7 +112,6 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 // Añadir Memoria Cache
 builder.Services.AddMemoryCache();
 
-logger.LogInformation("Creando aplicación");
 var app = builder.Build();
 
 // Utilizando autenticación JWT
@@ -152,7 +140,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
-logger.LogInformation("Aplicación creada con éxito. Procede a ejecutarse");
 
 app.Run();

@@ -1,30 +1,23 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using MRA.Services.Firebase;
 using MRA.Services.Helpers;
-using OfficeOpenXml.Table.PivotTable;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 
 namespace MRA.DTO.Logger
 {
-    public class MRLogger : IDisposable
+    public class MRLogger: ConsoleHelper, ILogger, IDisposable
     {
-        private const string APPSETTING_LOG_PATH = "Logger:Location";
-        private const string APPSETTING_LOG_DATE_NAME = "Logger:DateNameFormat";
-        private const string APPSETTING_LOG_DATE_FORMAT = "Logger:DateFormat";
-        private const string APPSETTING_LOG_FILE_PREFIX = "Logger:FilePrefix";
-        
+        private const string APPSETTING_LOG_PATH = "MRALogger:Location";
+        private const string APPSETTING_LOG_FILE_PREFIX = "MRALogger:FilePrefix";
+        private const string APPSETTING_LOG_DATE_NAME = "MRALogger:DateNameFormat";
+        private const string APPSETTING_LOG_DATE_FORMAT = "MRALogger:DateFormat";
+
         private string _logDirectory;
         private string _logFilePath;
         private string _logFileNameDateFormat;
         private string _logDateFormat;
         private StreamWriter _streamWriter;
-        private ConsoleHelper _console;
-        private ILogger _logger;
 
         public enum LogLevel
         {
@@ -35,23 +28,12 @@ namespace MRA.DTO.Logger
             Success,
         }
 
-        public MRLogger(IConfiguration configuration, ConsoleHelper console)
-        {
-            _console = console;
-            Init(configuration);
-        }
-        public MRLogger(ILogger logger, IConfiguration configuration)
-        {
-            _logger = logger;
-            Init(configuration);
-        }
-
-        private void Init(IConfiguration configuration)
+        public MRLogger(IConfiguration configuration)
         {
             _logDirectory = configuration[APPSETTING_LOG_PATH];
-
-            if (_logDirectory != null)
+            if (!string.IsNullOrEmpty(_logDirectory))
             {
+
                 if (!Directory.Exists(_logDirectory))
                 {
                     Directory.CreateDirectory(_logDirectory);
@@ -60,44 +42,46 @@ namespace MRA.DTO.Logger
                 _logFileNameDateFormat = configuration[APPSETTING_LOG_DATE_NAME] ?? "yyyyMMdd_HHmmss";
                 var logPrefix = configuration[APPSETTING_LOG_FILE_PREFIX] ?? "";
 
-                // Configura el nombre del archivo con fecha y hora al inicio de la instancia de Logger
                 _logFilePath = Path.Combine(_logDirectory, $"{logPrefix}_{DateTime.Now.ToString(_logFileNameDateFormat)}.log");
 
-                // Abre el archivo de log con StreamWriter en modo Append
                 _streamWriter = new StreamWriter(_logFilePath, append: true)
                 {
-                    AutoFlush = true // Para que se escriba inmediatamente en el archivo
+                    AutoFlush = true
                 };
             }
-
             _logDateFormat = configuration[APPSETTING_LOG_DATE_FORMAT] ?? "yyyy-MM-dd HH:mm:ss";
         }
 
-        public bool ProductionEnvironmentAlert(bool isInProduction)
+        public void Log<TState>(Microsoft.Extensions.Logging.LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
         {
-            if (isInProduction)
-            {
-                _console.ShowMessageWarning("Este proceso va a ser ejecutado en PRODUCCIÓN.");
-                var response = _console.FillBoolValue("¿Estás seguro de que quieres que se ejecute en PRODUCCIÓN?");
-                if (!response)
-                {
-                    Info("Ejecución abortada por 1º interacción de usuario");
-                    return false;
-                }
-                response = _console.FillBoolValue("¿Estás realmente seguro? Esta acción se podrá deshacer.");
-                if (!response)
-                {
-                    Info("Ejecución abortada por 2ª interacción de usuario");
-                    return false;
-                }
-                Info("El usuario es consciente de que la ejecución será en PRODUCCIÓN");
-            }
-            else
-            {
-                Info("El proceso será ejecutado en PRE-producción");
-            }
-            return true;
+            if (!IsEnabled(logLevel))
+                return;
+
+            string message = formatter(state, exception);
+            LogLevel customLogLevel = ConvertToCustomLogLevel(logLevel);
+            Log(message, customLogLevel);
         }
+
+        public bool IsEnabled(Microsoft.Extensions.Logging.LogLevel logLevel)
+        {
+            // Implementación para habilitar los niveles de logging según tus necesidades
+            return logLevel >= Microsoft.Extensions.Logging.LogLevel.Information;
+        }
+
+        public IDisposable BeginScope<TState>(TState state)
+        {
+            // Implementación para el manejo de scopes (puede dejarse en blanco si no se usa)
+            return null;
+        }
+
+        private LogLevel ConvertToCustomLogLevel(Microsoft.Extensions.Logging.LogLevel logLevel) =>
+            logLevel switch
+            {
+                Microsoft.Extensions.Logging.LogLevel.Information => LogLevel.Info,
+                Microsoft.Extensions.Logging.LogLevel.Warning => LogLevel.Warning,
+                Microsoft.Extensions.Logging.LogLevel.Error => LogLevel.Error,
+                _ => LogLevel.Default,
+            };
 
         public void Log(string message) => Log(message, LogLevel.Default);
         public void CleanLog(string message) => Log(message, LogLevel.Default, false);
@@ -105,15 +89,16 @@ namespace MRA.DTO.Logger
         public void Warning(string message, bool showTime = true, bool showPrefix = true) => Log(message, LogLevel.Warning, showTime, showPrefix);
         public void Error(string message, bool showTime = true, bool showPrefix = true) => Log(message, LogLevel.Error, showTime, showPrefix);
         public void Success(string message, bool showTime = true, bool showPrefix = true) => Log(message, LogLevel.Success, showTime, showPrefix);
+
         public void Log(string message, LogLevel level = LogLevel.Default, bool showTime = true, bool showPrefix = true)
         {
             string prefix = level switch
             {
-                LogLevel.Info =>    "ℹ INFO ",
+                LogLevel.Info => "ℹ INFO ",
                 LogLevel.Warning => "⚠ WARN ",
-                LogLevel.Error =>   "❌ ERROR ",
+                LogLevel.Error => "❌ ERROR ",
                 LogLevel.Success => "✅ SUCCESS ",
-                _ =>                "",
+                _ => ""
             };
 
             string logMessage = (showTime ? $"{DateTime.Now.ToString(_logDateFormat)} " : "")
@@ -121,27 +106,22 @@ namespace MRA.DTO.Logger
 
             _streamWriter?.WriteLine(logMessage);
 
-            switch(level)
+            switch (level)
             {
-                case LogLevel.Info: 
-                    _console?.ShowMessageInfo(logMessage);
-                    _logger?.LogInformation(message);
+                case LogLevel.Info:
+                    ShowMessageInfo(logMessage);
                     break;
-                case LogLevel.Warning: 
-                    _console?.ShowMessageWarning(logMessage);
-                    _logger?.LogWarning(message);
+                case LogLevel.Warning:
+                    ShowMessageWarning(logMessage);
                     break;
                 case LogLevel.Error:
-                    _console?.ShowMessageError(logMessage);
-                    _logger?.LogError(message);
+                    ShowMessageError(logMessage);
                     break;
                 case LogLevel.Success:
-                    _console?.ShowMessageSuccess(logMessage);
-                    _logger?.LogInformation("SUCCESS "+message);
+                    ShowMessageSuccess(logMessage);
                     break;
                 default:
-                    _console?.ShowMessage(logMessage);
-                    _logger?.LogInformation(message);
+                    ShowMessage(logMessage);
                     break;
             };
         }

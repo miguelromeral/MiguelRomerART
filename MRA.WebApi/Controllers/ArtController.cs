@@ -6,6 +6,7 @@ using MRA.Services;
 using MRA.DTO.Firebase.Models;
 using MRA.WebApi.Models.Requests;
 using MRA.WebApi.Models.Responses;
+using MRA.DTO.Logger;
 
 namespace MRA.WebApi.Controllers
 {
@@ -15,25 +16,30 @@ namespace MRA.WebApi.Controllers
     {
 
         private readonly DrawingService _drawingService;
-        private readonly ILogger<ArtController> _logger;
+        private readonly MRLogger _logger;
 
-        public ArtController(ILogger<ArtController> logger, DrawingService drawingService)
+        public ArtController(MRLogger logger, DrawingService drawingService)
         {
             _logger = logger;
             _drawingService = drawingService;
         }
 
-        //[HttpGet("drawings")]
-        //public async Task<List<Drawing>> Details()
-        //{
-        //    return await _drawingService.GetAllDrawings();
-        //}
-
         [HttpGet("select/products")]
         public async Task<List<ProductListItem>> Products()
         {
-            var drawings = await _drawingService.GetAllDrawings();
-            return _drawingService.GetProducts(drawings);
+            try
+            {
+                _logger.Info("Solicitados Productos");
+                var drawings = await _drawingService.GetAllDrawings();
+                var products = _drawingService.GetProducts(drawings);
+                _logger.Success("Productos recuperados: " + products.Count);
+                return products;
+            }
+            catch(Exception ex)
+            {
+                _logger.Error("Error al recuperar los productos: "+ex.Message);
+                return new List<ProductListItem>();
+            }
         }
 
         [HttpGet("select/characters")]
