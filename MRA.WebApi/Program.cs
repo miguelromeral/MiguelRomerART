@@ -70,10 +70,12 @@ var logger = new MRLogger(builder.Configuration);
 builder.Services.AddSingleton(logger);
 
 // Configuración de Azure
+logger.LogInformation("Configurando Azure Storage Service");
 var azureStorageService = new AzureStorageService(builder.Configuration);
 builder.Services.AddSingleton(azureStorageService);
 
 // Configuración de Firebase
+logger.LogInformation("Configurando Firebase");
 var secondsCache = builder.Configuration.GetValue<int>("CacheSeconds");
 
 var firebaseService = new FirestoreService(builder.Configuration);
@@ -140,5 +142,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+logger.LogInformation("Aplicación configurada correctamente. Iniciando.");
 
 app.Run();

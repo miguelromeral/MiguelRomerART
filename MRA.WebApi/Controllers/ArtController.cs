@@ -7,6 +7,8 @@ using MRA.DTO.Firebase.Models;
 using MRA.WebApi.Models.Requests;
 using MRA.WebApi.Models.Responses;
 using MRA.DTO.Logger;
+using System.Reflection;
+using Microsoft.AspNetCore.Http;
 
 namespace MRA.WebApi.Controllers
 {
@@ -25,7 +27,7 @@ namespace MRA.WebApi.Controllers
         }
 
         [HttpGet("select/products")]
-        public async Task<List<ProductListItem>> Products()
+        public async Task<ActionResult<List<ProductListItem>>> Products()
         {
             try
             {
@@ -33,41 +35,98 @@ namespace MRA.WebApi.Controllers
                 var drawings = await _drawingService.GetAllDrawings();
                 var products = _drawingService.GetProducts(drawings);
                 _logger.LogInformation("Productos recuperados: " + products.Count);
-                return products;
+                return Ok(products);
             }
             catch(Exception ex)
             {
                 _logger.LogError("Error al recuperar los productos: "+ex.Message);
-                return new List<ProductListItem>();
+                return StatusCode(StatusCodes.Status500InternalServerError, 
+                    new { message = "Error al recuperar los productos." });
+
             }
         }
 
         [HttpGet("select/characters")]
-        public async Task<List<CharacterListItem>> Characters()
+        public async Task<ActionResult<List<CharacterListItem>>> Characters()
         {
-            var drawings = await _drawingService.GetAllDrawings();
-            return _drawingService.GetCharacters(drawings);
+            try
+            {
+                _logger.LogInformation("Solicitados Personajes");
+                var drawings = await _drawingService.GetAllDrawings();
+                var characters = _drawingService.GetCharacters(drawings);
+                _logger.LogInformation("Personajes recuperados: " + characters.Count);
+                return Ok(characters);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error al recuperar los personajes: " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new { message = "Error al recuperar los personajes." });
+            }
         }
 
         [HttpGet("select/models")]
-        public async Task<List<string>> Models()
+        public async Task<ActionResult<List<string>>> Models()
         {
-            var drawings = await _drawingService.GetAllDrawings();
-            return _drawingService.GetModels(drawings);
+            try
+            {
+                _logger.LogInformation("Solicitados Modelos");
+                var drawings = await _drawingService.GetAllDrawings();
+                var models = _drawingService.GetModels(drawings);
+                _logger.LogInformation("Modelos recuperados: " + models.Count);
+                return Ok(models);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error al recuperar los modelos: " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new { message = "Error al recuperar los modelos." });
+            }
         }
 
 
         [HttpGet("collections-public")]
-        public async Task<List<CollectionResponse>> Collections()
+        public async Task<ActionResult<List<CollectionResponse>>> Collections()
         {
-            var drawings = await _drawingService.GetAllDrawings();
-            var collections = (await _drawingService.GetAllCollections(drawings)).Select(x => new CollectionResponse(x)).ToList();
-            var newList = new List<CollectionResponse>();
-            foreach(var collection in collections)
+            try
             {
-                newList.Add(FilterCollectionResponsePublic(collection));
+                _logger.LogInformation("Solicitadas Colecciones Públicas");
+                var drawings = await _drawingService.GetAllDrawings();
+                var collections = (await _drawingService.GetAllCollections(drawings)).Select(x => new CollectionResponse(x)).ToList();
+                var publicCollections = new List<CollectionResponse>();
+                foreach (var collection in collections)
+                {
+                    publicCollections.Add(FilterCollectionResponsePublic(collection));
+                }
+                _logger.LogInformation("Colecciones Públicas: "+publicCollections.Count);
+                return Ok(publicCollections);
             }
-            return newList;
+            catch (Exception ex)
+            {
+                _logger.LogError("Error al recuperar las colecciones públicas: " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new { message = "Error al recuperar las colecciones públicas." });
+            }
+        }
+
+        [HttpGet("collections-admin")]
+        [Authorize]
+        public async Task<ActionResult<List<CollectionResponse>>> CollectionsAdmin()
+        {
+            try
+            {
+                _logger.LogInformation("Solicitadas Colecciones");
+                var drawings = await _drawingService.GetAllDrawings();
+                var collections = (await _drawingService.GetAllCollections(drawings)).Select(x => new CollectionResponse(x)).ToList();
+                _logger.LogInformation("Colecciones: " + collections.Count);
+                return Ok(collections);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error al recuperar las colecciones: " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new { message = "Error al recuperar las colecciones." });
+            }
         }
 
         private CollectionResponse FilterCollectionResponsePublic(CollectionResponse collection)
@@ -78,87 +137,188 @@ namespace MRA.WebApi.Controllers
         }
 
 
-        [HttpGet("collections-admin")]
-        [Authorize]
-        public async Task<List<CollectionResponse>> CollectionsAdmin()
-        {
-            var drawings = await _drawingService.GetAllDrawings();
-            return (await _drawingService.GetAllCollections(drawings)).Select(x => new CollectionResponse(x)).ToList();
-        }
-
-
         [HttpGet("collection/details-public/{id}")]
-        public async Task<CollectionResponse> CollectionDetails(string id)
+        public async Task<ActionResult<CollectionResponse>> CollectionDetails(string id)
         {
-            var drawings = await _drawingService.GetAllDrawings();
-            return FilterCollectionResponsePublic(new CollectionResponse(await _drawingService.FindCollectionById(id, drawings)));
+            try
+            {
+                _logger.LogInformation($"Solicitados detalles públicos de colección \"{id}\"");
+                var drawings = await _drawingService.GetAllDrawings();
+                var collection = await _drawingService.FindCollectionById(id, drawings);
+                if(collection == null)
+                {
+                    _logger.LogWarning($"No se encontró ninguna colección \"{id}\"");
+                    return NotFound(new { message = $"No se encontró ninguna colección \"{id}\"" });
+                }
+                var publicCollection = FilterCollectionResponsePublic(new CollectionResponse(collection));
+                return Ok(publicCollection);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error al recuperar los detalles públicos de la colección \"{id}\": " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new { message = $"Error al recuperar los detalles públicos de la colección \"{id}\"" });
+            }
         }
 
         [HttpGet("collection/details-admin/{id}")]
         [Authorize]
-        public async Task<CollectionResponse> CollectionDetailsAdmin(string id)
+        public async Task<ActionResult<CollectionResponse>> CollectionDetailsAdmin(string id)
         {
-            var drawings = await _drawingService.GetAllDrawings();
-            return new CollectionResponse(await _drawingService.FindCollectionById(id, drawings));
+            try
+            {
+                _logger.LogInformation($"Solicitados detalles de colección \"{id}\"");
+                var drawings = await _drawingService.GetAllDrawings();
+                var collection = await _drawingService.FindCollectionById(id, drawings);
+                if (collection == null)
+                {
+                    _logger.LogWarning($"No se encontró ninguna colección \"{id}\"");
+                    return NotFound(new { message = $"No se encontró ninguna colección \"{id}\"" });
+                }
+                return Ok(new CollectionResponse(collection));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error al recuperar los detalles de la colección \"{id}\": " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new { message = $"Error al recuperar los detalles de la colección \"{id}\"" });
+            }
         }
 
 
         [HttpGet("details/{id}")]
-        public async Task<Drawing> Details(string id)
+        public async Task<ActionResult<Drawing>> Details(string id)
         {
-            return await _drawingService.FindDrawingById(id, true, updateViews: true, cache: false); ;
+            try
+            {
+                _logger.LogInformation($"Solicitados detalles públicos de dibujo \"{id}\"");
+                var drawing = await _drawingService.FindDrawingById(id, true, updateViews: true, cache: false);
+                if (drawing == null)
+                {
+                    _logger.LogWarning($"No se encontró ningún dibujo público \"{id}\"");
+                    return NotFound(new { message = $"No se encontró ningún dibujo público \"{id}\"" });
+                }
+                return Ok(drawing);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error al recuperar los detalles públicos del dibujo \"{id}\": " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new { message = $"Error al recuperar los detalles públicos del dibujo \"{id}\"" });
+            }
         }
 
 
         [HttpGet("details-admin/{id}")]
         [Authorize]
-        public async Task<Drawing> DetailsAdmin(string id)
+        public async Task<ActionResult<Drawing>> DetailsAdmin(string id)
         {
-            return await _drawingService.FindDrawingById(id, false, updateViews: false, cache: false);
+            try
+            {
+                _logger.LogInformation($"Solicitados detalles de dibujo \"{id}\"");
+                var drawing = await _drawingService.FindDrawingById(id, false, updateViews: false, cache: false);
+                if (drawing == null)
+                {
+                    _logger.LogWarning($"No se encontró ningún dibujo \"{id}\"");
+                    return NotFound(new { message = $"No se encontró ningún dibujo \"{id}\"" });
+                }
+                return Ok(drawing);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error al recuperar los detalles del dibujo \"{id}\": " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new { message = $"Error al recuperar los detalles del dibujo \"{id}\"" });
+            }
         }
 
 
         [HttpPost("filter-public")]
-        public async Task<DrawingFilterResultsResponse> Filter([FromBody] DrawingFilter filters)
+        public async Task<ActionResult<DrawingFilterResultsResponse>> Filter([FromBody] DrawingFilter filters)
         {
-            var allDrawings = await _drawingService.GetAllDrawings();
-            var allCollections = await _drawingService.GetAllCollections(allDrawings);
-            filters.OnlyVisible = true;
-            return new DrawingFilterResultsResponse(await _drawingService.FilterDrawingsGivenList(filters, allDrawings, allCollections));
+            try
+            {
+                _logger.LogInformation($"Filtrando dibujos públicos");
+                var allDrawings = await _drawingService.GetAllDrawings();
+                var allCollections = await _drawingService.GetAllCollections(allDrawings);
+                filters.OnlyVisible = true;
+                var results = await _drawingService.FilterDrawingsGivenList(filters, allDrawings, allCollections);
+                _logger.LogInformation($"Dibujos públicos filtrados: {results.TotalDrawings.Count}");
+                return Ok(new DrawingFilterResultsResponse(results));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error al filtrar dibujos públicos: " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new { message = $"Error al filtrar dibujos públicos" });
+            }
         }
 
         [HttpPost("filter-admin")]
         [Authorize]
-        public async Task<DrawingFilterResultsResponse> FilterAdmin([FromBody] DrawingFilter filters)
+        public async Task<ActionResult<DrawingFilterResultsResponse>> FilterAdmin([FromBody] DrawingFilter filters)
         {
-            var allDrawings = await _drawingService.GetAllDrawings();
-            var allCollections = await _drawingService.GetAllCollections(allDrawings);
-            filters.OnlyVisible = false;
-            return new DrawingFilterResultsResponse(await _drawingService.FilterDrawingsGivenList(filters, allDrawings, allCollections));
+            try
+            {
+                _logger.LogInformation($"Filtrando dibujos");
+                var allDrawings = await _drawingService.GetAllDrawings();
+                var allCollections = await _drawingService.GetAllCollections(allDrawings);
+                filters.OnlyVisible = false;
+                var results = await _drawingService.FilterDrawingsGivenList(filters, allDrawings, allCollections);
+                _logger.LogInformation($"Dibujos filtrados: {results.TotalDrawings.Count}");
+                return Ok(new DrawingFilterResultsResponse(results));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error al filtrar dibujos: " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new { message = $"Error al filtrar dibujos" });
+            }
         }
 
 
         [HttpPost("cheer")]
-        public async Task Cheer([FromBody] string id)
-        {
-            await _drawingService.UpdateLikes(id);
-        }
-
-        [HttpPost("vote/{id}")]
-        public async Task<VoteSubmittedModel> Vote(string id, [FromBody] int score)
-        {
-            return await _drawingService.Vote(id, score);
-        }
-
-
-
-
-        [Authorize]
-        [HttpPost("save/{id}")]
-        public async Task<Drawing> SaveDrawing(string id, [FromBody] SaveDrawingRequest request)
+        public async Task<ActionResult> Cheer([FromBody] string id)
         {
             try
             {
+                _logger.LogInformation($"Recibido like para dibujo \"{id}\"");
+                await _drawingService.UpdateLikes(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error al recibir like para dibujo \"{id}\": " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new { message = $"Error al recibir like para dibujo \"{id}\"" });
+            }
+        }
+
+        [HttpPost("vote/{id}")]
+        public async Task<ActionResult<VoteSubmittedModel>> Vote(string id, [FromBody] int score)
+        {
+            try
+            {
+                _logger.LogInformation($"Recibido voto para dibujo \"{id}\" ({score})");
+                var results = await _drawingService.Vote(id, score);
+                _logger.LogInformation($"Nuevos resultados para \"{id}\" ({results.NewScoreHuman}) [{results.NewVotes} votos]");
+                return Ok(results);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error al recibir voto para dibujo \"{id}\": " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new { message = $"Error al recibir voto para dibujo \"{id}\"" });
+            }
+        }
+
+        [Authorize]
+        [HttpPost("save/{id}")]
+        public async Task<ActionResult<Drawing>> SaveDrawing(string id, [FromBody] SaveDrawingRequest request)
+        {
+            try
+            {
+                _logger.LogInformation($"Guardando dibujo \"{id}\"");
                 var drawing = new Drawing()
                 {
                     ListComments = request.ListComments,
@@ -193,71 +353,58 @@ namespace MRA.WebApi.Controllers
                 Drawing result = await _drawingService.AddAsync(drawing);
                 result.TagsText = string.Join(Drawing.SEPARATOR_TAGS, result.Tags);
                 _drawingService.CleanAllCache();
-                return result;
+                return Ok(result);
             }
             catch (Exception ex)
             {
-                return null;
+                _logger.LogError($"Error al guardar dibujo \"{id}\": " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new { message = $"Error al guardar dibujo \"{id}\"" });
             }
         }
 
 
         [HttpGet("checkdrawing/{id}")]
-        public async Task<bool> ExisteDrawingId(string id)
+        public async Task<ActionResult<bool>> ExisteDrawingId(string id)
         {
-            var drawing = await _drawingService.FindDrawingById(id, false);
-            return drawing != null;
+            try
+            {
+                _logger.LogInformation($"Comprobando si existe dibujo \"{id}\"");
+                var drawing = await _drawingService.FindDrawingById(id, false);
+                var exists = drawing != null;
+                _logger.LogInformation($"Existe dibujo \"{id}\": {(exists ? "Sí" : "No")}");
+                return Ok(exists);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error al comprobar dibujo \"{id}\": " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new { message = $"Error al comprobar dibujo \"{id}\"" });
+            }
         }
 
         [Authorize]
         [HttpPost("checkazurepath")]
-        public async Task<CheckAzurePathResponse> CheckAzurePath([FromBody] CheckAzurePathRequest request)
-        {
-            var existe = await _drawingService.ExistsBlob(request.Id);
-
-            var blobLocationThumbnail = _drawingService.CrearThumbnailName(request.Id);
-
-            var urlBase = _drawingService.GetAzureUrlBase();
-            var url = urlBase + request.Id;
-            var url_tn = urlBase + blobLocationThumbnail;
-
-            return new CheckAzurePathResponse()
-            {
-                Existe = existe,
-                Url = url,
-                UrlThumbnail = url_tn,
-                PathThumbnail = blobLocationThumbnail
-            };
-        }
-
-        [HttpPost("upload")]
-        [Authorize]
-        public async Task<UploadAzureImageResponse> UploadAzureImage([FromForm] IFormFile image, [FromForm] int size, [FromForm] string path)
+        public async Task<ActionResult<CheckAzurePathResponse>> CheckAzurePath([FromBody] CheckAzurePathRequest request)
         {
             try
             {
-                if (image == null || image.Length == 0)
+                _logger.LogInformation($"Comprobando si existe blob de Azure \"{request.Id}\"");
+                var existe = await _drawingService.ExistsBlob(request.Id);
+                if (!existe)
                 {
-                    return new UploadAzureImageResponse()
-                    {
-                        Ok = false,
-                        Error = "No se ha proporcionado ninguna imagen",
-                    };
+                    _logger.LogWarning($"No existe el blob de Azure \"{request.Id}\"");
                 }
 
-                var blobLocationThumbnail = _drawingService.CrearThumbnailName(path);
-                await UploadImage(image, blobLocationThumbnail, size);
-                await UploadImage(image, path, 0);
+                var blobLocationThumbnail = _drawingService.CrearThumbnailName(request.Id);
 
                 var urlBase = _drawingService.GetAzureUrlBase();
-                var url = urlBase + path;
+                var url = urlBase + request.Id;
                 var url_tn = urlBase + blobLocationThumbnail;
 
-
-                return new UploadAzureImageResponse()
+                return new CheckAzurePathResponse()
                 {
-                    Ok = true,
-                    Error = "",
+                    Existe = existe,
                     Url = url,
                     UrlThumbnail = url_tn,
                     PathThumbnail = blobLocationThumbnail
@@ -265,11 +412,54 @@ namespace MRA.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                return new UploadAzureImageResponse()
+                _logger.LogError($"Error al comprobar si existe blob de Azure \"{request.Id}\": " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new { message = $"Error al comprobar si existe blob de Azure \"{request.Id}\"" });
+            }
+        }
+
+        [HttpPost("upload")]
+        [Authorize]
+        public async Task<ActionResult<UploadAzureImageResponse>> UploadAzureImage([FromForm] IFormFile image, [FromForm] int size, [FromForm] string path)
+        {
+            try
+            {
+                _logger.LogInformation($"Subiendo fichero a Azure \"{image.FileName}\"");
+                if (image == null || image.Length == 0)
                 {
-                    Ok = false,
-                    Error = ex.Message,
-                };
+                    //return new UploadAzureImageResponse()
+                    //{
+                    //    Ok = false,
+                    //    Error = "No se ha proporcionado ninguna imagen",
+                    //};
+                    _logger.LogWarning("No se ha proporcionado ningún fichero");
+                    return BadRequest(new { message = $"No se ha proporcinoado ningún fichero" });
+                }
+
+                var blobLocationThumbnail = _drawingService.CrearThumbnailName(path);
+                await UploadImage(image, blobLocationThumbnail, size);
+                _logger.LogInformation($"Subida imagen de Thumbnail a \"{blobLocationThumbnail}\"");
+                await UploadImage(image, path, 0);
+                _logger.LogInformation($"Subida imagen a \"{path}\"");
+
+                var urlBase = _drawingService.GetAzureUrlBase();
+                var url = urlBase + path;
+                var url_tn = urlBase + blobLocationThumbnail;
+
+                return Ok(new UploadAzureImageResponse()
+                {
+                    Ok = true,
+                    Error = "",
+                    Url = url,
+                    UrlThumbnail = url_tn,
+                    PathThumbnail = blobLocationThumbnail
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error al subir blob de Azure: " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new { message = $"Error al subir blob de Azure" });
             }
         }
 
@@ -285,31 +475,33 @@ namespace MRA.WebApi.Controllers
         }
 
 
-
-
-
-
         [HttpGet("check/collection/{id}")]
-        public async Task<bool> ExisteCollectionId(string id)
+        public async Task<ActionResult<bool>> ExisteCollectionId(string id)
         {
             try
             {
+                _logger.LogInformation($"Comprobando si existe colección \"{id}\"");
                 var drawings = await _drawingService.GetAllDrawings();
                 var collection = await _drawingService.FindCollectionById(id, drawings);
-                return collection != null;
+                var exists = collection != null;
+                _logger.LogInformation($"Existe colección \"{id}\": {(exists ? "Sí" : "No")}");
+                return Ok(exists);
             }
             catch (Exception ex)
             {
-                return false;
+                _logger.LogError($"Error al comprobar colección \"{id}\": " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new { message = $"Error al comprobar colección \"{id}\"" });
             }
         }
 
         [HttpPost("save/collection/{id}")]
         [Authorize]
-        public async Task<CollectionResponse> SaveCollection(string id, [FromBody] SaveCollectionRequest model)
+        public async Task<ActionResult<CollectionResponse>> SaveCollection(string id, [FromBody] SaveCollectionRequest model)
         {
             try
             {
+                _logger.LogInformation($"Guardando colección \"{model.Id}\"");
                 var collection = new Collection()
                 {
                     Id = model.Id,
@@ -317,35 +509,46 @@ namespace MRA.WebApi.Controllers
                     Name = model.Name,
                     Order = model.Order
                 };
+                if (String.IsNullOrEmpty(collection.Id))
+                {
+                    _logger.LogWarning("No se ha proporcionado un ID correcto para la colección");
+                    return BadRequest(new { message = "No se ha proporcionado un ID correcto para la colección" });
+                }
                 collection.DrawingsReferences = await _drawingService.SetDrawingsReferences(model.DrawingsIds);
 
-                if (!String.IsNullOrEmpty(collection.Id))
-                {
-                    var drawings = await _drawingService.GetAllDrawings();
-                    Collection result = await _drawingService.AddAsync(collection, drawings);
-                    _drawingService.CleanAllCache();
-                    return new CollectionResponse(result);
-                }
-
-                return null;
+                var drawings = await _drawingService.GetAllDrawings();
+                Collection result = await _drawingService.AddAsync(collection, drawings);
+                _logger.LogInformation($"Guardada colección \"{model.Id}\" con éxito");
+                _drawingService.CleanAllCache();
+                return new CollectionResponse(result);
             }
             catch (Exception ex)
             {
-                return null;
+                _logger.LogError($"Error al guardar colección \"{id}\": " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new { message = $"Error al guardar colección \"{id}\"" });
             }
         }
 
 
         [HttpPost("collection/remove")]
         [Authorize]
-        public async Task<bool> RemoveCollection([FromBody] string id)
+        public async Task<ActionResult<bool>> RemoveCollection([FromBody] string id)
         {
-            var result = await _drawingService.RemoveCollection(id);
-            if (result)
+            try
             {
+                _logger.LogInformation($"Eliminando colección \"{id}\"");
+                await _drawingService.RemoveCollection(id);
+                _logger.LogInformation($"Colección \"{id}\" eliminada con éxito");
                 _drawingService.CleanAllCache();
+                return Ok(true);
             }
-            return result;
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error al eliminar colección \"{id}\": " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new { message = $"Error al eliminar colección \"{id}\"" });
+            }
         }
     }
 }
