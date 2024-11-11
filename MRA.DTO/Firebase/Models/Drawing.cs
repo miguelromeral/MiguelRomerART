@@ -230,14 +230,6 @@ namespace MRA.DTO.Firebase.Models
             }
         }
 
-        public string FormattedDateMini
-        {
-            get
-            {
-                return Utilities.FormattedDateMini(Date);
-            }
-        }
-
         [ExcelColumn("Time (Minutes)", 65, width: 8)]
         public int Time { get; set; }
 

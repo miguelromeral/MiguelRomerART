@@ -1,7 +1,6 @@
 ﻿using Google.Cloud.Firestore;
 using Google.Protobuf.Collections;
 using Google.Type;
-using Microsoft.Azure.Storage;
 using Microsoft.Extensions.Configuration;
 using MRA.DTO.Firebase.Documents;
 using MRA.DTO.Firebase.Models;

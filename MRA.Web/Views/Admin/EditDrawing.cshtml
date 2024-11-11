@@ -163,7 +163,7 @@
                             <div class="mr-admin-form-control">
                                 <label>Fecha de Creación</label>
                                 <input type="hidden" id="iHiddenDate" name="Drawing.Date" value="@Model.Drawing.Date" />
-                                <input type="date" class="mr-custom-text" onchange="onChangeInputDate(this, 'iHiddenDate');" value="@Utilities.FormattedDateInput(Model.Drawing.Date)">
+                                <input type="date" class="mr-custom-text" onchange="onChangeInputDate(this, 'iHiddenDate');" value="@MRA.DTO.Utilities.FormattedDateInput(Model.Drawing.Date)">
                             </div>
                         </div>
                         <div class="col-12 col-sm-12 col-md-4">

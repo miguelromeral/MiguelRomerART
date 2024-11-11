@@ -66,14 +66,6 @@ namespace MRA.Services
             }
         }
 
-        public void CleanAllCache()
-        {
-            //CleanCacheItem(CACHE_ALL_DRAWINGS);
-            //CleanCacheItem(CACHE_ALL_COLLECTIONS);
-            base.CleanAllCache();
-
-        }
-
         public async Task<Collection> FindCollectionById(string documentId, List<Drawing> drawings, bool cache = true)
         {
             if (cache)
@@ -93,16 +85,6 @@ namespace MRA.Services
         {
             await _firestoreService.RemoveCollectionAsync(id);
         }
-
-
-        //public async Task<List<Collection>> GetAllCollectionsOrderPositive()
-        //{
-        //    return await GetOrSetAsync<List<Collection>>("all_collections_positive", async () =>
-        //    {
-        //        return await _firestoreService.GetAllCollectionsOrderPositive();
-        //    }, TimeSpan.FromSeconds(_secondsCache));
-        //}
-
 
         public async Task<FilterResults> FilterDrawingsGivenList(DrawingFilter filter, List<Drawing> drawings, List<Collection> collections)
         {
