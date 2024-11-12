@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace MRA.Services
 {
-    public class DrawingService : BaseCacheService
+    public class DrawingService : BaseCacheService, IDrawingService
     {
         private readonly int _secondsCache;
         private readonly AzureStorageService _azureStorageService;
@@ -25,7 +25,7 @@ namespace MRA.Services
         private const string CACHE_ALL_DRAWINGS = "all_drawings";
         private const string CACHE_ALL_COLLECTIONS = "all_collections";
 
-        public DrawingService(int secondsCache, IMemoryCache cache, AzureStorageService storageService, IFirestoreService firestoreService, 
+        public DrawingService(int secondsCache, IMemoryCache cache, AzureStorageService storageService, IFirestoreService firestoreService,
             RemoteConfigService remoteConfigService) : base(cache)
         {
             _secondsCache = secondsCache;
@@ -36,7 +36,7 @@ namespace MRA.Services
 
         public async Task<List<Drawing>> GetAllDrawings()
         {
-            return await GetOrSetAsync<List<Drawing>>(CACHE_ALL_DRAWINGS, async () =>
+            return await GetOrSetAsync(CACHE_ALL_DRAWINGS, async () =>
             {
                 return await FilterDrawings(DrawingFilter.GetModelNoFilters());
             }, TimeSpan.FromSeconds(_secondsCache));
@@ -45,7 +45,7 @@ namespace MRA.Services
         public string GetAzureUrlBase() => _azureStorageService.BlobURL;
         public async Task<List<Inspiration>> GetAllInspirations()
         {
-            return await GetOrSetAsync<List<Inspiration>>("all_inspirations", async () =>
+            return await GetOrSetAsync("all_inspirations", async () =>
             {
                 return await _firestoreService.GetInspirationsAsync();
             }, TimeSpan.FromSeconds(_secondsCache));
@@ -55,7 +55,7 @@ namespace MRA.Services
         {
             if (cache)
             {
-                return await GetOrSetAsync<List<Collection>>(CACHE_ALL_COLLECTIONS, async () =>
+                return await GetOrSetAsync(CACHE_ALL_COLLECTIONS, async () =>
                 {
                     return await _firestoreService.GetCollectionsAsync(drawings);
                 }, TimeSpan.FromSeconds(_secondsCache));
@@ -70,7 +70,7 @@ namespace MRA.Services
         {
             if (cache)
             {
-                return await GetOrSetAsync<Collection>($"collection_{documentId}", async () =>
+                return await GetOrSetAsync($"collection_{documentId}", async () =>
                 {
                     return await _firestoreService.FindCollectionByIdAsync(documentId, drawings);
                 }, TimeSpan.FromSeconds(_secondsCache));
@@ -100,7 +100,8 @@ namespace MRA.Services
 
         public async Task<List<Drawing>> FilterDrawings(DrawingFilter filter)
         {
-            return await GetOrSetAsync<List<Drawing>>(filter.CacheKey, async () => {
+            return await GetOrSetAsync<List<Drawing>>(filter.CacheKey, async () =>
+            {
                 List<Drawing> drawings = new List<Drawing>();
                 drawings = await _firestoreService.Filter(filter);
 
@@ -202,13 +203,13 @@ namespace MRA.Services
         public async Task<Drawing> AddAsync(Drawing document)
         {
             Drawing current = await FindDrawingById(document.Id, false, false, false);
-            if(current != null)
+            if (current != null)
             {
                 document.Likes = current.Likes;
                 document.ScorePopular = current.ScorePopular;
                 document.Views = current.Views;
                 document.VotesPopular = current.VotesPopular;
-            } 
+            }
             return await _firestoreService.AddDrawingAsync(document);
         }
 
@@ -232,7 +233,7 @@ namespace MRA.Services
         {
             var list = new List<ProductListItem>();
 
-            foreach (var product in drawings.Where(x => !String.IsNullOrEmpty(x.ProductName)).Select(x => new { x.ProductName, x.ProductType, x.ProductTypeName }).Distinct().ToList())
+            foreach (var product in drawings.Where(x => !string.IsNullOrEmpty(x.ProductName)).Select(x => new { x.ProductName, x.ProductType, x.ProductTypeName }).Distinct().ToList())
             {
                 if (list.Count(x => x.ProductName == product.ProductName) == 0)
                 {
@@ -251,7 +252,7 @@ namespace MRA.Services
         {
             var list = new List<CharacterListItem>();
 
-            foreach (var character in drawings.Where(x => !String.IsNullOrEmpty(x.ProductName)).Select(x => new { x.Name, x.ProductType, x.ProductTypeName }).Distinct().ToList())
+            foreach (var character in drawings.Where(x => !string.IsNullOrEmpty(x.ProductName)).Select(x => new { x.Name, x.ProductType, x.ProductTypeName }).Distinct().ToList())
             {
                 if (list.Count(x => x.CharacterName == character.Name) == 0)
                 {
@@ -271,7 +272,7 @@ namespace MRA.Services
         {
             var list = new List<string>();
 
-            foreach (var modelName in drawings.Where(x => !String.IsNullOrEmpty(x.ModelName)).Select(x => x.ModelName).Distinct().ToList())
+            foreach (var modelName in drawings.Where(x => !string.IsNullOrEmpty(x.ModelName)).Select(x => x.ModelName).Distinct().ToList())
             {
                 if (!list.Contains(modelName))
                 {

@@ -28,6 +28,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MRA.Import", "MRA.Import\MR
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MRA.Functions.Export", "MRA.Functions.Export\MRA.Functions.Export.csproj", "{665CD878-DFB2-49F2-85CB-A389C9559F78}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MRA.WebApi.Test", "MRA.Test\MRA.WebApi.Test.csproj", "{11AD6E81-4C8A-4BF2-A92B-4738A47EF862}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +64,10 @@ Global
 		{665CD878-DFB2-49F2-85CB-A389C9559F78}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{665CD878-DFB2-49F2-85CB-A389C9559F78}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{665CD878-DFB2-49F2-85CB-A389C9559F78}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11AD6E81-4C8A-4BF2-A92B-4738A47EF862}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11AD6E81-4C8A-4BF2-A92B-4738A47EF862}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11AD6E81-4C8A-4BF2-A92B-4738A47EF862}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11AD6E81-4C8A-4BF2-A92B-4738A47EF862}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

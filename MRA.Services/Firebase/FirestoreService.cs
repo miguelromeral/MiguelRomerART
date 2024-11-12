@@ -841,7 +841,7 @@ namespace MRA.Services.Firebase
             }
 
             // Realiza la transacción para actualizar la propiedad "views"
-            return await _firestoreDb.RunTransactionAsync(async transaction =>
+            return await _firestoreDb.RunTransactionAsync<VoteSubmittedModel>(async transaction =>
             {
                 var model = new VoteSubmittedModel();
                 try

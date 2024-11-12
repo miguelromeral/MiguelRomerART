@@ -67,7 +67,7 @@ builder.Services.AddCors(options =>
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
 var logger = new MRLogger(builder.Configuration);
-builder.Services.AddSingleton(logger);
+builder.Services.AddSingleton<ILogger>(logger);
 
 // Configuración de Azure
 logger.LogInformation("Configurando Azure Storage Service");
@@ -90,7 +90,7 @@ builder.Services.AddSingleton<IFirestoreService>(firebaseService);
 
 var drawingService = new DrawingService(secondsCache, new MemoryCache(new MemoryCacheOptions()), azureStorageService, firebaseService, remoteConfigService);
 
-builder.Services.AddSingleton(drawingService);
+builder.Services.AddSingleton<IDrawingService>(drawingService);
 
 // Configura el servicio de caché distribuido en memoria
 builder.Services.AddDistributedMemoryCache();
