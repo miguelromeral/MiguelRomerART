@@ -19,10 +19,10 @@ namespace MRA.Services
         Task<Collection> FindCollectionById(string documentId, List<Drawing> drawings, bool cache = true);
         Task RemoveCollection(string id);
         Task<FilterResults> FilterDrawingsGivenList(DrawingFilter filter, List<Drawing> drawings, List<Collection> collections);
-        Task<List<Drawing>> FilterDrawings(DrawingFilter filter);
+        //Task<List<Drawing>> FilterDrawings(DrawingFilter filter);
         Task<Drawing> FindDrawingById(string documentId, bool onlyIfVisible, bool updateViews = false, bool cache = true);
-        Task UpdateViews(string documentId);
-        Task UpdateLikes(string documentId);
+        Task<bool> UpdateViews(string documentId);
+        Task<bool> UpdateLikes(string documentId);
         Task<VoteSubmittedModel> Vote(string documentId, int score);
         Task<bool> ExistsBlob(string rutaBlob);
         Task<Drawing> AddAsync(Drawing document);
@@ -30,7 +30,7 @@ namespace MRA.Services
         Task RedimensionarYGuardarEnAzureStorage(string rutaEntrada, string nombreBlob, int anchoDeseado);
         Task RedimensionarYGuardarEnAzureStorage(MemoryStream rutaEntrada, string nombreBlob, int anchoDeseado);
         string CrearThumbnailName(string rutaImagen);
-        DocumentReference GetDbDocumentDrawing(string id);
+        //DocumentReference GetDbDocumentDrawing(string id);
         Task<List<DocumentReference>> SetDrawingsReferences(string[] ids);
         List<ProductListItem> GetProducts(List<Drawing> drawings);
         List<CharacterListItem> GetCharacters(List<Drawing> drawings);

@@ -6,6 +6,7 @@ using MRA.DTO.Logger;
 using MRA.DTO.ViewModels.Art.Select;
 using MRA.Services;
 using MRA.WebApi.Controllers;
+using MRA.WebApi.Test;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace MRA.Test.Controllers
 {
-    public class ArtControllerTest
+    public class ArtControllerTest : TestBase
     {
         private readonly ArtController _controller;
         private readonly Mock<IDrawingService> _drawingServiceMock;
@@ -36,10 +37,10 @@ namespace MRA.Test.Controllers
             // Configura el mock de IDrawingService para que devuelva datos de prueba
             var drawings = new List<Drawing> { new Drawing(), new Drawing() }; // Datos de prueba para "drawings"
             var products = new List<ProductListItem>
-        {
-            new ProductListItem { ProductName = "Product 1", ProductType = "Type", ProductTypeId = 1 },
-            new ProductListItem { ProductName = "Product 2", ProductType = "Type", ProductTypeId = 1 },
-        }; // Datos de prueba para "products"
+            {
+                new ProductListItem { ProductName = "Product 1", ProductType = "Type", ProductTypeId = 1 },
+                new ProductListItem { ProductName = "Product 2", ProductType = "Type", ProductTypeId = 1 },
+            }; // Datos de prueba para "products"
 
             // Configura los métodos que serán llamados en el servicio mock
             _drawingServiceMock.Setup(ds => ds.GetAllDrawings()).ReturnsAsync(drawings);

@@ -55,7 +55,8 @@ namespace MRA.DTO.Logger
         public bool IsEnabled(LogLevel logLevel)
         {
             // Implementación para habilitar los niveles de logging según tus necesidades
-            return logLevel >= LogLevel.Information;
+            //return logLevel >= LogLevel.Information;
+            return true;
         }
 
         public IDisposable BeginScope<TState>(TState state)
@@ -66,17 +67,23 @@ namespace MRA.DTO.Logger
 
         public void Log(string message) => Log(message, LogLevel.Information);
         public void CleanLog(string message) => Log(message, LogLevel.Information, false);
+        public void LogTrace(string message, bool showTime = true, bool showPrefix = true) => Log(message, LogLevel.Trace, showTime, showPrefix);
+        public void LogDebug(string message, bool showTime = true, bool showPrefix = true) => Log(message, LogLevel.Debug, showTime, showPrefix);
         public void LogInformation(string message, bool showTime = true, bool showPrefix = true) => Log(message, LogLevel.Information, showTime, showPrefix);
         public void LogWarning(string message, bool showTime = true, bool showPrefix = true) => Log(message, LogLevel.Warning, showTime, showPrefix);
         public void LogError(string message, bool showTime = true, bool showPrefix = true) => Log(message, LogLevel.Error, showTime, showPrefix);
+        public void LogCritical(string message, bool showTime = true, bool showPrefix = true) => Log(message, LogLevel.Critical, showTime, showPrefix);
 
         public void Log(string message, LogLevel level = LogLevel.Information, bool showTime = true, bool showPrefix = true)
         {
             string prefix = level switch
             {
+                LogLevel.Trace => "TRACE ",
+                LogLevel.Debug => "🐛 DEBUG ",
                 LogLevel.Information => "INFO ",
                 LogLevel.Warning => "⚠ WARN ",
                 LogLevel.Error => "❌ ERROR ",
+                LogLevel.Critical => "❌❌❌ FATAL ",
                 _ => ""
             };
 
@@ -87,6 +94,12 @@ namespace MRA.DTO.Logger
 
             switch (level)
             {
+                case LogLevel.Trace:
+                    ShowMessageTrace(logMessage);
+                    break;
+                case LogLevel.Debug:
+                    ShowMessageDebug(logMessage);
+                    break;
                 case LogLevel.Information:
                     ShowMessageInfo(logMessage);
                     break;
@@ -95,6 +108,9 @@ namespace MRA.DTO.Logger
                     break;
                 case LogLevel.Error:
                     ShowMessageError(logMessage);
+                    break;
+                case LogLevel.Critical:
+                    ShowMessageCritical(logMessage);
                     break;
                 default:
                     ShowMessage(logMessage);

@@ -16,15 +16,15 @@ namespace MRA.Services.Firebase.Interfaces
         Task<List<Collection>> GetCollectionsAsync(List<Drawing> drawings);
         Task<Drawing> AddDrawingAsync(Drawing document);
         Task<Collection> AddCollectionAsync(Collection document, List<Drawing> drawings);
-        Task<List<Drawing>> Filter(DrawingFilter filter);
+        //Task<List<Drawing>> Filter(DrawingFilter filter);
         Task<FilterResults> FilterGivenList(DrawingFilter filter, List<Drawing> drawings, List<Collection> collections);
         Task<Drawing> FindDrawingByIdAsync(string documentId, bool updateViews);
         Task<Collection> FindCollectionByIdAsync(string documentId, List<Drawing> drawings);
-        Task UpdateLikesAsync(string documentId);
+        Task<bool> UpdateLikesAsync(string documentId);
         Task<VoteSubmittedModel> VoteAsync(string documentId, int score);
-        DocumentReference GetDbDocumentDrawing(string id);
-        Task UpdateViewsAsync(string documentId);
-        Task RemoveCollectionAsync(string id);
+        //DocumentReference GetDbDocumentDrawing(string id);
+        Task<bool> UpdateViewsAsync(string documentId);
+        Task<Google.Cloud.Firestore.WriteResult> RemoveCollectionAsync(string id);
         Task<List<DocumentReference>> SetDrawingsReferencesAsync(string[] ids);
     }
 }

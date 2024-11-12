@@ -8,6 +8,7 @@ namespace MRA.DTO.Firebase.Models
 {
     public class VoteSubmittedModel
     {
+        public bool Success { get; set; }
         public double NewScore { get; set; }
         public int NewScoreHuman { get { return Drawing.CalculateScorePopular(NewScore); } }
         public int NewVotes { get; set; }

@@ -20,6 +20,8 @@ using System.Runtime.Intrinsics.Arm;
 using MRA.Services.Helpers;
 using MRA.DTO.Logger;
 using MRA.WebApi.Controllers;
+using MRA.Services.Firebase.Firestore;
+using MRA.Services.Logger;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,7 +29,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();  // Limpia los proveedores de logging preexistentes
 builder.Logging.AddConsole();      // Agrega logging en consola (visible en Kudu)
 builder.Logging.AddDebug();        // Agrega logging de depuración
-builder.Logging.SetMinimumLevel(LogLevel.Information);  // Cambia a Debug o Trace si necesitas más detalle
+//builder.Logging.SetMinimumLevel(LogLevel.Information);  // Cambia a Debug o Trace si necesitas más detalle
+builder.Logging.AddProvider(new MRLoggerProvider(builder.Configuration));
 
 // Añadimos Autenticación por JWT
 var jwtSettings = builder.Configuration.GetSection("Jwt");
@@ -67,7 +70,7 @@ builder.Services.AddCors(options =>
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
 var logger = new MRLogger(builder.Configuration);
-builder.Services.AddSingleton<ILogger>(logger);
+//builder.Services.AddSingleton<ILogger>(logger);
 
 // Configuración de Azure
 logger.LogInformation("Configurando Azure Storage Service");
@@ -78,7 +81,7 @@ builder.Services.AddSingleton(azureStorageService);
 logger.LogInformation("Configurando Firebase");
 var secondsCache = builder.Configuration.GetValue<int>("CacheSeconds");
 
-var firebaseService = new FirestoreService(builder.Configuration);
+var firebaseService = new FirestoreService(builder.Configuration, new FirestoreDatabase(), logger);
 
 //var accessToken = await GoogleCredentialHelper.GetAccessTokenAsync(serviceAccountPath);
 var remoteConfigService = new RemoteConfigService(new MemoryCache(new MemoryCacheOptions()), firebaseService.ProjectId, firebaseService.CredentialsPath, secondsCache);
@@ -88,7 +91,7 @@ firebaseService.SetRemoteConfigService(remoteConfigService);
 
 builder.Services.AddSingleton<IFirestoreService>(firebaseService);
 
-var drawingService = new DrawingService(secondsCache, new MemoryCache(new MemoryCacheOptions()), azureStorageService, firebaseService, remoteConfigService);
+var drawingService = new DrawingService(secondsCache, new MemoryCache(new MemoryCacheOptions()), azureStorageService, firebaseService, remoteConfigService, logger);
 
 builder.Services.AddSingleton<IDrawingService>(drawingService);
 

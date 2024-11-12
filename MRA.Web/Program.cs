@@ -12,6 +12,8 @@ using Azure.Storage.Blobs;
 using Microsoft.Extensions.Caching.Memory;
 using Google.Api;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using MRA.Services.Firebase.Firestore;
+using MRA.DTO.Logger;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,11 +22,13 @@ builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnC
 var azureStorageService = new AzureStorageService(builder.Configuration);
 builder.Services.AddSingleton(azureStorageService);
 
-var firebaseService = new FirestoreService(builder.Configuration);
+var logger = new MRLogger(builder.Configuration);
+
+var firebaseService = new FirestoreService(builder.Configuration, new FirestoreDatabase(), logger);
 
 builder.Services.AddSingleton<IFirestoreService>(firebaseService);
 
-var drawingService = new DrawingService(builder.Configuration.GetValue<int>("CacheSeconds"), new MemoryCache(new MemoryCacheOptions()), azureStorageService, firebaseService, null);
+var drawingService = new DrawingService(builder.Configuration.GetValue<int>("CacheSeconds"), new MemoryCache(new MemoryCacheOptions()), azureStorageService, firebaseService, null, logger);
 
 builder.Services.AddSingleton(drawingService);
 

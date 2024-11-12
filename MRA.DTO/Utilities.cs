@@ -124,6 +124,11 @@ namespace MRA.DTO
         }
         public static DateTime ConvertirStringADateTime(string fechaString, string formato = "yyyy/MM/dd")
         {
+            if (String.IsNullOrEmpty(fechaString))
+            {
+                return DateTime.MinValue;
+            }
+
             DateTime fecha = DateTime.ParseExact(fechaString, formato, CultureInfo.InvariantCulture);
             return fecha;
         }

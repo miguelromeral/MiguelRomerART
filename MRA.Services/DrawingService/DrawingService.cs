@@ -20,14 +20,16 @@ namespace MRA.Services
         private readonly int _secondsCache;
         private readonly AzureStorageService _azureStorageService;
         private readonly IFirestoreService _firestoreService;
+        private readonly ILogger _logger;
         private readonly RemoteConfigService _remoteConfigService;
 
         private const string CACHE_ALL_DRAWINGS = "all_drawings";
         private const string CACHE_ALL_COLLECTIONS = "all_collections";
 
         public DrawingService(int secondsCache, IMemoryCache cache, AzureStorageService storageService, IFirestoreService firestoreService,
-            RemoteConfigService remoteConfigService) : base(cache)
+            RemoteConfigService remoteConfigService, ILogger logger) : base(cache)
         {
+            _logger = logger;
             _secondsCache = secondsCache;
             _azureStorageService = storageService;
             _firestoreService = firestoreService;
@@ -38,7 +40,7 @@ namespace MRA.Services
         {
             return await GetOrSetAsync(CACHE_ALL_DRAWINGS, async () =>
             {
-                return await FilterDrawings(DrawingFilter.GetModelNoFilters());
+                return await _firestoreService.GetDrawingsAsync();
             }, TimeSpan.FromSeconds(_secondsCache));
         }
 
@@ -98,67 +100,67 @@ namespace MRA.Services
             }, TimeSpan.FromSeconds(_secondsCache));
         }
 
-        public async Task<List<Drawing>> FilterDrawings(DrawingFilter filter)
-        {
-            return await GetOrSetAsync<List<Drawing>>(filter.CacheKey, async () =>
-            {
-                List<Drawing> drawings = new List<Drawing>();
-                drawings = await _firestoreService.Filter(filter);
+        //public async Task<List<Drawing>> FilterDrawings(DrawingFilter filter)
+        //{
+        //    return await GetOrSetAsync<List<Drawing>>(filter.CacheKey, async () =>
+        //    {
+        //        List<Drawing> drawings = new List<Drawing>();
+        //        drawings = await _firestoreService.Filter(filter);
 
-                SetBlobUrl(ref drawings);
+        //        SetBlobUrl(ref drawings);
 
-                switch (filter.Sortby)
-                {
-                    //case "date-desc": 
-                    case "date-asc":
-                        drawings = drawings.OrderBy(x => x.Date).ToList();
-                        break;
-                    case "name-asc":
-                        drawings = drawings.OrderBy(x => x.Name).ToList();
-                        break;
-                    case "name-desc":
-                        drawings = drawings.OrderByDescending(x => x.Name).ToList();
-                        break;
-                    case "kudos-asc":
-                        drawings = drawings.OrderBy(x => x.Likes).ToList();
-                        break;
-                    case "kudos-desc":
-                        drawings = drawings.OrderByDescending(x => x.Likes).ToList();
-                        break;
-                    case "views-asc":
-                        drawings = drawings.OrderBy(x => x.Views).ToList();
-                        break;
-                    case "views-desc":
-                        drawings = drawings.OrderByDescending(x => x.Views).ToList();
-                        break;
-                    case "scorem-desc":
-                        drawings = drawings.Where(x => x.ScoreCritic > 0).OrderByDescending(x => x.ScoreCritic).ToList();
-                        break;
-                    case "scorem-asc":
-                        drawings = drawings.Where(x => x.ScoreCritic > 0).OrderBy(x => x.ScoreCritic).ToList();
-                        break;
-                    case "scoreu-desc":
-                        drawings = drawings.Where(x => x.ScorePopular > 0).OrderByDescending(x => (int)x.ScorePopular)
-                            .ThenByDescending(x => x.VotesPopular).ToList();
-                        break;
-                    case "scoreu-asc":
-                        drawings = drawings.Where(x => x.ScorePopular > 0).OrderBy(x => (int)x.ScorePopular)
-                            .ThenByDescending(x => x.VotesPopular).ToList();
-                        break;
-                    case "time-asc":
-                        drawings = drawings.Where(x => x.Time > 0).OrderBy(x => x.Time).ToList();
-                        break;
-                    case "time-desc":
-                        drawings = drawings.Where(x => x.Time > 0).OrderByDescending(x => x.Time).ToList();
-                        break;
-                    default:
-                        drawings = drawings.OrderByDescending(x => x.Date).ToList();
-                        break;
-                }
+        //        switch (filter.Sortby)
+        //        {
+        //            //case "date-desc": 
+        //            case "date-asc":
+        //                drawings = drawings.OrderBy(x => x.Date).ToList();
+        //                break;
+        //            case "name-asc":
+        //                drawings = drawings.OrderBy(x => x.Name).ToList();
+        //                break;
+        //            case "name-desc":
+        //                drawings = drawings.OrderByDescending(x => x.Name).ToList();
+        //                break;
+        //            case "kudos-asc":
+        //                drawings = drawings.OrderBy(x => x.Likes).ToList();
+        //                break;
+        //            case "kudos-desc":
+        //                drawings = drawings.OrderByDescending(x => x.Likes).ToList();
+        //                break;
+        //            case "views-asc":
+        //                drawings = drawings.OrderBy(x => x.Views).ToList();
+        //                break;
+        //            case "views-desc":
+        //                drawings = drawings.OrderByDescending(x => x.Views).ToList();
+        //                break;
+        //            case "scorem-desc":
+        //                drawings = drawings.Where(x => x.ScoreCritic > 0).OrderByDescending(x => x.ScoreCritic).ToList();
+        //                break;
+        //            case "scorem-asc":
+        //                drawings = drawings.Where(x => x.ScoreCritic > 0).OrderBy(x => x.ScoreCritic).ToList();
+        //                break;
+        //            case "scoreu-desc":
+        //                drawings = drawings.Where(x => x.ScorePopular > 0).OrderByDescending(x => (int)x.ScorePopular)
+        //                    .ThenByDescending(x => x.VotesPopular).ToList();
+        //                break;
+        //            case "scoreu-asc":
+        //                drawings = drawings.Where(x => x.ScorePopular > 0).OrderBy(x => (int)x.ScorePopular)
+        //                    .ThenByDescending(x => x.VotesPopular).ToList();
+        //                break;
+        //            case "time-asc":
+        //                drawings = drawings.Where(x => x.Time > 0).OrderBy(x => x.Time).ToList();
+        //                break;
+        //            case "time-desc":
+        //                drawings = drawings.Where(x => x.Time > 0).OrderByDescending(x => x.Time).ToList();
+        //                break;
+        //            default:
+        //                drawings = drawings.OrderByDescending(x => x.Date).ToList();
+        //                break;
+        //        }
 
-                return drawings;
-            }, TimeSpan.FromSeconds(_secondsCache));
-        }
+        //        return drawings;
+        //    }, TimeSpan.FromSeconds(_secondsCache));
+        //}
 
 
         private void SetBlobUrl(ref List<Drawing> drawings)
@@ -192,10 +194,10 @@ namespace MRA.Services
             return result;
         }
 
-        public async Task UpdateViews(string documentId) => await _firestoreService.UpdateViewsAsync(documentId);
+        public async Task<bool> UpdateViews(string documentId) => await _firestoreService.UpdateViewsAsync(documentId);
 
 
-        public async Task UpdateLikes(string documentId) => await _firestoreService.UpdateLikesAsync(documentId);
+        public async Task<bool> UpdateLikes(string documentId) => await _firestoreService.UpdateLikesAsync(documentId);
         public async Task<VoteSubmittedModel> Vote(string documentId, int score) => await _firestoreService.VoteAsync(documentId, score);
 
         public async Task<bool> ExistsBlob(string rutaBlob) => await _azureStorageService.ExistsBlob(rutaBlob);
@@ -223,7 +225,7 @@ namespace MRA.Services
 
         public string CrearThumbnailName(string rutaImagen) => _azureStorageService.CrearThumbnailName(rutaImagen);
 
-        public DocumentReference GetDbDocumentDrawing(string id) => _firestoreService.GetDbDocumentDrawing(id);
+        //public DocumentReference GetDbDocumentDrawing(string id) => _firestoreService.GetDbDocumentDrawing(id);
 
 
         public async Task<List<DocumentReference>> SetDrawingsReferences(string[] ids) => await _firestoreService.SetDrawingsReferencesAsync(ids);
@@ -232,7 +234,7 @@ namespace MRA.Services
         public List<ProductListItem> GetProducts(List<Drawing> drawings)
         {
             var list = new List<ProductListItem>();
-
+            _logger.LogTrace("Dada la lista de dibujos, vamos a separar los productos");
             foreach (var product in drawings.Where(x => !string.IsNullOrEmpty(x.ProductName)).Select(x => new { x.ProductName, x.ProductType, x.ProductTypeName }).Distinct().ToList())
             {
                 if (list.Count(x => x.ProductName == product.ProductName) == 0)

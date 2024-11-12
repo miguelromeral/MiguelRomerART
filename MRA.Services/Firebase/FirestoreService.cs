@@ -22,6 +22,8 @@ using MRA.DTO.Firebase.RemoteConfig;
 using Google.Cloud.Firestore.V1;
 using MRA.DTO.Exceptions;
 using System.Runtime.Intrinsics.Arm;
+using MRA.Services.Firebase.Firestore;
+using Microsoft.Extensions.Logging;
 
 namespace MRA.Services.Firebase
 {
@@ -41,19 +43,82 @@ namespace MRA.Services.Firebase
         #endregion
 
         private readonly IConfiguration _configuration;
-        private readonly FirestoreDb _firestoreDb;
+        private readonly IFirestoreDatabase _firestoreDb;
+        private readonly ILogger _logger;
         private string _serviceAccountPath = "";
         private DrawingFirebaseConverter _converterDrawing;
         private InspirationFirebaseConverter _converterInspiration;
         private CollectionFirebaseConverter _converterCollection;
         private RemoteConfigService? _remoteConfigService;
 
-        public string ProjectId { get { return _configuration[APPSETTING_FIREBASE_PROJECTID]; } }
-        public string CollectionDrawings { get { return _configuration[APPSETTING_FIREBASE_COLLECTION_DRAWINGS]; } }
-        public string CollectionCollections { get { return _configuration[APPSETTING_FIREBASE_COLLECTION_COLLECTIONS]; } }
-        public string CollectionInspirations { get { return _configuration[APPSETTING_FIREBASE_COLLECTION_INSPIRATIONS]; } }
-        public string AzureUrlBase { get { return _configuration[APPSETTING_AZURE_URL_BASE]; } }
-        public bool IsInProduction { get { return _configuration[APPSETTING_FIREBASE_ENVIRONMENT].Equals("production"); } }
+        public string ProjectId { 
+            get
+            {
+                string name = _configuration?.GetValue<string>(APPSETTING_FIREBASE_PROJECTID) ?? "";
+                if (String.IsNullOrEmpty(name))
+                {
+                    throw new NotImplementedException("No se ha especificado valor para "+ APPSETTING_FIREBASE_PROJECTID);
+                }
+                return name;
+            }
+        }
+        public string CollectionDrawings
+        {
+            get
+            {
+                string name = _configuration?.GetValue<string>(APPSETTING_FIREBASE_COLLECTION_DRAWINGS) ?? "";
+                if (String.IsNullOrEmpty(name))
+                {
+                    throw new CollectionNameNotProvidedException("Drawings");
+                }
+                return name;
+            }
+        }
+        public string CollectionCollections
+        {
+            get
+            {
+                string name = _configuration?.GetValue<string>(APPSETTING_FIREBASE_COLLECTION_COLLECTIONS) ?? "";
+                if (String.IsNullOrEmpty(name))
+                {
+                    throw new CollectionNameNotProvidedException("Collections");
+                }
+                return name;
+            }
+        }
+        public string CollectionInspirations { 
+            get
+            {
+                string name = _configuration?.GetValue<string>(APPSETTING_FIREBASE_COLLECTION_INSPIRATIONS) ?? "";
+                if (String.IsNullOrEmpty(name))
+                {
+                    throw new CollectionNameNotProvidedException("Inspirations");
+                }
+                return name;
+            }
+        }
+        public string AzureUrlBase {
+            get
+            {
+                string name = _configuration?.GetValue<string>(APPSETTING_AZURE_URL_BASE) ?? "";
+                if (String.IsNullOrEmpty(name))
+                {
+                    throw new NotImplementedException("No se ha especificado valor para " + APPSETTING_AZURE_URL_BASE);
+                }
+                return name;
+            }
+        }
+        public bool IsInProduction {
+            get
+            {
+                string name = _configuration?.GetValue<string>(APPSETTING_FIREBASE_ENVIRONMENT) ?? "";
+                if (String.IsNullOrEmpty(name))
+                {
+                    throw new NotImplementedException("No se ha especificado valor para " + APPSETTING_FIREBASE_ENVIRONMENT);
+                }
+                return name.Equals("production"); ;
+            }
+        }
         public string CredentialsPath
         {
             get
@@ -67,11 +132,13 @@ namespace MRA.Services.Firebase
             }
         }
 
-        public FirestoreService(IConfiguration configuration)
+        public FirestoreService(IConfiguration configuration, IFirestoreDatabase db, ILogger logger)
         {
+            _logger = logger;
             _configuration = configuration;
             LoadCredentials();
-            _firestoreDb = FirestoreDb.Create(ProjectId);
+            _firestoreDb = db;
+            _firestoreDb.Create(ProjectId);
             _converterDrawing = new DrawingFirebaseConverter(AzureUrlBase);
             _converterInspiration = new InspirationFirebaseConverter();
             _converterCollection = new CollectionFirebaseConverter();
@@ -106,37 +173,22 @@ namespace MRA.Services.Firebase
 
         public DocumentReference DocumentReference(string collection, string id)
         {
-            return _firestoreDb.Document($"{collection}/{id}");
+            return _firestoreDb.GetDocumentReference(collection, id);
         }
 
         public async Task<List<Drawing>> GetDrawingsAsync()
         {
-            if (String.IsNullOrEmpty(CollectionDrawings))
-            {
-                throw new CollectionNameNotProvidedException("Drawings");
-            }
-
-            var collection = _firestoreDb.Collection(CollectionDrawings);
-            var documents = (await collection.OrderByDescending("date").GetSnapshotAsync())
-                .Documents.Select(s => s.ConvertTo<DrawingDocument>()).ToList();
-
+            _logger.LogTrace("Requesting All Drawings");
+            var documents = await _firestoreDb.GetAllDocumentsAsync<DrawingDocument>(CollectionDrawings);
             return documents.Select(_converterDrawing.ConvertToModel).ToList();
         }
 
 
         public async Task<List<Inspiration>> GetInspirationsAsync()
         {
-            if (String.IsNullOrEmpty(CollectionInspirations))
-            {
-                throw new CollectionNameNotProvidedException("Inspirations");
-            }
-
             try
             {
-                var collection = _firestoreDb.Collection(CollectionInspirations);
-                var snapshot = (await collection.GetSnapshotAsync());
-                var inspdocs = snapshot.Documents.Select(s => s.ConvertTo<InspirationDocument>()).ToList();
-
+                var inspdocs = (await _firestoreDb.GetAllDocumentsAsync<InspirationDocument>(CollectionInspirations));
                 return inspdocs.Select(_converterInspiration.ConvertToModel).ToList();
             }catch(Exception ex)
             {
@@ -166,16 +218,9 @@ namespace MRA.Services.Firebase
 
         public async Task<List<Collection>> GetCollectionsAsync(List<Drawing> drawings)
         {
-            if (String.IsNullOrEmpty(CollectionCollections))
-            {
-                throw new CollectionNameNotProvidedException("Collections");
-            }
-
             try
             {
-                var snapshot = (await _firestoreDb.Collection(CollectionCollections).GetSnapshotAsync());
-                var collections = snapshot.Documents;
-                var collectionDocs = collections.Select(s => s.ConvertTo<CollectionDocument>()).ToList();
+                var collectionDocs = (await _firestoreDb.GetAllDocumentsAsync<CollectionDocument>(CollectionCollections));
                 return await HandleAllCollections(collectionDocs, drawings);
             }
             catch (Exception ex)
@@ -215,18 +260,13 @@ namespace MRA.Services.Firebase
 
         public async Task<List<DocumentReference>> SetDrawingsReferencesAsync(string[] ids)
         {
-            if (String.IsNullOrEmpty(CollectionDrawings))
-            {
-                throw new CollectionNameNotProvidedException("Drawings");
-            }
-
             var list = new List<DocumentReference>();
 
             if (ids != null)
             {
                 foreach (var id in ids)
                 {
-                    var tmp = _firestoreDb.Document(CollectionDrawings + "/" + id);
+                    var tmp = _firestoreDb.GetDocumentReference(CollectionDrawings, id);
                     list.Add(tmp);
                 }
             }
@@ -472,212 +512,202 @@ namespace MRA.Services.Firebase
             return drawings;
         }
 
-        public async Task<List<Drawing>> Filter(DrawingFilter filter)
-        {
-            if (String.IsNullOrEmpty(CollectionDrawings))
-            {
-                throw new CollectionNameNotProvidedException("Drawings");
-            }
+        //public async Task<List<Drawing>> Filter(DrawingFilter filter)
+        //{
+        //    try
+        //    {
+        //        Query query = _firestoreDb.Collection(CollectionDrawings);
 
-            try
-            {
-                Query query = _firestoreDb.Collection(CollectionDrawings);
+        //        //query = query.WhereNotEqualTo("visible", false);
 
-                //query = query.WhereNotEqualTo("visible", false);
+        //        //if (filter.OnlyVisible)
+        //        //{
+        //        //    query = query.WhereEqualTo("visible", true);
+        //        //}
+        //        if (filter.Favorites)
+        //        {
+        //            query = query.WhereEqualTo("favorite", true);
+        //        }
+        //        if (!String.IsNullOrEmpty(filter.TextQuery))
+        //        {
+        //            query = query.WhereArrayContainsAny("tags", DeleteAndAdjustTags(filter.Tags));
+        //        }
+        //        if (!String.IsNullOrEmpty(filter.ProductName))
+        //        {
+        //            if (filter.ProductName.Equals("none"))
+        //            {
+        //                query = query.WhereEqualTo("product_name", "");
+        //            }
+        //            else
+        //            {
+        //                query = query.WhereEqualTo("product_name", filter.ProductName);
+        //            }
+        //        }
+        //        if (!String.IsNullOrEmpty(filter.CharacterName))
+        //        {
+        //            if (filter.CharacterName.Equals("none"))
+        //            {
+        //                query = query.WhereEqualTo("name", "");
+        //            }
+        //            else
+        //            {
+        //                query = query.WhereEqualTo("name", filter.CharacterName);
+        //            }
+        //        }
+        //        if (!String.IsNullOrEmpty(filter.ModelName))
+        //        {
+        //            if (filter.ModelName.Equals("none"))
+        //            {
+        //                query = query.WhereEqualTo("model_name", "");
+        //            }
+        //            else
+        //            {
+        //                query = query.WhereEqualTo("model_name", filter.ModelName);
+        //            }
+        //        }
+        //        if (filter.Type > -1)
+        //        {
+        //            query = query.WhereEqualTo("type", filter.Type);
+        //        }
+        //        if (filter.ProductType > -1)
+        //        {
+        //            query = query.WhereEqualTo("product_type", filter.ProductType);
+        //        }
+        //        if (filter.Software > 0)
+        //        {
+        //            query = query.WhereEqualTo("software", filter.Software);
+        //        }
+        //        if (filter.Paper > 0)
+        //        {
+        //            query = query.WhereEqualTo("paper", filter.Paper);
+        //        }
+        //        if (filter.Spotify != null)
+        //        {
+        //            if (filter.Spotify ?? false)
+        //            {
+        //                query = query.WhereNotEqualTo("spotify_url", "");
+        //            }
+        //            else
+        //            {
+        //                query = query.WhereEqualTo("spotify_url", "");
+        //            }
+        //        }
 
-                //if (filter.OnlyVisible)
-                //{
-                //    query = query.WhereEqualTo("visible", true);
-                //}
-                if (filter.Favorites)
-                {
-                    query = query.WhereEqualTo("favorite", true);
-                }
-                if (!String.IsNullOrEmpty(filter.TextQuery))
-                {
-                    query = query.WhereArrayContainsAny("tags", DeleteAndAdjustTags(filter.Tags));
-                }
-                if (!String.IsNullOrEmpty(filter.ProductName))
-                {
-                    if (filter.ProductName.Equals("none"))
-                    {
-                        query = query.WhereEqualTo("product_name", "");
-                    }
-                    else
-                    {
-                        query = query.WhereEqualTo("product_name", filter.ProductName);
-                    }
-                }
-                if (!String.IsNullOrEmpty(filter.CharacterName))
-                {
-                    if (filter.CharacterName.Equals("none"))
-                    {
-                        query = query.WhereEqualTo("name", "");
-                    }
-                    else
-                    {
-                        query = query.WhereEqualTo("name", filter.CharacterName);
-                    }
-                }
-                if (!String.IsNullOrEmpty(filter.ModelName))
-                {
-                    if (filter.ModelName.Equals("none"))
-                    {
-                        query = query.WhereEqualTo("model_name", "");
-                    }
-                    else
-                    {
-                        query = query.WhereEqualTo("model_name", filter.ModelName);
-                    }
-                }
-                if (filter.Type > -1)
-                {
-                    query = query.WhereEqualTo("type", filter.Type);
-                }
-                if (filter.ProductType > -1)
-                {
-                    query = query.WhereEqualTo("product_type", filter.ProductType);
-                }
-                if (filter.Software > 0)
-                {
-                    query = query.WhereEqualTo("software", filter.Software);
-                }
-                if (filter.Paper > 0)
-                {
-                    query = query.WhereEqualTo("paper", filter.Paper);
-                }
-                if (filter.Spotify != null)
-                {
-                    if (filter.Spotify ?? false)
-                    {
-                        query = query.WhereNotEqualTo("spotify_url", "");
-                    }
-                    else
-                    {
-                        query = query.WhereEqualTo("spotify_url", "");
-                    }
-                }
+        //        //// Aplicar la ordenación
+        //        //switch (filter.Sortby)
+        //        //{
+        //        //    case "date-asc":
+        //        //        query = query.OrderBy("date");
+        //        //        break;
+        //        //    case "date-desc":
+        //        //        query = query.OrderByDescending("date");
+        //        //        break;
+        //        //    case "name-asc":
+        //        //        query = query.OrderBy("name");
+        //        //        break;
+        //        //    case "name-desc":
+        //        //        query = query.OrderByDescending("name");
+        //        //        break;
+        //        //    case "kudos-asc":
+        //        //        query = query.OrderBy("likes");
+        //        //        break;
+        //        //    case "kudos-desc":
+        //        //        query = query.OrderByDescending("likes");
+        //        //        break;
+        //        //    case "views-asc":
+        //        //        query = query.OrderBy("views");
+        //        //        break;
+        //        //    case "views-desc":
+        //        //        query = query.OrderByDescending("views");
+        //        //        break;
+        //        //    case "scorem-asc":
+        //        //        query = query.OrderBy("score_critic");
+        //        //        break;
+        //        //    case "scorem-desc":
+        //        //        query = query.OrderByDescending("score_critic");
+        //        //        break;
+        //        //    case "scoreu-asc":
+        //        //        query = query.OrderBy("score_popular").OrderByDescending("votes_popular");
+        //        //        break;
+        //        //    case "scoreu-desc":
+        //        //        query = query.OrderByDescending("score_popular").OrderByDescending("votes_popular");
+        //        //        break;
+        //        //    case "time-asc":
+        //        //        query = query.OrderBy("time");
+        //        //        break;
+        //        //    case "time-desc":
+        //        //        query = query.OrderByDescending("time");
+        //        //        break;
+        //        //    default:
+        //        //        query = query.OrderByDescending("date");
+        //        //        break;
+        //        //}
 
-                //// Aplicar la ordenación
-                //switch (filter.Sortby)
-                //{
-                //    case "date-asc":
-                //        query = query.OrderBy("date");
-                //        break;
-                //    case "date-desc":
-                //        query = query.OrderByDescending("date");
-                //        break;
-                //    case "name-asc":
-                //        query = query.OrderBy("name");
-                //        break;
-                //    case "name-desc":
-                //        query = query.OrderByDescending("name");
-                //        break;
-                //    case "kudos-asc":
-                //        query = query.OrderBy("likes");
-                //        break;
-                //    case "kudos-desc":
-                //        query = query.OrderByDescending("likes");
-                //        break;
-                //    case "views-asc":
-                //        query = query.OrderBy("views");
-                //        break;
-                //    case "views-desc":
-                //        query = query.OrderByDescending("views");
-                //        break;
-                //    case "scorem-asc":
-                //        query = query.OrderBy("score_critic");
-                //        break;
-                //    case "scorem-desc":
-                //        query = query.OrderByDescending("score_critic");
-                //        break;
-                //    case "scoreu-asc":
-                //        query = query.OrderBy("score_popular").OrderByDescending("votes_popular");
-                //        break;
-                //    case "scoreu-desc":
-                //        query = query.OrderByDescending("score_popular").OrderByDescending("votes_popular");
-                //        break;
-                //    case "time-asc":
-                //        query = query.OrderBy("time");
-                //        break;
-                //    case "time-desc":
-                //        query = query.OrderByDescending("time");
-                //        break;
-                //    default:
-                //        query = query.OrderByDescending("date");
-                //        break;
-                //}
+        //        if (filter.PageSize > 0 && filter.PageNumber > 0)
+        //        {
+        //            query = query.Limit(filter.PageSize);
 
-                if (filter.PageSize > 0 && filter.PageNumber > 0)
-                {
-                    query = query.Limit(filter.PageSize);
+        //            // Obtener el documento de inicio basado en la página anterior
+        //            var previousDocumentsQuery = query.Limit((filter.PageNumber- 1) * filter.PageSize);
+        //            var previousDocuments = await previousDocumentsQuery.GetSnapshotAsync();
+        //            var lastDocumentFromPreviousPage = previousDocuments.Documents.LastOrDefault();
+        //            if (lastDocumentFromPreviousPage != null)
+        //            {
+        //                query = query.StartAfter(lastDocumentFromPreviousPage);
+        //            }
+        //        }
 
-                    // Obtener el documento de inicio basado en la página anterior
-                    var previousDocumentsQuery = query.Limit((filter.PageNumber- 1) * filter.PageSize);
-                    var previousDocuments = await previousDocumentsQuery.GetSnapshotAsync();
-                    var lastDocumentFromPreviousPage = previousDocuments.Documents.LastOrDefault();
-                    if (lastDocumentFromPreviousPage != null)
-                    {
-                        query = query.StartAfter(lastDocumentFromPreviousPage);
-                    }
-                }
+        //        var documents = (await query.GetSnapshotAsync()).Documents.Select(s => s.ConvertTo<DrawingDocument>()).ToList();
 
-                var documents = (await query.GetSnapshotAsync()).Documents.Select(s => s.ConvertTo<DrawingDocument>()).ToList();
-
-                var list = documents.Select(_converterDrawing.ConvertToModel).ToList();
+        //        var list = documents.Select(_converterDrawing.ConvertToModel).ToList();
 
 
-                if (!String.IsNullOrEmpty(filter.Collection))
-                {
-                    var collection = (await GetCollectionsAsync(list)).Find(x => x.Id.Equals(filter.Collection));
+        //        if (!String.IsNullOrEmpty(filter.Collection))
+        //        {
+        //            var collection = (await GetCollectionsAsync(list)).Find(x => x.Id.Equals(filter.Collection));
 
-                    if(collection != null)
-                    {
-                        var idsCollection = collection.Drawings.Select(x => x.Id).ToList();
+        //            if(collection != null)
+        //            {
+        //                var idsCollection = collection.Drawings.Select(x => x.Id).ToList();
 
-                        list = list.Where(d => idsCollection.Contains(d.Id)).ToList();
-                    }
-                }
+        //                list = list.Where(d => idsCollection.Contains(d.Id)).ToList();
+        //            }
+        //        }
 
-                if (filter.OnlyVisible)
-                {
-                    list = list.Where(x => x.Visible).ToList();
-                }
+        //        if (filter.OnlyVisible)
+        //        {
+        //            list = list.Where(x => x.Visible).ToList();
+        //        }
 
-                return list;
-            }
-            catch(Exception ex)
-            {
-                Debug.WriteLine("Error when filtering documents: " + ex.Message);
-            }
-            return new List<Drawing>();
-        }
+        //        return list;
+        //    }
+        //    catch(Exception ex)
+        //    {
+        //        Debug.WriteLine("Error when filtering documents: " + ex.Message);
+        //    }
+        //    return new List<Drawing>();
+        //}
 
         public async Task<Drawing> FindDrawingByIdAsync(string documentId, bool updateViews = false)
         {
-            if (String.IsNullOrEmpty(CollectionDrawings))
-            {
-                throw new CollectionNameNotProvidedException("Drawings");
-            }
-
             try
             {
-                DocumentReference docRef = _firestoreDb.Collection(CollectionDrawings).Document(documentId);
+                var drawing = await _firestoreDb.GetDocumentAsync<DrawingDocument>(CollectionDrawings, documentId);
 
-                DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
-
-                if (snapshot.Exists)
+                if (drawing == null)
                 {
-                    if (updateViews)
-                    {
-                        await UpdateViewsAsync(documentId);
-                    }
-
-                    return _converterDrawing.ConvertToModel(snapshot.ConvertTo<DrawingDocument>());
+                    Debug.WriteLine($"Documento \"{documentId}\" no encontrado entre los dibujos");
+                    throw new KeyNotFoundException($"Documento \"{documentId}\" no encontrado entre los dibujos");
                 }
-                 
-                return null;
-            }catch(Exception ex)
+
+                if (updateViews)
+                {
+                    await UpdateViewsAsync(documentId);
+                }
+
+                return _converterDrawing.ConvertToModel(drawing);
+            }
+            catch (Exception ex)
             {
                 Debug.WriteLine("Exception when getting document '" + documentId + "': " + ex.Message);
             }
@@ -686,24 +716,18 @@ namespace MRA.Services.Firebase
 
         public async Task<Inspiration> FindInspirationById(string documentId)
         {
-            if (String.IsNullOrEmpty(CollectionInspirations))
-            {
-                throw new CollectionNameNotProvidedException("Inspirations");
-            }
-
             try
             {
-                DocumentReference docRef = _firestoreDb.Collection(CollectionInspirations).Document(documentId);
+                var inspiration = await _firestoreDb.GetDocumentAsync<InspirationDocument>(CollectionInspirations, documentId);
 
-                DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
-
-                if (snapshot.Exists)
+                if (inspiration == null)
                 {
-                    var converter = new InspirationFirebaseConverter();
-                    return converter.ConvertToModel(snapshot.ConvertTo<InspirationDocument>());
+                    Debug.WriteLine($"Documento \"{documentId}\" no encontrado entre las inspiraciones");
+                    throw new KeyNotFoundException($"Documento \"{documentId}\" no encontrado entre las inspiraciones");
                 }
 
-                return null;
+                var converter = new InspirationFirebaseConverter();
+                return converter.ConvertToModel(inspiration);
             }
             catch (Exception ex)
             {
@@ -714,25 +738,18 @@ namespace MRA.Services.Firebase
 
         public async Task<Collection> FindCollectionByIdAsync(string documentId, List<Drawing> drawings)
         {
-            if (String.IsNullOrEmpty(CollectionCollections))
-            {
-                throw new CollectionNameNotProvidedException("Collections");
-            }
-
             try
             {
-                DocumentReference docRef = _firestoreDb.Collection(CollectionCollections).Document(documentId);
+                var collection = await _firestoreDb.GetDocumentAsync<CollectionDocument>(CollectionCollections, documentId);
 
-                DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
-
-                if (snapshot.Exists)
+                if (collection == null)
                 {
-                    var converter = new CollectionFirebaseConverter();
-                    var tmp = snapshot.ConvertTo<CollectionDocument>();
-                    return await HandleCollection(tmp, drawings);
+                    Debug.WriteLine($"Documento \"{documentId}\" no encontrado entre las colecciones");
+                    throw new KeyNotFoundException($"Documento \"{documentId}\" no encontrado entre las colecciones");
                 }
 
-                return null;
+                var converter = new CollectionFirebaseConverter();
+                return converter.ConvertToModel(collection);
             }
             catch (Exception ex)
             {
@@ -741,151 +758,25 @@ namespace MRA.Services.Firebase
             return null;
         }
 
-        public async Task RemoveCollectionAsync(string id)
+        public async Task<Google.Cloud.Firestore.WriteResult> RemoveCollectionAsync(string id)
         {
-            if (String.IsNullOrEmpty(CollectionCollections))
-            {
-                throw new CollectionNameNotProvidedException("Collections");
-            }
-
-            DocumentReference docRef = _firestoreDb.Collection(CollectionCollections).Document(id);
-            await docRef.DeleteAsync();
+            return await _firestoreDb.DeleteDocumentAsync(CollectionCollections, id);
         }
 
-
-        public async Task UpdateViewsAsync(string documentId)
+        public async Task<bool> UpdateViewsAsync(string documentId)
         {
-            if (String.IsNullOrEmpty(CollectionDrawings))
-            {
-                throw new CollectionNameNotProvidedException("Drawings");
-            }
-
-            // Realiza la transacción para actualizar la propiedad "views"
-            await _firestoreDb.RunTransactionAsync(async transaction =>
-            {
-                try
-                {
-                    DocumentReference docRef = _firestoreDb.Collection(CollectionDrawings).Document(documentId);
-
-                    // Obtiene el documento actual
-                    DocumentSnapshot snapshot = await transaction.GetSnapshotAsync(docRef);
-
-
-                    if (snapshot.ContainsField("views"))
-                    {
-                        // Si existe, obtiene el valor actual de "views" y le suma uno
-                        long currentViews = snapshot.GetValue<long>("views");
-                        long newViews = currentViews + 1;
-
-                        // Actualiza la propiedad "views" en el documento
-                        transaction.Update(docRef, "views", newViews);
-                    }
-                    else
-                    {
-                        // Si no existe, crea la propiedad "views" con el valor inicial de 1
-                        transaction.Set(docRef, new { views = 1 }, SetOptions.MergeAll);
-                    }
-
-                }catch(Exception ex)
-                {
-                    Debug.WriteLine("Error when updating views for document '" + documentId + "': " + ex.Message);
-                }
-            });
+            return await _firestoreDb.UpdateViewsAsync(CollectionDrawings, documentId);
         }
 
-        public async Task UpdateLikesAsync(string documentId)
+        public async Task<bool> UpdateLikesAsync(string documentId)
         {
-            if (String.IsNullOrEmpty(CollectionDrawings))
-            {
-                throw new CollectionNameNotProvidedException("Drawings");
-            }
-
-            // Realiza la transacción para actualizar la propiedad "views"
-            await _firestoreDb.RunTransactionAsync(async transaction =>
-            {
-                try
-                {
-                    DocumentReference docRef = _firestoreDb.Collection(CollectionDrawings).Document(documentId);
-
-                    // Obtiene el documento actual
-                    DocumentSnapshot snapshot = await transaction.GetSnapshotAsync(docRef);
-
-
-                    if (snapshot.ContainsField("likes"))
-                    {
-                        long currentViews = snapshot.GetValue<long>("likes");
-                        long newViews = currentViews + 1;
-
-                        transaction.Update(docRef, "likes", newViews);
-                    }
-                    else
-                    {
-                        // Si no existe, crea la propiedad "views" con el valor inicial de 1
-                        transaction.Set(docRef, new { likes = 1 }, SetOptions.MergeAll);
-                    }
-
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine("Error when updating views for document '" + documentId + "': " + ex.Message);
-                }
-            });
+            return await _firestoreDb.UpdateLikesAsync(CollectionDrawings, documentId);
         }
-
 
         public async Task<VoteSubmittedModel> VoteAsync(string documentId, int score)
         {
-            if (String.IsNullOrEmpty(CollectionDrawings))
-            {
-                throw new CollectionNameNotProvidedException("Drawings");
-            }
-
-            // Realiza la transacción para actualizar la propiedad "views"
-            return await _firestoreDb.RunTransactionAsync<VoteSubmittedModel>(async transaction =>
-            {
-                var model = new VoteSubmittedModel();
-                try
-                {
-                    if (score > 100) score = 100;
-                    if (score < 0) score = 0;
-
-                    DocumentReference docRef = _firestoreDb.Collection(CollectionDrawings).Document(documentId);
-
-                    // Obtiene el documento actual
-                    DocumentSnapshot snapshot = await transaction.GetSnapshotAsync(docRef);
-
-
-                    if (snapshot.ContainsField("score_popular") && snapshot.ContainsField("votes_popular"))
-                    {
-                        int nVotes = snapshot.GetValue<int>("votes_popular");
-                        double average = snapshot.GetValue<double>("score_popular");
-
-                        model.NewVotes = nVotes + 1;
-                        model.NewScore = ((average * nVotes) + score) / (nVotes + 1);
-
-                        transaction.Update(docRef, "score_popular", model.NewScore);
-                        transaction.Update(docRef, "votes_popular", model.NewVotes);
-                    }
-                    else
-                    {
-
-                        model.NewVotes = 1;
-                        model.NewScore = score;
-
-                        // Si no existe, crea la propiedad "views" con el valor inicial de 1
-                        transaction.Set(docRef, new { votes_popular = model.NewVotes, score_popular = model.NewScore }, SetOptions.MergeAll);
-                    }
-
-                }
-                catch (Exception ex)
-                {
-                    model.NewVotes = -1;
-                    Debug.WriteLine("Error when updating score for document '" + documentId + "': " + ex.Message);
-                }
-                return model;
-            });
+            return await _firestoreDb.VoteAsync(CollectionDrawings, documentId, score);
         }
-
 
         public void SetAutomaticTags(ref Drawing document)
         {
@@ -986,21 +877,11 @@ namespace MRA.Services.Firebase
 
         public async Task<Drawing> AddDrawingAsync(Drawing document)
         {
-            if (String.IsNullOrEmpty(CollectionDrawings))
-            {
-                throw new CollectionNameNotProvidedException("Drawings");
-            }
-
             SetAutomaticTags(ref document);
             
-            var collection = _firestoreDb.Collection(CollectionDrawings);
             var drawingDocument = _converterDrawing.ConvertToDocument(document);
 
-            // Obtiene una referencia al documento específico en la colección
-            DocumentReference docRef = collection.Document(document.Id);
-
-            // Inserta o actualiza el documento con los datos especificados
-            await docRef.SetAsync(drawingDocument);
+            await _firestoreDb.SetDocumentAsync(CollectionDrawings, document.Id, drawingDocument);
 
             return _converterDrawing.ConvertToModel(drawingDocument);
         }
@@ -1008,54 +889,24 @@ namespace MRA.Services.Firebase
 
         public async Task<Collection> AddCollectionAsync(Collection document, List<Drawing> drawings)
         {
-            if (String.IsNullOrEmpty(CollectionCollections))
-            {
-                throw new CollectionNameNotProvidedException("Drawings");
-            }
-
-            var collection = _firestoreDb.Collection(CollectionCollections);
             var collectionDocument = _converterCollection.ConvertToDocument(document);
 
-            // Obtiene una referencia al documento específico en la colección
-            DocumentReference docRef = collection.Document(document.Id);
-
-            // Inserta o actualiza el documento con los datos especificados
-            await docRef.SetAsync(collectionDocument);
+            await _firestoreDb.SetDocumentAsync(CollectionCollections, document.Id, collectionDocument);
 
             return await HandleCollection(collectionDocument, drawings);
         }
 
-        public DocumentReference GetDbDocument(string path)
-        {
-            return _firestoreDb.Document(path);
-        }
-
-        public DocumentReference GetDbDocumentDrawing(string id)
-        {
-            if (String.IsNullOrEmpty(CollectionDrawings))
-            {
-                throw new CollectionNameNotProvidedException("Drawings");
-            }
-
-            return _firestoreDb.Document(CollectionDrawings + "/" + id);
-        }
+        //public DocumentReference GetDbDocumentDrawing(string id)
+        //{
+        //    return _firestoreDb.Document(CollectionDrawings + "/" + id);
+        //}
 
 
         public async Task AddInspirationAsync(Inspiration document)
         {
-            if (String.IsNullOrEmpty(CollectionInspirations))
-            {
-                throw new CollectionNameNotProvidedException("Inspirations");
-            }
+            var inspirationDocument = _converterInspiration.ConvertToDocument(document);
 
-            var collection = _firestoreDb.Collection(CollectionInspirations);
-            var drawingDocument = _converterInspiration.ConvertToDocument(document);
-
-            // Obtiene una referencia al documento específico en la colección
-            DocumentReference docRef = collection.Document(document.Id);
-
-            // Inserta o actualiza el documento con los datos especificados
-            await docRef.SetAsync(drawingDocument);
+            await _firestoreDb.SetDocumentAsync(CollectionInspirations, document.Id, inspirationDocument);
         }
     }
 }

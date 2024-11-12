@@ -18,9 +18,9 @@ namespace MRA.WebApi.Controllers
     {
 
         private readonly IDrawingService _drawingService;
-        private readonly ILogger _logger;
+        private readonly ILogger<ArtController> _logger;
 
-        public ArtController(ILogger logger, IDrawingService drawingService)
+        public ArtController(ILogger<ArtController> logger, IDrawingService drawingService)
         {
             _logger = logger;
             _drawingService = drawingService;

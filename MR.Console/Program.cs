@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.Runtime.Intrinsics.Arm;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using MRA.Services.Firebase.Firestore;
 
 var helper = new ConsoleHelper();
 
@@ -24,7 +25,7 @@ try
 
     // Inicializa Firestore
     helper.ShowMessageInfo("Setting up FIRESTORE.");
-    var firebaseService = new FirestoreService(configuration);
+    var firebaseService = new FirestoreService(configuration, new FirestoreDatabase());
 
     helper.ShowMessageInfo("Setting up AZURE STORAGE ACCOUNT.");
     var azureStorageService = new AzureStorageService(configuration);

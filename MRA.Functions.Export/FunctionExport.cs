@@ -12,6 +12,7 @@ using MRA.DTO.Firebase.Models;
 using MRA.Services.AzureStorage;
 using MRA.Services.Excel;
 using MRA.Services.Firebase;
+using MRA.Services.Firebase.Firestore;
 using MRA.Services.Helpers;
 using OfficeOpenXml;
 
@@ -53,7 +54,7 @@ namespace MRA.Functions.Export
                 var azureStorageService = new AzureStorageService(_configuration);
 
                 _logger.LogInformation("Registrando credenciales de Firebase");
-                var firestoreService = new FirestoreService(_configuration);
+                var firestoreService = new FirestoreService(_configuration, new FirestoreDatabase());
 
                 var remoteConfigService = new RemoteConfigService(null, firestoreService.ProjectId, firestoreService.CredentialsPath, 3600);
                 firestoreService.SetRemoteConfigService(remoteConfigService);

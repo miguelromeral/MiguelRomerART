@@ -12,6 +12,7 @@ using Microsoft.Extensions.Caching.Memory;
 using MRA.Services.Excel;
 using MRA.DTO;
 using MRA.DTO.Logger;
+using MRA.Services.Firebase.Firestore;
 
 var console = new ConsoleHelper();
 MRLogger? logger = null;
@@ -32,7 +33,7 @@ try
     ExcelPackage.LicenseContext = (LicenseContext)Enum.Parse(typeof(LicenseContext), excelService.License);
 
     logger.Log("Registrando credenciales de Firebase");
-    var firestoreService = new FirestoreService(configuration);
+    var firestoreService = new FirestoreService(configuration, new FirestoreDatabase());
 
     //var remoteConfigService = new RemoteConfigService(new MemoryCache(new MemoryCacheOptions()), firestoreService.ProjectId, firestoreService.CredentialsPath, 60000);
     //firestoreService.SetRemoteConfigService(remoteConfigService);

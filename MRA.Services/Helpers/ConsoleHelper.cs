@@ -14,6 +14,18 @@ namespace MRA.Services.Helpers
         private int PAD_RIGHT = 10;
         public bool ShowMessageType = true;
 
+        public void ShowMessageTrace(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.WriteLine(message);
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+        public void ShowMessageDebug(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.WriteLine(message);
+            Console.ForegroundColor = ConsoleColor.White;
+        }
         public void ShowMessageInfo(string message)
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
@@ -38,6 +50,15 @@ namespace MRA.Services.Helpers
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(message);
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+        public void ShowMessageCritical(string message)
+        {
+            var previous = Console.BackgroundColor;
+            Console.BackgroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine(message);
+            Console.BackgroundColor = previous;
             Console.ForegroundColor = ConsoleColor.White;
         }
 
