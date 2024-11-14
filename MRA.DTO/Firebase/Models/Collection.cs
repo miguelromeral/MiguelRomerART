@@ -23,15 +23,6 @@ namespace MRA.DTO.Firebase.Models
         [JsonIgnore]
         public List<DocumentReference> DrawingsReferences { get; set; }
 
-        [JsonIgnore]
-        public string TextDrawingsReferences
-        {
-            get
-            {
-                return Environment.NewLine + String.Join(", "+ Environment.NewLine, DrawingsReferences.Select(x => "* "+x.Parent + "/" + x.Id).ToList());
-            }
-        }
-
 
         public override string ToString()
         {

@@ -109,9 +109,9 @@ namespace MRA.WebApi.Controllers
             }
         }
 
-        [HttpGet("drawing/details/admin/{id}")]
+        [HttpGet("drawing/full-details/{id}")]
         [Authorize]
-        public async Task<ActionResult<Drawing>> DrawingDetailsAdmin(string id)
+        public async Task<ActionResult<Drawing>> DrawingFullDetails(string id)
         {
             try
             {
@@ -155,9 +155,9 @@ namespace MRA.WebApi.Controllers
             }
         }
 
-        [HttpPost("drawing/filter/admin")]
+        [HttpPost("drawing/full-filter")]
         [Authorize]
-        public async Task<ActionResult<DrawingFilterResultsResponse>> DrawingFilterAdmin([FromBody] DrawingFilter filters)
+        public async Task<ActionResult<DrawingFilterResultsResponse>> DrawingFullFilter([FromBody] DrawingFilter filters)
         {
             try
             {
@@ -403,9 +403,9 @@ namespace MRA.WebApi.Controllers
             }
         }
 
-        [HttpGet("collection/details/admin/{id}")]
+        [HttpGet("collection/full-details/{id}")]
         [Authorize]
-        public async Task<ActionResult<CollectionResponse>> CollectionDetailsAdmin(string id)
+        public async Task<ActionResult<CollectionResponse>> CollectionFullDetails(string id)
         {
             try
             {
@@ -453,9 +453,9 @@ namespace MRA.WebApi.Controllers
             }
         }
 
-        [HttpGet("collections/admin")]
+        [HttpGet("collections/full")]
         [Authorize]
-        public async Task<ActionResult<List<CollectionResponse>>> CollectionsAdmin()
+        public async Task<ActionResult<List<CollectionResponse>>> CollectionsFull()
         {
             try
             {

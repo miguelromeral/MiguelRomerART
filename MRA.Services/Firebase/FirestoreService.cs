@@ -178,7 +178,7 @@ namespace MRA.Services.Firebase
 
         public async Task<List<Drawing>> GetDrawingsAsync()
         {
-            _logger.LogTrace("Requesting All Drawings");
+            _logger.LogTrace("Recuperando todos los dibujos desde Firestore");
             var documents = await _firestoreDb.GetAllDocumentsAsync<DrawingDocument>(CollectionDrawings);
             return documents.Select(_converterDrawing.ConvertToModel).ToList();
         }
@@ -189,7 +189,7 @@ namespace MRA.Services.Firebase
             try
             {
                 var inspdocs = (await _firestoreDb.GetAllDocumentsAsync<InspirationDocument>(CollectionInspirations));
-                return inspdocs.Select(_converterInspiration.ConvertToModel).ToList();
+            return inspdocs.Select(_converterInspiration.ConvertToModel).ToList();
             }catch(Exception ex)
             {
                 Console.WriteLine("Error when getting inspirations: " + ex.Message);
@@ -221,8 +221,8 @@ namespace MRA.Services.Firebase
             try
             {
                 var collectionDocs = (await _firestoreDb.GetAllDocumentsAsync<CollectionDocument>(CollectionCollections));
-                return await HandleAllCollections(collectionDocs, drawings);
-            }
+                return HandleAllCollections(collectionDocs, drawings);
+        }
             catch (Exception ex)
             {
                 Console.WriteLine("Error when getting collections: " + ex.Message);
@@ -230,7 +230,7 @@ namespace MRA.Services.Firebase
             }
         }
 
-        public async Task<Collection> HandleCollection(CollectionDocument collection, List<Drawing> drawings)
+        public Collection HandleCollection(CollectionDocument collection, List<Drawing> drawings)
         {
             var c = new Collection()
             {
@@ -274,7 +274,7 @@ namespace MRA.Services.Firebase
             return list;
         }
 
-        public async Task<List<Collection>> HandleAllCollections(List<CollectionDocument> collectionDocs, List<Drawing> drawings)
+        public List<Collection> HandleAllCollections(List<CollectionDocument> collectionDocs, List<Drawing> drawings)
         {
             try
             {
@@ -282,7 +282,7 @@ namespace MRA.Services.Firebase
 
                 foreach(var collection in collectionDocs)
                 {
-                    listCollections.Add(await HandleCollection(collection, drawings));
+                    listCollections.Add(HandleCollection(collection, drawings));
                 }
                 return listCollections;
             }
@@ -740,16 +740,15 @@ namespace MRA.Services.Firebase
         {
             try
             {
-                var collection = await _firestoreDb.GetDocumentAsync<CollectionDocument>(CollectionCollections, documentId);
+                var collectionDocument = await _firestoreDb.GetDocumentAsync<CollectionDocument>(CollectionCollections, documentId);
 
-                if (collection == null)
+                if (collectionDocument == null)
                 {
                     Debug.WriteLine($"Documento \"{documentId}\" no encontrado entre las colecciones");
                     throw new KeyNotFoundException($"Documento \"{documentId}\" no encontrado entre las colecciones");
                 }
 
-                var converter = new CollectionFirebaseConverter();
-                return converter.ConvertToModel(collection);
+                return HandleCollection(collectionDocument, drawings);
             }
             catch (Exception ex)
             {
@@ -893,7 +892,7 @@ namespace MRA.Services.Firebase
 
             await _firestoreDb.SetDocumentAsync(CollectionCollections, document.Id, collectionDocument);
 
-            return await HandleCollection(collectionDocument, drawings);
+            return HandleCollection(collectionDocument, drawings);
         }
 
         //public DocumentReference GetDbDocumentDrawing(string id)

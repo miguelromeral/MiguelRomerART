@@ -6,7 +6,6 @@ using MRA.DTO.Logger;
 using MRA.DTO.ViewModels.Art.Select;
 using MRA.Services;
 using MRA.WebApi.Controllers;
-using MRA.WebApi.Test;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,4 +1,5 @@
-﻿using Google.Cloud.Firestore;
+﻿using System.Reflection;
+using Google.Cloud.Firestore;
 using Moq;
 using MRA.DTO.Firebase.Documents;
 using MRA.DTO.Firebase.Models;
@@ -11,6 +12,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Castle.Core.Configuration;
 using MRA.DTO.Logger;
+using System.Dynamic;
+using MRA.Services.Firebase.Interfaces;
 
 namespace MRA.Test.Services
 {
@@ -26,7 +29,7 @@ namespace MRA.Test.Services
         }
 
         [Fact]
-        public void ShouldInitialize_WithCorrectConfiguration()
+        public void ShouldInitialize_Ok()
         {
             Assert.Equal("TestProjectID", _firestoreService.ProjectId);
             Assert.Equal("TestDrawings", _firestoreService.CollectionDrawings);
@@ -35,20 +38,36 @@ namespace MRA.Test.Services
         }
 
         [Fact]
-        public async Task GetDrawingsAsync_ShouldReturnListOfDrawings()
+        public async Task GetDrawingsAsync_Ok()
         {
             _firestoreDbMock.Setup(db => db.GetAllDocumentsAsync<DrawingDocument>(_firestoreService.CollectionDrawings)).ReturnsAsync(new List<DrawingDocument>()
             {
-                new DrawingDocument(), 
+                new DrawingDocument(),
                 new DrawingDocument()
             });
 
-            // Actúa: llama al método `GetDrawingsAsync`
             var result = await _firestoreService.GetDrawingsAsync();
 
-            // Verifica que se devolvió la lista de `Drawing` y que tiene la cantidad esperada
             Assert.IsType<List<Drawing>>(result);
             Assert.NotEmpty(result);
+            Assert.Equal(2, result.Count);
+        }
+
+        [Fact]
+        public async Task GetInspirationsAsync_Ok()
+        {
+            var expected = new List<InspirationDocument>()
+            {
+                new InspirationDocument(),
+                new InspirationDocument()
+            };
+            _firestoreDbMock.Setup(db => db.GetAllDocumentsAsync<InspirationDocument>(_firestoreService.CollectionInspirations)).ReturnsAsync(expected);
+
+            var result = await _firestoreService.GetInspirationsAsync();
+
+            Assert.IsType<List<Inspiration>>(result);
+            Assert.NotEmpty(result);
+            Assert.Equal(expected.Count, result.Count);
         }
     }
 }
