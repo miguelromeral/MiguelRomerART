@@ -152,6 +152,7 @@ namespace MRA.Services.Firebase
             var googleCredentialsJson = Environment.GetEnvironmentVariable(ENV_GOOGLE_CREDENTIALS_AZURE);
             if (!string.IsNullOrEmpty(googleCredentialsJson))
             {
+                _logger.LogInformation($"Existe una variable de entorno \"{ENV_GOOGLE_CREDENTIALS_AZURE}\".");
                 var tempCredentialPath = Path.Combine(Path.GetTempPath(), "firebase-credentials.json");
                 File.WriteAllText(tempCredentialPath, googleCredentialsJson);
 
@@ -159,6 +160,7 @@ namespace MRA.Services.Firebase
             }
             else
             {
+                _logger.LogInformation($"No se ha encontrado una variable de entorno \"{ENV_GOOGLE_CREDENTIALS_AZURE}\". Se procede a leer fichero local.");
                 // Si estoy en local
                 _serviceAccountPath = _configuration[APPSETTING_FIREBASE_CREDENTIALS_PATH];
             }

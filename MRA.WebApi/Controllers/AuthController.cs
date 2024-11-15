@@ -2,7 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using MRA.DTO.Auth;
+using MRA.DTO.JWT;
 using MRA.DTO.ViewModels.Account;
+using MRA.Services.Helpers;
+using MRA.Services.JWT;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -13,17 +16,37 @@ namespace MRA.WebApi.Controllers
     [ApiController]
     public class AuthController : Controller
     {
-        private readonly IConfiguration _configuration;
+        public const string ENV_WEB_ADMIN_USER = "ENV_WEB_ADMIN_USER";
+        public const string ENV_WEB_ADMIN_PASSWORD = "ENV_WEB_ADMIN_PASSWORD";
 
-        public AuthController(IConfiguration configuration)
+        private readonly string _adminUser;
+        private readonly string _adminPassword;
+
+        private readonly JwtSettings _jwtSettings;
+
+        private readonly ILogger<AuthController> _logger;
+
+        public AuthController(ILogger<AuthController> logger)
         {
-            _configuration = configuration;
+            _logger = logger;
+            try
+            {
+                _adminUser = EnvironmentHelper.ReadValue(ENV_WEB_ADMIN_USER);
+                _adminPassword = EnvironmentHelper.ReadValue(ENV_WEB_ADMIN_PASSWORD);
+
+                _jwtSettings = JwtService.Load();
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                throw;
+            }
         }
 
         [HttpPost("login")]
         public IActionResult Login([FromBody] UserLoginDto loginDto)
         {
-            if (loginDto.Username != _configuration["Administrator:User"] || loginDto.Password != _configuration["Administrator:Password"])
+            if (loginDto.Username != _adminUser || loginDto.Password != _adminPassword)
             {
                 return Unauthorized();
             }
@@ -34,12 +57,12 @@ namespace MRA.WebApi.Controllers
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
+                issuer: _jwtSettings.Issuer,
+                audience: _jwtSettings.Audience,
                 claims: claims,
                 expires: DateTime.Now.AddMinutes(1440),
                 signingCredentials: creds);
@@ -51,7 +74,6 @@ namespace MRA.WebApi.Controllers
                 Token = new JwtSecurityTokenHandler().WriteToken(token)
             }
             );
-            
         }
 
         [HttpPost("validate-token")]
@@ -59,7 +81,7 @@ namespace MRA.WebApi.Controllers
         public IActionResult ValidateToken([FromBody] TokenDto tokenDto)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);
+            var key = Encoding.ASCII.GetBytes(_jwtSettings.Key);
 
             try
             {
@@ -68,9 +90,9 @@ namespace MRA.WebApi.Controllers
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = true,
-                    ValidIssuer = _configuration["Jwt:Issuer"],
+                    ValidIssuer = _jwtSettings.Issuer,
                     ValidateAudience = true,
-                    ValidAudience = _configuration["Jwt:Audience"],
+                    ValidAudience = _jwtSettings.Audience,
                     ValidateLifetime = true,
                 }, out SecurityToken validatedToken);
 

@@ -35,9 +35,9 @@ namespace MRA.Functions.Export
         [FunctionName("FunctionExport")]
         public async Task Run(
 #if DEBUG
-        [TimerTrigger("0 */1 * * * *")]
+        [TimerTrigger("0 */2 * * * *")]
 #else
-        [TimerTrigger("0 30 12 */1 * *")] // Every day at 12:30 UTC
+        [TimerTrigger("0 30 12 */3 * *")] // Every 3 days at 12:30 UTC
 #endif
          TimerInfo myTimer/*, ILogger log*/)
         {
@@ -49,12 +49,13 @@ namespace MRA.Functions.Export
 
                 _logger.LogInformation("Configurando EPPlus");
                 ExcelPackage.LicenseContext = (LicenseContext)Enum.Parse(typeof(LicenseContext), excelService.License);
+                _logger.LogTrace("Licencia de EPPlus: " + ExcelPackage.LicenseContext);
 
                 _logger.LogInformation("Configurando Azure Service");
-                var azureStorageService = new AzureStorageService(_configuration);
+                var azureStorageService = new AzureStorageService(_configuration, _logger);
 
-                _logger.LogInformation("Registrando credenciales de Firebase");
-                var firestoreService = new FirestoreService(_configuration, new FirestoreDatabase());
+                _logger.LogInformation("Configurando Firebase Service");
+                var firestoreService = new FirestoreService(_configuration, new FirestoreDatabase(), _logger);
 
                 var remoteConfigService = new RemoteConfigService(null, firestoreService.ProjectId, firestoreService.CredentialsPath, 3600);
                 firestoreService.SetRemoteConfigService(remoteConfigService);

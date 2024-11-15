@@ -22,6 +22,10 @@ using MRA.DTO.Logger;
 using MRA.WebApi.Controllers;
 using MRA.Services.Firebase.Firestore;
 using MRA.Services.Logger;
+using MRA.Services.JWT;
+using MRA.DTO.JWT;
+
+DotNetEnv.Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,8 +37,8 @@ builder.Logging.AddDebug();        // Agrega logging de depuración
 builder.Logging.AddProvider(new MRLoggerProvider(builder.Configuration));
 
 // Añadimos Autenticación por JWT
-var jwtSettings = builder.Configuration.GetSection("Jwt");
-var key = Encoding.ASCII.GetBytes(jwtSettings["Key"]);
+var jwtSettings = JwtService.Load();
+var key = Encoding.ASCII.GetBytes(jwtSettings.Key);
 
 builder.Services.AddAuthentication(options =>
 {
@@ -49,8 +53,8 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = jwtSettings["Issuer"],
-        ValidAudience = jwtSettings["Audience"],
+        ValidIssuer = jwtSettings.Issuer,
+        ValidAudience = jwtSettings.Audience,
         IssuerSigningKey = new SymmetricSecurityKey(key)
     };
 });
@@ -74,7 +78,7 @@ var logger = new MRLogger(builder.Configuration);
 
 // Configuración de Azure
 logger.LogInformation("Configurando Azure Storage Service");
-var azureStorageService = new AzureStorageService(builder.Configuration);
+var azureStorageService = new AzureStorageService(builder.Configuration, logger);
 builder.Services.AddSingleton(azureStorageService);
 
 // Configuración de Firebase

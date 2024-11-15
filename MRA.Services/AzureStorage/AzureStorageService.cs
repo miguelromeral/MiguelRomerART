@@ -1,7 +1,9 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using MRA.DTO.AzureStorage;
+using MRA.Services.Helpers;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.Processing;
@@ -16,21 +18,33 @@ namespace MRA.Services.AzureStorage
 {
     public class AzureStorageService
     {
+        #region Environment Variables Names
+        private const string ENV_AZURE_STORAGE_CONNECTION_STRING = "ENV_AZURE_STORAGE_CONNECTION_STRING";
+        #endregion
+
+        #region App Settings Names
         private const string APPSETTING_AZURE_URL_BASE = "AzureStorage:BlobPath";
         private const string APPSETTING_AZURE_BLOB_STORAGE_CONTAINER = "AzureStorage:BlobStorageContainer";
-        private const string APPSETTING_AZURE_BLOB_STORAGE_CONNECTION_STRING = "AzureStorage:ConnectionString";
         private const string APPSETTING_AZURE_BLOB_STORAGE_EXPORT_LOCATION = "AzureStorage:Backup:Export:Location";
+        #endregion
+
         public string BlobURL { get { return _configuration[APPSETTING_AZURE_URL_BASE]; } }
         public string BlobStorageContainer { get { return _configuration[APPSETTING_AZURE_BLOB_STORAGE_CONTAINER]; } }
-        public string ConnectionString { get { return _configuration[APPSETTING_AZURE_BLOB_STORAGE_CONNECTION_STRING]; } }
+
+        private readonly string _connectionString;
+        public string ConnectionString { get { return _connectionString; } }
         public string ExportLocation { get { return _configuration[APPSETTING_AZURE_BLOB_STORAGE_EXPORT_LOCATION]; } }
 
         private readonly IConfiguration _configuration;
+        private readonly ILogger _logger;
         private readonly BlobServiceClient _blobServiceClient;
 
-        public AzureStorageService(IConfiguration configuration)
+
+        public AzureStorageService(IConfiguration configuration, ILogger logger)
         {
+            _logger = logger;
             _configuration = configuration;
+            _connectionString = EnvironmentHelper.ReadValue(ENV_AZURE_STORAGE_CONNECTION_STRING);
             _blobServiceClient = new BlobServiceClient(ConnectionString);
         }
 
