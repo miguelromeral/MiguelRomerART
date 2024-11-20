@@ -250,7 +250,7 @@ namespace MRA.WebApi.Controllers
                     Title = request.Title,
                     Type = request.Type,
                     InstagramUrl = request.InstagramUrl,
-                    TwitterUrl = request.TwitterUrl,
+                    BlueskyUrl = request.BlueskyUrl,
                     Visible = request.Visible
                 };
 

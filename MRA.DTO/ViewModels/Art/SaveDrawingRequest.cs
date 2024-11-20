@@ -29,7 +29,7 @@ namespace MRA.DTO.ViewModels.Art
         public bool Favorite { get; set; }
         public string ReferenceUrl { get; set; }
         public string InstagramUrl { get; set; }
-        public string TwitterUrl { get; set; }
+        public string BlueskyUrl { get; set; }
         public int ScoreCritic { get; set; }
         public int Filter { get; set; }
         public List<string> ListComments { get; set; }

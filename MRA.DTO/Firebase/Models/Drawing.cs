@@ -342,9 +342,8 @@ namespace MRA.DTO.Firebase.Models
         #endregion
 
         #region Social Networks
-        [ExcelColumn("Twitter URL", 130, url: true, wrapText: true)]
-        public string TwitterUrl { get; set; }
-
+        [ExcelColumn("Bluesky URL", 130, url: true, wrapText: true)]
+        public string BlueskyUrl { get; set; }
         [ExcelColumn("Instagram URL", 131, url: true, wrapText: true)]
         public string InstagramUrl { get; set; }
         #endregion

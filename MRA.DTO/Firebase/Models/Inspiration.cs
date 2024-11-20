@@ -20,6 +20,7 @@ namespace MRA.DTO.Firebase.Models
         public string Name { get; set; }
         public string Instagram { get; set; }
         public string Twitter { get; set; }
+        public string Bluesky { get; set; }
         public string YouTube { get; set; }
         public string Twitch { get; set; }
         public string Pinterest { get; set; }

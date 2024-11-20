@@ -23,6 +23,9 @@ namespace MRA.DTO.Firebase.Documents
         public string twitter { get; set; }
 
         [FirestoreProperty]
+        public string bluesky { get; set; }
+
+        [FirestoreProperty]
         public string youtube { get; set; }
         [FirestoreProperty]
         public string twitch { get; set; }

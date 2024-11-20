@@ -93,7 +93,7 @@ namespace MRA.DTO.Firebase.Documents
         public string spotify_url { get; set; }
 
         [FirestoreProperty]
-        public string twitter_url { get; set; }
+        public string bluesky_url { get; set; }
 
         [FirestoreProperty]
         public string instagram_url { get; set; }
