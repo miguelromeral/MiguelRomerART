@@ -1,7 +1,9 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using MRA.DTO.AzureStorage;
+using MRA.DTO.Options;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.Processing;
@@ -16,21 +18,17 @@ namespace MRA.Services.AzureStorage
 {
     public class AzureStorageService
     {
-        private const string APPSETTING_AZURE_URL_BASE = "AzureStorage:BlobPath";
-        private const string APPSETTING_AZURE_BLOB_STORAGE_CONTAINER = "AzureStorage:BlobStorageContainer";
-        private const string APPSETTING_AZURE_BLOB_STORAGE_CONNECTION_STRING = "AzureStorage:ConnectionString";
-        private const string APPSETTING_AZURE_BLOB_STORAGE_EXPORT_LOCATION = "AzureStorage:Backup:Export:Location";
-        public string BlobURL { get { return _configuration[APPSETTING_AZURE_URL_BASE]; } }
-        public string BlobStorageContainer { get { return _configuration[APPSETTING_AZURE_BLOB_STORAGE_CONTAINER]; } }
-        public string ConnectionString { get { return _configuration[APPSETTING_AZURE_BLOB_STORAGE_CONNECTION_STRING]; } }
-        public string ExportLocation { get { return _configuration[APPSETTING_AZURE_BLOB_STORAGE_EXPORT_LOCATION]; } }
+        public string BlobURL { get => _options.BlobPath; }
+        public string BlobStorageContainer { get => _options.BlobStorageContainer; }
+        public string ConnectionString { get => _options.ConnectionString; }
+        public string ExportLocation { get => _options.ExportLocation; }
 
-        private readonly IConfiguration _configuration;
         private readonly BlobServiceClient _blobServiceClient;
+        private readonly AzureStorageOptions _options;
 
-        public AzureStorageService(IConfiguration configuration)
+        public AzureStorageService(IOptions<AzureStorageOptions> options)
         {
-            _configuration = configuration;
+            _options = options.Value;
             _blobServiceClient = new BlobServiceClient(ConnectionString);
         }
 

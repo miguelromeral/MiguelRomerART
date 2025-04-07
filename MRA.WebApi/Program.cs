@@ -22,6 +22,12 @@ using MRA.DTO.Logger;
 using MRA.WebApi.Controllers;
 using MRA.Services.Firebase.Firestore;
 using MRA.Services.Logger;
+using Azure.Identity;
+using MRA.DTO.Options;
+using Azure.Security.KeyVault.Secrets;
+using Microsoft.Identity.Client.Platforms.Features.DesktopOs.Kerberos;
+using FirebaseAdmin.Auth.Multitenancy;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -67,15 +73,26 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+builder.Configuration
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
+    .AddJsonFile($"appsettings.Local.json", optional: true)
+    .AddEnvironmentVariables();
 
 var logger = new MRLogger(builder.Configuration);
-//builder.Services.AddSingleton<ILogger>(logger);
 
-// Configuración de Azure
+if (builder.Environment.IsProduction())
+{
+    logger.LogInformation("Configurando Azure Key Vault");
+    var keyVaultURL = builder.Configuration.GetValue<string>("AzureKeyVault:URL");
+    builder.Configuration.AddAzureKeyVault(new Uri(keyVaultURL), new DefaultAzureCredential());
+}
+
+builder.Services.Configure<AzureStorageOptions>(builder.Configuration.GetSection("AzureStorage"));
+
 logger.LogInformation("Configurando Azure Storage Service");
-var azureStorageService = new AzureStorageService(builder.Configuration);
-builder.Services.AddSingleton(azureStorageService);
+builder.Services.AddSingleton<AzureStorageService>();
 
 // Configuración de Firebase
 logger.LogInformation("Configurando Firebase");
@@ -91,6 +108,7 @@ firebaseService.SetRemoteConfigService(remoteConfigService);
 
 builder.Services.AddSingleton<IFirestoreService>(firebaseService);
 
+var azureStorageService = builder.Services.BuildServiceProvider().GetRequiredService<AzureStorageService>();
 var drawingService = new DrawingService(secondsCache, new MemoryCache(new MemoryCacheOptions()), azureStorageService, firebaseService, remoteConfigService, logger);
 
 builder.Services.AddSingleton<IDrawingService>(drawingService);
