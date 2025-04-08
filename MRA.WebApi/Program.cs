@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using MRA.WebApi.Startup;
 using MRA.DependencyInjection;
+using MRA.DependencyInjection.Startup;
 
 var builder = WebApplication.CreateBuilder(args);
 

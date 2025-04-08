@@ -26,5 +26,6 @@ namespace MRA.Services.Firebase.Interfaces
         Task<bool> UpdateViewsAsync(string documentId);
         Task<Google.Cloud.Firestore.WriteResult> RemoveCollectionAsync(string id);
         Task<List<DocumentReference>> SetDrawingsReferencesAsync(string[] ids);
+        Task<List<Drawing>> CalculatePopularityOfListDrawings(List<Drawing> drawings);
     }
 }

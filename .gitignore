@@ -376,3 +376,4 @@ FodyWeavers.xsd
 /MRA.Import/Credentials/
 /MRA.WebApi/.env
 /MRA.WebApi/appsettings.Local.json
+/MRA.Functions.Export/appsettings.Local.json

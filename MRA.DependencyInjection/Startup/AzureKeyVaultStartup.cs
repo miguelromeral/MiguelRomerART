@@ -1,7 +1,7 @@
 ﻿using Azure.Identity;
+using Microsoft.Extensions.Configuration;
 
-namespace MRA.WebApi.Startup;
-
+namespace MRA.DependencyInjection.Startup;
 public static class AzureKeyVaultStartup
 {
     public static void ConfigureKeyVault(this IConfigurationBuilder configuration, IConfiguration config)

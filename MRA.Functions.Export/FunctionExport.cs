@@ -1,19 +1,19 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Host;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using MRA.DTO.Configuration;
 using MRA.DTO.Firebase.Models;
+using MRA.Services;
 using MRA.Services.AzureStorage;
 using MRA.Services.Excel;
-using MRA.Services.Firebase;
-using MRA.Services.Firebase.Firestore;
-using MRA.Services.Helpers;
+using MRA.Services.Firebase.Interfaces;
+using MRA.Services.Firebase.RemoteConfig;
 using OfficeOpenXml;
 
 namespace MRA.Functions.Export
@@ -22,13 +22,29 @@ namespace MRA.Functions.Export
     {
         private readonly ILogger<FunctionExport> _logger;
         private readonly IConfiguration _configuration;
+        private readonly IAzureStorageService _azureStorageService;
+        private readonly IFirestoreService _firestoreService;
+        private readonly IRemoteConfigService _remoteConfigService;
+        private readonly IDrawingService _drawingService;
+        private readonly AppConfiguration _appConfiguration;
 
         public FunctionExport(
             ILogger<FunctionExport> logger,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IAzureStorageService azureStorageService,
+            IFirestoreService firestoreService,
+            IRemoteConfigService remoteConfigService,
+            IDrawingService drawingService,
+            AppConfiguration appConfiguration
+            )
         {
-            _logger = logger;
+            _appConfiguration = appConfiguration;
             _configuration = configuration;
+            _logger = logger;
+            _azureStorageService = azureStorageService;
+            _firestoreService = firestoreService;
+            _remoteConfigService = remoteConfigService;
+            _drawingService = drawingService;
         }
 
 
@@ -39,7 +55,8 @@ namespace MRA.Functions.Export
 #else
         [TimerTrigger("0 30 12 */1 * *")] // Every day at 12:30 UTC
 #endif
-         TimerInfo myTimer/*, ILogger log*/)
+            TimerInfo myTimer
+            )
         {
             try
             {
@@ -50,33 +67,23 @@ namespace MRA.Functions.Export
                 _logger.LogInformation("Configurando EPPlus");
                 ExcelPackage.LicenseContext = (LicenseContext)Enum.Parse(typeof(LicenseContext), excelService.License);
 
-                _logger.LogInformation("Configurando Azure Service");
-                var azureStorageService = new AzureStorageService(_configuration);
-
-                _logger.LogInformation("Registrando credenciales de Firebase");
-                var firestoreService = new FirestoreService(_configuration, new FirestoreDatabase());
-
-                var remoteConfigService = new RemoteConfigService(null, firestoreService.ProjectId, firestoreService.CredentialsPath, 3600);
-                firestoreService.SetRemoteConfigService(remoteConfigService);
-
-                _logger.LogInformation($"Ejecución AUTOMATIZADA en entorno de {(firestoreService.IsInProduction ? "PRODUCCIÓN" : "PRE")}");
-
                 _logger.LogInformation("Leyendo documentos desde Firestore");
                 List<Drawing> listDrawings;
 
 #if DEBUG
                 listDrawings = new List<Drawing>(){
-                    await firestoreService.FindDrawingByIdAsync("cloud")
+                    await _firestoreService.FindDrawingByIdAsync("cloud", updateViews: false)
                 };
 #else
-                listDrawings = await firestoreService.GetDrawingsAsync();
+                listDrawings = await _firestoreService.GetDrawingsAsync();
 #endif
 
-                _logger.LogInformation("Calculando Popularidad");
-                listDrawings = await firestoreService.CalculatePopularityOfListDrawings(listDrawings);
+                // TODO: resolver fallo en Producción aquí
+                //_logger.LogInformation("Calculando Popularidad");
+                //listDrawings = await _firestoreService.CalculatePopularityOfListDrawings(listDrawings);
 
+                _logger.LogInformation("Procediendo a crear Excel");
 
-                // Crear un nuevo archivo Excel
                 using (ExcelPackage excel = new ExcelPackage())
                 {
                     _logger.LogInformation($"Creando hoja principal \"{ExcelService.EXCEL_DRAWING_SHEET_NAME}\"");
@@ -93,20 +100,17 @@ namespace MRA.Functions.Export
                     excelService.FillSheetsDictionary(excel, drawingProperties, workSheet);
 
                     _logger.LogInformation("Preparando fichero para guardar en Azure Storage");
-                    // Crear un MemoryStream para guardar el archivo en memoria
                     using (var memoryStream = new MemoryStream())
                     {
                         var fileName = excelService.GetFileName();
-                        // Guardar el contenido del ExcelPackage en el MemoryStream
+
                         excel.SaveAs(memoryStream);
 
-                        // Restablecer la posición del Stream al inicio
-                        memoryStream.Position = 0;
+                        memoryStream.Position = 0; // Restablecer la posición del Stream al inicio
 
                         try
                         {
-                            // Llamar a la función para subir a Azure, pasando el MemoryStream
-                            await azureStorageService.GuardarExcelEnAzureStorage(memoryStream, azureStorageService.ExportLocation, fileName);
+                            await _azureStorageService.GuardarExcelEnAzureStorage(memoryStream, _appConfiguration.AzureStorage.ExportLocation, fileName);
                         }
                         catch (Exception ex)
                         {
