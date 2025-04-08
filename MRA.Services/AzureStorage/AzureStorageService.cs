@@ -1,7 +1,9 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using MRA.DTO.AzureStorage;
+using MRA.DTO.Configuration;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.Processing;
@@ -14,23 +16,18 @@ using System.Threading.Tasks;
 
 namespace MRA.Services.AzureStorage
 {
-    public class AzureStorageService
+    public class AzureStorageService : IAzureStorageService
     {
-        private const string APPSETTING_AZURE_URL_BASE = "AzureStorage:BlobPath";
-        private const string APPSETTING_AZURE_BLOB_STORAGE_CONTAINER = "AzureStorage:BlobStorageContainer";
-        private const string APPSETTING_AZURE_BLOB_STORAGE_CONNECTION_STRING = "AzureStorage:ConnectionString";
-        private const string APPSETTING_AZURE_BLOB_STORAGE_EXPORT_LOCATION = "AzureStorage:Backup:Export:Location";
-        public string BlobURL { get { return _configuration[APPSETTING_AZURE_URL_BASE]; } }
-        public string BlobStorageContainer { get { return _configuration[APPSETTING_AZURE_BLOB_STORAGE_CONTAINER]; } }
-        public string ConnectionString { get { return _configuration[APPSETTING_AZURE_BLOB_STORAGE_CONNECTION_STRING]; } }
-        public string ExportLocation { get { return _configuration[APPSETTING_AZURE_BLOB_STORAGE_EXPORT_LOCATION]; } }
+        public string BlobStorageContainer { get => _config.AzureStorage.BlobStorageContainer; }
+        public string ConnectionString { get => _config.AzureStorage.ConnectionString; }
+        public string ExportLocation { get => _config.AzureStorage.ExportLocation; }
 
-        private readonly IConfiguration _configuration;
         private readonly BlobServiceClient _blobServiceClient;
+        private readonly AppConfiguration _config;
 
-        public AzureStorageService(IConfiguration configuration)
+        public AzureStorageService(AppConfiguration config)
         {
-            _configuration = configuration;
+            _config = config;
             _blobServiceClient = new BlobServiceClient(ConnectionString);
         }
 
@@ -215,6 +212,7 @@ namespace MRA.Services.AzureStorage
 
             return nuevaRuta;
         }
+        public string GetBlobURL() => _config.AzureStorage.BlobPath;
     }
 
 }

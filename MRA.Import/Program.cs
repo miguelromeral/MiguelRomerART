@@ -13,18 +13,20 @@ using MRA.Services.Excel;
 using MRA.DTO;
 using MRA.DTO.Logger;
 using MRA.Services.Firebase.Firestore;
+using MRA.DependencyInjection.Startup;
+using MRA.Services.Firebase.RemoteConfig;
 
 var console = new ConsoleHelper();
 MRLogger? logger = null;
 try
 {
     // Configuración de la aplicación
-    var builder = new ConfigurationBuilder()
-        .SetBasePath(Directory.GetCurrentDirectory())
-        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+    var builder = new ConfigurationBuilder().AddAppSettingsFiles("Production");
     var configuration = builder.Build();
 
-    logger = new MRLogger(configuration);
+    var appConfig = configuration.GetMRAConfiguration();
+
+    logger = new MRLogger(appConfig);
     logger.Log("Iniciando Aplicación de Importación");
 
     var excelService = new ExcelService(configuration, logger);
@@ -33,7 +35,7 @@ try
     ExcelPackage.LicenseContext = (LicenseContext)Enum.Parse(typeof(LicenseContext), excelService.License);
 
     logger.Log("Registrando credenciales de Firebase");
-    var firestoreService = new FirestoreService(configuration, new FirestoreDatabase());
+    var firestoreService = new FirestoreService(appConfig, new FirestoreDatabase(appConfig), null);
 
     //var remoteConfigService = new RemoteConfigService(new MemoryCache(new MemoryCacheOptions()), firestoreService.ProjectId, firestoreService.CredentialsPath, 60000);
     //firestoreService.SetRemoteConfigService(remoteConfigService);

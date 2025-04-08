@@ -1,124 +1,38 @@
 ﻿using Google.Cloud.Firestore;
-using Google.Protobuf.Collections;
-using Google.Type;
-using Microsoft.Extensions.Configuration;
 using MRA.DTO.Firebase.Documents;
 using MRA.DTO.Firebase.Models;
 using MRA.DTO.ViewModels.Art;
-using MRA.DTO.Firebase.Interfaces;
 using MRA.DTO.Firebase.Converters;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using static Google.Cloud.Firestore.V1.StructuredQuery.Types;
 using MRA.Services.Firebase.Interfaces;
-using System.ComponentModel.DataAnnotations;
 using MRA.DTO.Firebase.RemoteConfig;
-using Google.Cloud.Firestore.V1;
-using MRA.DTO.Exceptions;
-using System.Runtime.Intrinsics.Arm;
 using MRA.Services.Firebase.Firestore;
 using Microsoft.Extensions.Logging;
+using MRA.DTO.Configuration;
+using MRA.Services.Firebase.RemoteConfig;
 
 namespace MRA.Services.Firebase
 {
     public class FirestoreService : IFirestoreService
     {
-        #region App Settings
-        private const string APPSETTING_FIREBASE_CREDENTIALS_PATH = "Firebase:CredentialsPath";
-        private const string APPSETTING_FIREBASE_PROJECTID = "Firebase:ProjectID";
-        private const string APPSETTING_FIREBASE_ENVIRONMENT = "Firebase:Environment";
-        private const string APPSETTING_FIREBASE_COLLECTION_DRAWINGS = "Firebase:CollectionDrawings";
-        private const string APPSETTING_FIREBASE_COLLECTION_COLLECTIONS = "Firebase:CollectionCollections";
-        private const string APPSETTING_FIREBASE_COLLECTION_INSPIRATIONS = "Firebase:CollectionInspirations";
-        private const string APPSETTING_AZURE_URL_BASE = "AzureStorage:BlobPath";
-
+        private const string ENVIRONMENT_PRODUCTION = "production";
         private const string ENV_GOOGLE_CREDENTIALS_AZURE = "GOOGLE_APPLICATION_CREDENTIALS_JSON";
         private const string ENV_GOOGLE_CREDENTIALS = "GOOGLE_APPLICATION_CREDENTIALS";
-        #endregion
 
-        private readonly IConfiguration _configuration;
         private readonly IFirestoreDatabase _firestoreDb;
         private readonly ILogger _logger;
         private string _serviceAccountPath = "";
         private DrawingFirebaseConverter _converterDrawing;
         private InspirationFirebaseConverter _converterInspiration;
         private CollectionFirebaseConverter _converterCollection;
-        private RemoteConfigService? _remoteConfigService;
+        private IRemoteConfigService _remoteConfigService;
+        private readonly AppConfiguration _appConfiguration;
 
-        public string ProjectId { 
-            get
-            {
-                string name = _configuration?.GetValue<string>(APPSETTING_FIREBASE_PROJECTID) ?? "";
-                if (String.IsNullOrEmpty(name))
-                {
-                    throw new NotImplementedException("No se ha especificado valor para "+ APPSETTING_FIREBASE_PROJECTID);
-                }
-                return name;
-            }
-        }
-        public string CollectionDrawings
-        {
-            get
-            {
-                string name = _configuration?.GetValue<string>(APPSETTING_FIREBASE_COLLECTION_DRAWINGS) ?? "";
-                if (String.IsNullOrEmpty(name))
-                {
-                    throw new CollectionNameNotProvidedException("Drawings");
-                }
-                return name;
-            }
-        }
-        public string CollectionCollections
-        {
-            get
-            {
-                string name = _configuration?.GetValue<string>(APPSETTING_FIREBASE_COLLECTION_COLLECTIONS) ?? "";
-                if (String.IsNullOrEmpty(name))
-                {
-                    throw new CollectionNameNotProvidedException("Collections");
-                }
-                return name;
-            }
-        }
-        public string CollectionInspirations { 
-            get
-            {
-                string name = _configuration?.GetValue<string>(APPSETTING_FIREBASE_COLLECTION_INSPIRATIONS) ?? "";
-                if (String.IsNullOrEmpty(name))
-                {
-                    throw new CollectionNameNotProvidedException("Inspirations");
-                }
-                return name;
-            }
-        }
-        public string AzureUrlBase {
-            get
-            {
-                string name = _configuration?.GetValue<string>(APPSETTING_AZURE_URL_BASE) ?? "";
-                if (String.IsNullOrEmpty(name))
-                {
-                    throw new NotImplementedException("No se ha especificado valor para " + APPSETTING_AZURE_URL_BASE);
-                }
-                return name;
-            }
-        }
-        public bool IsInProduction {
-            get
-            {
-                string name = _configuration?.GetValue<string>(APPSETTING_FIREBASE_ENVIRONMENT) ?? "";
-                if (String.IsNullOrEmpty(name))
-                {
-                    throw new NotImplementedException("No se ha especificado valor para " + APPSETTING_FIREBASE_ENVIRONMENT);
-                }
-                return name.Equals("production"); ;
-            }
-        }
+        public string ProjectId { get => _appConfiguration.Firebase.ProjectID; }
+        public string CollectionDrawings { get => _appConfiguration.Firebase.CollectionDrawings; }
+        public string CollectionCollections { get => _appConfiguration.Firebase.CollectionCollections; }
+        public string CollectionInspirations { get => _appConfiguration.Firebase.CollectionInspirations; }
+        public bool IsInProduction { get => _appConfiguration.Firebase.Environment?.Equals(ENVIRONMENT_PRODUCTION) ?? false; } 
         public string CredentialsPath
         {
             get
@@ -132,14 +46,19 @@ namespace MRA.Services.Firebase
             }
         }
 
-        public FirestoreService(IConfiguration configuration, IFirestoreDatabase db, ILogger logger)
+        public FirestoreService(
+            AppConfiguration appConfig, 
+            IFirestoreDatabase db,
+            IRemoteConfigService remoteConfigService
+            /*, ILogger logger*/)
         {
-            _logger = logger;
-            _configuration = configuration;
+            _appConfiguration = appConfig;
+            //_logger = logger;
             LoadCredentials();
             _firestoreDb = db;
-            _firestoreDb.Create(ProjectId);
-            _converterDrawing = new DrawingFirebaseConverter(AzureUrlBase);
+            _firestoreDb.Create();
+            _remoteConfigService = remoteConfigService;
+            _converterDrawing = new DrawingFirebaseConverter(_appConfiguration.AzureStorage.BlobPath);
             _converterInspiration = new InspirationFirebaseConverter();
             _converterCollection = new CollectionFirebaseConverter();
         }
@@ -160,15 +79,10 @@ namespace MRA.Services.Firebase
             else
             {
                 // Si estoy en local
-                _serviceAccountPath = _configuration[APPSETTING_FIREBASE_CREDENTIALS_PATH];
+                _serviceAccountPath = _appConfiguration.Firebase.CredentialsPath;
             }
 
             Environment.SetEnvironmentVariable(ENV_GOOGLE_CREDENTIALS, _serviceAccountPath);
-        }
-
-        public void SetRemoteConfigService(RemoteConfigService service)
-        {
-            _remoteConfigService = service;
         }
 
         public DocumentReference DocumentReference(string collection, string id)
@@ -178,7 +92,7 @@ namespace MRA.Services.Firebase
 
         public async Task<List<Drawing>> GetDrawingsAsync()
         {
-            _logger.LogTrace("Recuperando todos los dibujos desde Firestore");
+            //_logger.LogTrace("Recuperando todos los dibujos desde Firestore");
             var documents = await _firestoreDb.GetAllDocumentsAsync<DrawingDocument>(CollectionDrawings);
             return documents.Select(_converterDrawing.ConvertToModel).ToList();
         }
@@ -197,24 +111,6 @@ namespace MRA.Services.Firebase
             }
         }
 
-
-        //public async Task<List<Collection>> GetAllCollectionsOrderPositive()
-        //{
-        //    try
-        //    {
-        //        Query query = _firestoreDb.Collection(_collectionNameCollections);
-        //        query = query.WhereGreaterThanOrEqualTo("order", 0);
-        //        var snapshot = (await query.GetSnapshotAsync());
-        //        var collections = snapshot.Documents;
-        //        var collectionDocs = collections.Select(s => s.ConvertTo<CollectionDocument>()).ToList();
-        //        return await HandleAllCollections(collectionDocs);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine("Error when getting collections: " + ex.Message);
-        //        return new List<Collection>();
-        //    }
-        //}
 
         public async Task<List<Collection>> GetCollectionsAsync(List<Drawing> drawings)
         {

@@ -1,6 +1,7 @@
 ﻿using Google.Cloud.Firestore;
 using MRA.DTO.Firebase.Documents;
 using MRA.DTO.Firebase.Models;
+using MRA.DTO.Configuration;
 using System.Diagnostics;
 using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
@@ -12,14 +13,16 @@ namespace MRA.Services.Firebase.Firestore
     public class FirestoreDatabase : IFirestoreDatabase
     {
         private FirestoreDb _firestoreDb;
+        private readonly AppConfiguration _appConfig;
 
-        public FirestoreDatabase()
+        public FirestoreDatabase(AppConfiguration appConfig)
         {
+            _appConfig = appConfig;
         }
 
-        public void Create(string projectId, Google.Cloud.Firestore.V1.FirestoreClient client = null)
+        public void Create(Google.Cloud.Firestore.V1.FirestoreClient client = null)
         {
-            _firestoreDb = FirestoreDb.Create(projectId, client);
+            _firestoreDb = FirestoreDb.Create(_appConfig.Firebase.ProjectID, client);
         }
 
         //public CollectionReference Collection(string path) => _firestoreDb.Collection(path);

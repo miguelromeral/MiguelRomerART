@@ -2,35 +2,36 @@
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using MRA.DTO.Firebase.Models;
+using MRA.DTO.Configuration;
 using MRA.DTO.ViewModels.Art;
 using MRA.DTO.ViewModels.Art.Select;
 using MRA.Services.AzureStorage;
-using MRA.Services.Firebase;
 using MRA.Services.Firebase.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using MRA.Services.Firebase.RemoteConfig;
 
 namespace MRA.Services
 {
     public class DrawingService : BaseCacheService, IDrawingService
     {
-        private readonly int _secondsCache;
-        private readonly AzureStorageService _azureStorageService;
+        private readonly IAzureStorageService _azureStorageService;
         private readonly IFirestoreService _firestoreService;
-        private readonly ILogger _logger;
-        private readonly RemoteConfigService _remoteConfigService;
+        //private readonly ILogger _logger;
+        private readonly IRemoteConfigService _remoteConfigService;
+        private readonly AppConfiguration _appConfiguration;
 
         private const string CACHE_ALL_DRAWINGS = "all_drawings";
         private const string CACHE_ALL_COLLECTIONS = "all_collections";
 
-        public DrawingService(int secondsCache, IMemoryCache cache, AzureStorageService storageService, IFirestoreService firestoreService,
-            RemoteConfigService remoteConfigService, ILogger logger) : base(cache)
+        public DrawingService(
+            IMemoryCache cache, 
+            IAzureStorageService storageService, 
+            IFirestoreService firestoreService,
+            IRemoteConfigService remoteConfigService,
+            /* ILogger logger, */
+            AppConfiguration appConfig) : base(cache)
         {
-            _logger = logger;
-            _secondsCache = secondsCache;
+            _appConfiguration = appConfig;
+            //_logger = logger;
             _azureStorageService = storageService;
             _firestoreService = firestoreService;
             _remoteConfigService = remoteConfigService;
@@ -41,16 +42,16 @@ namespace MRA.Services
             return await GetOrSetAsync(CACHE_ALL_DRAWINGS, async () =>
             {
                 return await _firestoreService.GetDrawingsAsync();
-            }, TimeSpan.FromSeconds(_secondsCache));
+            }, TimeSpan.FromSeconds(_appConfiguration.Cache.RefreshSeconds));
         }
 
-        public string GetAzureUrlBase() => _azureStorageService.BlobURL;
+        public string GetAzureUrlBase() => _azureStorageService.GetBlobURL();
         public async Task<List<Inspiration>> GetAllInspirations()
         {
             return await GetOrSetAsync("all_inspirations", async () =>
             {
                 return await _firestoreService.GetInspirationsAsync();
-            }, TimeSpan.FromSeconds(_secondsCache));
+            }, TimeSpan.FromSeconds(_appConfiguration.Cache.RefreshSeconds));
         }
 
         public async Task<List<Collection>> GetAllCollections(List<Drawing> drawings, bool cache = true)
@@ -60,7 +61,7 @@ namespace MRA.Services
                 return await GetOrSetAsync(CACHE_ALL_COLLECTIONS, async () =>
                 {
                     return await _firestoreService.GetCollectionsAsync(drawings);
-                }, TimeSpan.FromSeconds(_secondsCache));
+                }, TimeSpan.FromSeconds(_appConfiguration.Cache.RefreshSeconds));
             }
             else
             {
@@ -75,7 +76,7 @@ namespace MRA.Services
                 return await GetOrSetAsync($"collection_{documentId}", async () =>
                 {
                     return await _firestoreService.FindCollectionByIdAsync(documentId, drawings);
-                }, TimeSpan.FromSeconds(_secondsCache));
+                }, TimeSpan.FromSeconds(_appConfiguration.Cache.RefreshSeconds));
             }
             else
             {
@@ -97,7 +98,7 @@ namespace MRA.Services
                 SetBlobUrl(ref list);
                 results.UpdatefilteredDrawings(list);
                 return results;
-            }, TimeSpan.FromSeconds(_secondsCache));
+            }, TimeSpan.FromSeconds(_appConfiguration.Cache.RefreshSeconds));
         }
 
         //public async Task<List<Drawing>> FilterDrawings(DrawingFilter filter)
@@ -165,7 +166,7 @@ namespace MRA.Services
 
         private void SetBlobUrl(ref List<Drawing> drawings)
         {
-            drawings.ForEach(d => d.UrlBase = _azureStorageService.BlobURL);
+            drawings.ForEach(d => d.UrlBase = _azureStorageService.GetBlobURL());
         }
 
         public async Task<Drawing> FindDrawingById(string documentId, bool onlyIfVisible, bool updateViews = false, bool cache = true)
@@ -176,7 +177,7 @@ namespace MRA.Services
                 return await GetOrSetAsync<Drawing>($"drawing_{documentId}", async () =>
                 {
                     return await FindDrawingByIdTask(documentId, onlyIfVisible, updateViews, cache);
-                }, TimeSpan.FromSeconds(_secondsCache));
+                }, TimeSpan.FromSeconds(_appConfiguration.Cache.RefreshSeconds));
             }
             else
             {
@@ -234,7 +235,7 @@ namespace MRA.Services
         public List<ProductListItem> GetProducts(List<Drawing> drawings)
         {
             var list = new List<ProductListItem>();
-            _logger.LogTrace("Dada la lista de dibujos, vamos a separar los productos");
+            //_logger.LogTrace("Dada la lista de dibujos, vamos a separar los productos");
             foreach (var product in drawings.Where(x => !string.IsNullOrEmpty(x.ProductName)).Select(x => new { x.ProductName, x.ProductType, x.ProductTypeName }).Distinct().ToList())
             {
                 if (list.Count(x => x.ProductName == product.ProductName) == 0)

@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MRA.DTO.Auth;
+using MRA.DTO.Configuration;
 using MRA.DTO.ViewModels.Account;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -13,17 +15,17 @@ namespace MRA.WebApi.Controllers
     [ApiController]
     public class AuthController : Controller
     {
-        private readonly IConfiguration _configuration;
+        private readonly AppConfiguration _appConfig;
 
-        public AuthController(IConfiguration configuration)
+        public AuthController(AppConfiguration appConfig)
         {
-            _configuration = configuration;
+            _appConfig = appConfig;
         }
 
         [HttpPost("login")]
         public IActionResult Login([FromBody] UserLoginDto loginDto)
         {
-            if (loginDto.Username != _configuration["Administrator:User"] || loginDto.Password != _configuration["Administrator:Password"])
+            if (loginDto.Username != _appConfig.Administrator.User || loginDto.Password != _appConfig.Administrator.Password)
             {
                 return Unauthorized();
             }
@@ -34,12 +36,12 @@ namespace MRA.WebApi.Controllers
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appConfig.Jwt.Key));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
+                issuer: _appConfig.Jwt.Issuer,
+                audience: _appConfig.Jwt.Audience,
                 claims: claims,
                 expires: DateTime.Now.AddMinutes(1440),
                 signingCredentials: creds);
@@ -55,11 +57,10 @@ namespace MRA.WebApi.Controllers
         }
 
         [HttpPost("validate-token")]
-        //[Authorize]
         public IActionResult ValidateToken([FromBody] TokenDto tokenDto)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);
+            var key = Encoding.ASCII.GetBytes(_appConfig.Jwt.Key);
 
             try
             {
@@ -68,9 +69,9 @@ namespace MRA.WebApi.Controllers
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = true,
-                    ValidIssuer = _configuration["Jwt:Issuer"],
+                    ValidIssuer = _appConfig.Jwt.Issuer,
                     ValidateAudience = true,
-                    ValidAudience = _configuration["Jwt:Audience"],
+                    ValidAudience = _appConfig.Jwt.Audience,
                     ValidateLifetime = true,
                 }, out SecurityToken validatedToken);
 

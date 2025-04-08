@@ -1,23 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <Version>2.15.65.1</Version>
+    <Version>2.16.65.1</Version>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.4.0" />
+    <PackageReference Include="Azure.Identity" Version="1.13.2" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.22.2" />
     <PackageReference Include="Google.Apis.Storage.v1" Version="1.68.0.3463" />
     <PackageReference Include="Google.Cloud.Firestore.V1" Version="3.8.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.32" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.2" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.36.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MRA.DependencyInjection\MRA.DependencyInjection.csproj" />
     <ProjectReference Include="..\MRA.DTO\MRA.DTO.csproj" />
     <ProjectReference Include="..\MRA.Services\MRA.Services.csproj" />
   </ItemGroup>

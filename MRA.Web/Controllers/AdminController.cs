@@ -16,6 +16,8 @@ using MRA.Web.Models;
 using System.Diagnostics;
 using System.Collections.Generic;
 using MRA.Services;
+using Microsoft.Extensions.Options;
+using MRA.DTO.Configuration.Options;
 
 namespace MRA.Web.Controllers
 {
@@ -24,12 +26,14 @@ namespace MRA.Web.Controllers
         private readonly DrawingService _drawingService;
         private readonly ILogger<HomeController> _logger;
         private readonly IConfiguration _configuration;
+        private readonly AdministratorOptions _administratorOptions;
 
-        public AdminController(ILogger<HomeController> logger, DrawingService drawingService, IConfiguration configuration)
+        public AdminController(ILogger<HomeController> logger, DrawingService drawingService, IConfiguration configuration, IOptions<AdministratorOptions> adminOptions)
         {
             _logger = logger;
             _drawingService = drawingService;
             _configuration = configuration;
+            _administratorOptions = adminOptions.Value;
         }
 
 
@@ -58,12 +62,12 @@ namespace MRA.Web.Controllers
 
             try
             {
-                var passwordAppSettings = _configuration["Administrator:Password"];
+                var passwordAppSettings = _administratorOptions.Password;
 
                 if (passwordAppSettings.Equals(password))
                 {
                     var userId = SessionSettings.USER_ID_ADMIN;
-                    var userName = "MiguelRomeral";
+                    var userName = _administratorOptions.User;
 
                     var claims = new List<Claim>
                     {
