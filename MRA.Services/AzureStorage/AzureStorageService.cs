@@ -18,17 +18,17 @@ namespace MRA.Services.AzureStorage
 {
     public class AzureStorageService
     {
-        public string BlobURL { get => _options.BlobPath; }
-        public string BlobStorageContainer { get => _options.BlobStorageContainer; }
-        public string ConnectionString { get => _options.ConnectionString; }
-        public string ExportLocation { get => _options.ExportLocation; }
+        public string BlobURL { get => _config.AzureStorage.BlobPath; }
+        public string BlobStorageContainer { get => _config.AzureStorage.BlobStorageContainer; }
+        public string ConnectionString { get => _config.AzureStorage.ConnectionString; }
+        public string ExportLocation { get => _config.AzureStorage.ExportLocation; }
 
         private readonly BlobServiceClient _blobServiceClient;
-        private readonly AzureStorageOptions _options;
+        private readonly AppConfiguration _config;
 
-        public AzureStorageService(IOptions<AzureStorageOptions> options)
+        public AzureStorageService(AppConfiguration config)
         {
-            _options = options.Value;
+            _config = config;
             _blobServiceClient = new BlobServiceClient(ConnectionString);
         }
 

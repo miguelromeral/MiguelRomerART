@@ -24,6 +24,8 @@ using MRA.DTO.Exceptions;
 using System.Runtime.Intrinsics.Arm;
 using MRA.Services.Firebase.Firestore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Identity.Client;
+using MRA.DTO.Options;
 
 namespace MRA.Services.Firebase
 {
@@ -36,7 +38,6 @@ namespace MRA.Services.Firebase
         private const string APPSETTING_FIREBASE_COLLECTION_DRAWINGS = "Firebase:CollectionDrawings";
         private const string APPSETTING_FIREBASE_COLLECTION_COLLECTIONS = "Firebase:CollectionCollections";
         private const string APPSETTING_FIREBASE_COLLECTION_INSPIRATIONS = "Firebase:CollectionInspirations";
-        private const string APPSETTING_AZURE_URL_BASE = "AzureStorage:BlobPath";
 
         private const string ENV_GOOGLE_CREDENTIALS_AZURE = "GOOGLE_APPLICATION_CREDENTIALS_JSON";
         private const string ENV_GOOGLE_CREDENTIALS = "GOOGLE_APPLICATION_CREDENTIALS";
@@ -50,6 +51,7 @@ namespace MRA.Services.Firebase
         private InspirationFirebaseConverter _converterInspiration;
         private CollectionFirebaseConverter _converterCollection;
         private RemoteConfigService? _remoteConfigService;
+        private readonly AppConfiguration _appConfiguration;
 
         public string ProjectId { 
             get
@@ -97,17 +99,17 @@ namespace MRA.Services.Firebase
                 return name;
             }
         }
-        public string AzureUrlBase {
-            get
-            {
-                string name = _configuration?.GetValue<string>(APPSETTING_AZURE_URL_BASE) ?? "";
-                if (String.IsNullOrEmpty(name))
-                {
-                    throw new NotImplementedException("No se ha especificado valor para " + APPSETTING_AZURE_URL_BASE);
-                }
-                return name;
-            }
-        }
+        //public string AzureUrlBase {
+        //    get
+        //    {
+        //        string name = _configuration?.GetValue<string>(APPSETTING_AZURE_URL_BASE) ?? "";
+        //        if (String.IsNullOrEmpty(name))
+        //        {
+        //            throw new NotImplementedException("No se ha especificado valor para " + APPSETTING_AZURE_URL_BASE);
+        //        }
+        //        return name;
+        //    }
+        //}
         public bool IsInProduction {
             get
             {
@@ -132,14 +134,15 @@ namespace MRA.Services.Firebase
             }
         }
 
-        public FirestoreService(IConfiguration configuration, IFirestoreDatabase db, ILogger logger)
+        public FirestoreService(IConfiguration configuration, AppConfiguration appConfig, IFirestoreDatabase db, ILogger logger)
         {
+            _appConfiguration = appConfig;
             _logger = logger;
             _configuration = configuration;
             LoadCredentials();
             _firestoreDb = db;
             _firestoreDb.Create(ProjectId);
-            _converterDrawing = new DrawingFirebaseConverter(AzureUrlBase);
+            _converterDrawing = new DrawingFirebaseConverter(_appConfiguration.AzureStorage.BlobPath);
             _converterInspiration = new InspirationFirebaseConverter();
             _converterCollection = new CollectionFirebaseConverter();
         }

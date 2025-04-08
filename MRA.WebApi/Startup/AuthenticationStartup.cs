@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using MRA.DTO.Options;
 using System.Text;
 
 namespace MRA.WebApi.Startup;
@@ -8,8 +9,10 @@ public static class AuthenticationStartup
 {
     public static void AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
-        var jwtSettings = configuration.GetSection("Jwt");
-        var key = Encoding.ASCII.GetBytes(jwtSettings["Key"]);
+        var jwtSection = configuration.GetSection("Jwt");
+        services.Configure<JwtOptions>(jwtSection);
+        
+        var jwtOptions = jwtSection.Get<JwtOptions>();
 
         services.AddAuthentication(options =>
         {
@@ -24,9 +27,9 @@ public static class AuthenticationStartup
                 ValidateAudience = true,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                ValidIssuer = jwtSettings["Issuer"],
-                ValidAudience = jwtSettings["Audience"],
-                IssuerSigningKey = new SymmetricSecurityKey(key)
+                ValidIssuer = jwtOptions.Issuer,
+                ValidAudience = jwtOptions.Audience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtOptions.Key))
             };
         });
     }

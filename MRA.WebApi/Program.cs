@@ -6,8 +6,18 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using MRA.DTO.Logger;
 using MRA.WebApi.Startup;
+using MRA.DependencyInjection;
+using MRA.DTO.Options;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.AddAppSettings();
+
+if (builder.Environment.IsProduction())
+    builder.Configuration.ConfigureKeyVault(builder.Configuration);
+
+//builder.Services.AddCustomConfiguration(builder.Configuration);
+builder.Services.AddDependencyInjectionServices(builder.Configuration);
 
 builder.Logging.AddCustomLogging(builder.Configuration);
 
@@ -15,21 +25,20 @@ builder.Services.AddJwtAuthentication(builder.Configuration);
 
 builder.Services.AddCorsPolicies();
 
-builder.AddAppSettings();
-
-if (builder.Environment.IsProduction())
-    builder.Configuration.ConfigureKeyVault(builder.Configuration);
 builder.Services.AddAzureStorage(builder.Configuration);
 
 var logger = new MRLogger(builder.Configuration);
-builder.Services.AddFirebase(builder.Configuration, logger);
+var appConfig = builder.Services.BuildServiceProvider().GetRequiredService<AppConfiguration>();
+
+builder.Services.AddFirebase(builder.Configuration, logger, appConfig);
 
 var azureStorageService = builder.Services.BuildServiceProvider().GetRequiredService<AzureStorageService>();
-var drawingService = new DrawingService(builder.Configuration.GetValue<int>("CacheSeconds"), new MemoryCache(new MemoryCacheOptions()),
+var drawingService = new DrawingService(new MemoryCache(new MemoryCacheOptions()),
     azureStorageService,
     builder.Services.BuildServiceProvider().GetRequiredService<IFirestoreService>(),
     builder.Services.BuildServiceProvider().GetRequiredService<RemoteConfigService>(),
-    logger);
+    logger,
+    appConfig);
 
 builder.Services.AddSingleton<IDrawingService>(drawingService);
 
