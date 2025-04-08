@@ -1,7 +1,6 @@
 ﻿using Azure.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MRA.DTO.Options;
 using MRA.Services.AzureStorage;
 
 namespace MRA.DependencyInjection.Startup;

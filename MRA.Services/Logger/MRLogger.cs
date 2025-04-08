@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using MRA.DTO.Options;
+using MRA.DTO.Configuration;
 using MRA.Services.Helpers;
 using System;
 using System.IO;

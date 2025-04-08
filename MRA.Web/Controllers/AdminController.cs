@@ -17,7 +17,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using MRA.Services;
 using Microsoft.Extensions.Options;
-using MRA.DTO.Options;
+using MRA.DTO.Configuration.Options;
 
 namespace MRA.Web.Controllers
 {

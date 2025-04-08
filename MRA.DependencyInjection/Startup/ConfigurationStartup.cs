@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MRA.DTO.Options;
+using MRA.DTO.Configuration.Options;
+using MRA.DTO.Configuration;
 using System.Text;
 
 namespace MRA.DependencyInjection.Startup;

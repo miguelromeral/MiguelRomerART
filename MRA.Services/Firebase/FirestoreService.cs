@@ -8,7 +8,7 @@ using MRA.Services.Firebase.Interfaces;
 using MRA.DTO.Firebase.RemoteConfig;
 using MRA.Services.Firebase.Firestore;
 using Microsoft.Extensions.Logging;
-using MRA.DTO.Options;
+using MRA.DTO.Configuration;
 using MRA.Services.Firebase.RemoteConfig;
 
 namespace MRA.Services.Firebase

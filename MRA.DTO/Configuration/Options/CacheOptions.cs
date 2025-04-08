@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MRA.DTO.Options;
+namespace MRA.DTO.Configuration.Options;
 
 public class CacheOptions
 {

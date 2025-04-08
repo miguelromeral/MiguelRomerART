@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MRA.DTO.Auth;
-using MRA.DTO.Options;
+using MRA.DTO.Configuration;
 using MRA.DTO.ViewModels.Account;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MRA.DependencyInjection.Startup;
 using Microsoft.Extensions.Configuration;
-using MRA.DTO.Options;
+using MRA.DTO.Configuration;
 using MRA.Services.AzureStorage;
 using MRA.Services;
 using Microsoft.Extensions.Caching.Memory;

@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using MRA.DTO.Firebase.Models;
-using MRA.DTO.Options;
+using MRA.DTO.Configuration;
 using MRA.DTO.ViewModels.Art;
 using MRA.DTO.ViewModels.Art.Select;
 using MRA.Services.AzureStorage;

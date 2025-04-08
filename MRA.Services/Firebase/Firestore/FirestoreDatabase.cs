@@ -1,7 +1,7 @@
 ﻿using Google.Cloud.Firestore;
 using MRA.DTO.Firebase.Documents;
 using MRA.DTO.Firebase.Models;
-using MRA.DTO.Options;
+using MRA.DTO.Configuration;
 using System.Diagnostics;
 using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;

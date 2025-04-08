@@ -1,7 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using MRA.DTO.Configuration.Options;
 
-namespace MRA.DTO.Options;
+namespace MRA.DTO.Configuration;
 
 public class AppConfiguration
 {

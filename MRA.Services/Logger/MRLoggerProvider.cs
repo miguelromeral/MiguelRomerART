@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MRA.DTO.Logger;
-using MRA.DTO.Options;
+using MRA.DTO.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
