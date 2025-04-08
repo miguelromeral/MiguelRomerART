@@ -10,4 +10,6 @@ public class AppConfiguration
     public AzureKeyVaultOptions AzureKeyVault { get; set; }
     public AzureStorageOptions AzureStorage { get; set; }
     public CacheOptions Cache { get; set; }
+    public FirebaseOptions Firebase { get; set; }
+    public MRALoggerOptions MRALogger { get; set; }
 }

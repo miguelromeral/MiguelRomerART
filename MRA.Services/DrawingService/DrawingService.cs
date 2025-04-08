@@ -6,13 +6,8 @@ using MRA.DTO.Options;
 using MRA.DTO.ViewModels.Art;
 using MRA.DTO.ViewModels.Art.Select;
 using MRA.Services.AzureStorage;
-using MRA.Services.Firebase;
 using MRA.Services.Firebase.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using MRA.Services.Firebase.RemoteConfig;
 
 namespace MRA.Services
 {
@@ -20,18 +15,23 @@ namespace MRA.Services
     {
         private readonly IAzureStorageService _azureStorageService;
         private readonly IFirestoreService _firestoreService;
-        private readonly ILogger _logger;
-        private readonly RemoteConfigService _remoteConfigService;
+        //private readonly ILogger _logger;
+        private readonly IRemoteConfigService _remoteConfigService;
         private readonly AppConfiguration _appConfiguration;
 
         private const string CACHE_ALL_DRAWINGS = "all_drawings";
         private const string CACHE_ALL_COLLECTIONS = "all_collections";
 
-        public DrawingService(IMemoryCache cache, IAzureStorageService storageService, IFirestoreService firestoreService,
-            RemoteConfigService remoteConfigService, ILogger logger, AppConfiguration appConfig) : base(cache)
+        public DrawingService(
+            IMemoryCache cache, 
+            IAzureStorageService storageService, 
+            IFirestoreService firestoreService,
+            IRemoteConfigService remoteConfigService,
+            /* ILogger logger, */
+            AppConfiguration appConfig) : base(cache)
         {
             _appConfiguration = appConfig;
-            _logger = logger;
+            //_logger = logger;
             _azureStorageService = storageService;
             _firestoreService = firestoreService;
             _remoteConfigService = remoteConfigService;
@@ -235,7 +235,7 @@ namespace MRA.Services
         public List<ProductListItem> GetProducts(List<Drawing> drawings)
         {
             var list = new List<ProductListItem>();
-            _logger.LogTrace("Dada la lista de dibujos, vamos a separar los productos");
+            //_logger.LogTrace("Dada la lista de dibujos, vamos a separar los productos");
             foreach (var product in drawings.Where(x => !string.IsNullOrEmpty(x.ProductName)).Select(x => new { x.ProductName, x.ProductType, x.ProductTypeName }).Distinct().ToList())
             {
                 if (list.Count(x => x.ProductName == product.ProductName) == 0)

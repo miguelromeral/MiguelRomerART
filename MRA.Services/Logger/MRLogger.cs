@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using MRA.DTO.Options;
 using MRA.Services.Helpers;
 using System;
 using System.IO;
@@ -8,20 +9,22 @@ namespace MRA.DTO.Logger
 {
     public class MRLogger: ConsoleHelper, ILogger, IDisposable
     {
-        private const string APPSETTING_LOG_PATH = "MRALogger:Location";
-        private const string APPSETTING_LOG_FILE_PREFIX = "MRALogger:FilePrefix";
-        private const string APPSETTING_LOG_DATE_NAME = "MRALogger:DateNameFormat";
-        private const string APPSETTING_LOG_DATE_FORMAT = "MRALogger:DateFormat";
+        private const string DEFAULT_PREFIX = "";
+        private const string DEFAULT_DATENAMEFORMAT = "yyyyMMdd_HHmmss";
+        private const string DEFAULT_DATEFORMAT = "yyyy-MM-dd HH:mm:ss";
 
         private string _logDirectory;
         private string _logFilePath;
         private string _logFileNameDateFormat;
         private string _logDateFormat;
         private StreamWriter _streamWriter;
+        private readonly AppConfiguration _appConfiguration;
 
-        public MRLogger(IConfiguration configuration)
+        public MRLogger(AppConfiguration appConfig)
         {
-            _logDirectory = configuration[APPSETTING_LOG_PATH];
+            _appConfiguration = appConfig;
+
+            _logDirectory = _appConfiguration.MRALogger.Location;
             if (!string.IsNullOrEmpty(_logDirectory))
             {
 
@@ -30,8 +33,8 @@ namespace MRA.DTO.Logger
                     Directory.CreateDirectory(_logDirectory);
                 }
 
-                _logFileNameDateFormat = configuration[APPSETTING_LOG_DATE_NAME] ?? "yyyyMMdd_HHmmss";
-                var logPrefix = configuration[APPSETTING_LOG_FILE_PREFIX] ?? "";
+                _logFileNameDateFormat = _appConfiguration.MRALogger.DateNameFormat ?? DEFAULT_DATENAMEFORMAT;
+                var logPrefix = _appConfiguration.MRALogger.FilePrefix ?? DEFAULT_PREFIX;
 
                 _logFilePath = Path.Combine(_logDirectory, $"{logPrefix}_{DateTime.Now.ToString(_logFileNameDateFormat)}.log");
 
@@ -40,7 +43,7 @@ namespace MRA.DTO.Logger
                     AutoFlush = true
                 };
             }
-            _logDateFormat = configuration[APPSETTING_LOG_DATE_FORMAT] ?? "yyyy-MM-dd HH:mm:ss";
+            _logDateFormat = _appConfiguration.MRALogger.DateFormat ?? DEFAULT_DATEFORMAT;
         }
 
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)

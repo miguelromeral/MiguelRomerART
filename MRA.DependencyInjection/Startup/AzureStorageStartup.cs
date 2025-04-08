@@ -8,9 +8,8 @@ namespace MRA.DependencyInjection.Startup;
 
 public static class AzureStorageStartup
 {
-    public static void AddAzureStorage(this IServiceCollection services, IConfiguration configuration)
+    public static void AddCustomAzureStorage(this IServiceCollection services)
     {
-        //services.Configure<AzureStorageOptions>(configuration.GetSection("AzureStorage"));
         services.AddSingleton<IAzureStorageService, AzureStorageService>();
     }
 }

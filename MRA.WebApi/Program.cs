@@ -1,13 +1,6 @@
-using MRA.Services;
-using MRA.Services.Firebase.Interfaces;
-using MRA.Services.Firebase;
-using MRA.Services.AzureStorage;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using MRA.DTO.Logger;
 using MRA.WebApi.Startup;
 using MRA.DependencyInjection;
-using MRA.DTO.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,29 +11,11 @@ builder.AddAppSettings();
 if (builder.Environment.IsProduction())
     builder.Configuration.ConfigureKeyVault(builder.Configuration);
 
-//builder.Services.AddCustomConfiguration(builder.Configuration);
 builder.Services.AddDependencyInjectionServices(builder.Configuration);
 
 builder.Services.AddJwtAuthentication(builder.Configuration);
 
 builder.Services.AddCorsPolicies();
-
-//builder.Services.AddAzureStorage(builder.Configuration);
-
-var logger = new MRLogger(builder.Configuration);
-var appConfig = builder.Services.BuildServiceProvider().GetRequiredService<AppConfiguration>();
-
-builder.Services.AddFirebase(builder.Configuration, logger, appConfig);
-
-var azureStorageService = builder.Services.BuildServiceProvider().GetRequiredService<IAzureStorageService>();
-var drawingService = new DrawingService(new MemoryCache(new MemoryCacheOptions()),
-    azureStorageService,
-    builder.Services.BuildServiceProvider().GetRequiredService<IFirestoreService>(),
-    builder.Services.BuildServiceProvider().GetRequiredService<RemoteConfigService>(),
-    logger,
-    appConfig);
-
-builder.Services.AddSingleton<IDrawingService>(drawingService);
 
 builder.Services.AddDistributedMemoryCache();
 
@@ -77,5 +52,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-logger.LogInformation("Aplicación configurada correctamente. Iniciando.");
 app.Run();

@@ -12,10 +12,4 @@ public static class AzureStorageStartup
         var credential = new DefaultAzureCredential();
         configuration.AddAzureKeyVault(new Uri(keyVaultURL), credential);
     }
-
-    public static void AddAzureStorage(this IServiceCollection services, IConfiguration configuration)
-    {
-        services.Configure<AzureStorageOptions>(configuration.GetSection("AzureStorage"));
-        services.AddSingleton<AzureStorageService>();
-    }
 }

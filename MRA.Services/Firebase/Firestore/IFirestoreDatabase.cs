@@ -5,7 +5,7 @@ namespace MRA.Services.Firebase.Firestore
 {
     public interface IFirestoreDatabase
     {
-        void Create(string projectId, Google.Cloud.Firestore.V1.FirestoreClient client = null);
+        void Create(Google.Cloud.Firestore.V1.FirestoreClient client = null);
         //CollectionReference Collection(string path);
         Task<List<T>> GetAllDocumentsAsync<T>(string collection);
         Task<bool> DocumentExistsAsync(string collection, string documentId);

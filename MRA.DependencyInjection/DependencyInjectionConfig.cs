@@ -8,6 +8,8 @@ using MRA.DependencyInjection.Startup;
 using Microsoft.Extensions.Configuration;
 using MRA.DTO.Options;
 using MRA.Services.AzureStorage;
+using MRA.Services;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace MRA.DependencyInjection;
 
@@ -15,22 +17,14 @@ public static class DependencyInjectionConfig
 {
     public static IServiceCollection AddDependencyInjectionServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddCustomConfiguration(configuration);
+        services.AddCustomConfiguration();
+        services.AddCustomLogger();
 
-        services.AddAzureStorage(configuration);
+        services.AddSingleton<IMemoryCache>(new MemoryCache(new MemoryCacheOptions()));
 
-
-        //services.Configure<AppConfiguration>(configuration);
-
-        //services.Configura
-
-        // Agrega aquí todas tus configuraciones de DI
-        // Por ejemplo:
-        //services.AddScoped<IMiServicio, MiServicio>();
-        //services.AddSingleton<IMiSingleton, MiSingleton>();
-
-        // También puedes agregar configuración, AutoMapper, etc.
-        // services.AddAutoMapper(typeof(MappingProfile));
+        services.AddCustomAzureStorage();
+        services.AddCustomFirebase();
+        services.AddSingleton<IDrawingService, DrawingService>();
 
         return services;
     }

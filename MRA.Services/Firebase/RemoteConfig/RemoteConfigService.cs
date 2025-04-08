@@ -1,41 +1,38 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using MRA.DTO.Firebase.Models;
 using MRA.DTO.Firebase.RemoteConfig;
+using MRA.DTO.Options;
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace MRA.Services.Firebase
+namespace MRA.Services.Firebase.RemoteConfig
 {
-    public class RemoteConfigService : BaseCacheService
+    public class RemoteConfigService : BaseCacheService, IRemoteConfigService
     {
-        private readonly int _secondsCache;
         private readonly HttpClient _httpClient;
-        private readonly string _firebaseProjectId;
-        private readonly string _serviceAccountPath;
         private readonly string CACHE_REMOTE_CONFIG = "remote_config";
+        private readonly AppConfiguration _appConfiguration;
 
-        public RemoteConfigService(IMemoryCache cache, string firebaseProjectId, string serviceAccountPath, int secondsCache)
+        public RemoteConfigService(IMemoryCache cache, AppConfiguration appConfig)
             : base(cache)
         {
-            _firebaseProjectId = firebaseProjectId;
-            _serviceAccountPath = serviceAccountPath;
-            _secondsCache = secondsCache;
+            _appConfiguration = appConfig;
             _httpClient = new HttpClient
             {
-                BaseAddress = new Uri($"https://firebaseremoteconfig.googleapis.com/v1/projects/{_firebaseProjectId}/remoteConfig")
+                BaseAddress = new Uri($"https://firebaseremoteconfig.googleapis.com/v1/projects/{_appConfiguration.Firebase.ProjectID}/remoteConfig")
             };
         }
 
         private async Task<HttpClient> GetHttpClientAsync()
         {
-            var accessToken = await GoogleCredentialHelper.GetAccessTokenAsync(_serviceAccountPath);
+            var accessToken = await GoogleCredentialHelper.GetAccessTokenAsync(_appConfiguration.Firebase.CredentialsPath);
 
             var httpClient = new HttpClient
             {
-                BaseAddress = new Uri($"https://firebaseremoteconfig.googleapis.com/v1/projects/{_firebaseProjectId}/remoteConfig")
+                BaseAddress = new Uri($"https://firebaseremoteconfig.googleapis.com/v1/projects/{_appConfiguration.Firebase.ProjectID}/remoteConfig")
             };
 
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
@@ -48,7 +45,7 @@ namespace MRA.Services.Firebase
             return await GetOrSetAsync(CACHE_REMOTE_CONFIG, async () =>
             {
                 return await GetRemoteConfigInfo();
-            }, TimeSpan.FromSeconds(_secondsCache));
+            }, TimeSpan.FromSeconds(_appConfiguration.Cache.RefreshSeconds));
         }
 
         private async Task<RemoteConfigResponse> GetRemoteConfigInfo()

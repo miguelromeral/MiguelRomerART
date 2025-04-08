@@ -12,6 +12,6 @@ public static class LogginStartup
         if(environment.IsDevelopment())
             logging.AddDebug();
 
-        logging.AddProvider(new MRLoggerProvider(configuration));
+        //logging.AddProvider(new MRLoggerProvider(configuration, new DTO.Options.AppConfiguration()));
     }
 }
