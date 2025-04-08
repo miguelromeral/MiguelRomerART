@@ -18,7 +18,7 @@ namespace MRA.Services
 {
     public class DrawingService : BaseCacheService, IDrawingService
     {
-        private readonly AzureStorageService _azureStorageService;
+        private readonly IAzureStorageService _azureStorageService;
         private readonly IFirestoreService _firestoreService;
         private readonly ILogger _logger;
         private readonly RemoteConfigService _remoteConfigService;
@@ -27,7 +27,7 @@ namespace MRA.Services
         private const string CACHE_ALL_DRAWINGS = "all_drawings";
         private const string CACHE_ALL_COLLECTIONS = "all_collections";
 
-        public DrawingService(IMemoryCache cache, AzureStorageService storageService, IFirestoreService firestoreService,
+        public DrawingService(IMemoryCache cache, IAzureStorageService storageService, IFirestoreService firestoreService,
             RemoteConfigService remoteConfigService, ILogger logger, AppConfiguration appConfig) : base(cache)
         {
             _appConfiguration = appConfig;
@@ -45,7 +45,7 @@ namespace MRA.Services
             }, TimeSpan.FromSeconds(_appConfiguration.Cache.RefreshSeconds));
         }
 
-        public string GetAzureUrlBase() => _azureStorageService.BlobURL;
+        public string GetAzureUrlBase() => _azureStorageService.GetBlobURL();
         public async Task<List<Inspiration>> GetAllInspirations()
         {
             return await GetOrSetAsync("all_inspirations", async () =>
@@ -166,7 +166,7 @@ namespace MRA.Services
 
         private void SetBlobUrl(ref List<Drawing> drawings)
         {
-            drawings.ForEach(d => d.UrlBase = _azureStorageService.BlobURL);
+            drawings.ForEach(d => d.UrlBase = _azureStorageService.GetBlobURL());
         }
 
         public async Task<Drawing> FindDrawingById(string documentId, bool onlyIfVisible, bool updateViews = false, bool cache = true)

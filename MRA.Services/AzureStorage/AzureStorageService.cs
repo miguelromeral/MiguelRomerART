@@ -16,9 +16,8 @@ using System.Threading.Tasks;
 
 namespace MRA.Services.AzureStorage
 {
-    public class AzureStorageService
+    public class AzureStorageService : IAzureStorageService
     {
-        public string BlobURL { get => _config.AzureStorage.BlobPath; }
         public string BlobStorageContainer { get => _config.AzureStorage.BlobStorageContainer; }
         public string ConnectionString { get => _config.AzureStorage.ConnectionString; }
         public string ExportLocation { get => _config.AzureStorage.ExportLocation; }
@@ -213,6 +212,7 @@ namespace MRA.Services.AzureStorage
 
             return nuevaRuta;
         }
+        public string GetBlobURL() => _config.AzureStorage.BlobPath;
     }
 
 }

@@ -11,6 +11,8 @@ using MRA.DTO.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Logging.AddCustomLogging(builder.Configuration, builder.Environment);
+
 builder.AddAppSettings();
 
 if (builder.Environment.IsProduction())
@@ -19,20 +21,18 @@ if (builder.Environment.IsProduction())
 //builder.Services.AddCustomConfiguration(builder.Configuration);
 builder.Services.AddDependencyInjectionServices(builder.Configuration);
 
-builder.Logging.AddCustomLogging(builder.Configuration);
-
 builder.Services.AddJwtAuthentication(builder.Configuration);
 
 builder.Services.AddCorsPolicies();
 
-builder.Services.AddAzureStorage(builder.Configuration);
+//builder.Services.AddAzureStorage(builder.Configuration);
 
 var logger = new MRLogger(builder.Configuration);
 var appConfig = builder.Services.BuildServiceProvider().GetRequiredService<AppConfiguration>();
 
 builder.Services.AddFirebase(builder.Configuration, logger, appConfig);
 
-var azureStorageService = builder.Services.BuildServiceProvider().GetRequiredService<AzureStorageService>();
+var azureStorageService = builder.Services.BuildServiceProvider().GetRequiredService<IAzureStorageService>();
 var drawingService = new DrawingService(new MemoryCache(new MemoryCacheOptions()),
     azureStorageService,
     builder.Services.BuildServiceProvider().GetRequiredService<IFirestoreService>(),

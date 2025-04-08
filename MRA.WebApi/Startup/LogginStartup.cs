@@ -4,11 +4,14 @@ namespace MRA.WebApi.Startup;
 
 public static class LogginStartup
 {
-    public static void AddCustomLogging(this ILoggingBuilder logging, IConfiguration configuration)
+    public static void AddCustomLogging(this ILoggingBuilder logging, IConfiguration configuration, IHostEnvironment environment)
     {
         logging.ClearProviders();
+        
         logging.AddConsole();
-        logging.AddDebug();
+        if(environment.IsDevelopment())
+            logging.AddDebug();
+
         logging.AddProvider(new MRLoggerProvider(configuration));
     }
 }

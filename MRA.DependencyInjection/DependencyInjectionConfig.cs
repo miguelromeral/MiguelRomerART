@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using MRA.DependencyInjection.Startup;
 using Microsoft.Extensions.Configuration;
 using MRA.DTO.Options;
+using MRA.Services.AzureStorage;
 
 namespace MRA.DependencyInjection;
 
@@ -14,21 +15,9 @@ public static class DependencyInjectionConfig
 {
     public static IServiceCollection AddDependencyInjectionServices(this IServiceCollection services, IConfiguration configuration)
     {
-        //services.AddSingleton(sp =>
-        //{
-        //    var config = sp.GetRequiredService<IConfiguration>();
-
-        //    var appConfig = new AppConfiguration
-        //    {
-        //        AzureStorage = config.GetSection("AzureStorage").Get<AzureStorageOptions>(),
-        //        AzureKeyVault = config.GetSection("AzureKeyVault").Get<AzureKeyVaultOptions>(),
-        //        Administrator = config.GetSection("Administrator").Get<AdministratorOptions>(),
-        //        Jwt = config.GetSection("Jwt").Get<JwtOptions>()
-        //    };
-
-        //    return appConfig;
-        //});
         services.AddCustomConfiguration(configuration);
+
+        services.AddAzureStorage(configuration);
 
 
         //services.Configure<AppConfiguration>(configuration);
