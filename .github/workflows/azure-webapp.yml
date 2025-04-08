@@ -64,8 +64,9 @@ jobs:
 
       - name: Get version from csproj
         id: version
+        shell: bash
         run: |
-          VERSION=$(dotnet --version)
+          VERSION=$(grep -oP '(?<=<Version>)(.*)(?=</Version>)' ./MRA.WebApi/MRA.WebApi.csproj)
           echo "MRA.WebApi Version is $VERSION"
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
