@@ -7,7 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Logging.AddCustomLogging(builder.Configuration, builder.Environment);
 
-builder.AddAppSettings();
+builder.Configuration
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddAppSettingsFiles(builder.Environment.EnvironmentName)
+    .AddEnvironmentVariables();
 
 if (builder.Environment.IsProduction())
     builder.Configuration.ConfigureKeyVault(builder.Configuration);

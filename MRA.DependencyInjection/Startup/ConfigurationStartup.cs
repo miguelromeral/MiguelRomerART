@@ -12,20 +12,23 @@ public static class ConfigurationStartup
     {
         services.AddSingleton(sp =>
         {
-            var config = sp.GetRequiredService<IConfiguration>();
-
-            var appConfig = new AppConfiguration
-            {
-                AzureStorage = config.GetSection("AzureStorage").Get<AzureStorageOptions>(),
-                AzureKeyVault = config.GetSection("AzureKeyVault").Get<AzureKeyVaultOptions>(),
-                Administrator = config.GetSection("Administrator").Get<AdministratorOptions>(),
-                Jwt = config.GetSection("Jwt").Get<JwtOptions>(),
-                Cache = config.GetSection("Cache").Get<CacheOptions>(),
-                Firebase = config.GetSection("Firebase").Get<FirebaseOptions>(),
-                MRALogger = config.GetSection("MRALogger").Get<MRALoggerOptions>()
-            };
-
-            return appConfig;
+            return sp.GetRequiredService<IConfiguration>().GetMRAConfiguration();
         });
+    }
+
+    public static AppConfiguration GetMRAConfiguration(this IConfiguration config)
+    {
+        var appConfig = new AppConfiguration
+        {
+            AzureStorage = config.GetSection("AzureStorage").Get<AzureStorageOptions>(),
+            AzureKeyVault = config.GetSection("AzureKeyVault").Get<AzureKeyVaultOptions>(),
+            Administrator = config.GetSection("Administrator").Get<AdministratorOptions>(),
+            Jwt = config.GetSection("Jwt").Get<JwtOptions>(),
+            Cache = config.GetSection("Cache").Get<CacheOptions>(),
+            Firebase = config.GetSection("Firebase").Get<FirebaseOptions>(),
+            MRALogger = config.GetSection("MRALogger").Get<MRALoggerOptions>()
+        };
+
+        return appConfig;
     }
 }

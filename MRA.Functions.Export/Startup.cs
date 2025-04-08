@@ -23,9 +23,7 @@ namespace MRA.Functions.Export
 
             var configurationBuilder = new ConfigurationBuilder()
                 .SetBasePath(context.ApplicationRootPath)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{context.EnvironmentName}.json", optional: true)
-                .AddJsonFile($"appsettings.Local.json", optional: true)
+                .AddAppSettingsFiles(context.EnvironmentName)
                 .AddEnvironmentVariables();
 
             var configuration = configurationBuilder.Build();
