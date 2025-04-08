@@ -62,6 +62,18 @@ jobs:
           name: .net-app
           path: ${{github.workspace}}/publish
 
+      - name: Get version from csproj
+        id: version
+        run: |
+          VERSION=$(dotnet --version)
+          echo "MRA.WebApi Version is $VERSION"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Create a new tag
+        run: |
+          git tag "v${{ env.VERSION }}"
+          git push origin "v${{ env.VERSION }}"
+
   deploy:
     runs-on: windows-latest
     needs: build

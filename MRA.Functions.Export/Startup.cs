@@ -23,7 +23,7 @@ namespace MRA.Functions.Export
 
             var configurationBuilder = new ConfigurationBuilder()
                 .SetBasePath(context.ApplicationRootPath)
-                .AddAppSettingsFiles(context.EnvironmentName)
+                .AddAppSettingsFiles(context.EnvironmentName, context.EnvironmentName == "Development")
                 .AddEnvironmentVariables();
 
             var configuration = configurationBuilder.Build();
