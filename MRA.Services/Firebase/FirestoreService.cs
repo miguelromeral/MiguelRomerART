@@ -74,7 +74,7 @@ namespace MRA.Services.Firebase
                 var googleCredentialsJson = Environment.GetEnvironmentVariable(ENV_GOOGLE_CREDENTIALS_AZURE);
                 if (!string.IsNullOrEmpty(googleCredentialsJson))
                 {
-                    _logger.LogInformation("Config found in Azure ENV values. Creating temporal file with its content.");
+                    _logger.LogInformation($"Config found in Azure ENV values. Creating temporal file with its content. Variable: '{ENV_GOOGLE_CREDENTIALS_AZURE}'");
                     var tempCredentialPath = Path.Combine(Path.GetTempPath(), "firebase-credentials.json");
                     File.WriteAllText(tempCredentialPath, googleCredentialsJson);
 
