@@ -14,6 +14,9 @@
 # For more information on the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # For more samples to get started with GitHub Action workflows to deploy to Azure: https://github.com/Azure/actions-workflow-samples
 
+permissions:
+  contents: write
+
 name: MRA.WebApi Azure Deployment
 
 env:
@@ -79,6 +82,12 @@ jobs:
           Write-Output "Version is $version"
           "VERSION=$version" >> $env:GITHUB_ENV
 
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          
       - name: Create Git tag
         run: |
           git tag "v${{ env.VERSION }}"
