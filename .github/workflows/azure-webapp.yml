@@ -24,7 +24,7 @@ env:
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "feature/create-tag-on-push" ]
   workflow_dispatch:
 
 jobs:
@@ -34,36 +34,37 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up .NET Core
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
+      # - name: Set up .NET Core
+      #   uses: actions/setup-dotnet@v4
+      #   with:
+      #     dotnet-version: ${{ env.DOTNET_VERSION }}
           
-      - name: Set up dependency caching for faster builds
-        uses: actions/cache@v3
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
+      # - name: Set up dependency caching for faster builds
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: ~/.nuget/packages
+      #     key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-nuget-
 
-      - name: Install dependencies
-        run: dotnet restore ${{env.CSPROJ_PATH}}
+      # - name: Install dependencies
+      #   run: dotnet restore ${{env.CSPROJ_PATH}}
         
-      - name: Build
-        run: dotnet build ${{env.CSPROJ_PATH}} --configuration Release --no-restore
+      # - name: Build
+      #   run: dotnet build ${{env.CSPROJ_PATH}} --configuration Release --no-restore
 
-      - name: Publish
-        run: dotnet publish ${{env.CSPROJ_PATH}} -c Release -o ${{github.workspace}}/publish --no-build
+      # - name: Publish
+      #   run: dotnet publish ${{env.CSPROJ_PATH}} -c Release -o ${{github.workspace}}/publish --no-build
 
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v4
-        with:
-          name: .net-app
-          path: ${{github.workspace}}/publish
+      # - name: Upload artifact for deployment job
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: .net-app
+      #     path: ${{github.workspace}}/publish
       
       - name: Extract version from .csproj
         id: extract-version
+        shell: bash
         run: |
           VERSION=$(grep -oP '(?<=<Version>)(.*)(?=</Version>)' ${{env.CSPROJ_PATH}})
           echo "Version is $VERSION"
@@ -74,24 +75,24 @@ jobs:
           git tag "v${{ env.VERSION }}"
           git push origin "v${{ env.VERSION }}"
 
-  deploy:
-    runs-on: windows-latest
-    needs: build
-    environment:
-      name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+  # deploy:
+  #   runs-on: windows-latest
+  #   needs: build
+  #   environment:
+  #     name: 'Production'
+  #     url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
-    steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v4
-        with:
-          name: .net-app
+  #   steps:
+  #     - name: Download artifact from build job
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: .net-app
 
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v3
-        with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          slot-name: 'Production'
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: .
+  #     - name: Deploy to Azure Web App
+  #       id: deploy-to-webapp
+  #       uses: azure/webapps-deploy@v3
+  #       with:
+  #         app-name: ${{ env.AZURE_WEBAPP_NAME }}
+  #         slot-name: 'Production'
+  #         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+  #         package: .
