@@ -49,25 +49,25 @@ jobs:
           name: .net-app
           path: ${{github.workspace}}/publish
 
-      - name: Extract version from .csproj (PowerShell)
-        id: extract-version
-        shell: pwsh
-        run: |
-          [xml]$xml = Get-Content "${{ env.CSPROJ_PATH }}"
-          $version = $xml.Project.PropertyGroup.Version
-          Write-Output "Version is $version"
-          "VERSION=$version" >> $env:GITHUB_ENV
+      # - name: Extract version from .csproj (PowerShell)
+      #   id: extract-version
+      #   shell: pwsh
+      #   run: |
+      #     [xml]$xml = Get-Content "${{ env.CSPROJ_PATH }}"
+      #     $version = $xml.Project.PropertyGroup.Version
+      #     Write-Output "Version is $version"
+      #     "VERSION=$version" >> $env:GITHUB_ENV
 
-      - name: Configure Git
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+      # - name: Configure Git
+      #   run: |
+      #     git config user.name "github-actions[bot]"
+      #     git config user.email "github-actions[bot]@users.noreply.github.com"
+      #     git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
           
-      - name: Create Git tag
-        run: |
-          git tag "v${{ env.VERSION }}"
-          git push origin "v${{ env.VERSION }}"
+      # - name: Create Git tag
+      #   run: |
+      #     git tag "v${{ env.VERSION }}"
+      #     git push origin "v${{ env.VERSION }}"
 
   deploy:
     runs-on: windows-latest
