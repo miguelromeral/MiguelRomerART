@@ -62,11 +62,18 @@ jobs:
       #     name: .net-app
       #     path: ${{github.workspace}}/publish
       
+      # - name: Extract version from .csproj
+      #   id: extract-version
+      #   shell: bash
+      #   run: |
+      #     VERSION=$(grep -oP '(?<=<Version>)(.*)(?=</Version>)' ${{env.CSPROJ_PATH}})
+      #     echo "Version is $VERSION"
+      #     echo "VERSION=$VERSION" >> $GITHUB_ENV
+
       - name: Extract version from .csproj
         id: extract-version
-        shell: bash
         run: |
-          VERSION=$(grep -oP '(?<=<Version>)(.*)(?=</Version>)' ${{env.CSPROJ_PATH}})
+          VERSION=$(xmlstarlet sel -t -v "/Project/PropertyGroup/Version" ${{ env.CSPROJ_PATH }})
           echo "Version is $VERSION"
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
