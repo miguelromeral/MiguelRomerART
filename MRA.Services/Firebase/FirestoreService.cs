@@ -70,8 +70,12 @@ namespace MRA.Services.Firebase
                 _logger.LogInformation("Loading credentials for Google Firebase");
                 _serviceAccountPath = "";
 
+                _logger.LogTrace("Reading JSON credential file of Google from " + ENV_GOOGLE_CREDENTIALS_AZURE);
                 // Si estás en Azure, crea el archivo temporal desde la variable de entorno
                 var googleCredentialsJson = Environment.GetEnvironmentVariable(ENV_GOOGLE_CREDENTIALS_AZURE);
+
+                _logger.LogTrace($"JSON credential file of Google has a length of {googleCredentialsJson?.Length ?? 0} characters");
+
                 if (!string.IsNullOrEmpty(googleCredentialsJson))
                 {
                     _logger.LogInformation($"Config found in Azure ENV values. Creating temporal file with its content. Variable: '{ENV_GOOGLE_CREDENTIALS_AZURE}'");
