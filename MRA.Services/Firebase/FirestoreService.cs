@@ -50,10 +50,10 @@ namespace MRA.Services.Firebase
             AppConfiguration appConfig, 
             IFirestoreDatabase db,
             IRemoteConfigService remoteConfigService
-            /*, ILogger logger*/)
+            , ILogger logger)
         {
             _appConfiguration = appConfig;
-            //_logger = logger;
+            _logger = logger;
             LoadCredentials();
             _firestoreDb = db;
             _firestoreDb.Create();
@@ -65,24 +65,33 @@ namespace MRA.Services.Firebase
 
         public void LoadCredentials()
         {
-            _serviceAccountPath = "";
-
-            // Si estás en Azure, crea el archivo temporal desde la variable de entorno
-            var googleCredentialsJson = Environment.GetEnvironmentVariable(ENV_GOOGLE_CREDENTIALS_AZURE);
-            if (!string.IsNullOrEmpty(googleCredentialsJson))
+            try
             {
-                var tempCredentialPath = Path.Combine(Path.GetTempPath(), "firebase-credentials.json");
-                File.WriteAllText(tempCredentialPath, googleCredentialsJson);
+                _logger.LogInformation("Loading credentials for Google Firebase");
+                _serviceAccountPath = "";
 
-                _serviceAccountPath = tempCredentialPath;
-            }
-            else
+                // Si estás en Azure, crea el archivo temporal desde la variable de entorno
+                var googleCredentialsJson = Environment.GetEnvironmentVariable(ENV_GOOGLE_CREDENTIALS_AZURE);
+                if (!string.IsNullOrEmpty(googleCredentialsJson))
+                {
+                    _logger.LogInformation("Config found in Azure ENV values. Creating temporal file with its content.");
+                    var tempCredentialPath = Path.Combine(Path.GetTempPath(), "firebase-credentials.json");
+                    File.WriteAllText(tempCredentialPath, googleCredentialsJson);
+
+                    _serviceAccountPath = tempCredentialPath;
+                }
+                else
+                {
+                    _logger.LogInformation("Not found config in Azure ENV values, reading local file.");
+                    _serviceAccountPath = _appConfiguration.Firebase.CredentialsPath;
+                }
+
+                _logger.LogInformation("Google Credentials file to be read from " + _serviceAccountPath);
+                Environment.SetEnvironmentVariable(ENV_GOOGLE_CREDENTIALS, _serviceAccountPath);
+            }catch(Exception ex)
             {
-                // Si estoy en local
-                _serviceAccountPath = _appConfiguration.Firebase.CredentialsPath;
+                _logger.LogError(ex, "An error happened while loading Google Credentials.");
             }
-
-            Environment.SetEnvironmentVariable(ENV_GOOGLE_CREDENTIALS, _serviceAccountPath);
         }
 
         public DocumentReference DocumentReference(string collection, string id)
