@@ -13,7 +13,10 @@ builder.Configuration
     .AddEnvironmentVariables();
 
 if (builder.Environment.IsProduction())
+{
     builder.Configuration.ConfigureKeyVault(builder.Configuration);
+    builder.Logging.AddAzureWebAppDiagnostics();
+}
 
 builder.Services.AddDependencyInjectionServices(builder.Configuration);
 
