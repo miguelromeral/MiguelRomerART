@@ -45,7 +45,8 @@ namespace MRA.Services.Firebase.RemoteConfig
             return await GetOrSetAsync(CACHE_REMOTE_CONFIG, async () =>
             {
                 return await GetRemoteConfigInfo();
-            }, TimeSpan.FromSeconds(_appConfiguration.Cache.RefreshSeconds));
+            }, 
+            useCache: true, TimeSpan.FromSeconds(_appConfiguration.Cache.RefreshSeconds));
         }
 
         private async Task<RemoteConfigResponse> GetRemoteConfigInfo()

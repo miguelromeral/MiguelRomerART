@@ -23,6 +23,7 @@ public class CollectionModel : IModel
     public CollectionModel()
     {
         Drawings = new List<DrawingModel>();
+        DrawingIds = new List<string>();
     }
 
     public override string ToString()
@@ -38,4 +39,6 @@ public class CollectionModel : IModel
 
         return sb.ToString();
     }
+
+    public string GetId() => Id;
 }

@@ -32,4 +32,5 @@ public class InspirationModel : IModel
             
         }
     }
+    public string GetId() => Id;
 }

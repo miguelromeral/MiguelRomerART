@@ -426,4 +426,6 @@ public class DrawingModel : IModel
             return $"{valorFormateado} M";
         }
     }
+
+    public string GetId() => Id;
 }

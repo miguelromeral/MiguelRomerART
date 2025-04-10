@@ -46,41 +46,30 @@ namespace MRA.Services
 
         public async Task<IEnumerable<DrawingModel>> GetAllDrawings(bool onlyIfVisible, bool cache = true)
         {
-            if (cache)
-            {
-                return await GetOrSetAsync(CACHE_ALL_DRAWINGS + onlyIfVisible, async () =>
+            return await GetOrSetAsync(CACHE_ALL_DRAWINGS + onlyIfVisible, async () =>
                 {
                     return await _drawingService.GetAllDrawingsAsync(onlyIfVisible);
-                }, TimeSpan.FromSeconds(_appConfiguration.Cache.RefreshSeconds));
-            }
-            else
-            {
-                return await _drawingService.GetAllDrawingsAsync(onlyIfVisible);
-            }
+                }, 
+                useCache: cache, TimeSpan.FromSeconds(_appConfiguration.Cache.RefreshSeconds));
         }
 
         public string GetAzureUrlBase() => _azureStorageService.GetBlobURL();
         public async Task<IEnumerable<InspirationModel>> GetAllInspirations()
         {
             return await GetOrSetAsync("all_inspirations", async () =>
-            {
-                return await _inspirationService.GetAllInspirationsAsync();
-            }, TimeSpan.FromSeconds(_appConfiguration.Cache.RefreshSeconds));
+                {
+                    return await _inspirationService.GetAllInspirationsAsync();
+                }, 
+                useCache: true, TimeSpan.FromSeconds(_appConfiguration.Cache.RefreshSeconds));
         }
 
         public async Task<IEnumerable<CollectionModel>> GetAllCollectionsAsync(bool onlyIfVisible, bool cache = true)
         {
-            if (cache)
-            {
-                return await GetOrSetAsync(CACHE_ALL_COLLECTIONS + onlyIfVisible, async () =>
+            return await GetOrSetAsync(CACHE_ALL_COLLECTIONS + onlyIfVisible, async () =>
                 {
                     return await FetchCollectionsAndLinkDrawings(onlyIfVisible, cache);
-                }, TimeSpan.FromSeconds(_appConfiguration.Cache.RefreshSeconds));
-            }
-            else
-            {
-                return await FetchCollectionsAndLinkDrawings(onlyIfVisible, false);
-            }
+                }, 
+                useCache: cache, TimeSpan.FromSeconds(_appConfiguration.Cache.RefreshSeconds));
         }
 
         private async Task<IEnumerable<CollectionModel>> FetchCollectionsAndLinkDrawings(bool onlyIfVisible, bool cache)
@@ -94,8 +83,7 @@ namespace MRA.Services
         {
             var collection = await _collectionService.FindCollectionAsync(id);
             var drawgins = await GetAllDrawings(onlyIfVisible, cache);
-            LinkDrawingToCollection(collection, drawgins);
-            return collection;
+            return LinkDrawingToCollection(collection, drawgins);
         }
 
         private static IEnumerable<CollectionModel> LinkDrawingsToCollections(IEnumerable<CollectionModel> collections, IEnumerable<DrawingModel> drawgins)
@@ -105,7 +93,7 @@ namespace MRA.Services
             foreach (var collection in collections)
                 newCollections.Add(LinkDrawingToCollection(collection, drawgins));
             
-            newCollections = newCollections.Where(c => c.Drawings.Count() == 0).ToList();
+            newCollections = newCollections.Where(c => c.Drawings.Count() > 0).ToList();
             return newCollections;
         }
 
@@ -117,26 +105,21 @@ namespace MRA.Services
 
         public async Task<CollectionModel> FindCollectionByIdAsync(string documentId, bool onlyIfVisible, bool cache = true)
         {
-            if (cache)
-            {
-                return await GetOrSetAsync($"collection_{documentId}", async () =>
-                {
-                    return await FetchCollectionAndLinkDrawings(documentId, onlyIfVisible: onlyIfVisible, cache: cache);
-                }, TimeSpan.FromSeconds(_appConfiguration.Cache.RefreshSeconds));
-            }
-            else
+            return await GetOrSetAsync($"collection_{documentId}", async () =>
             {
                 return await FetchCollectionAndLinkDrawings(documentId, onlyIfVisible: onlyIfVisible, cache: cache);
-            }
+            },
+            useCache: cache, TimeSpan.FromSeconds(_appConfiguration.Cache.RefreshSeconds));
         }
 
 
         public async Task<FilterResults> FilterDrawingsAsync(DrawingFilter filter)
         {
-            return await GetOrSetAsync<FilterResults>(filter.CacheKey, async () =>
-            {
-                return await FilterGivenList(filter);
-            }, TimeSpan.FromSeconds(_appConfiguration.Cache.RefreshSeconds));
+            return await GetOrSetAsync(filter.CacheKey, async () =>
+                {
+                    return await FilterGivenList(filter);
+                },
+                useCache: true, TimeSpan.FromSeconds(_appConfiguration.Cache.RefreshSeconds));
         }
 
         private async Task<FilterResults> FilterGivenList(DrawingFilter filter)
@@ -374,17 +357,11 @@ namespace MRA.Services
 
         public async Task<DrawingModel> FindDrawingByIdAsync(string documentId, bool onlyIfVisible, bool updateViews = false, bool cache = true)
         {
-            if (cache)
-            {
-                return await GetOrSetAsync($"drawing_{documentId}", async () =>
-                {
-                    return await _drawingService.FindDrawingAsync(documentId, onlyIfVisible, updateViews);
-                }, TimeSpan.FromSeconds(_appConfiguration.Cache.RefreshSeconds));
-            }
-            else
+            return await GetOrSetAsync($"drawing_{documentId}", async () =>
             {
                 return await _drawingService.FindDrawingAsync(documentId, onlyIfVisible, updateViews);
-            }
+            },
+            useCache: cache, TimeSpan.FromSeconds(_appConfiguration.Cache.RefreshSeconds));
         }
 
         public async Task<bool> ExistsBlob(string rutaBlob) => await _azureStorageService.ExistsBlob(rutaBlob);

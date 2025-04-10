@@ -8,4 +8,5 @@ namespace MRA.DTO.Models;
 
 public interface IModel
 {
+    string GetId();
 }

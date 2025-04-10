@@ -437,14 +437,14 @@ namespace MRA.WebApi.Controllers
 
         #region Collection List
         [HttpGet("collections")]
-        public async Task<ActionResult<List<CollectionResponse>>> Collections()
+        public async Task<ActionResult<IEnumerable<CollectionResponse>>> Collections()
         {
             try
             {
                 _logger.LogInformation("Solicitadas Colecciones Públicas");
                 var collections = await _appService.GetAllCollectionsAsync(onlyIfVisible: true, cache: true);
                 _logger.LogInformation("Colecciones Públicas: "+ collections.Count());
-                return Ok(collections);
+                return Ok(collections.Select(c => new CollectionResponse(c)));
             }
             catch (Exception ex)
             {
@@ -456,14 +456,14 @@ namespace MRA.WebApi.Controllers
 
         [HttpGet("collections/full")]
         [Authorize]
-        public async Task<ActionResult<List<CollectionResponse>>> CollectionsFull()
+        public async Task<ActionResult<IEnumerable<CollectionResponse>>> CollectionsFull()
         {
             try
             {
                 _logger.LogInformation("Solicitadas Colecciones");
                 var collections = await _appService.GetAllCollectionsAsync(onlyIfVisible: false, cache: true);
                 _logger.LogInformation("Colecciones: " + collections.Count());
-                return Ok(collections);
+                return Ok(collections.Select(c => new CollectionResponse(c)));
             }
             catch (Exception ex)
             {
