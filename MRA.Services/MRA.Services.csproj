@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MRA.DTO\MRA.DTO.csproj" />
+    <ProjectReference Include="..\MRA.Infrastructure\MRA.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

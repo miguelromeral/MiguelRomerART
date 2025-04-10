@@ -23,12 +23,12 @@ namespace MRA.Web.Controllers
 {
     public class AdminController : Controller
     {
-        private readonly DrawingService _drawingService;
+        private readonly AppService _drawingService;
         private readonly ILogger<HomeController> _logger;
         private readonly IConfiguration _configuration;
         private readonly AdministratorOptions _administratorOptions;
 
-        public AdminController(ILogger<HomeController> logger, DrawingService drawingService, IConfiguration configuration, IOptions<AdministratorOptions> adminOptions)
+        public AdminController(ILogger<HomeController> logger, AppService drawingService, IConfiguration configuration, IOptions<AdministratorOptions> adminOptions)
         {
             _logger = logger;
             _drawingService = drawingService;

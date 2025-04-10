@@ -1,0 +1,102 @@
+﻿using Google.Cloud.Firestore;
+using MRA.Infrastructure.Database;
+using MRA.Infrastructure.Configuration;
+
+namespace MRA.Infrastructure.Firestore
+{
+    public class FirestoreDatabase : IDocumentsDatabase
+    {
+        private const string ENV_GOOGLE_CREDENTIALS_AZURE = "GOOGLE_APPLICATION_CREDENTIALS_JSON";
+        private const string ENV_GOOGLE_CREDENTIALS = "GOOGLE_APPLICATION_CREDENTIALS";
+
+        private readonly string _projectId;
+        private string _serviceAccountPath = "";
+
+        private FirestoreDb _firestoreDb;
+        private FirestoreDb FirestoreDb
+        {
+            get
+            {
+                if (_firestoreDb == null)
+                {
+                    LoadCredentials();
+                    Create();
+                }   
+
+                return _firestoreDb;
+            }
+        }
+
+        public FirestoreDatabase(AppConfiguration appConfig)
+        {
+            _projectId = appConfig.Firebase.ProjectID;
+            _serviceAccountPath = appConfig.Firebase.CredentialsPath;
+        }
+
+
+        public void LoadCredentials()
+        {
+            var googleCredentialsJson = Environment.GetEnvironmentVariable(ENV_GOOGLE_CREDENTIALS_AZURE);
+            if (!string.IsNullOrEmpty(googleCredentialsJson))
+            {
+                var tempCredentialPath = Path.Combine(Path.GetTempPath(), "firebase-credentials.json");
+                File.WriteAllText(tempCredentialPath, googleCredentialsJson);
+
+                _serviceAccountPath = tempCredentialPath;
+            }
+
+            Environment.SetEnvironmentVariable(ENV_GOOGLE_CREDENTIALS, _serviceAccountPath);
+        }
+
+        public void Create(Google.Cloud.Firestore.V1.FirestoreClient client = null)
+        {
+            _firestoreDb = FirestoreDb.Create(_projectId, client);
+        }
+
+        public async Task<IEnumerable<IDocument>> GetAllDocumentsAsync<IDocument>(string collection) =>
+            (await FirestoreDb.Collection(collection).GetSnapshotAsync())
+                .Documents.Select(s => s.ConvertTo<IDocument>());
+
+        public DocumentReference GetDocumentReference(string collection, string documentId) => FirestoreDb.Collection(collection).Document(documentId);
+
+        public async Task<bool> DocumentExistsAsync(string collection, string documentId)
+        {
+            DocumentReference docRef = FirestoreDb.Collection(collection).Document(documentId);
+            DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+            return snapshot.Exists;
+        }
+        public async Task<IDocument> GetDocumentAsync<IDocument>(string collection, string documentId)
+        {
+            DocumentReference docRef = FirestoreDb.Collection(collection).Document(documentId);
+            DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+            return snapshot.ConvertTo<IDocument>();
+        }
+
+        public async Task<bool> SetDocumentAsync(string collection, string documentId, IDocument document)
+        {
+            try
+            {
+                DocumentReference docRef = FirestoreDb.Collection(collection).Document(documentId);
+                await docRef.SetAsync(document);
+                return true;
+            }catch(Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> DeleteDocumentAsync(string collection, string id)
+        {
+            try
+            {
+                DocumentReference docRef = FirestoreDb.Collection(collection).Document(id);
+                await docRef.DeleteAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+    }
+}

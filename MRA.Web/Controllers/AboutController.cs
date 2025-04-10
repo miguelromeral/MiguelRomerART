@@ -9,10 +9,10 @@ namespace MRA.Web.Controllers
     {
 
 
-        private readonly DrawingService _drawingService;
+        private readonly AppService _drawingService;
         private readonly ILogger<HomeController> _logger;
 
-        public AboutController(ILogger<HomeController> logger, DrawingService drawingService)
+        public AboutController(ILogger<HomeController> logger, AppService drawingService)
         {
             _logger = logger;
             _drawingService = drawingService;

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MRA.DependencyInjection.Startup;
 using Microsoft.Extensions.Configuration;
-using MRA.DTO.Configuration;
+using MRA.Infrastructure.Configuration;
 using MRA.Services.AzureStorage;
 using MRA.Services;
 using Microsoft.Extensions.Caching.Memory;
@@ -23,8 +23,8 @@ public static class DependencyInjectionConfig
         services.AddSingleton<IMemoryCache>(new MemoryCache(new MemoryCacheOptions()));
 
         services.AddCustomAzureStorage();
-        services.AddCustomFirebase();
-        services.AddSingleton<IDrawingService, DrawingService>();
+        services.AddCustomDatabase();
+        services.AddSingleton<IAppService, AppService>();
 
         return services;
     }

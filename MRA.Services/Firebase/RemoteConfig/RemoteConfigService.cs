@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using MRA.DTO.Firebase.Models;
 using MRA.DTO.Firebase.RemoteConfig;
-using MRA.DTO.Configuration;
+using MRA.Infrastructure.Configuration;
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;

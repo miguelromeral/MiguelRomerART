@@ -1,40 +1,33 @@
-﻿using Google.Cloud.Firestore;
-using Google.Protobuf.Compiler;
-using MRA.DTO.Firebase.Documents;
-using MRA.DTO.Firebase.Interfaces;
-using MRA.DTO.Firebase.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MRA.DTO.Models;
+using MRA.Infrastructure.Firestore.Documents;
 
-namespace MRA.DTO.Firebase.Converters
+namespace MRA.DTO.Firebase.Converters;
+
+public class CollectionFirebaseConverter : IFirestoreDocumentConverter<CollectionModel, CollectionDocument>
 {
-    public class CollectionFirebaseConverter : IFirebaseConverter<Collection, CollectionDocument>
+    public CollectionModel ConvertToModel(CollectionDocument collectionDocument)
     {
-        public Collection ConvertToModel(CollectionDocument collectionDocument)
+        return new CollectionModel
         {
-            return new Collection
-            {
-                Id = collectionDocument.Id,
-                Name = collectionDocument.name,
-                Description = collectionDocument.description,
-                Order = collectionDocument.order,
-                DrawingsReferences = collectionDocument.drawings
-            };
-        }
+            Id = collectionDocument.Id,
+            Name = collectionDocument.name,
+            Description = collectionDocument.description,
+            Order = collectionDocument.order,
+            DrawingIds = collectionDocument.drawingIds
+            //DrawingsReferences = collectionDocument.drawings
+        };
+    }
 
-        public CollectionDocument ConvertToDocument(Collection collection)
+    public CollectionDocument ConvertToDocument(CollectionModel collection)
+    {
+        return new CollectionDocument
         {
-            return new CollectionDocument
-            {
-                Id = collection.Id,
-                name = collection.Name,
-                description = collection.Description,
-                order = collection.Order,
-                drawings = collection.DrawingsReferences
-            };
-        }
+            Id = collection.Id,
+            name = collection.Name,
+            description = collection.Description,
+            order = collection.Order,
+            drawingIds = collection.DrawingIds.ToList()
+            //drawings = collection.DrawingsReferences
+        };
     }
 }

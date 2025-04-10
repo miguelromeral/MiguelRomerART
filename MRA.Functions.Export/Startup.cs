@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MRA.DependencyInjection;
 using MRA.DependencyInjection.Startup;
-using MRA.DTO.Configuration;
+using MRA.Infrastructure.Configuration;
 using MRA.DTO.Configuration.Options;
 using System;
 

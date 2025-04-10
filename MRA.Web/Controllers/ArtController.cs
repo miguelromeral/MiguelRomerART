@@ -15,11 +15,11 @@ namespace MRA.Web.Controllers
 {
     public class ArtController : Controller
     {
-        private readonly DrawingService _drawingService;
+        private readonly AppService _drawingService;
         private readonly ILogger<HomeController> _logger;
         private readonly IConfiguration _configuration;
 
-        public ArtController(ILogger<HomeController> logger, DrawingService drawingService, IConfiguration configuration)
+        public ArtController(ILogger<HomeController> logger, AppService drawingService, IConfiguration configuration)
         {
             _logger = logger;
             _drawingService = drawingService;

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using MRA.DTO.Configuration;
+using MRA.Infrastructure.Configuration;
 using MRA.DTO.Firebase.Models;
 using MRA.Services;
 using MRA.Services.AzureStorage;
@@ -25,7 +25,7 @@ namespace MRA.Functions.Export
         private readonly IAzureStorageService _azureStorageService;
         private readonly IFirestoreService _firestoreService;
         private readonly IRemoteConfigService _remoteConfigService;
-        private readonly IDrawingService _drawingService;
+        private readonly IAppService _drawingService;
         private readonly AppConfiguration _appConfiguration;
 
         public FunctionExport(
@@ -34,7 +34,7 @@ namespace MRA.Functions.Export
             IAzureStorageService azureStorageService,
             IFirestoreService firestoreService,
             IRemoteConfigService remoteConfigService,
-            IDrawingService drawingService,
+            IAppService drawingService,
             AppConfiguration appConfiguration
             )
         {

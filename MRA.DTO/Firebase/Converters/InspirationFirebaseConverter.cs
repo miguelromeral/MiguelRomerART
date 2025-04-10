@@ -1,46 +1,38 @@
-﻿using Google.Cloud.Firestore;
-using Google.Protobuf.Compiler;
-using MRA.DTO.Firebase.Documents;
-using MRA.DTO.Firebase.Interfaces;
-using MRA.DTO.Firebase.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MRA.DTO.Firebase.Models;
+using MRA.DTO.Models;
+using MRA.Infrastructure.Firestore.Documents;
 
-namespace MRA.DTO.Firebase.Converters
+namespace MRA.DTO.Firebase.Converters;
+
+public class InspirationFirebaseConverter : IFirestoreDocumentConverter<InspirationModel, InspirationDocument>
 {
-    public class InspirationFirebaseConverter : IFirebaseConverter<Inspiration, InspirationDocument>
+    public InspirationModel ConvertToModel(InspirationDocument drawingDocument)
     {
-        public Inspiration ConvertToModel(InspirationDocument drawingDocument)
+        return new Inspiration
         {
-            return new Inspiration
-            {
-                Id = drawingDocument.Id,
-                Name = drawingDocument.name,
-                Instagram = drawingDocument.instagram,
-                Type = drawingDocument.type,
-                Twitter = drawingDocument.twitter,
-                YouTube = drawingDocument.youtube,
-                Twitch = drawingDocument.twitch,
-                Pinterest = drawingDocument.pinterest,
-            };
-        }
+            Id = drawingDocument.Id,
+            Name = drawingDocument.name,
+            Instagram = drawingDocument.instagram,
+            Type = drawingDocument.type,
+            Twitter = drawingDocument.twitter,
+            YouTube = drawingDocument.youtube,
+            Twitch = drawingDocument.twitch,
+            Pinterest = drawingDocument.pinterest,
+        };
+    }
 
-        public InspirationDocument ConvertToDocument(Inspiration drawing)
+    public InspirationDocument ConvertToDocument(InspirationModel drawing)
+    {
+        return new InspirationDocument
         {
-            return new InspirationDocument
-            {
-                Id = drawing.Id,
-                name = drawing.Name,
-                instagram = drawing.Instagram,
-                twitter = drawing.Twitter,
-                type = drawing.Type,
-                youtube = drawing.YouTube,
-                twitch = drawing.Twitch,
-                pinterest = drawing.Pinterest,
-            };
-        }
+            Id = drawing.Id,
+            name = drawing.Name,
+            instagram = drawing.Instagram,
+            twitter = drawing.Twitter,
+            type = drawing.Type,
+            youtube = drawing.YouTube,
+            twitch = drawing.Twitch,
+            pinterest = drawing.Pinterest,
+        };
     }
 }

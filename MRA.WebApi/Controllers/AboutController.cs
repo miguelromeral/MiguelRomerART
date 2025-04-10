@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MRA.DTO.Firebase.Models;
+using MRA.DTO.Models;
 using MRA.Services;
+using MRA.Services.Models.Inspirations;
 
 namespace MRA.WebApi.Controllers
 {
@@ -8,21 +10,22 @@ namespace MRA.WebApi.Controllers
     [Route("api/[controller]")]
     public class AboutController : Controller
     {
-
-        private readonly DrawingService _drawingService;
         private readonly ILogger<AboutController> _logger;
+        private readonly IInspirationService _inspirationService;
 
-        public AboutController(ILogger<AboutController> logger, DrawingService drawingService)
+        public AboutController(
+            ILogger<AboutController> logger, 
+            IInspirationService inspirationService)
         {
             _logger = logger;
-            _drawingService = drawingService;
+            _inspirationService = inspirationService;
         }
 
 
         [HttpGet("inspirations")]
-        public async Task<List<Inspiration>> IndexAsync()
+        public async Task<IEnumerable<InspirationModel>> IndexAsync()
         {
-            return await _drawingService.GetAllInspirations();
+            return await _inspirationService.GetAllInspirationsAsync();
         }
     }
 }

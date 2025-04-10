@@ -17,13 +17,13 @@ namespace MRA.Test.Controllers
     public class ArtControllerTest : TestBase
     {
         private readonly ArtController _controller;
-        private readonly Mock<IDrawingService> _drawingServiceMock;
+        private readonly Mock<IAppService> _drawingServiceMock;
         private readonly Mock<ILogger<ArtController>> _loggerMock;
 
         public ArtControllerTest()
         {
             // Crea un mock de IDrawingService y ILogger
-            _drawingServiceMock = new Mock<IDrawingService>();
+            _drawingServiceMock = new Mock<IAppService>();
             _loggerMock = new Mock<ILogger<ArtController>>();
 
             // Crea el controlador usando los mocks
