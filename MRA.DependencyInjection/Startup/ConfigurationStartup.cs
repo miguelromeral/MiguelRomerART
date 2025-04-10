@@ -25,7 +25,8 @@ public static class ConfigurationStartup
             Jwt = config.GetSection("Jwt").Get<JwtOptions>(),
             Cache = config.GetSection("Cache").Get<CacheOptions>(),
             Firebase = config.GetSection("Firebase").Get<FirebaseOptions>(),
-            MRALogger = config.GetSection("MRALogger").Get<MRALoggerOptions>()
+            MRALogger = config.GetSection("MRALogger").Get<MRALoggerOptions>(),
+            EPPlus = config.GetSection("EPPlus").Get<EPPlusOptions>()
         };
 
         return appConfig;

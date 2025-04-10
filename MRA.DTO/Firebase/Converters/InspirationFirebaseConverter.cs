@@ -1,4 +1,4 @@
-﻿using MRA.DTO.Firebase.Models;
+﻿using MRA.DTO.Firebase.Converters.Interfaces;
 using MRA.DTO.Models;
 using MRA.Infrastructure.Firestore.Documents;
 
@@ -8,7 +8,7 @@ public class InspirationFirebaseConverter : IFirestoreDocumentConverter<Inspirat
 {
     public InspirationModel ConvertToModel(InspirationDocument drawingDocument)
     {
-        return new Inspiration
+        return new InspirationModel
         {
             Id = drawingDocument.Id,
             Name = drawingDocument.name,

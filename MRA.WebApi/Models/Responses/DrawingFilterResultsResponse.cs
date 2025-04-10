@@ -1,7 +1,5 @@
-﻿using MRA.DTO.Firebase.Models;
-using MRA.DTO.Models;
+﻿using MRA.DTO.Models;
 using MRA.DTO.ViewModels.Art;
-using System.Transactions;
 
 namespace MRA.WebApi.Models.Responses
 {

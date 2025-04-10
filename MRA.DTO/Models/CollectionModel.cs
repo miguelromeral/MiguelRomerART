@@ -1,4 +1,5 @@
 ﻿using Google.Cloud.Firestore;
+using MRA.DTO.Models.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,12 +1,8 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
-using MRA.DTO.Firebase.Models;
 using MRA.DTO.Firebase.RemoteConfig;
 using MRA.Infrastructure.Configuration;
-using System;
-using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace MRA.Services.Firebase.RemoteConfig
 {

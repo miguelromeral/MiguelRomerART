@@ -1,6 +1,4 @@
 ﻿
-using MRA.DTO.Firebase.Models;
-
 namespace MRA.DTO.Excel.Attributes;
 
 [AttributeUsage(AttributeTargets.Property)]

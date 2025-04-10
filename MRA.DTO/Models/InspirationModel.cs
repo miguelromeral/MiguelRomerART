@@ -1,4 +1,6 @@
 ﻿
+using MRA.DTO.Models.Interfaces;
+
 namespace MRA.DTO.Models;
 
 public class InspirationModel : IModel

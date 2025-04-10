@@ -1,6 +1,5 @@
-﻿
-using MRA.DTO.Firebase.Models;
-using MRA.DTO.Models;
+﻿using MRA.DTO.Models;
+using MRA.DTO.ViewModels.Art;
 using MRA.DTO.ViewModels.Art.Select;
 
 namespace MRA.Services.Models.Drawings;

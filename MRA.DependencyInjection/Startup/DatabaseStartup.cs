@@ -9,6 +9,7 @@ using MRA.Services.Models.Documents;
 using MRA.Services.Models.Drawings;
 using MRA.Services.Models.Inspirations;
 using MRA.DTO.Firebase.Converters;
+using MRA.DTO.Firebase.Converters.Interfaces;
 
 namespace MRA.DependencyInjection.Startup;
 

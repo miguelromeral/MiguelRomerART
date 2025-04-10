@@ -1,9 +1,9 @@
 ﻿using MRA.Infrastructure.Configuration;
-using MRA.DTO.Firebase.Converters;
 using MRA.DTO.Models;
 using MRA.Infrastructure.Database;
 using MRA.Infrastructure.Firestore.Documents;
 using MRA.Services.Models.Documents;
+using MRA.DTO.Firebase.Converters.Interfaces;
 
 namespace MRA.Services.Models.Inspirations;
 

@@ -1,5 +1,5 @@
-﻿using MRA.DTO.Firebase.Converters;
-using MRA.DTO.Models;
+﻿using MRA.DTO.Firebase.Converters.Interfaces;
+using MRA.DTO.Models.Interfaces;
 using MRA.Infrastructure.Database;
 
 namespace MRA.Services.Models.Documents;

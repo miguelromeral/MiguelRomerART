@@ -1,5 +1,4 @@
-﻿using MRA.DTO.Firebase.Models;
-using MRA.DTO.Models;
+﻿using MRA.DTO.Models;
 using System.Text.Json.Serialization;
 
 namespace MRA.DTO.ViewModels.Art

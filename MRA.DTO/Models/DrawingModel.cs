@@ -1,6 +1,7 @@
 ﻿using Google.Protobuf;
 using MRA.DTO;
 using MRA.DTO.Excel.Attributes;
+using MRA.DTO.Models.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,10 +18,6 @@ public class DrawingModel : IModel
 {
     public const string SEPARATOR_COMMENTS = "#";
     public const string SEPARATOR_TAGS = " ";
-
-    public const string EXCEL_FAVORITE_VALUE = "Favorite";
-    public const string EXCEL_VISIBLE_VALUE = "Visible";
-    public const string EXCEL_SEPARATOR_COMMENTS = "\n";
 
     public DrawingModel()
     {   

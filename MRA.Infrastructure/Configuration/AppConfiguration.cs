@@ -12,4 +12,5 @@ public class AppConfiguration
     public CacheOptions Cache { get; set; }
     public FirebaseOptions Firebase { get; set; }
     public MRALoggerOptions MRALogger { get; set; }
+    public EPPlusOptions EPPlus { get; set; }
 }

@@ -1,4 +1,4 @@
-﻿using MRA.DTO.Models;
+﻿using MRA.DTO.Models.Interfaces;
 
 namespace MRA.Services.Models.Documents;
 

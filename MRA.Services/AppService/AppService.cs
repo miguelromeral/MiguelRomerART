@@ -18,7 +18,7 @@ namespace MRA.Services
         private readonly IDrawingService _drawingService;
         private readonly IInspirationService _inspirationService;
         private readonly ICollectionService _collectionService;
-        private readonly ILogger _logger;
+        private readonly ILogger<AppService> _logger;
         private readonly IRemoteConfigService _remoteConfigService;
         private readonly AppConfiguration _appConfiguration;
 
@@ -32,7 +32,7 @@ namespace MRA.Services
             IDrawingService drawingService,
             IInspirationService inspirationService,
             ICollectionService collectionService,
-            ILogger logger,
+            ILogger<AppService> logger,
             AppConfiguration appConfig) : base(cache)
         {
             _appConfiguration = appConfig;

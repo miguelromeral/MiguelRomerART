@@ -1,27 +1,23 @@
-﻿using Google.Cloud.Firestore;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using OfficeOpenXml;
 using MRA.Services.Helpers;
-using OfficeOpenXml.Style;
-using OfficeOpenXml.Table;
-using System.Drawing;
-using MRA.Services.Firebase;
-using MRA.DTO.Excel.Attributes;
-using MRA.DTO.Firebase.Models;
 using Microsoft.Extensions.Caching.Memory;
 using MRA.Services.Excel;
 using MRA.DTO;
 using MRA.DTO.Logger;
-using MRA.Services.Firebase.Firestore;
 using MRA.DependencyInjection.Startup;
-using MRA.Services.Firebase.RemoteConfig;
+using Microsoft.Extensions.Logging;
 
 var console = new ConsoleHelper();
-MRLogger? logger = null;
+ILogger? logger = null;
 try
 {
     // Configuración de la aplicación
-    var builder = new ConfigurationBuilder().AddAppSettingsFiles("Production");
+    var builder = new ConfigurationBuilder()
+        .AddAppSettingsFiles("Development", isDevelopment: true)
+        //.AddEnvironmentVariables()
+        ;
+
     var configuration = builder.Build();
 
     var appConfig = configuration.GetMRAConfiguration();
@@ -29,10 +25,10 @@ try
     logger = new MRLogger(appConfig);
     logger.Log("Iniciando Aplicación de Importación");
 
-    var excelService = new ExcelService(configuration, logger);
+    var excelService = new ExcelService(appConfig, logger);
 
     logger.Log("Configurando EPPlus");
-    ExcelPackage.LicenseContext = (LicenseContext)Enum.Parse(typeof(LicenseContext), excelService.License);
+    ExcelPackage.LicenseContext = (LicenseContext)Enum.Parse(typeof(LicenseContext), excelService.GetEPPlusLicense());
 
     logger.Log("Registrando credenciales de Firebase");
     var firestoreService = new FirestoreService(appConfig, new FirestoreDatabase(appConfig), null);

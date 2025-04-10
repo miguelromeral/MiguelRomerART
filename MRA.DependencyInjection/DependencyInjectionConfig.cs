@@ -1,15 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MRA.DependencyInjection.Startup;
 using Microsoft.Extensions.Configuration;
-using MRA.Infrastructure.Configuration;
-using MRA.Services.AzureStorage;
 using MRA.Services;
 using Microsoft.Extensions.Caching.Memory;
+using MRA.Services.Excel.Interfaces;
+using MRA.Services.Excel;
 
 namespace MRA.DependencyInjection;
 
@@ -20,6 +15,7 @@ public static class DependencyInjectionConfig
         services.AddCustomConfiguration();
         services.AddCustomLogger();
 
+        services.AddSingleton<IExcelService, ExcelService>();
         services.AddSingleton<IMemoryCache>(new MemoryCache(new MemoryCacheOptions()));
 
         services.AddCustomAzureStorage();

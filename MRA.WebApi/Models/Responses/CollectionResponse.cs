@@ -1,5 +1,4 @@
-﻿using MRA.DTO.Firebase.Models;
-using MRA.DTO.Models;
+﻿using MRA.DTO.Models;
 
 namespace MRA.WebApi.Models.Responses
 {

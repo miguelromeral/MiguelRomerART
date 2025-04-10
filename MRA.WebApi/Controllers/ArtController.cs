@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using MRA.DTO.ViewModels.Art;
 using MRA.DTO.ViewModels.Art.Select;
 using MRA.Services;
-using MRA.DTO.Firebase.Models;
 using MRA.WebApi.Models.Requests;
 using MRA.WebApi.Models.Responses;
 using MRA.Services.Models.Drawings;
@@ -95,7 +94,7 @@ namespace MRA.WebApi.Controllers
 
         #region Drawings Details
         [HttpGet("drawing/details/{id}")]
-        public async Task<ActionResult<Drawing>> DrawingDetails(string id)
+        public async Task<ActionResult<DrawingModel>> DrawingDetails(string id)
         {
             try
             {
@@ -118,7 +117,7 @@ namespace MRA.WebApi.Controllers
 
         [HttpGet("drawing/full-details/{id}")]
         [Authorize]
-        public async Task<ActionResult<Drawing>> DrawingFullDetails(string id)
+        public async Task<ActionResult<DrawingModel>> DrawingFullDetails(string id)
         {
             try
             {
@@ -230,12 +229,12 @@ namespace MRA.WebApi.Controllers
         #region Drawing Form
         [Authorize]
         [HttpPost("drawing/save/{id}")]
-        public async Task<ActionResult<Drawing>> DrawingSave(string id, [FromBody] SaveDrawingRequest request)
+        public async Task<ActionResult<DrawingModel>> DrawingSave(string id, [FromBody] SaveDrawingRequest request)
         {
             try
             {
                 _logger.LogInformation($"Guardando dibujo \"{id}\"");
-                var drawing = new Drawing()
+                var drawing = new DrawingModel()
                 {
                     ListComments = request.ListComments,
                     ListCommentsStyle = request.ListCommentsStyle,
@@ -257,7 +256,7 @@ namespace MRA.WebApi.Controllers
                     Software = request.Software,
                     Filter = request.Filter,
                     SpotifyUrl = request.SpotifyUrl,
-                    Tags = request.TagsText.Split(Drawing.SEPARATOR_TAGS).ToList(),
+                    Tags = request.TagsText.Split(DrawingModel.SEPARATOR_TAGS).ToList(),
                     Time = request.Time,
                     Title = request.Title,
                     Type = request.Type,

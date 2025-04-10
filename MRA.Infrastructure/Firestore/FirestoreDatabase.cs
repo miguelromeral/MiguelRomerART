@@ -18,10 +18,7 @@ namespace MRA.Infrastructure.Firestore
             get
             {
                 if (_firestoreDb == null)
-                {
-                    LoadCredentials();
-                    Create();
-                }   
+                    InitializeFirestore();
 
                 return _firestoreDb;
             }
@@ -34,7 +31,13 @@ namespace MRA.Infrastructure.Firestore
         }
 
 
-        public void LoadCredentials()
+        public void InitializeFirestore()
+        {
+            LoadCredentials();
+            Create();
+        }
+
+        private void LoadCredentials()
         {
             var googleCredentialsJson = Environment.GetEnvironmentVariable(ENV_GOOGLE_CREDENTIALS_AZURE);
             if (!string.IsNullOrEmpty(googleCredentialsJson))
@@ -48,16 +51,14 @@ namespace MRA.Infrastructure.Firestore
             Environment.SetEnvironmentVariable(ENV_GOOGLE_CREDENTIALS, _serviceAccountPath);
         }
 
-        public void Create(Google.Cloud.Firestore.V1.FirestoreClient client = null)
+        private void Create()
         {
-            _firestoreDb = FirestoreDb.Create(_projectId, client);
+            _firestoreDb = FirestoreDb.Create(_projectId);
         }
 
         public async Task<IEnumerable<IDocument>> GetAllDocumentsAsync<IDocument>(string collection) =>
             (await FirestoreDb.Collection(collection).GetSnapshotAsync())
                 .Documents.Select(s => s.ConvertTo<IDocument>());
-
-        public DocumentReference GetDocumentReference(string collection, string documentId) => FirestoreDb.Collection(collection).Document(documentId);
 
         public async Task<bool> DocumentExistsAsync(string collection, string documentId)
         {
@@ -65,6 +66,7 @@ namespace MRA.Infrastructure.Firestore
             DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
             return snapshot.Exists;
         }
+
         public async Task<IDocument> GetDocumentAsync<IDocument>(string collection, string documentId)
         {
             DocumentReference docRef = FirestoreDb.Collection(collection).Document(documentId);

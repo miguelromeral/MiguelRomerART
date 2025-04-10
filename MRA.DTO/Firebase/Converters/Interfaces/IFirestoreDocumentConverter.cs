@@ -1,7 +1,7 @@
-﻿using MRA.DTO.Models;
+﻿using MRA.DTO.Models.Interfaces;
 using MRA.Infrastructure.Database;
 
-namespace MRA.DTO.Firebase.Converters;
+namespace MRA.DTO.Firebase.Converters.Interfaces;
 
 public interface IFirestoreDocumentConverter<Model, Document> 
     where Model : IModel
