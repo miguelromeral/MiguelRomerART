@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Logging.AddCustomLogging(builder.Configuration, builder.Environment);
 
 builder.Configuration
-    .SetBasePath(Directory.GetCurrentDirectory())
+    .SetBasePath(AppContext.BaseDirectory)
     .AddCustomAppSettingsFiles(builder.Environment.EnvironmentName, builder.Environment.IsDevelopment())
     .AddEnvironmentVariables();
 
@@ -18,6 +18,7 @@ if (builder.Environment.IsProduction())
     builder.Logging.AddAzureWebAppDiagnostics();
 }
 
+builder.Services.AddLogging();
 builder.Services.AddDependencyInjectionServices(builder.Configuration);
 
 builder.Services.AddJwtAuthentication(builder.Configuration);
