@@ -377,3 +377,6 @@ FodyWeavers.xsd
 /MRA.WebApi/.env
 /MRA.WebApi/appsettings.Local.json
 /MRA.Functions.Export/appsettings.Local.json
+
+# Converted JSON
+/PythonParsers/*.json

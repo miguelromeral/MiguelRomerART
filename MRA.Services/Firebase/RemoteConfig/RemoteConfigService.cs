@@ -1,12 +1,8 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
-using MRA.DTO.Firebase.Models;
 using MRA.DTO.Firebase.RemoteConfig;
-using MRA.DTO.Configuration;
-using System;
-using System.Net.Http;
+using MRA.Infrastructure.Configuration;
 using System.Net.Http.Headers;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace MRA.Services.Firebase.RemoteConfig
 {
@@ -45,7 +41,8 @@ namespace MRA.Services.Firebase.RemoteConfig
             return await GetOrSetAsync(CACHE_REMOTE_CONFIG, async () =>
             {
                 return await GetRemoteConfigInfo();
-            }, TimeSpan.FromSeconds(_appConfiguration.Cache.RefreshSeconds));
+            }, 
+            useCache: true, TimeSpan.FromSeconds(_appConfiguration.Cache.RefreshSeconds));
         }
 
         private async Task<RemoteConfigResponse> GetRemoteConfigInfo()

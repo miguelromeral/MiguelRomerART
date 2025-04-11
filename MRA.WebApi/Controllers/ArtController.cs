@@ -3,12 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using MRA.DTO.ViewModels.Art;
 using MRA.DTO.ViewModels.Art.Select;
 using MRA.Services;
-using MRA.DTO.Firebase.Models;
 using MRA.WebApi.Models.Requests;
 using MRA.WebApi.Models.Responses;
-using MRA.DTO.Logger;
-using System.Reflection;
-using Microsoft.AspNetCore.Http;
+using MRA.Services.Models.Drawings;
+using MRA.Services.Models.Collections;
+using MRA.DTO.Exceptions;
+using MRA.DTO.Models;
 
 namespace MRA.WebApi.Controllers
 {
@@ -17,13 +17,22 @@ namespace MRA.WebApi.Controllers
     public class ArtController : Controller
     {
 
+        private readonly IAppService _appService;
         private readonly IDrawingService _drawingService;
+        private readonly ICollectionService _collectionService;
         private readonly ILogger<ArtController> _logger;
 
-        public ArtController(ILogger<ArtController> logger, IDrawingService drawingService)
+        public ArtController(
+            ILogger<ArtController> logger, 
+            IAppService appService,
+            IDrawingService drawingService,
+            ICollectionService collectionService
+            )
         {
             _logger = logger;
+            _appService = appService;
             _drawingService = drawingService;
+            _collectionService = collectionService;
         }
 
         #region Drawing Selects
@@ -33,9 +42,8 @@ namespace MRA.WebApi.Controllers
             try
             {
                 _logger.LogInformation("Solicitados Productos");
-                var drawings = await _drawingService.GetAllDrawings();
-                var products = _drawingService.GetProducts(drawings);
-                _logger.LogInformation("Productos recuperados: " + products.Count);
+                var products = await _drawingService.GetProductsAsync();
+                _logger.LogInformation($"Productos recuperados: {products.Count()}");
                 return Ok(products);
             }
             catch(Exception ex)
@@ -53,9 +61,8 @@ namespace MRA.WebApi.Controllers
             try
             {
                 _logger.LogInformation("Solicitados Personajes");
-                var drawings = await _drawingService.GetAllDrawings();
-                var characters = _drawingService.GetCharacters(drawings);
-                _logger.LogInformation("Personajes recuperados: " + characters.Count);
+                var characters = await _drawingService.GetCharactersAsync();
+                _logger.LogInformation("Personajes recuperados: " + characters.Count());
                 return Ok(characters);
             }
             catch (Exception ex)
@@ -72,9 +79,8 @@ namespace MRA.WebApi.Controllers
             try
             {
                 _logger.LogInformation("Solicitados Modelos");
-                var drawings = await _drawingService.GetAllDrawings();
-                var models = _drawingService.GetModels(drawings);
-                _logger.LogInformation("Modelos recuperados: " + models.Count);
+                var models = await _drawingService.GetModelsAsync();
+                _logger.LogInformation("Modelos recuperados: " + models.Count());
                 return Ok(models);
             }
             catch (Exception ex)
@@ -88,18 +94,18 @@ namespace MRA.WebApi.Controllers
 
         #region Drawings Details
         [HttpGet("drawing/details/{id}")]
-        public async Task<ActionResult<Drawing>> DrawingDetails(string id)
+        public async Task<ActionResult<DrawingModel>> DrawingDetails(string id)
         {
             try
             {
                 _logger.LogInformation($"Solicitados detalles públicos de dibujo \"{id}\"");
-                var drawing = await _drawingService.FindDrawingById(id, true, updateViews: true, cache: false);
-                if (drawing == null)
-                {
-                    _logger.LogWarning($"No se encontró ningún dibujo público \"{id}\"");
-                    return NotFound(new { message = $"No se encontró ningún dibujo público \"{id}\"" });
-                }
+                var drawing = await _appService.FindDrawingByIdAsync(id, onlyIfVisible: true, updateViews: true, cache: false);
                 return Ok(drawing);
+            }
+            catch (DrawingNotFoundException dnf)
+            {
+                _logger.LogWarning($"No se encontró ningún dibujo público \"{id}\"");
+                return NotFound(new { message = $"No se encontró ningún dibujo público \"{id}\"" });
             }
             catch (Exception ex)
             {
@@ -111,18 +117,18 @@ namespace MRA.WebApi.Controllers
 
         [HttpGet("drawing/full-details/{id}")]
         [Authorize]
-        public async Task<ActionResult<Drawing>> DrawingFullDetails(string id)
+        public async Task<ActionResult<DrawingModel>> DrawingFullDetails(string id)
         {
             try
             {
                 _logger.LogInformation($"Solicitados detalles de dibujo \"{id}\"");
-                var drawing = await _drawingService.FindDrawingById(id, false, updateViews: false, cache: false);
-                if (drawing == null)
-                {
-                    _logger.LogWarning($"No se encontró ningún dibujo \"{id}\"");
-                    return NotFound(new { message = $"No se encontró ningún dibujo \"{id}\"" });
-                }
+                var drawing = await _appService.FindDrawingByIdAsync(id, onlyIfVisible: false, updateViews: false, cache: false);
                 return Ok(drawing);
+            }
+            catch (DrawingNotFoundException dnf)
+            {
+                _logger.LogWarning($"No se encontró ningún dibujo \"{id}\"");
+                return NotFound(new { message = $"No se encontró ningún dibujo \"{id}\"" });
             }
             catch (Exception ex)
             {
@@ -140,11 +146,9 @@ namespace MRA.WebApi.Controllers
             try
             {
                 _logger.LogInformation($"Filtrando dibujos públicos");
-                var allDrawings = await _drawingService.GetAllDrawings();
-                var allCollections = await _drawingService.GetAllCollections(allDrawings);
                 filters.OnlyVisible = true;
-                var results = await _drawingService.FilterDrawingsGivenList(filters, allDrawings, allCollections);
-                _logger.LogInformation($"Dibujos públicos filtrados: {results.TotalDrawings.Count}");
+                var results = await _appService.FilterDrawingsAsync(filters);
+                _logger.LogInformation($"Dibujos públicos filtrados: {results.TotalDrawings.Count()}");
                 return Ok(new DrawingFilterResultsResponse(results));
             }
             catch (Exception ex)
@@ -162,11 +166,9 @@ namespace MRA.WebApi.Controllers
             try
             {
                 _logger.LogInformation($"Filtrando dibujos");
-                var allDrawings = await _drawingService.GetAllDrawings();
-                var allCollections = await _drawingService.GetAllCollections(allDrawings);
                 filters.OnlyVisible = false;
-                var results = await _drawingService.FilterDrawingsGivenList(filters, allDrawings, allCollections);
-                _logger.LogInformation($"Dibujos filtrados: {results.TotalDrawings.Count}");
+                var results = await _appService.FilterDrawingsAsync(filters);
+                _logger.LogInformation($"Dibujos filtrados: {results.TotalDrawings.Count()}");
                 return Ok(new DrawingFilterResultsResponse(results));
             }
             catch (Exception ex)
@@ -185,8 +187,12 @@ namespace MRA.WebApi.Controllers
             try
             {
                 _logger.LogInformation($"Recibido like para dibujo \"{id}\"");
-                await _drawingService.UpdateLikes(id);
-                return Ok();
+                return Ok(await _drawingService.UpdateLikesAsync(id));
+            }
+            catch (DrawingNotFoundException dnf)
+            {
+                _logger.LogWarning($"No se encontró ningún dibujo \"{id}\"");
+                return NotFound(new { message = $"No se encontró ningún dibujo \"{id}\"" });
             }
             catch (Exception ex)
             {
@@ -202,9 +208,14 @@ namespace MRA.WebApi.Controllers
             try
             {
                 _logger.LogInformation($"Recibido voto para dibujo \"{id}\" ({score})");
-                var results = await _drawingService.Vote(id, score);
+                var results = await _drawingService.VoteDrawingAsync(id, score);
                 _logger.LogInformation($"Nuevos resultados para \"{id}\" ({results.NewScoreHuman}) [{results.NewVotes} votos]");
                 return Ok(results);
+            }
+            catch (DrawingNotFoundException dnf)
+            {
+                _logger.LogWarning($"No se encontró ningún dibujo \"{id}\"");
+                return NotFound(new { message = $"No se encontró ningún dibujo \"{id}\"" });
             }
             catch (Exception ex)
             {
@@ -218,12 +229,12 @@ namespace MRA.WebApi.Controllers
         #region Drawing Form
         [Authorize]
         [HttpPost("drawing/save/{id}")]
-        public async Task<ActionResult<Drawing>> DrawingSave(string id, [FromBody] SaveDrawingRequest request)
+        public async Task<ActionResult<DrawingModel>> DrawingSave(string id, [FromBody] SaveDrawingRequest request)
         {
             try
             {
                 _logger.LogInformation($"Guardando dibujo \"{id}\"");
-                var drawing = new Drawing()
+                var drawing = new DrawingModel()
                 {
                     ListComments = request.ListComments,
                     ListCommentsStyle = request.ListCommentsStyle,
@@ -245,7 +256,7 @@ namespace MRA.WebApi.Controllers
                     Software = request.Software,
                     Filter = request.Filter,
                     SpotifyUrl = request.SpotifyUrl,
-                    Tags = request.TagsText.Split(Drawing.SEPARATOR_TAGS).ToList(),
+                    Tags = request.TagsText.Split(DrawingModel.SEPARATOR_TAGS).ToList(),
                     Time = request.Time,
                     Title = request.Title,
                     Type = request.Type,
@@ -254,10 +265,9 @@ namespace MRA.WebApi.Controllers
                     Visible = request.Visible
                 };
 
-                Drawing result = await _drawingService.AddAsync(drawing);
-                result.TagsText = string.Join(Drawing.SEPARATOR_TAGS, result.Tags);
-                _drawingService.CleanAllCache();
-                return Ok(result);
+                await _drawingService.SaveDrawingAsync(id, drawing);
+                _appService.CleanAllCache();
+                return Ok(drawing);
             }
             catch (Exception ex)
             {
@@ -273,8 +283,7 @@ namespace MRA.WebApi.Controllers
             try
             {
                 _logger.LogInformation($"Comprobando si existe dibujo \"{id}\"");
-                var drawing = await _drawingService.FindDrawingById(id, false);
-                var exists = drawing != null;
+                var exists = await _drawingService.ExistsDrawing(id);
                 _logger.LogInformation($"Existe dibujo \"{id}\": {(exists ? "Sí" : "No")}");
                 return Ok(exists);
             }
@@ -293,15 +302,15 @@ namespace MRA.WebApi.Controllers
             try
             {
                 _logger.LogInformation($"Comprobando si existe blob de Azure \"{request.Id}\"");
-                var existe = await _drawingService.ExistsBlob(request.Id);
+                var existe = await _appService.ExistsBlob(request.Id);
                 if (!existe)
                 {
                     _logger.LogWarning($"No existe el blob de Azure \"{request.Id}\"");
                 }
 
-                var blobLocationThumbnail = _drawingService.CrearThumbnailName(request.Id);
+                var blobLocationThumbnail = _appService.CrearThumbnailName(request.Id);
 
-                var urlBase = _drawingService.GetAzureUrlBase();
+                var urlBase = _appService.GetAzureUrlBase();
                 var url = urlBase + request.Id;
                 var url_tn = urlBase + blobLocationThumbnail;
 
@@ -339,13 +348,13 @@ namespace MRA.WebApi.Controllers
                     return BadRequest(new { message = $"No se ha proporcinoado ningún fichero" });
                 }
 
-                var blobLocationThumbnail = _drawingService.CrearThumbnailName(path);
+                var blobLocationThumbnail = _appService.CrearThumbnailName(path);
                 await UploadImage(image, blobLocationThumbnail, size);
                 _logger.LogInformation($"Subida imagen de Thumbnail a \"{blobLocationThumbnail}\"");
                 await UploadImage(image, path, 0);
                 _logger.LogInformation($"Subida imagen a \"{path}\"");
 
-                var urlBase = _drawingService.GetAzureUrlBase();
+                var urlBase = _appService.GetAzureUrlBase();
                 var url = urlBase + path;
                 var url_tn = urlBase + blobLocationThumbnail;
 
@@ -373,7 +382,7 @@ namespace MRA.WebApi.Controllers
                 await azureImage.CopyToAsync(imageStream);
                 imageStream.Position = 0;
 
-                await _drawingService.RedimensionarYGuardarEnAzureStorage(imageStream, path, azureImageThumbnailSize);
+                await _appService.RedimensionarYGuardarEnAzureStorage(imageStream, path, azureImageThumbnailSize);
             }
         }
         #endregion
@@ -385,15 +394,13 @@ namespace MRA.WebApi.Controllers
             try
             {
                 _logger.LogInformation($"Solicitados detalles públicos de colección \"{id}\"");
-                var drawings = await _drawingService.GetAllDrawings();
-                var collection = await _drawingService.FindCollectionById(id, drawings);
-                if (collection == null)
-                {
-                    _logger.LogWarning($"No se encontró ninguna colección \"{id}\"");
-                    return NotFound(new { message = $"No se encontró ninguna colección \"{id}\"" });
-                }
-                var publicCollection = FilterCollectionResponsePublic(new CollectionResponse(collection));
-                return Ok(publicCollection);
+                var collection = await _appService.FindCollectionByIdAsync(id, onlyIfVisible: true, cache: true);
+                return Ok(new CollectionResponse(collection));
+            }
+            catch (CollectionNotFoundException cnf)
+            {
+                _logger.LogWarning($"No se encontró ninguna colección \"{id}\"");
+                return NotFound(new { message = $"No se encontró ninguna colección \"{id}\"" });
             }
             catch (Exception ex)
             {
@@ -410,14 +417,13 @@ namespace MRA.WebApi.Controllers
             try
             {
                 _logger.LogInformation($"Solicitados detalles de colección \"{id}\"");
-                var drawings = await _drawingService.GetAllDrawings();
-                var collection = await _drawingService.FindCollectionById(id, drawings);
-                if (collection == null)
-                {
-                    _logger.LogWarning($"No se encontró ninguna colección \"{id}\"");
-                    return NotFound(new { message = $"No se encontró ninguna colección \"{id}\"" });
-                }
+                var collection = await _appService.FindCollectionByIdAsync(id, onlyIfVisible: false, cache: true);
                 return Ok(new CollectionResponse(collection));
+            }
+            catch (CollectionNotFoundException cnf)
+            {
+                _logger.LogWarning($"No se encontró ninguna colección \"{id}\"");
+                return NotFound(new { message = $"No se encontró ninguna colección \"{id}\"" });
             }
             catch (Exception ex)
             {
@@ -430,20 +436,14 @@ namespace MRA.WebApi.Controllers
 
         #region Collection List
         [HttpGet("collections")]
-        public async Task<ActionResult<List<CollectionResponse>>> Collections()
+        public async Task<ActionResult<IEnumerable<CollectionResponse>>> Collections()
         {
             try
             {
                 _logger.LogInformation("Solicitadas Colecciones Públicas");
-                var drawings = await _drawingService.GetAllDrawings();
-                var collections = (await _drawingService.GetAllCollections(drawings)).Select(x => new CollectionResponse(x)).ToList();
-                var publicCollections = new List<CollectionResponse>();
-                foreach (var collection in collections)
-                {
-                    publicCollections.Add(FilterCollectionResponsePublic(collection));
-                }
-                _logger.LogInformation("Colecciones Públicas: "+publicCollections.Count);
-                return Ok(publicCollections);
+                var collections = await _appService.GetAllCollectionsAsync(onlyIfVisible: true, cache: true);
+                _logger.LogInformation("Colecciones Públicas: "+ collections.Count());
+                return Ok(collections.Select(c => new CollectionResponse(c)));
             }
             catch (Exception ex)
             {
@@ -455,15 +455,14 @@ namespace MRA.WebApi.Controllers
 
         [HttpGet("collections/full")]
         [Authorize]
-        public async Task<ActionResult<List<CollectionResponse>>> CollectionsFull()
+        public async Task<ActionResult<IEnumerable<CollectionResponse>>> CollectionsFull()
         {
             try
             {
                 _logger.LogInformation("Solicitadas Colecciones");
-                var drawings = await _drawingService.GetAllDrawings();
-                var collections = (await _drawingService.GetAllCollections(drawings)).Select(x => new CollectionResponse(x)).ToList();
-                _logger.LogInformation("Colecciones: " + collections.Count);
-                return Ok(collections);
+                var collections = await _appService.GetAllCollectionsAsync(onlyIfVisible: false, cache: true);
+                _logger.LogInformation("Colecciones: " + collections.Count());
+                return Ok(collections.Select(c => new CollectionResponse(c)));
             }
             catch (Exception ex)
             {
@@ -473,12 +472,12 @@ namespace MRA.WebApi.Controllers
             }
         }
 
-        private CollectionResponse FilterCollectionResponsePublic(CollectionResponse collection)
-        {
-            collection.Drawings = collection.Drawings.Where(x => x.Visible).ToList();
-            collection.DrawingsId = collection.Drawings.Select(x => x.Id).ToList();
-            return collection;
-        }
+        //private CollectionResponse FilterCollectionResponsePublic(CollectionResponse collection)
+        //{
+        //    collection.Drawings = collection.Drawings.Where(x => x.Visible).ToList();
+        //    collection.DrawingsId = collection.Drawings.Select(x => x.Id).ToList();
+        //    return collection;
+        //}
         #endregion
 
         #region Collection Form
@@ -489,9 +488,7 @@ namespace MRA.WebApi.Controllers
             try
             {
                 _logger.LogInformation($"Comprobando si existe colección \"{id}\"");
-                var drawings = await _drawingService.GetAllDrawings();
-                var collection = await _drawingService.FindCollectionById(id, drawings);
-                var exists = collection != null;
+                var exists = await _collectionService.ExistsCollection(id);
                 _logger.LogInformation($"Existe colección \"{id}\": {(exists ? "Sí" : "No")}");
                 return Ok(exists);
             }
@@ -510,25 +507,24 @@ namespace MRA.WebApi.Controllers
             try
             {
                 _logger.LogInformation($"Guardando colección \"{model.Id}\"");
-                var collection = new Collection()
+                var collection = new CollectionModel()
                 {
                     Id = model.Id,
                     Description = model.Description,
                     Name = model.Name,
-                    Order = model.Order
+                    Order = model.Order,
+                    DrawingIds = model.DrawingsIds   
                 };
                 if (String.IsNullOrEmpty(collection.Id))
                 {
                     _logger.LogWarning("No se ha proporcionado un ID correcto para la colección");
                     return BadRequest(new { message = "No se ha proporcionado un ID correcto para la colección" });
                 }
-                collection.DrawingsReferences = await _drawingService.SetDrawingsReferences(model.DrawingsIds);
 
-                var drawings = await _drawingService.GetAllDrawings();
-                Collection result = await _drawingService.AddAsync(collection, drawings);
+                await _collectionService.SaveCollectionAsync(id, collection);
                 _logger.LogInformation($"Guardada colección \"{model.Id}\" con éxito");
-                _drawingService.CleanAllCache();
-                return new CollectionResponse(result);
+                _appService.CleanAllCache();
+                return new CollectionResponse(collection);
             }
             catch (Exception ex)
             {
@@ -545,10 +541,15 @@ namespace MRA.WebApi.Controllers
             try
             {
                 _logger.LogInformation($"Eliminando colección \"{id}\"");
-                await _drawingService.RemoveCollection(id);
+                await _collectionService.DeleteCollection(id);
                 _logger.LogInformation($"Colección \"{id}\" eliminada con éxito");
-                _drawingService.CleanAllCache();
+                _appService.CleanAllCache();
                 return Ok(true);
+            }
+            catch (CollectionNotFoundException cnf)
+            {
+                _logger.LogWarning($"No se encontró ninguna colección \"{id}\"");
+                return NotFound(new { message = $"No se encontró ninguna colección \"{id}\"" });
             }
             catch (Exception ex)
             {

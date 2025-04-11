@@ -5,24 +5,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MRA.DTO.Exceptions
+namespace MRA.DTO.Exceptions;
+
+public class CollectionNameNotProvidedException : DocumentNotFoundException
 {
-    public class CollectionNameNotProvidedException : Exception
+    public CollectionNameNotProvidedException() : base("")
     {
-        public CollectionNameNotProvidedException()
-        {
-        }
-
-        public CollectionNameNotProvidedException(string collectionName)
-            : base(CustomMessage(collectionName))
-        {
-        }
-
-        public CollectionNameNotProvidedException(string collectionName, Exception inner)
-            : base(CustomMessage(collectionName), inner)
-        {
-        }
-
-        public static string CustomMessage(string name) => $"The collection with name \"{name}\" was not provided.";
     }
+
+    public CollectionNameNotProvidedException(string collectionName)
+        : base(CustomMessage(collectionName))
+    {
+    }
+
+    public CollectionNameNotProvidedException(string collectionName, Exception inner)
+        : base(CustomMessage(collectionName), inner)
+    {
+    }
+
+    public static string CustomMessage(string name) => $"The collection with name \"{name}\" was not provided.";
 }

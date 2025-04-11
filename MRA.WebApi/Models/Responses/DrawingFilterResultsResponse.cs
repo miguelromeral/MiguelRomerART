@@ -1,13 +1,12 @@
-﻿using MRA.DTO.Firebase.Models;
+﻿using MRA.DTO.Models;
 using MRA.DTO.ViewModels.Art;
-using System.Transactions;
 
 namespace MRA.WebApi.Models.Responses
 {
     public class DrawingFilterResultsResponse : FilterResults
     {
-        public new List<Drawing> FilteredDrawings { get; set; }
-        public new int FetchedCount { get { return (FilteredDrawings != null ? FilteredDrawings.Count : 0); } }
+        public new IEnumerable<DrawingModel> FilteredDrawings { get; set; }
+        public new int FetchedCount { get { return (FilteredDrawings != null ? FilteredDrawings.Count() : 0); } }
 
 
         public DrawingFilterResultsResponse(FilterResults results)

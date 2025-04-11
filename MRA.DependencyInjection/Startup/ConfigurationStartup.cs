@@ -1,8 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MRA.DTO.Configuration.Options;
-using MRA.DTO.Configuration;
-using System.Text;
+using MRA.Infrastructure.Configuration;
+using MRA.Infrastructure.Configuration.Options;
 
 namespace MRA.DependencyInjection.Startup;
 
@@ -26,7 +25,10 @@ public static class ConfigurationStartup
             Jwt = config.GetSection("Jwt").Get<JwtOptions>(),
             Cache = config.GetSection("Cache").Get<CacheOptions>(),
             Firebase = config.GetSection("Firebase").Get<FirebaseOptions>(),
-            MRALogger = config.GetSection("MRALogger").Get<MRALoggerOptions>()
+            MRALogger = config.GetSection("MRALogger").Get<MRALoggerOptions>(),
+            EPPlus = config.GetSection("EPPlus").Get<EPPlusOptions>(),
+            AzureCosmosDb = config.GetSection("AzureCosmosDb").Get<AzureCosmosDbOptions>(),
+            Database = config.GetSection("Database").Get<DatabaseOptions>()
         };
 
         return appConfig;

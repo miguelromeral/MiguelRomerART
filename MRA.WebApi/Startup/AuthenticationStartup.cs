@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using MRA.DTO.Configuration.Options;
+using MRA.Infrastructure.Configuration.Options;
 using System.Text;
 
 namespace MRA.WebApi.Startup;

@@ -93,30 +93,28 @@ namespace MRA.Services
             return data;
         }
 
-        public async Task<T> GetOrSetAsync<T>(string cacheKey, Func<Task<T>> getDataFunc, TimeSpan cacheDuration)
+        public async Task<T> GetOrSetAsync<T>(string cacheKey, Func<Task<T>> getDataFunc, bool useCache, TimeSpan cacheDuration)
         {
-            if (_cache != null)
-            {
-                if (_cache.TryGetValue(cacheKey, out T cachedData))
-                {
-                    return cachedData;
-                }
-
-                var data = await getDataFunc();
-
-                var cacheEntryOptions = new MemoryCacheEntryOptions
-                {
-                    AbsoluteExpirationRelativeToNow = cacheDuration
-                };
-
-                _cache.Set(cacheKey, data, cacheEntryOptions);
-
-                return data;
-            }
-            else
+            if (!useCache || _cache == null || cacheDuration == TimeSpan.Zero)
             {
                 return await getDataFunc();
             }
+
+            if (_cache.TryGetValue(cacheKey, out T cachedData))
+            {
+                return cachedData;
+            }
+
+            var data = await getDataFunc();
+
+            var cacheEntryOptions = new MemoryCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = cacheDuration
+            };
+
+            _cache.Set(cacheKey, data, cacheEntryOptions);
+
+            return data;
         }
 
     }

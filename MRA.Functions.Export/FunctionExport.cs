@@ -1,50 +1,51 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using MRA.DTO.Configuration;
-using MRA.DTO.Firebase.Models;
+using MRA.DTO.Models;
+using MRA.Infrastructure.Configuration;
 using MRA.Services;
 using MRA.Services.AzureStorage;
 using MRA.Services.Excel;
-using MRA.Services.Firebase.Interfaces;
+using MRA.Services.Excel.Interfaces;
 using MRA.Services.Firebase.RemoteConfig;
+using MRA.Services.Models.Drawings;
 using OfficeOpenXml;
+using OfficeOpenXml.Drawing.Style.Effect;
 
 namespace MRA.Functions.Export
 {
     public class FunctionExport
     {
         private readonly ILogger<FunctionExport> _logger;
-        private readonly IConfiguration _configuration;
+        private readonly IExcelService _excelService;
         private readonly IAzureStorageService _azureStorageService;
-        private readonly IFirestoreService _firestoreService;
         private readonly IRemoteConfigService _remoteConfigService;
         private readonly IDrawingService _drawingService;
+        private readonly IAppService _appService;
         private readonly AppConfiguration _appConfiguration;
 
         public FunctionExport(
             ILogger<FunctionExport> logger,
-            IConfiguration configuration,
+            IExcelService excelService,
             IAzureStorageService azureStorageService,
-            IFirestoreService firestoreService,
             IRemoteConfigService remoteConfigService,
             IDrawingService drawingService,
+            IAppService appService,
             AppConfiguration appConfiguration
             )
         {
             _appConfiguration = appConfiguration;
-            _configuration = configuration;
+            _excelService = excelService;
             _logger = logger;
             _azureStorageService = azureStorageService;
-            _firestoreService = firestoreService;
             _remoteConfigService = remoteConfigService;
             _drawingService = drawingService;
+            _appService = appService;
         }
 
 
@@ -62,25 +63,23 @@ namespace MRA.Functions.Export
             {
                 _logger.LogInformation("Iniciando Aplicación de Exportación");
 
-                var excelService = new ExcelService(_configuration, _logger);
-
                 _logger.LogInformation("Configurando EPPlus");
-                ExcelPackage.LicenseContext = (LicenseContext)Enum.Parse(typeof(LicenseContext), excelService.License);
+                ExcelPackage.LicenseContext = (LicenseContext)Enum.Parse(typeof(LicenseContext), _excelService.GetEPPlusLicense());
 
                 _logger.LogInformation("Leyendo documentos desde Firestore");
-                List<Drawing> listDrawings;
+                List<DrawingModel> listDrawings;
 
 #if DEBUG
-                listDrawings = new List<Drawing>(){
-                    await _firestoreService.FindDrawingByIdAsync("cloud", updateViews: false)
+                listDrawings = new List<DrawingModel>(){
+                    await _drawingService.FindDrawingAsync("cloud", onlyIfVisible: false, updateViews: false)
                 };
 #else
-                listDrawings = await _firestoreService.GetDrawingsAsync();
+                listDrawings = (await _drawingService.GetAllDrawingsAsync(onlyIfVisible: false)).ToList();
 #endif
 
                 // TODO: resolver fallo en Producción aquí
-                //_logger.LogInformation("Calculando Popularidad");
-                //listDrawings = await _firestoreService.CalculatePopularityOfListDrawings(listDrawings);
+                _logger.LogInformation("Calculando Popularidad");
+                listDrawings = (await _appService.CalculatePopularityOfListDrawings(listDrawings)).ToList();
 
                 _logger.LogInformation("Procediendo a crear Excel");
 
@@ -91,18 +90,18 @@ namespace MRA.Functions.Export
                     workSheet.View.FreezePanes(2, 2);
 
                     _logger.LogInformation("Obteniendo propiedades del DTO de Drawing");
-                    var drawingProperties = excelService.GetPropertiesAttributes<Drawing>();
+                    var drawingProperties = _excelService.GetPropertiesAttributes<DrawingModel>();
 
                     _logger.LogInformation("Rellenando tabla principal");
-                    excelService.FillDrawingTable(ref workSheet, drawingProperties, listDrawings.OrderBy(x => x.Id).ToList());
+                    _excelService.FillDrawingTable(ref workSheet, drawingProperties, listDrawings.OrderBy(x => x.Id).ToList());
 
                     _logger.LogInformation("Preparando hojas de diccionarios");
-                    excelService.FillSheetsDictionary(excel, drawingProperties, workSheet);
+                    _excelService.FillSheetsDictionary(excel, drawingProperties, workSheet);
 
                     _logger.LogInformation("Preparando fichero para guardar en Azure Storage");
                     using (var memoryStream = new MemoryStream())
                     {
-                        var fileName = excelService.GetFileName();
+                        var fileName = _excelService.GetFileName();
 
                         excel.SaveAs(memoryStream);
 

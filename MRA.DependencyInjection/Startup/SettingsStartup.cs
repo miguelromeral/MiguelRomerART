@@ -5,7 +5,7 @@ namespace MRA.DependencyInjection.Startup;
 
 public static class SettingsStartup
 {
-    public static IConfigurationBuilder AddAppSettingsFiles(this IConfigurationBuilder builder, string environment, bool isDevelopment)
+    public static IConfigurationBuilder AddCustomAppSettingsFiles(this IConfigurationBuilder builder, string environment, bool isDevelopment)
     {
         builder
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
