@@ -23,6 +23,7 @@ namespace MRA.WebApi.Controllers
         [HttpGet("inspirations")]
         public async Task<IEnumerable<InspirationModel>> IndexAsync()
         {
+            _logger.LogInformation("Fetching inspirations");
             return await _inspirationService.GetAllInspirationsAsync();
         }
     }

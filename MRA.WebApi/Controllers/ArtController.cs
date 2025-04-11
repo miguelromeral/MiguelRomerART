@@ -143,39 +143,32 @@ namespace MRA.WebApi.Controllers
         [HttpPost("drawing/filter")]
         public async Task<ActionResult<DrawingFilterResultsResponse>> DrawingFilter([FromBody] DrawingFilter filters)
         {
-            try
-            {
-                _logger.LogInformation($"Filtrando dibujos públicos");
-                filters.OnlyVisible = true;
-                var results = await _appService.FilterDrawingsAsync(filters);
-                _logger.LogInformation($"Dibujos públicos filtrados: {results.TotalDrawings.Count()}");
-                return Ok(new DrawingFilterResultsResponse(results));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error al filtrar dibujos públicos: " + ex.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    new { message = $"Error al filtrar dibujos públicos" });
-            }
+            filters.OnlyVisible = true;
+            return await FilteringDrawings(filters);
         }
 
         [HttpPost("drawing/full-filter")]
         [Authorize]
         public async Task<ActionResult<DrawingFilterResultsResponse>> DrawingFullFilter([FromBody] DrawingFilter filters)
         {
+            filters.OnlyVisible = false;
+            return await FilteringDrawings(filters);
+        }
+
+        private async Task<ActionResult<DrawingFilterResultsResponse>> FilteringDrawings(DrawingFilter filters)
+        {
             try
             {
-                _logger.LogInformation($"Filtrando dibujos");
-                filters.OnlyVisible = false;
+                _logger.LogInformation($"Filtering drawings");
                 var results = await _appService.FilterDrawingsAsync(filters);
                 _logger.LogInformation($"Dibujos filtrados: {results.TotalDrawings.Count()}");
                 return Ok(new DrawingFilterResultsResponse(results));
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error al filtrar dibujos: " + ex.Message);
+                _logger.LogError(ex, $"Error when filtering drawings.");
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    new { message = $"Error al filtrar dibujos" });
+                    new { message = $"Error when filtering drawings" });
             }
         }
         #endregion

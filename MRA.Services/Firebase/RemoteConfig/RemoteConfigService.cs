@@ -8,7 +8,6 @@ namespace MRA.Services.Firebase.RemoteConfig
 {
     public class RemoteConfigService : BaseCacheService, IRemoteConfigService
     {
-        private readonly HttpClient _httpClient;
         private readonly string CACHE_REMOTE_CONFIG = "remote_config";
         private readonly AppConfiguration _appConfiguration;
 
@@ -16,10 +15,6 @@ namespace MRA.Services.Firebase.RemoteConfig
             : base(cache)
         {
             _appConfiguration = appConfig;
-            _httpClient = new HttpClient
-            {
-                BaseAddress = new Uri($"https://firebaseremoteconfig.googleapis.com/v1/projects/{_appConfiguration.Firebase.ProjectID}/remoteConfig")
-            };
         }
 
         private async Task<HttpClient> GetHttpClientAsync()
@@ -58,8 +53,10 @@ namespace MRA.Services.Firebase.RemoteConfig
 
         public async Task<T> GetConfigValueAsync<T>(RemoteConfigKey<T> key)
         {
-            var remoteConfig = await GetRemoteConfig();
-            return remoteConfig.GetParameter(key);
+            //var remoteConfig = await GetRemoteConfig();
+            //return remoteConfig.GetParameter(key);
+
+            return key.DefaultValue;
         }
     }
 }
