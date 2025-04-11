@@ -1,8 +1,9 @@
 ﻿using Google.Cloud.Firestore;
-using MRA.Infrastructure.Database;
 using MRA.Infrastructure.Configuration;
+using MRA.Infrastructure.Database.Documents.Interfaces;
+using MRA.Infrastructure.Database.Providers.Interfaces;
 
-namespace MRA.Infrastructure.Firestore
+namespace MRA.Infrastructure.Database.Providers
 {
     public class FirestoreDatabase : IDocumentsDatabase
     {

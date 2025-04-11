@@ -1,6 +1,7 @@
-﻿using MRA.DTO.Firebase.Converters.Interfaces;
+﻿using MRA.DTO.Mapper.Interfaces;
 using MRA.DTO.Models.Interfaces;
-using MRA.Infrastructure.Database;
+using MRA.Infrastructure.Database.Documents.Interfaces;
+using MRA.Infrastructure.Database.Providers.Interfaces;
 
 namespace MRA.Services.Models.Documents;
 
@@ -10,9 +11,9 @@ public abstract class DocumentModelService<Model, Document> : IDocumentModelServ
 {
     private readonly string _collectionName;
     private readonly IDocumentsDatabase _db;
-    protected IFirestoreDocumentConverter<Model, Document> Converter;
+    protected IDocumentMapper<Model, Document> Converter;
 
-    public DocumentModelService(string collectionName, IFirestoreDocumentConverter<Model, Document> converter, IDocumentsDatabase db)
+    public DocumentModelService(string collectionName, IDocumentMapper<Model, Document> converter, IDocumentsDatabase db)
     {
         _collectionName = collectionName;
         Converter = converter;
@@ -26,7 +27,8 @@ public abstract class DocumentModelService<Model, Document> : IDocumentModelServ
 
     public async Task<IEnumerable<Model>> GetAllAsync()
     {
-        return (await _db.GetAllDocumentsAsync<Document>(_collectionName)).Select(Converter.ConvertToModel);
+        var tmp = (await _db.GetAllDocumentsAsync<Document>(_collectionName));
+        return tmp.Select(Converter.ConvertToModel);
     }
 
     public async Task<Model> FindAsync(string id)

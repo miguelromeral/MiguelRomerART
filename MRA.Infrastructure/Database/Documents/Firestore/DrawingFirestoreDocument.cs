@@ -1,10 +1,11 @@
 ﻿using Google.Cloud.Firestore;
-using MRA.Infrastructure.Database;
+using MRA.Infrastructure.Database.Documents.Interfaces;
+using Newtonsoft.Json;
 
-namespace MRA.Infrastructure.Firestore.Documents;
+namespace MRA.Infrastructure.Database.Documents.Firestore;
 
 [FirestoreData]
-public class DrawingDocument : IDocument
+public class DrawingFirestoreDocument : IDrawingDocument
 {
     [FirestoreDocumentId]
     public string Id { get; set; }
@@ -45,29 +46,17 @@ public class DrawingDocument : IDocument
     [FirestoreProperty]
     public string product_name { get; set; }
 
-    //[FirestoreProperty]
-    //public string comment { get; set; }
+    [FirestoreProperty]
+    public IEnumerable<string> list_comments { get; set; }
 
     [FirestoreProperty]
-    public List<string> list_comments { get; set; }
-
-    //[FirestoreProperty]
-    //public List<string> comment_style { get; set; }
+    public IEnumerable<string> list_comments_style { get; set; }
 
     [FirestoreProperty]
-    public List<string> list_comments_style { get; set; }
-
-    //[FirestoreProperty]
-    //public string comment_pros { get; set; }
+    public IEnumerable<string> list_comments_pros { get; set; }
 
     [FirestoreProperty]
-    public List<string> list_comments_pros { get; set; }
-
-    //[FirestoreProperty]
-    //public string comment_cons { get; set; }
-
-    [FirestoreProperty]
-    public List<string> list_comments_cons { get; set; }
+    public IEnumerable<string> list_comments_cons { get; set; }
 
 
     [FirestoreProperty]
@@ -101,12 +90,14 @@ public class DrawingDocument : IDocument
     public int paper { get; set; }
 
     [FirestoreProperty]
-    public List<string>? tags { get; set; }
+    public IEnumerable<string>? tags { get; set; }
 
     [FirestoreProperty]
     public int score_critic { get; set; }
+
     [FirestoreProperty]
     public double score_popular { get; set; }
+
     [FirestoreProperty]
     public int votes_popular { get; set; }
 

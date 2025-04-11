@@ -1,19 +1,19 @@
-﻿using MRA.Infrastructure.Configuration;
-using MRA.DTO.Models;
-using MRA.Infrastructure.Database;
-using MRA.Infrastructure.Firestore.Documents;
+﻿using MRA.DTO.Models;
 using MRA.Services.Models.Documents;
-using MRA.DTO.Firebase.Converters.Interfaces;
+using MRA.Infrastructure.Database.Providers.Interfaces;
+using MRA.DTO.Mapper.Interfaces;
+using MRA.Infrastructure.Configuration;
+using MRA.Infrastructure.Database.Documents.Interfaces;
 
 namespace MRA.Services.Models.Inspirations;
 
-public class InspirationService : DocumentModelService<InspirationModel, InspirationDocument>, IInspirationService
+public class InspirationService : DocumentModelService<InspirationModel, IInspirationDocument>, IInspirationService
 {
     public InspirationService(
         AppConfiguration appConfig,
-        IFirestoreDocumentConverter<InspirationModel, InspirationDocument> converter,
+        IDocumentMapper<InspirationModel, IInspirationDocument> converter,
         IDocumentsDatabase db) 
-        : base(collectionName: appConfig.Firebase.CollectionInspirations, converter, db)
+        : base(collectionName: appConfig.Database.Collections.Inspirations, converter, db)
     {
     }
 

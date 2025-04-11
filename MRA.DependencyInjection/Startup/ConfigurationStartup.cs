@@ -26,7 +26,9 @@ public static class ConfigurationStartup
             Cache = config.GetSection("Cache").Get<CacheOptions>(),
             Firebase = config.GetSection("Firebase").Get<FirebaseOptions>(),
             MRALogger = config.GetSection("MRALogger").Get<MRALoggerOptions>(),
-            EPPlus = config.GetSection("EPPlus").Get<EPPlusOptions>()
+            EPPlus = config.GetSection("EPPlus").Get<EPPlusOptions>(),
+            AzureCosmosDb = config.GetSection("AzureCosmosDb").Get<AzureCosmosDbOptions>(),
+            Database = config.GetSection("Database").Get<DatabaseOptions>()
         };
 
         return appConfig;

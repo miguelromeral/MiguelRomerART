@@ -13,4 +13,6 @@ public class AppConfiguration
     public FirebaseOptions Firebase { get; set; }
     public MRALoggerOptions MRALogger { get; set; }
     public EPPlusOptions EPPlus { get; set; }
+    public AzureCosmosDbOptions AzureCosmosDb { get; set; }
+    public DatabaseOptions Database { get; set; }
 }

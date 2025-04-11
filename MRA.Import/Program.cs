@@ -14,7 +14,7 @@ try
 {
     // Configuración de la aplicación
     var builder = new ConfigurationBuilder()
-        .AddAppSettingsFiles("Development", isDevelopment: true)
+        .AddCustomAppSettingsFiles("Development", isDevelopment: true)
         //.AddEnvironmentVariables()
         ;
 

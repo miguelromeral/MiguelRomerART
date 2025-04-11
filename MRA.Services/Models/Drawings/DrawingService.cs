@@ -2,21 +2,21 @@
 using MRA.DTO.Exceptions;
 using MRA.DTO.Models;
 using MRA.DTO.ViewModels.Art.Select;
-using MRA.Infrastructure.Database;
-using MRA.Infrastructure.Firestore.Documents;
 using MRA.Services.Models.Documents;
 using MRA.DTO.ViewModels.Art;
-using MRA.DTO.Firebase.Converters.Interfaces;
+using MRA.Infrastructure.Database.Providers.Interfaces;
+using MRA.DTO.Mapper.Interfaces;
+using MRA.Infrastructure.Database.Documents.Interfaces;
 
 namespace MRA.Services.Models.Drawings;
 
-public class DrawingService : DocumentModelService<DrawingModel, DrawingDocument>, IDrawingService
+public class DrawingService : DocumentModelService<DrawingModel, IDrawingDocument>, IDrawingService
 {
     public DrawingService(
         AppConfiguration appConfig,
-        IFirestoreDocumentConverter<DrawingModel, DrawingDocument> converter,
+        IDocumentMapper<DrawingModel, IDrawingDocument> converter,
         IDocumentsDatabase db)
-        : base(collectionName: appConfig.Firebase.CollectionDrawings, converter, db)
+        : base(collectionName: appConfig.Database.Collections.Drawings, converter, db)
     {
     }
 
@@ -202,8 +202,8 @@ public class DrawingService : DocumentModelService<DrawingModel, DrawingDocument
         }
         list.AddRange(document.ProductName.Split(" ").Select(x => x.ToLower()));
 
-        document.Tags.AddRange(list);
-        document.Tags = DeleteAndAdjustTags(document.Tags).ToList();
+        list.AddRange(document.Tags);
+        document.Tags = DeleteAndAdjustTags(list);
     }
 
 

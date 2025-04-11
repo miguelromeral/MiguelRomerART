@@ -9,7 +9,7 @@ builder.Logging.AddCustomLogging(builder.Configuration, builder.Environment);
 
 builder.Configuration
     .SetBasePath(Directory.GetCurrentDirectory())
-    .AddAppSettingsFiles(builder.Environment.EnvironmentName, builder.Environment.IsDevelopment())
+    .AddCustomAppSettingsFiles(builder.Environment.EnvironmentName, builder.Environment.IsDevelopment())
     .AddEnvironmentVariables();
 
 if (builder.Environment.IsProduction())

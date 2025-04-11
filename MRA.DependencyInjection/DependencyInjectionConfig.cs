@@ -15,12 +15,10 @@ public static class DependencyInjectionConfig
         services.AddCustomConfiguration();
         services.AddCustomLogger();
 
-        services.AddSingleton<IExcelService, ExcelService>();
         services.AddSingleton<IMemoryCache>(new MemoryCache(new MemoryCacheOptions()));
 
-        services.AddCustomAzureStorage();
-        services.AddCustomDatabase();
-        services.AddSingleton<IAppService, AppService>();
+        services.AddCustomInfrastructure();
+        services.AddCustomServices();
 
         return services;
     }

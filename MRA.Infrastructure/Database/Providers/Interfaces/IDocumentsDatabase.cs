@@ -1,6 +1,7 @@
 ﻿using Google.Cloud.Firestore;
+using MRA.Infrastructure.Database.Documents.Interfaces;
 
-namespace MRA.Infrastructure.Database;
+namespace MRA.Infrastructure.Database.Providers.Interfaces;
 
 public interface IDocumentsDatabase
 {

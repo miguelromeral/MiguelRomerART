@@ -1,20 +1,21 @@
 ﻿using MRA.Infrastructure.Configuration;
 using MRA.DTO.Models;
-using MRA.Infrastructure.Firestore.Documents;
-using MRA.DTO.Firebase.Converters.Interfaces;
+using MRA.DTO.Mapper.Interfaces;
+using MRA.Infrastructure.Database.Documents.Interfaces;
+using MRA.Infrastructure.Database.Documents.MongoDb;
 
-namespace MRA.DTO.Firebase.Converters;
+namespace MRA.DTO.Mapper;
 
-public class DrawingFirebaseConverter : IFirestoreDocumentConverter<DrawingModel, DrawingDocument>
+public class DrawingMapper : IDocumentMapper<DrawingModel, IDrawingDocument>
 {
     private readonly string _urlBase;
 
-    public DrawingFirebaseConverter(AppConfiguration appConfig)
+    public DrawingMapper(AppConfiguration appConfig)
     {
         _urlBase = appConfig.AzureStorage.BlobPath;
     }
 
-    public DrawingModel ConvertToModel(DrawingDocument drawingDocument)
+    public DrawingModel ConvertToModel(IDrawingDocument drawingDocument)
     {
         return new DrawingModel
         {
@@ -24,7 +25,7 @@ public class DrawingFirebaseConverter : IFirestoreDocumentConverter<DrawingModel
             Title = drawingDocument.title,
             Name = drawingDocument.name,
             Date = drawingDocument.date,
-            DateObject = MRA.DTO.Utilities.ConvertirStringADateTime(drawingDocument.date),
+            DateObject = Utilities.ConvertirStringADateTime(drawingDocument.date),
             DateHyphen = (drawingDocument.date ?? "").Replace("/", "-"),
             Time = drawingDocument.time ?? 0,
             ProductType = drawingDocument.product_type,
@@ -54,9 +55,9 @@ public class DrawingFirebaseConverter : IFirestoreDocumentConverter<DrawingModel
         };
     }
 
-    public DrawingDocument ConvertToDocument(DrawingModel drawing)
+    public IDrawingDocument ConvertToDocument(DrawingModel drawing)
     {
-        return new DrawingDocument
+        return new DrawingMongoDocument
         {
             Id = drawing.Id,
             path = drawing.Path ?? "",
@@ -68,13 +69,9 @@ public class DrawingFirebaseConverter : IFirestoreDocumentConverter<DrawingModel
             name = drawing.Name ?? "",
             product_type = drawing.ProductType,
             product_name = drawing.ProductName ?? "",
-            //comment = drawing.Comment ?? "",
             list_comments = drawing.ListComments ?? new List<string>(),
-            //comment_pros = drawing.CommentPros ?? "",
             list_comments_pros = drawing.ListCommentsPros ?? new List<string>(),
-            //comment_cons = drawing.CommentCons ?? "",
             list_comments_cons = drawing.ListCommentsCons ?? new List<string>(),
-            //comment_style = drawing.ListCommentsStyle ?? new List<string>(),
             list_comments_style = drawing.ListCommentsStyle ?? new List<string>(),
             views = drawing.Views,
             likes = drawing.Likes,

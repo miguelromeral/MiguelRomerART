@@ -1,10 +1,11 @@
 ﻿using Google.Cloud.Firestore;
-using MRA.Infrastructure.Database;
+using MRA.Infrastructure.Database.Documents.Interfaces;
+using Newtonsoft.Json;
 
-namespace MRA.Infrastructure.Firestore.Documents;
+namespace MRA.Infrastructure.Database.Documents.Firestore;
 
 [FirestoreData]
-public class CollectionDocument : IDocument
+public class CollectionFirestoreDocument : ICollectionDocument
 {
     [FirestoreDocumentId]
     public string Id { get; set; }
@@ -19,10 +20,7 @@ public class CollectionDocument : IDocument
     public int order { get; set; }
 
     [FirestoreProperty]
-    public List<DocumentReference> drawings { get; set; }
-
-    [FirestoreProperty]
-    public List<string> drawingIds { get; set; }
+    public IEnumerable<string> drawingIds { get; set; }
 
     public string GetId() => Id;
 }

@@ -1,20 +1,20 @@
 ﻿using MRA.Infrastructure.Configuration;
 using MRA.DTO.Models;
-using MRA.Infrastructure.Database;
-using MRA.Infrastructure.Firestore.Documents;
 using MRA.Services.Models.Documents;
 using MRA.DTO.Exceptions;
-using MRA.DTO.Firebase.Converters.Interfaces;
+using MRA.Infrastructure.Database.Providers.Interfaces;
+using MRA.DTO.Mapper.Interfaces;
+using MRA.Infrastructure.Database.Documents.Interfaces;
 
 namespace MRA.Services.Models.Collections;
 
-public class CollectionService : DocumentModelService<CollectionModel, CollectionDocument>, ICollectionService
+public class CollectionService : DocumentModelService<CollectionModel, ICollectionDocument>, ICollectionService
 {
     public CollectionService(
         AppConfiguration appConfig,
-        IFirestoreDocumentConverter<CollectionModel, CollectionDocument> converter,
+        IDocumentMapper<CollectionModel, ICollectionDocument> converter,
         IDocumentsDatabase db)
-        : base(collectionName: appConfig.Firebase.CollectionCollections, converter, db)
+        : base(collectionName: appConfig.Database.Collections.Collections, converter, db)
     {
     }
 

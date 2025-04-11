@@ -277,24 +277,24 @@ public class DrawingModel : IModel
 
     #region Comments
     [ExcelColumn("List Comments", 81)]
-    public List<string> ListComments { get; set; }
+    public IEnumerable<string> ListComments { get; set; }
     #endregion
 
     #region Style Comments
     [ExcelColumn("Style Comment", 91)]
-    public List<string> ListCommentsStyle { get; set; }
+    public IEnumerable<string> ListCommentsStyle { get; set; }
     #endregion
 
     #region Positive Comments
 
     [ExcelColumn("Positive Comments", 100)]
-    public List<string> ListCommentsPros { get; set; }
+    public IEnumerable<string> ListCommentsPros { get; set; }
     #endregion
 
     #region Negative Comments
 
     [ExcelColumn("Negative Comments", 100)]
-    public List<string> ListCommentsCons { get; set; }
+    public IEnumerable<string> ListCommentsCons { get; set; }
     #endregion
 
     #region References
@@ -347,7 +347,7 @@ public class DrawingModel : IModel
     public string TagsText { get; set; }
 
     [ExcelColumn("Tags", 140, hidden: true)]
-    public List<string> Tags { get; set; }
+    public IEnumerable<string> Tags { get; set; }
     #endregion
 
     #region Popularity

@@ -1,12 +1,13 @@
-﻿using MRA.DTO.Firebase.Converters.Interfaces;
+﻿using MRA.DTO.Mapper.Interfaces;
 using MRA.DTO.Models;
-using MRA.Infrastructure.Firestore.Documents;
+using MRA.Infrastructure.Database.Documents.Interfaces;
+using MRA.Infrastructure.Database.Documents.MongoDb;
 
-namespace MRA.DTO.Firebase.Converters;
+namespace MRA.DTO.Mapper;
 
-public class CollectionFirebaseConverter : IFirestoreDocumentConverter<CollectionModel, CollectionDocument>
+public class CollectionMapper : IDocumentMapper<CollectionModel, ICollectionDocument>
 {
-    public CollectionModel ConvertToModel(CollectionDocument collectionDocument)
+    public CollectionModel ConvertToModel(ICollectionDocument collectionDocument)
     {
         return new CollectionModel
         {
@@ -15,20 +16,18 @@ public class CollectionFirebaseConverter : IFirestoreDocumentConverter<Collectio
             Description = collectionDocument.description,
             Order = collectionDocument.order,
             DrawingIds = collectionDocument.drawingIds
-            //DrawingsReferences = collectionDocument.drawings
         };
     }
 
-    public CollectionDocument ConvertToDocument(CollectionModel collection)
+    public ICollectionDocument ConvertToDocument(CollectionModel collection)
     {
-        return new CollectionDocument
+        return new CollectionMongoDocument
         {
             Id = collection.Id,
             name = collection.Name,
             description = collection.Description,
             order = collection.Order,
             drawingIds = collection.DrawingIds.ToList()
-            //drawings = collection.DrawingsReferences
         };
     }
 }
