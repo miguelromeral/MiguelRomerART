@@ -1,7 +1,7 @@
 ﻿
-namespace MRA.Infrastructure.Configuration.Options;
+namespace MRA.Infrastructure.Settings.Options;
 
-public class MRALoggerOptions
+public class MRALoggerSettings
 {
     public string Location { get; set; }
     public string FilePrefix { get; set; }

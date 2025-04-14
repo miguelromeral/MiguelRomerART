@@ -1,19 +1,37 @@
-﻿using Google.Api;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using MRA.Infrastructure.Settings;
+using MRA.Infrastructure.Settings.Options;
 
 namespace MRA.DependencyInjection.Startup;
 
-public static class SettingsStartup
+public static class ConfigurationStartup
 {
-    public static IConfigurationBuilder AddCustomAppSettingsFiles(this IConfigurationBuilder builder, string environment, bool isDevelopment)
+    public static void AddCustomConfiguration(this IServiceCollection services)
     {
-        builder
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-            .AddJsonFile($"appsettings.{environment}.json", optional: true);
+        services.AddSingleton(sp =>
+        {
+            return sp.GetRequiredService<IConfiguration>().GetMRAConfiguration();
+        });
+    }
 
-        if(isDevelopment)
-            builder.AddJsonFile($"appsettings.Local.json", optional: true);
+    public static AppSettings GetMRAConfiguration(this IConfiguration config)
+    {
+        var appConfig = new AppSettings
+        {
+            AzureStorage = config.GetSection("AzureStorage").Get<AzureStorageSettings>(),
+            AzureKeyVault = config.GetSection("AzureKeyVault").Get<AzureKeyVaultSettings>(),
+            Administrator = config.GetSection("Administrator").Get<AdministratorSettings>(),
+            Jwt = config.GetSection("Jwt").Get<JwtSettings>(),
+            Cache = config.GetSection("Cache").Get<CacheSettings>(),
+            Firebase = config.GetSection("Firebase").Get<FirebaseSettings>(),
+            MRALogger = config.GetSection("MRALogger").Get<MRALoggerSettings>(),
+            EPPlus = config.GetSection("EPPlus").Get<EPPlusSettings>(),
+            AzureCosmosDb = config.GetSection("AzureCosmosDb").Get<AzureCosmosSettings>(),
+            Database = config.GetSection("Database").Get<DatabaseSettings>(),
+            RemoteConfig = config.GetSection("RemoteConfig").Get<RemoteConfigSettings>()
+        };
 
-        return builder;
+        return appConfig;
     }
 }

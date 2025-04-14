@@ -1,4 +1,4 @@
-﻿using MRA.Infrastructure.Configuration;
+﻿using MRA.Infrastructure.Settings;
 using MRA.DTO.Exceptions;
 using MRA.DTO.Models;
 using MRA.DTO.ViewModels.Art.Select;
@@ -13,7 +13,7 @@ namespace MRA.Services.Models.Drawings;
 public class DrawingService : DocumentModelService<DrawingModel, IDrawingDocument>, IDrawingService
 {
     public DrawingService(
-        AppConfiguration appConfig,
+        AppSettings appConfig,
         IDocumentMapper<DrawingModel, IDrawingDocument> converter,
         IDocumentsDatabase db)
         : base(collectionName: appConfig.Database.Collections.Drawings, converter, db)

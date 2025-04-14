@@ -1,6 +1,6 @@
-﻿namespace MRA.Infrastructure.Configuration.Options;
+﻿namespace MRA.Infrastructure.Settings.Options;
 
-public class DatabaseOptions
+public class DatabaseSettings
 {
     public string Name { get; set; }
     public DatabaseCollectionsOptions Collections { get; set; }

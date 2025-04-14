@@ -38,7 +38,7 @@ try
 
     logger.Log("Recuperando documentos desde Firestore");
     var listDrawingsFirestore = await firestoreService.GetDrawingsAsync();
-    //listDrawingsFirestore = await firestoreService.CalculatePopularityOfListDrawings(listDrawings);
+    //listDrawingsFirestore = firestoreService.CalculatePopularityOfListDrawings(listDrawings);
 
     var filePath = console.FillStringValue("Ruta del Fichero a Procesar");
     //var filePath = "M:\\Descargas\\Excels_MiguelRomerART\\FirestoreDrawings_20241031_1038.xlsx";

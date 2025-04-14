@@ -1,4 +1,4 @@
-﻿using MRA.Infrastructure.Configuration;
+﻿using MRA.Infrastructure.Settings;
 using MRA.DTO.Models;
 using MRA.DTO.Mapper.Interfaces;
 using MRA.Infrastructure.Database.Documents.Interfaces;
@@ -10,7 +10,7 @@ public class DrawingMapper : IDocumentMapper<DrawingModel, IDrawingDocument>
 {
     private readonly string _urlBase;
 
-    public DrawingMapper(AppConfiguration appConfig)
+    public DrawingMapper(AppSettings appConfig)
     {
         _urlBase = appConfig.AzureStorage.BlobPath;
     }

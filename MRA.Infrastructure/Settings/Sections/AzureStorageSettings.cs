@@ -1,7 +1,7 @@
 ﻿
-namespace MRA.Infrastructure.Configuration.Options;
+namespace MRA.Infrastructure.Settings.Options;
 
-public class AzureStorageOptions
+public class AzureStorageSettings
 {
     public string ConnectionString { get; set; }
     public string BlobStorageContainer { get; set; }

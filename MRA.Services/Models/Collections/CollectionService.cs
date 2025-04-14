@@ -1,4 +1,4 @@
-﻿using MRA.Infrastructure.Configuration;
+﻿using MRA.Infrastructure.Settings;
 using MRA.DTO.Models;
 using MRA.Services.Models.Documents;
 using MRA.DTO.Exceptions;
@@ -11,7 +11,7 @@ namespace MRA.Services.Models.Collections;
 public class CollectionService : DocumentModelService<CollectionModel, ICollectionDocument>, ICollectionService
 {
     public CollectionService(
-        AppConfiguration appConfig,
+        AppSettings appConfig,
         IDocumentMapper<CollectionModel, ICollectionDocument> converter,
         IDocumentsDatabase db)
         : base(collectionName: appConfig.Database.Collections.Collections, converter, db)

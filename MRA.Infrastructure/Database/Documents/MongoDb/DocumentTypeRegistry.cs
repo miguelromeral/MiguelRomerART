@@ -1,5 +1,5 @@
 ﻿using Google.Protobuf.Reflection;
-using MRA.Infrastructure.Configuration;
+using MRA.Infrastructure.Settings;
 using MRA.Infrastructure.Database.Documents.Interfaces;
 
 namespace MRA.Infrastructure.Database.Documents.MongoDb;
@@ -8,7 +8,7 @@ public class DocumentTypeRegistry
 {
     private readonly Dictionary<string, Type> _collectionTypeMapping = new Dictionary<string, Type>();
 
-    public DocumentTypeRegistry(AppConfiguration appConfig)
+    public DocumentTypeRegistry(AppSettings appConfig)
     {
         RegisterDocumentType<InspirationMongoDocument>(appConfig.Database.Collections.Inspirations);
         RegisterDocumentType<DrawingMongoDocument>(appConfig.Database.Collections.Drawings);

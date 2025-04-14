@@ -15,7 +15,7 @@ namespace MRA.Services
 
         Task<FilterResults> FilterDrawingsAsync(DrawingFilter filter);
 
-        Task<IEnumerable<DrawingModel>> CalculatePopularityOfListDrawings(IEnumerable<DrawingModel> drawings);
+        IEnumerable<DrawingModel> CalculatePopularityOfListDrawings(IEnumerable<DrawingModel> drawings);
 
         Task RedimensionarYGuardarEnAzureStorage(string rutaEntrada, string nombreBlob, int anchoDeseado);
         Task RedimensionarYGuardarEnAzureStorage(MemoryStream rutaEntrada, string nombreBlob, int anchoDeseado);

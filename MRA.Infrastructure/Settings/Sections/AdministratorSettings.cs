@@ -1,7 +1,7 @@
 ﻿
-namespace MRA.Infrastructure.Configuration.Options;
+namespace MRA.Infrastructure.Settings.Options;
 
-public class AdministratorOptions
+public class AdministratorSettings
 {
     public string User { get; set; }
     public string Password { get; set; }

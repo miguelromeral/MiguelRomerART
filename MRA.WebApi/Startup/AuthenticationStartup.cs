@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using MRA.Infrastructure.Configuration.Options;
+using MRA.Infrastructure.Settings.Options;
 using System.Text;
 
 namespace MRA.WebApi.Startup;
@@ -10,9 +10,9 @@ public static class AuthenticationStartup
     public static void AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
         var jwtSection = configuration.GetSection("Jwt");
-        services.Configure<JwtOptions>(jwtSection);
+        services.Configure<JwtSettings>(jwtSection);
         
-        var jwtOptions = jwtSection.Get<JwtOptions>();
+        var jwtOptions = jwtSection.Get<JwtSettings>();
 
         services.AddAuthentication(options =>
         {

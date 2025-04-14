@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MRA.DTO.Auth;
-using MRA.Infrastructure.Configuration;
+using MRA.Infrastructure.Settings;
 using MRA.DTO.ViewModels.Account;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -15,9 +15,9 @@ namespace MRA.WebApi.Controllers
     [ApiController]
     public class AuthController : Controller
     {
-        private readonly AppConfiguration _appConfig;
+        private readonly AppSettings _appConfig;
 
-        public AuthController(AppConfiguration appConfig)
+        public AuthController(AppSettings appConfig)
         {
             _appConfig = appConfig;
         }
