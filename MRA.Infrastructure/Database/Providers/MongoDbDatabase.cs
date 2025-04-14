@@ -1,4 +1,6 @@
-﻿using MongoDB.Bson;
+﻿using DnsClient.Internal;
+using Microsoft.Extensions.Logging;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using MRA.Infrastructure.Configuration;
@@ -14,43 +16,57 @@ public class MongoDbDatabase : IDocumentsDatabase
 
     private readonly AppConfiguration _appConfiguration;
     private readonly DocumentTypeRegistry _typeRegistry;
-    private IMongoDatabase _database;
+    private readonly ILogger<MongoDbDatabase> _logger;
+
+    private readonly object _initLock = new object();
+    private static IMongoDatabase? _database = null;
 
     private IMongoDatabase Database
     {
         get
         {
             if (_database == null)
-                InitializeMongoDb();
+            {
+                lock (_initLock)
+                {
+                    if (_database == null)
+                    {
+                        InitializeMongoDb();
+                    }
+                }
+            }
 
             return _database;
         }
     }
 
-    public MongoDbDatabase(AppConfiguration appConfig)
+    public MongoDbDatabase(AppConfiguration appConfig, ILogger<MongoDbDatabase> logger)
     {
         _appConfiguration = appConfig;
+        _logger = logger;
         _typeRegistry = new DocumentTypeRegistry(appConfig);
     }
 
     private void InitializeMongoDb()
     {
-        RegisterBsonClass<InspirationMongoDocument>();
-        RegisterBsonClass<DrawingMongoDocument>();
-        RegisterBsonClass<CollectionMongoDocument>();
-        RegisterBsonClass<object>();
+        _logger.LogInformation("Initializing MongoDb Database. Registering document classes.");
+        RegisterBsonClass(typeof(InspirationMongoDocument));
+        RegisterBsonClass(typeof(DrawingMongoDocument));
+        RegisterBsonClass(typeof(CollectionMongoDocument));
 
         var mongoClient = new MongoClient(_appConfiguration.AzureCosmosDb.ConnectionString);
         _database = mongoClient.GetDatabase(_appConfiguration.AzureCosmosDb.DatabaseName);
     }
 
-    private void RegisterBsonClass<TDocument>()
+    private void RegisterBsonClass(Type documentType)
     {
-        BsonClassMap.RegisterClassMap<TDocument>(map =>
+        if (!BsonClassMap.IsClassMapRegistered(documentType))
         {
-            map.AutoMap();
-            map.SetIgnoreExtraElements(true);
-        });
+            var classMap = new BsonClassMap(documentType);
+            classMap.AutoMap();
+            classMap.SetIgnoreExtraElements(true);
+            BsonClassMap.RegisterClassMap(classMap);
+        }
     }
 
     public async Task<IEnumerable<IDocument>> GetAllDocumentsAsync<IDocument>(string collection)
