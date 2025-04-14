@@ -36,7 +36,11 @@ jobs:
 
       - name: Install dependencies
         run: dotnet restore ${{env.CSPROJ_PATH}}
-        
+      
+      - name: Create temporary appsettings.Local.json
+        run: |
+          echo "{}" > MRA.DependencyInjection/appsettings.Local.json
+          
       - name: Build
         run: dotnet build ${{env.CSPROJ_PATH}} --configuration Release --no-restore
 

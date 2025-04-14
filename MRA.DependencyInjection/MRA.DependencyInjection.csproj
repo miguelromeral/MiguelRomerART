@@ -12,14 +12,9 @@
     <None Remove="appsettings.Local.json" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ApplicationDefinition Include="appsettings.Local.json" />
-  </ItemGroup>
-
-  <ItemGroup>
+  <ItemGroup Condition="'$(Configuration)' == 'Debug'">
     <Content Include="appsettings.Local.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </Content>
   </ItemGroup>
 
