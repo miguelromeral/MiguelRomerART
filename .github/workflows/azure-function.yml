@@ -36,6 +36,9 @@ jobs:
 
       - name: Install dependencies
         run: dotnet restore ${{env.CSPROJ_PATH}}
+        
+      - name: Build
+        run: dotnet build ${{env.CSPROJ_PATH}} --configuration Release --no-restore
 
       - name: Publish
         run: dotnet publish ${{env.CSPROJ_PATH}} -c Release -o ${{github.workspace}}/publish --no-build
