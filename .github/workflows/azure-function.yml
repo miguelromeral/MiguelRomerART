@@ -1,0 +1,37 @@
+
+permissions:
+  contents: write
+
+name: MRA.Functions.Export Azure Deployment
+
+env:
+  AZURE_FUNCTION_NAME: RomerARTExport
+  DOTNET_VERSION: '6'
+  CSPROJ_PATH: './MRA.Functions.Export/MRA.Functions.Export.csproj'
+
+on:
+  push:
+    branches: [ "main", "feature/publish-azure-function-github-action" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+          
+      - name: Publish
+        run: dotnet publish ${{env.CSPROJ_PATH}} -c Release -o ${{github.workspace}}/publish --no-build
+        
+      - name: Deploy to Azure
+        uses: azure/functions-action@v2
+        with:
+          app-name: ${{ env.AZURE_FUNCTION_NAME }}
+          package: ./publish
+          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
