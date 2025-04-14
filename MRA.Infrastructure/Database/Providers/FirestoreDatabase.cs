@@ -1,5 +1,5 @@
 ﻿using Google.Cloud.Firestore;
-using MRA.Infrastructure.Configuration;
+using MRA.Infrastructure.Settings;
 using MRA.Infrastructure.Database.Documents.Interfaces;
 using MRA.Infrastructure.Database.Providers.Interfaces;
 
@@ -25,7 +25,7 @@ namespace MRA.Infrastructure.Database.Providers
             }
         }
 
-        public FirestoreDatabase(AppConfiguration appConfig)
+        public FirestoreDatabase(AppSettings appConfig)
         {
             _projectId = appConfig.Firebase.ProjectID;
             _serviceAccountPath = appConfig.Firebase.CredentialsPath;

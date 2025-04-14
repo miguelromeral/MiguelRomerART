@@ -1,6 +1,6 @@
-﻿namespace MRA.Infrastructure.Configuration.Options;
+﻿namespace MRA.Infrastructure.Settings.Options;
 
-public class AzureCosmosDbOptions
+public class AzureCosmosSettings
 {
     public string ConnectionString { get; set; }
     public string DatabaseName { get; set; }

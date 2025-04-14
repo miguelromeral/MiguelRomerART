@@ -1,20 +1,18 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using MRA.Infrastructure.Settings;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace MRA.Services
+namespace MRA.Services.Cache
 {
-    public class BaseCacheService
+    public class CacheServiceBase
     {
         internal readonly IMemoryCache _cache;
+        internal readonly AppSettings _appSettings;
 
-        public BaseCacheService(IMemoryCache cache)
+        public CacheServiceBase(AppSettings appSettings, IMemoryCache cache)
         {
             _cache = cache;
+            _appSettings = appSettings;
         }
 
         public void CleanCacheItem(string item)
@@ -26,13 +24,6 @@ namespace MRA.Services
             Clear(_cache);
         }
 
-
-        /// <summary>
-        /// Clear IMemoryCache
-        /// </summary>
-        /// <param name="cache">Cache</param>
-        /// <exception cref="InvalidOperationException">Unable to clear memory cache</exception>
-        /// <exception cref="ArgumentNullException">Cache is null</exception>
         private void Clear(IMemoryCache cache)
         {
             if (cache == null)
@@ -74,7 +65,7 @@ namespace MRA.Services
             throw new InvalidOperationException("Unable to clear memory cache instance of type " + cache.GetType().FullName);
         }
 
-        public T GetOrSet<T>(string cacheKey, Func<T> getDataFunc, TimeSpan cacheDuration)
+        public T GetOrSetFromCache<T>(string cacheKey, Func<T> getDataFunc)
         {
             if (_cache.TryGetValue(cacheKey, out T cachedData))
             {
@@ -85,7 +76,7 @@ namespace MRA.Services
 
             var cacheEntryOptions = new MemoryCacheEntryOptions
             {
-                AbsoluteExpirationRelativeToNow = cacheDuration
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds( _appSettings.Cache.RefreshSeconds)
             };
 
             _cache.Set(cacheKey, data, cacheEntryOptions);
@@ -93,9 +84,9 @@ namespace MRA.Services
             return data;
         }
 
-        public async Task<T> GetOrSetAsync<T>(string cacheKey, Func<Task<T>> getDataFunc, bool useCache, TimeSpan cacheDuration)
+        public async Task<T> GetOrSetFromCacheAsync<T>(string cacheKey, Func<Task<T>> getDataFunc, bool useCache)
         {
-            if (!useCache || _cache == null || cacheDuration == TimeSpan.Zero)
+            if (!useCache || _cache == null)
             {
                 return await getDataFunc();
             }
@@ -109,7 +100,7 @@ namespace MRA.Services
 
             var cacheEntryOptions = new MemoryCacheEntryOptions
             {
-                AbsoluteExpirationRelativeToNow = cacheDuration
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(_appSettings.Cache.RefreshSeconds)
             };
 
             _cache.Set(cacheKey, data, cacheEntryOptions);

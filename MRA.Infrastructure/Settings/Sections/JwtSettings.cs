@@ -1,7 +1,7 @@
 ﻿
-namespace MRA.Infrastructure.Configuration.Options;
+namespace MRA.Infrastructure.Settings.Options;
 
-public class JwtOptions
+public class JwtSettings
 {
     public string Key { get; set; }
     public string Issuer { get; set; }

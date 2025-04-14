@@ -1,7 +1,7 @@
 ﻿
-namespace MRA.Infrastructure.Configuration.Options;
+namespace MRA.Infrastructure.Settings.Options;
 
-public class FirebaseOptions
+public class FirebaseSettings
 {
     public string CredentialsPath { get; set; }
     public string ProjectID { get; set; }

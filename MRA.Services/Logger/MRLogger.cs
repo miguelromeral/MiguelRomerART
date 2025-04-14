@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-using MRA.Infrastructure.Configuration;
+using MRA.Infrastructure.Settings;
 using MRA.Services.Helpers;
 
 namespace MRA.DTO.Logger;
@@ -15,9 +15,9 @@ public class MRLogger: ConsoleHelper, ILogger, IDisposable
     private string _logFileNameDateFormat;
     private string _logDateFormat;
     private StreamWriter _streamWriter;
-    private readonly AppConfiguration _appConfiguration;
+    private readonly AppSettings _appConfiguration;
 
-    public MRLogger(AppConfiguration appConfig)
+    public MRLogger(AppSettings appConfig)
     {
         _appConfiguration = appConfig;
 

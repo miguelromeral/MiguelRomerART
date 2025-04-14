@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
-using MRA.Infrastructure.Configuration;
+using MRA.Infrastructure.Settings;
 using MRA.Infrastructure.Database.Documents.Interfaces;
 using MRA.Infrastructure.Database.Documents.MongoDb;
 using MRA.Infrastructure.Database.Providers.Interfaces;
@@ -14,7 +14,7 @@ public class MongoDbDatabase : IDocumentsDatabase
 {
     internal const string ID_FIELD = "_id";
 
-    private readonly AppConfiguration _appConfiguration;
+    private readonly AppSettings _appConfiguration;
     private readonly DocumentTypeRegistry _typeRegistry;
     private readonly ILogger<MongoDbDatabase> _logger;
 
@@ -40,7 +40,7 @@ public class MongoDbDatabase : IDocumentsDatabase
         }
     }
 
-    public MongoDbDatabase(AppConfiguration appConfig, ILogger<MongoDbDatabase> logger)
+    public MongoDbDatabase(AppSettings appConfig, ILogger<MongoDbDatabase> logger)
     {
         _appConfiguration = appConfig;
         _logger = logger;

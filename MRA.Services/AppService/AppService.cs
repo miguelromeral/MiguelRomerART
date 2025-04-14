@@ -1,18 +1,19 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
-using MRA.Infrastructure.Configuration;
+using MRA.Infrastructure.Settings;
 using MRA.DTO.ViewModels.Art;
 using MRA.Services.AzureStorage;
-using MRA.Services.Firebase.RemoteConfig;
 using MRA.Services.Models.Inspirations;
 using MRA.Services.Models.Collections;
 using MRA.DTO.Models;
 using MRA.Services.Models.Drawings;
 using MRA.DTO.Firebase.RemoteConfig;
+using MRA.Services.RemoteConfig;
+using MRA.Services.Cache;
 
 namespace MRA.Services
 {
-    public class AppService : BaseCacheService, IAppService
+    public class AppService : CacheServiceBase, IAppService
     {
         private readonly IAzureStorageService _azureStorageService;
         private readonly IDrawingService _drawingService;
@@ -20,7 +21,7 @@ namespace MRA.Services
         private readonly ICollectionService _collectionService;
         private readonly ILogger<AppService> _logger;
         private readonly IRemoteConfigService _remoteConfigService;
-        private readonly AppConfiguration _appConfiguration;
+        private readonly AppSettings _appConfiguration;
 
         private const string CACHE_ALL_DRAWINGS = "all_drawings";
         private const string CACHE_ALL_COLLECTIONS = "all_collections";
@@ -33,7 +34,7 @@ namespace MRA.Services
             IInspirationService inspirationService,
             ICollectionService collectionService,
             ILogger<AppService> logger,
-            AppConfiguration appConfig) : base(cache)
+            AppSettings appConfig) : base(appConfig, cache)
         {
             _appConfiguration = appConfig;
             _logger = logger;
@@ -46,30 +47,30 @@ namespace MRA.Services
 
         public async Task<IEnumerable<DrawingModel>> GetAllDrawings(bool onlyIfVisible, bool cache = true)
         {
-            return await GetOrSetAsync(CACHE_ALL_DRAWINGS + onlyIfVisible, async () =>
+            return await GetOrSetFromCacheAsync(CACHE_ALL_DRAWINGS + onlyIfVisible, async () =>
                 {
                     return await _drawingService.GetAllDrawingsAsync(onlyIfVisible);
                 }, 
-                useCache: cache, TimeSpan.FromSeconds(_appConfiguration.Cache.RefreshSeconds));
+                useCache: cache);
         }
 
         public string GetAzureUrlBase() => _azureStorageService.GetBlobURL();
         public async Task<IEnumerable<InspirationModel>> GetAllInspirations()
         {
-            return await GetOrSetAsync("all_inspirations", async () =>
+            return await GetOrSetFromCacheAsync("all_inspirations", async () =>
                 {
                     return await _inspirationService.GetAllInspirationsAsync();
                 }, 
-                useCache: true, TimeSpan.FromSeconds(_appConfiguration.Cache.RefreshSeconds));
+                useCache: true);
         }
 
         public async Task<IEnumerable<CollectionModel>> GetAllCollectionsAsync(bool onlyIfVisible, bool cache = true)
         {
-            return await GetOrSetAsync(CACHE_ALL_COLLECTIONS + onlyIfVisible, async () =>
+            return await GetOrSetFromCacheAsync(CACHE_ALL_COLLECTIONS + onlyIfVisible, async () =>
                 {
                     return await FetchCollectionsAndLinkDrawings(onlyIfVisible, cache);
                 }, 
-                useCache: cache, TimeSpan.FromSeconds(_appConfiguration.Cache.RefreshSeconds));
+                useCache: cache);
         }
 
         private async Task<IEnumerable<CollectionModel>> FetchCollectionsAndLinkDrawings(bool onlyIfVisible, bool cache)
@@ -105,21 +106,21 @@ namespace MRA.Services
 
         public async Task<CollectionModel> FindCollectionByIdAsync(string documentId, bool onlyIfVisible, bool cache = true)
         {
-            return await GetOrSetAsync($"collection_{documentId}", async () =>
+            return await GetOrSetFromCacheAsync($"collection_{documentId}", async () =>
             {
                 return await FetchCollectionAndLinkDrawings(documentId, onlyIfVisible: onlyIfVisible, cache: cache);
             },
-            useCache: cache, TimeSpan.FromSeconds(_appConfiguration.Cache.RefreshSeconds));
+            useCache: cache);
         }
 
 
         public async Task<FilterResults> FilterDrawingsAsync(DrawingFilter filter)
         {
-            return await GetOrSetAsync(filter.CacheKey, async () =>
+            return await GetOrSetFromCacheAsync(filter.CacheKey, async () =>
                 {
                     return await FilterGivenList(filter);
                 },
-                useCache: true, TimeSpan.FromSeconds(_appConfiguration.Cache.RefreshSeconds));
+                useCache: true);
         }
 
         private async Task<FilterResults> FilterGivenList(DrawingFilter filter)
@@ -288,7 +289,7 @@ namespace MRA.Services
                         drawings = drawings.OrderByDescending(x => x.Time).ToList();
                         break;
                     default:
-                        drawings = (await CalculatePopularityOfListDrawings(drawings)).OrderByDescending(x => x.Popularity).ToList();
+                        drawings = CalculatePopularityOfListDrawings(drawings).OrderByDescending(x => x.Popularity).ToList();
                         break;
                 }
             }
@@ -332,19 +333,13 @@ namespace MRA.Services
             }
         }
 
-        public async Task<IEnumerable<DrawingModel>> CalculatePopularityOfListDrawings(IEnumerable<DrawingModel> drawings)
+        public IEnumerable<DrawingModel> CalculatePopularityOfListDrawings(IEnumerable<DrawingModel> drawings)
         {
-            double wDate = 0, wCritic = 0, wPopular = 0, wFavorite = 0;
-            int wMonths = 0;
-
-            if (_remoteConfigService != null)
-            {
-                wDate = await _remoteConfigService.GetConfigValueAsync(RemoteConfigKeys.PopularityDateWeight);
-                wMonths = await _remoteConfigService.GetConfigValueAsync(RemoteConfigKeys.PopularityDateMonths);
-                wCritic = await _remoteConfigService.GetConfigValueAsync(RemoteConfigKeys.PopularityCriticWeight);
-                wPopular = await _remoteConfigService.GetConfigValueAsync(RemoteConfigKeys.PopularityPopularWeight);
-                wFavorite = await _remoteConfigService.GetConfigValueAsync(RemoteConfigKeys.PopularityFavoriteWeight);
-            }
+            double wDate = _remoteConfigService.GetPopularityDate();
+            int wMonths = _remoteConfigService.GetPopularityMonths();
+            double wCritic = _remoteConfigService.GetPopularityCritic();
+            double wPopular = _remoteConfigService.GetPopularityPopular();
+            double wFavorite = _remoteConfigService.GetPopularityFavorite();
 
             foreach (var d in drawings)
             {
@@ -357,11 +352,11 @@ namespace MRA.Services
 
         public async Task<DrawingModel> FindDrawingByIdAsync(string documentId, bool onlyIfVisible, bool updateViews = false, bool cache = true)
         {
-            return await GetOrSetAsync($"drawing_{documentId}", async () =>
+            return await GetOrSetFromCacheAsync($"drawing_{documentId}", async () =>
             {
                 return await _drawingService.FindDrawingAsync(documentId, onlyIfVisible, updateViews);
             },
-            useCache: cache, TimeSpan.FromSeconds(_appConfiguration.Cache.RefreshSeconds));
+            useCache: cache);
         }
 
         public async Task<bool> ExistsBlob(string rutaBlob) => await _azureStorageService.ExistsBlob(rutaBlob);

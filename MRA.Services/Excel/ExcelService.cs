@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using MRA.DTO.Excel.Attributes;
 using MRA.DTO.Models;
-using MRA.Infrastructure.Configuration;
+using MRA.Infrastructure.Settings;
 using MRA.Services.Excel.Interfaces;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
@@ -55,11 +55,11 @@ public class ExcelService : IExcelService
     public string FileExtension { get { return _appConfiguration.EPPlus.File.Extension; } }
     public bool SaveFileLocally { get { return FilePath != null && FileName != null; } }
 
-    private readonly AppConfiguration _appConfiguration;
+    private readonly AppSettings _appConfiguration;
     private readonly ILogger<ExcelService>? _logger;
 
 
-    public ExcelService(AppConfiguration appConfig, ILogger<ExcelService> logger)
+    public ExcelService(AppSettings appConfig, ILogger<ExcelService> logger)
     {
         _appConfiguration = appConfig;
         _logger = logger;

@@ -1,5 +1,5 @@
 ﻿using Microsoft.Azure.Cosmos;
-using MRA.Infrastructure.Configuration;
+using MRA.Infrastructure.Settings;
 using MRA.Infrastructure.Database.Documents.Interfaces;
 using MRA.Infrastructure.Database.Providers.Interfaces;
 
@@ -7,7 +7,7 @@ namespace MRA.Infrastructure.Database.Providers
 {
     public class AzureCosmosDbDatabase : IDocumentsDatabase
     {
-        private readonly AppConfiguration _appConfiguration;
+        private readonly AppSettings _appConfiguration;
 
         private CosmosClient _cosmosClient;
         private CosmosClient CosmosClient
@@ -21,7 +21,7 @@ namespace MRA.Infrastructure.Database.Providers
             }
         }
 
-        public AzureCosmosDbDatabase(AppConfiguration appConfig)
+        public AzureCosmosDbDatabase(AppSettings appConfig)
         {
             _appConfiguration = appConfig;
         }

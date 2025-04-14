@@ -1,6 +1,6 @@
-﻿namespace MRA.Infrastructure.Configuration.Options;
+﻿namespace MRA.Infrastructure.Settings.Options;
 
-public class EPPlusOptions
+public class EPPlusSettings
 {
     public ExcelPackageOptions ExcelPackage { get; set; }
     public FileOptions File { get; set; }

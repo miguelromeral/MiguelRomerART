@@ -4,18 +4,16 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MRA.DTO.Models;
-using MRA.Infrastructure.Configuration;
+using MRA.Infrastructure.Settings;
 using MRA.Services;
 using MRA.Services.AzureStorage;
 using MRA.Services.Excel;
 using MRA.Services.Excel.Interfaces;
-using MRA.Services.Firebase.RemoteConfig;
 using MRA.Services.Models.Drawings;
+using MRA.Services.RemoteConfig;
 using OfficeOpenXml;
-using OfficeOpenXml.Drawing.Style.Effect;
 
 namespace MRA.Functions.Export
 {
@@ -27,7 +25,7 @@ namespace MRA.Functions.Export
         private readonly IRemoteConfigService _remoteConfigService;
         private readonly IDrawingService _drawingService;
         private readonly IAppService _appService;
-        private readonly AppConfiguration _appConfiguration;
+        private readonly AppSettings _appConfiguration;
 
         public FunctionExport(
             ILogger<FunctionExport> logger,
@@ -36,7 +34,7 @@ namespace MRA.Functions.Export
             IRemoteConfigService remoteConfigService,
             IDrawingService drawingService,
             IAppService appService,
-            AppConfiguration appConfiguration
+            AppSettings appConfiguration
             )
         {
             _appConfiguration = appConfiguration;
@@ -79,7 +77,7 @@ namespace MRA.Functions.Export
 
                 // TODO: resolver fallo en Producción aquí
                 _logger.LogInformation("Calculando Popularidad");
-                listDrawings = (await _appService.CalculatePopularityOfListDrawings(listDrawings)).ToList();
+                listDrawings = _appService.CalculatePopularityOfListDrawings(listDrawings).ToList();
 
                 _logger.LogInformation("Procediendo a crear Excel");
 

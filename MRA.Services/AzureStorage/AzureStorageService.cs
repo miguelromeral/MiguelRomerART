@@ -3,7 +3,7 @@ using Azure.Storage.Blobs.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using MRA.DTO.AzureStorage;
-using MRA.Infrastructure.Configuration;
+using MRA.Infrastructure.Settings;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.Processing;
@@ -23,9 +23,9 @@ namespace MRA.Services.AzureStorage
         public string ExportLocation { get => _config.AzureStorage.ExportLocation; }
 
         private readonly BlobServiceClient _blobServiceClient;
-        private readonly AppConfiguration _config;
+        private readonly AppSettings _config;
 
-        public AzureStorageService(AppConfiguration config)
+        public AzureStorageService(AppSettings config)
         {
             _config = config;
             _blobServiceClient = new BlobServiceClient(ConnectionString);
