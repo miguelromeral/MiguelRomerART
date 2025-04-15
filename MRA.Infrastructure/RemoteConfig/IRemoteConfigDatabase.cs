@@ -1,4 +1,4 @@
-﻿namespace MRA.Infrastructure.Database.RemoteConfig;
+﻿namespace MRA.Infrastructure.RemoteConfig;
 
 public interface IRemoteConfigDatabase
 {

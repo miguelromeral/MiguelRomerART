@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MRA.DTO.Enums.Drawing;
+using System.ComponentModel.DataAnnotations;
 
 namespace MRA.DTO.ViewModels.Art;
 
@@ -15,7 +16,7 @@ public class SaveDrawingRequest
     public bool Visible { get; set; }
 
     [Required]
-    public int Type { get; set; }
+    public DrawingTypes Type { get; set; }
     public string? TagsText { get; set; }
     public string? Name { get; set; }
     public string? ModelName { get; set; }
@@ -26,15 +27,15 @@ public class SaveDrawingRequest
     public string DateHyphen { get; set; }
 
     [Required]
-    public int Software { get; set; }
+    public DrawingSoftwares Software { get; set; }
 
     [Required]
-    public int Paper { get; set; }
+    public DrawingPaperSizes Paper { get; set; }
 
     public int? Time { get; set; }
 
     [Required]
-    public int ProductType { get; set; }
+    public DrawingProductTypes ProductType { get; set; }
     public string? ProductName { get; set; }
 
     [Required]
@@ -48,7 +49,7 @@ public class SaveDrawingRequest
     public int ScoreCritic { get; set; }
 
     [Required]
-    public int Filter { get; set; }
+    public DrawingFilterTypes Filter { get; set; }
 
     public List<string>? ListComments { get; set; }
     public List<string>? ListCommentsPros { get; set; }

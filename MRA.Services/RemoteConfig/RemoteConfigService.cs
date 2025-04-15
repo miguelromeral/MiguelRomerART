@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
-using MRA.Infrastructure.Database.RemoteConfig;
+using MRA.Infrastructure.RemoteConfig;
 using MRA.Infrastructure.Settings;
 using MRA.Services.Cache;
 

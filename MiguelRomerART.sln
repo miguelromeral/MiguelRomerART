@@ -30,6 +30,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MRA.DependencyInjection", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MRA.Infrastructure", "MRA.Infrastructure\MRA.Infrastructure.csproj", "{D15D70CB-75DE-4216-BD89-72DEBC0F5ECD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MRA.Functions.Excelsize", "MRA.Functions.Excelsize\MRA.Functions.Excelsize.csproj", "{1AB1223E-110F-462A-89CB-650CB2495FF6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,6 +70,10 @@ Global
 		{D15D70CB-75DE-4216-BD89-72DEBC0F5ECD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D15D70CB-75DE-4216-BD89-72DEBC0F5ECD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D15D70CB-75DE-4216-BD89-72DEBC0F5ECD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AB1223E-110F-462A-89CB-650CB2495FF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AB1223E-110F-462A-89CB-650CB2495FF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AB1223E-110F-462A-89CB-650CB2495FF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AB1223E-110F-462A-89CB-650CB2495FF6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

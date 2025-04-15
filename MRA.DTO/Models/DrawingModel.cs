@@ -1,16 +1,9 @@
-﻿using Google.Protobuf;
-using MRA.DTO;
-using MRA.DTO.Excel.Attributes;
+﻿using MRA.DTO.Enums.Drawing;
 using MRA.DTO.Models.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
-using System.Linq;
+using MRA.Infrastructure.Enums;
+using MRA.Infrastructure.Excel.Attributes;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace MRA.DTO.Models;
 
@@ -28,56 +21,6 @@ public class DrawingModel : IModel
         ListCommentsCons = new List<string>();
     }
 
-    public static Dictionary<int, string> DRAWING_TYPES = new Dictionary<int, string>()
-        {
-            {0, "Otros"},
-            {1, "Lápices de Grafito"},
-            {2, "Digital"},
-            {3, "Sketch"},
-            {4, "Marcadores"},
-            {5, "Lápices de Colores"},
-            {6, "Bolígrafo"},
-            {7, "Line Art"},
-        };
-
-    public static Dictionary<int, string> DRAWING_PRODUCT_TYPES = new Dictionary<int, string>()
-        {
-            {0, "Otros"},
-            {1, "Videojuego"},
-            {2, "Actor / Actriz"},
-            {3, "Cantante"},
-            {4, "Deportista"},
-            {5, "Influencer"},
-        };
-
-    public static Dictionary<int, string> DRAWING_SOFTWARE = new Dictionary<int, string>()
-        {
-            {0, "Ninguno"},
-            {1, "Medibang Paint"},
-            {2, "Clip Studio Paint"},
-            {3, "Adobe Photoshop"},
-            {4, "GIMP"},
-        };
-
-    public static Dictionary<int, string> DRAWING_PAPER_SIZE = new Dictionary<int, string>()
-        {
-            {0, "Desconocido"},
-            {1, "A1"},
-            {2, "A2"},
-            {3, "A3"},
-            {4, "A4"},
-            {5, "A5"},
-            {6, "A6"},
-        };
-
-    public static Dictionary<int, string> DRAWING_FILTER = new Dictionary<int, string>()
-        {
-            {0, "Desconocido"},
-            {1, "Snapseed"},
-            {2, "Adobe Photoshop"},
-            {3, "Instagram"},
-            {4, "Samsung Galaxy"},
-        };
 
     #region Document Data
     [ExcelColumn("ID", 1, width: 30)]
@@ -119,21 +62,11 @@ public class DrawingModel : IModel
 
     #region Product
     [ExcelColumn("#Product Type", 40, hidden: true, width: 5)]
-    public int ProductType { get; set; }
+    public DrawingProductTypes ProductType { get; set; }
 
     [ExcelColumn("Product Type", 41, width: 15)]
-    public string ProductTypeName
-    {
-        get
-        {
-            if (DRAWING_PRODUCT_TYPES.ContainsKey(ProductType))
-            {
-
-                return DRAWING_PRODUCT_TYPES[ProductType];
-            }
-            return "Otros";
-        }
-    }
+    public string ProductTypeName { get => ProductType.GetDescription(); }
+    
 
     [ExcelColumn("Product", 42, width: 30)]
     public string ProductName { get; set; }
@@ -141,72 +74,28 @@ public class DrawingModel : IModel
 
     #region Style
     [ExcelColumn("#Type", 50, hidden: true, width: 5)]
-    public int Type { get; set; }
+    public DrawingTypes Type { get; set; }
 
     [ExcelColumn("Type", 51, width: 20)]
-    public string TypeName
-    {
-        get
-        {
-
-            if (DRAWING_TYPES.ContainsKey(Type))
-            {
-
-                return DRAWING_TYPES[Type];
-            }
-            return "Otros";
-        }
-    }
+    public string TypeName { get => Type.GetDescription(); }
 
     [ExcelColumn("#Software", 52, hidden: true, width: 5)]
-    public int Software { get; set; }
+    public DrawingSoftwares Software { get; set; }
 
     [ExcelColumn("Software", 53, width: 20)]
-    public string SoftwareName
-    {
-        get
-        {
-            if (DRAWING_SOFTWARE.ContainsKey(Software))
-            {
-
-                return DRAWING_SOFTWARE[Software];
-            }
-            return "Ninguno";
-        }
-    }
+    public string SoftwareName { get => Software.GetDescription(); }
 
     [ExcelColumn("#Paper", 54, hidden: true, width: 5)]
-    public int Paper { get; set; }
+    public DrawingPaperSizes Paper { get; set; }
 
     [ExcelColumn("Paper", 55, width: 10)]
-    public string PaperHuman
-    {
-        get
-        {
-            if (DRAWING_PAPER_SIZE.ContainsKey(Paper))
-            {
-
-                return DRAWING_PAPER_SIZE[Paper];
-            }
-            return "Otro";
-        }
-    }
+    public string PaperHuman { get => Paper.GetDescription(); }
 
     [ExcelColumn("#Filter", 56, hidden: true, width: 5)]
-    public int Filter { get; set; }
+    public DrawingFilterTypes Filter { get; set; }
 
     [ExcelColumn("Filter", 57, width: 20)]
-    public string FilterName
-    {
-        get
-        {
-            if (DRAWING_FILTER.ContainsKey(Filter))
-            {
-                return DRAWING_FILTER[Filter];
-            }
-            return "Ninguno";
-        }
-    }
+    public string FilterName { get => Filter.GetDescription(); }
     #endregion
 
     #region Details

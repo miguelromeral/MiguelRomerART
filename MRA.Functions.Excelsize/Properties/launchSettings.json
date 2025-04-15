@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "MRA.Functions.Excelsize": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7049",
+      "launchBrowser": false
+    }
+  }
+}

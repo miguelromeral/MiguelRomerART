@@ -1,5 +1,5 @@
 ﻿
-namespace MRA.DTO.Excel.Attributes;
+namespace MRA.Infrastructure.Excel.Attributes;
 
 [AttributeUsage(AttributeTargets.Property)]
 public class ExcelColumnAttribute : Attribute

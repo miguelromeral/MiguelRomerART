@@ -1,4 +1,5 @@
-﻿using MRA.DTO.Models;
+﻿using MRA.DTO.Enums.Drawing;
+using MRA.DTO.Models;
 using System.Text.Json.Serialization;
 
 namespace MRA.DTO.ViewModels.Art
@@ -42,11 +43,11 @@ namespace MRA.DTO.ViewModels.Art
             TotalDrawings = totalDrawings;
             FilteredDrawingCharacters = totalDrawings.Select(x => x.Name).Distinct().Where(x => !string.IsNullOrEmpty(x)).ToList();
             FilteredDrawingModels = totalDrawings.Select(x => x.ModelName).Distinct().Where(x => !string.IsNullOrEmpty(x)).ToList();
-            FilteredDrawingStyles = totalDrawings.Select(x => x.Type).Distinct().ToList();
-            FilteredDrawingProductTypes = totalDrawings.Select(x => x.ProductType).Distinct().ToList();
+            FilteredDrawingStyles = totalDrawings.Select(x => (int) x.Type).Distinct().ToList();
+            FilteredDrawingProductTypes = totalDrawings.Select(x => (int) x.ProductType).Distinct().ToList();
             FilteredDrawingProducts = totalDrawings.Select(x => x.ProductName).Distinct().Where(x => !string.IsNullOrEmpty(x)).ToList();
-            FilteredDrawingSoftwares = totalDrawings.Select(x => x.Software).Distinct().Where(x => x > 0).ToList();
-            FilteredDrawingPapers = totalDrawings.Select(x => x.Paper).Distinct().Where(x => x > 0).ToList();
+            FilteredDrawingSoftwares = totalDrawings.Select(x => (int) x.Software).Distinct().Where(x => x > 0).ToList();
+            FilteredDrawingPapers = totalDrawings.Select(x => (int) x.Paper).Distinct().Where(x => x > 0).ToList();
             NDrawingFavorites = totalDrawings.Count(x => x.Favorite);
             FilteredCollections = new List<string>();
             FilteredDrawings = new List<DrawingModel>();
