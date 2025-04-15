@@ -1,6 +1,8 @@
 using MRA.WebApi.Startup;
 using MRA.DependencyInjection;
 using MRA.DependencyInjection.Startup;
+using MRA.DTO.Enums.Drawing;
+using MRA.DTO.Enums;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,7 +31,15 @@ builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new EnumStringJsonConverter<DrawingFilterTypes>());
+        options.JsonSerializerOptions.Converters.Add(new EnumStringJsonConverter<DrawingPaperSizes>());
+        options.JsonSerializerOptions.Converters.Add(new EnumStringJsonConverter<DrawingProductTypes>());
+        options.JsonSerializerOptions.Converters.Add(new EnumStringJsonConverter<DrawingSoftwares>());
+        options.JsonSerializerOptions.Converters.Add(new EnumStringJsonConverter<DrawingTypes>());
+    });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

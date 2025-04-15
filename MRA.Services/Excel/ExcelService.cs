@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using MRA.DTO.Enums.Drawing;
 using MRA.DTO.Models;
 using MRA.Infrastructure.Excel;
 using MRA.Infrastructure.Excel.Attributes;
@@ -160,39 +161,39 @@ public class ExcelService : IExcelService
 
     public void FillSheetsDictionary(ExcelPackage excel, List<ExcelColumnInfo> drawingProperties, ExcelWorksheet workSheet)
     {
-        _excel.CreateWorksheetDictionary(
+        _excel.CreateWorksheetDictionary<DrawingTypes>(
             excel,
             sheetName: EXCEL_STYLE_SHEET_NAME, 
             tableName: EXCEL_STYLE_TABLE_NAME,
-            DrawingModel.DRAWING_TYPES, drawingProperties, workSheet,
+            drawingProperties, workSheet,
             nameColumnDropdown: EXCEL_STYLE_COLUMN_NAME,
             nameColumnIndex: EXCEL_STYLE_COLUMN_INDEX);
-        _excel.CreateWorksheetDictionary(
+        _excel.CreateWorksheetDictionary<DrawingProductTypes>(
             excel,
             sheetName: EXCEL_PRODUCT_SHEET_NAME,
             tableName: EXCEL_PRODUCT_TABLE_NAME,
-            DrawingModel.DRAWING_PRODUCT_TYPES, drawingProperties, workSheet,
+            drawingProperties, workSheet,
             nameColumnDropdown: EXCEL_PRODUCT_COLUMN_NAME,
             nameColumnIndex: EXCEL_PRODUCT_COLUMN_INDEX);
-        _excel.CreateWorksheetDictionary(
+        _excel.CreateWorksheetDictionary<DrawingSoftwares>(
             excel,
             sheetName: EXCEL_SOFTWARE_SHEET_NAME,
             tableName: EXCEL_SOFTWARE_TABLE_NAME,
-            DrawingModel.DRAWING_SOFTWARE, drawingProperties, workSheet,
+            drawingProperties, workSheet,
             nameColumnDropdown: EXCEL_SOFTWARE_COLUMN_NAME,
             nameColumnIndex: EXCEL_SOFTWARE_COLUMN_INDEX);
-        _excel.CreateWorksheetDictionary(
+        _excel.CreateWorksheetDictionary<DrawingPaperSizes>(
             excel,
             sheetName: EXCEL_PAPER_SHEET_NAME,
             tableName: EXCEL_PAPER_TABLE_NAME,
-            DrawingModel.DRAWING_PAPER_SIZE, drawingProperties, workSheet,
+            drawingProperties, workSheet,
             nameColumnDropdown: EXCEL_PAPER_COLUMN_NAME,
             nameColumnIndex: EXCEL_PAPER_COLUMN_INDEX);
-        _excel.CreateWorksheetDictionary(
+        _excel.CreateWorksheetDictionary<DrawingFilterTypes>(
             excel,
             sheetName: EXCEL_FILTER_SHEET_NAME,
             tableName: EXCEL_FILTER_TABLE_NAME,
-            DrawingModel.DRAWING_FILTER, drawingProperties, workSheet,
+            drawingProperties, workSheet,
             nameColumnDropdown: EXCEL_FILTER_COLUMN_NAME,
             nameColumnIndex: EXCEL_FILTER_COLUMN_INDEX);
     }

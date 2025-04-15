@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.Logging;
-using MRA.Infrastructure.Settings;
-using System.Reflection;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using OfficeOpenXml.Table;
 using MRA.Infrastructure.Excel.Attributes;
 using System.Drawing;
+using MRA.Infrastructure.Exceptions.Excel;
+using MRA.Infrastructure.Enums;
 
 namespace MRA.Infrastructure.Excel;
 
@@ -14,19 +14,18 @@ public class EPPlusExcelProvider : IExcelProvider
     private const string DICTIONARY_COLUMN_INDEX = "Index";
     private const string DICTIONARY_COLUMN_NAME = "Name";
 
-    private readonly AppSettings _appConfiguration;
-    private readonly ILogger<EPPlusExcelProvider>? _logger;
+    private readonly ILogger<EPPlusExcelProvider> _logger;
 
 
-    public EPPlusExcelProvider(AppSettings appConfig, ILogger<EPPlusExcelProvider> logger)
+    public EPPlusExcelProvider(ILogger<EPPlusExcelProvider> logger)
     {
-        _appConfiguration = appConfig;
         _logger = logger;
         ExcelPackage.License.SetNonCommercialPersonal("MiguelRomeral");
     }
 
     public List<ExcelColumnInfo> GetPropertiesAttributes<T>()
     {
+        _logger.LogTrace("Reading properties of type {Type}.", typeof(T));
         return typeof(T)
             .GetProperties()
             .Where(p => Attribute.IsDefined(p, typeof(ExcelColumnAttribute)))
@@ -60,10 +59,20 @@ public class EPPlusExcelProvider : IExcelProvider
             indexColumn: FindColumnNumberOf(properties, nameColumnIndex));
     }
 
+    public void CreateWorksheetDictionary<TEnum>(ExcelPackage excel, string sheetName, string tableName, List<ExcelColumnInfo> properties, ExcelWorksheet mainSheet, string nameColumnDropdown, string nameColumnIndex) where TEnum : Enum
+    {
+        var wsTypes = FillWorksheetDictionary<TEnum>(excel, name: sheetName, tableName: tableName);
+
+        AddDropdownColumn(mainSheet, wsTypes, tableName,
+            dataRowStart: 2,
+            dropdownColumn: FindColumnNumberOf(properties, nameColumnDropdown),
+            indexColumn: FindColumnNumberOf(properties, nameColumnIndex));
+    }
+
     public int FindColumnNumberOf(List<ExcelColumnInfo> properties, string name)
     {
         var index = properties.FindIndex(x => x.Attribute.Name.Equals(name)) + 1;
-        if (index < 0) throw new Exception($"Column with name \"{name}\" was not found");
+        if (index < 0) throw new ExcelColumnNotFoundException($"Column with name \"{name}\" was not found");
         return index;
     }
 
@@ -88,12 +97,35 @@ public class EPPlusExcelProvider : IExcelProvider
         return worksheet;
     }
 
+    public ExcelWorksheet FillWorksheetDictionary<TEnum>(ExcelPackage excel, string name, string tableName) where TEnum : Enum
+    {
+        var worksheet = excel.Workbook.Worksheets.Add(name);
+
+        worksheet.Cells[1, 1].Value = DICTIONARY_COLUMN_NAME;
+        worksheet.Cells[1, 2].Value = DICTIONARY_COLUMN_INDEX;
+
+        int row = 1;
+
+        // Iterar sobre los valores del enum
+        foreach (TEnum item in Enum.GetValues(typeof(TEnum)))
+        {
+            row++;
+            worksheet.Cells[row, 1].Value = item.GetDescription();
+            worksheet.Cells[row, 2].Value = Convert.ToInt32(item);
+            worksheet.Cells[row, 2].Style.Numberformat.Format = "#,##0";
+        }
+
+        CreateTable(ref worksheet, tableName, 1, 1, row, 2);
+        worksheet.Column(1).Width = 60;
+        return worksheet;
+    }
+
     private void AddDropdownColumn(ExcelWorksheet mainSheet, ExcelWorksheet dictionarySheet, string tableName, int dataRowStart, int dropdownColumn, int indexColumn)
     {
         // Obtener la tabla desde el worksheet del diccionario
         var dictionaryTable = dictionarySheet.Tables[tableName];
         if (dictionaryTable == null)
-            throw new Exception($"La tabla '{tableName}' no fue encontrada en la hoja '{dictionarySheet.Name}'.");
+            throw new ExcelTableNotFoundException($"La tabla '{tableName}' no fue encontrada en la hoja '{dictionarySheet.Name}'.");
 
         // Definir el nombre de rango dinámico para la columna "Name" en la tabla del diccionario
         string dynamicRangeName = $"{tableName}_NameRange";
@@ -161,4 +193,5 @@ public class EPPlusExcelProvider : IExcelProvider
 
         return nameToColumnMap;
     }
+
 }

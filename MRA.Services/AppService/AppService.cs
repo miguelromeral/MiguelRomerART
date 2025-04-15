@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using MRA.Infrastructure.Settings;
 using MRA.DTO.ViewModels.Art;
+using MRA.Infrastructure.Enums;
 using MRA.Services.Models.Inspirations;
 using MRA.Services.Models.Collections;
 using MRA.DTO.Models;
@@ -9,6 +10,7 @@ using MRA.Services.Models.Drawings;
 using MRA.Services.RemoteConfig;
 using MRA.Services.Cache;
 using MRA.Services.Storage;
+using MRA.DTO.Enums.Drawing;
 
 namespace MRA.Services
 {
@@ -183,19 +185,19 @@ namespace MRA.Services
 
                 }
             }
-            if (filter.Type > -1)
+            if (filter.Type != EnumExtensions.GetDefaultValue<DrawingTypes>())
             {
                 drawings = drawings.Where(x => x.Type == filter.Type).ToList();
             }
-            if (filter.ProductType > -1)
+            if (filter.ProductType != EnumExtensions.GetDefaultValue<DrawingProductTypes>())
             {
                 drawings = drawings.Where(x => x.ProductType == filter.ProductType).ToList();
             }
-            if (filter.Software > 0)
+            if (filter.Software != EnumExtensions.GetDefaultValue<DrawingSoftwares>())
             {
                 drawings = drawings.Where(x => x.Software == filter.Software).ToList();
             }
-            if (filter.Paper > 0)
+            if (filter.Paper != EnumExtensions.GetDefaultValue<DrawingPaperSizes>())
             {
                 drawings = drawings.Where(x => x.Paper == filter.Paper).ToList();
             }

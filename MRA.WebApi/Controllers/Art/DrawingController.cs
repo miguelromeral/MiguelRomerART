@@ -229,7 +229,7 @@ public class DrawingController : Controller
                 Software = request.Software,
                 Filter = request.Filter,
                 SpotifyUrl = request.SpotifyUrl,
-                Tags = request.TagsText.Split(DrawingModel.SEPARATOR_TAGS).ToList(),
+                Tags = request.TagsText?.Split(DrawingModel.SEPARATOR_TAGS) ?? [],
                 Time = request.Time ?? 0,
                 Title = request.Title ?? string.Empty,
                 Type = request.Type,

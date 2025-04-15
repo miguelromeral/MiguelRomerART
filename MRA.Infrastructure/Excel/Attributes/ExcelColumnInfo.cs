@@ -45,7 +45,7 @@ public class ExcelColumnInfo
 
     public object? GetValue<T>(T? instance)
     {
-        if (instance == null || Property == null) return null;
+        if (instance is null || Property == null) return null;
 
         return Property.GetValue(instance);
     }

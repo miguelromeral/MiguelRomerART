@@ -39,35 +39,4 @@ public class ArtController : Controller
         _collectionService = collectionService;
     }
 
-    #region Collection List
-    [HttpGet("collections")]
-    public async Task<ActionResult<IEnumerable<CollectionResponse>>> Collections()
-    {
-        return await FetchCollectionList(true);
-    }
-
-    [HttpGet("collections/full")]
-    [Authorize]
-    public async Task<ActionResult<IEnumerable<CollectionResponse>>> CollectionsFull()
-    {
-        return await FetchCollectionList(false);
-    }
-
-    private async Task<ActionResult<IEnumerable<CollectionResponse>>> FetchCollectionList(bool onlyIfVisible)
-    {
-        try
-        {
-            _logger.LogInformation("Solicitadas Colecciones");
-            var collections = await _appService.GetAllCollectionsAsync(onlyIfVisible: onlyIfVisible, cache: true);
-            _logger.LogInformation("Colecciones Públicas: " + collections.Count());
-            return Ok(collections.Select(c => new CollectionResponse(c)));
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError("Error al recuperar las colecciones: " + ex.Message);
-            return StatusCode(StatusCodes.Status500InternalServerError,
-                new { message = "Error when fetching collections." });
-        }
-    }
-    #endregion
 }

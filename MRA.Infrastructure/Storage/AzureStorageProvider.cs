@@ -42,7 +42,7 @@ public class AzureStorageProvider : IStorageProvider
         return new BlobFileInfo
         {
             Name = blobItem.Name,
-            Url = containerClient.Uri + "/" + blobItem.Name
+            Url = $"{containerClient.Uri}/{blobItem.Name}"
         };
     }
 
@@ -58,7 +58,7 @@ public class AzureStorageProvider : IStorageProvider
     public async Task ResizeAndSave(string rutaEntrada, string nombreBlob, int anchoDeseado)
     {
         // Cargar la imagen utilizando ImageSharp
-        using (var imagenOriginal = Image.Load(rutaEntrada))
+        using (var imagenOriginal = await Image.LoadAsync(rutaEntrada))
         {
             if (anchoDeseado > 0)
             {
@@ -73,7 +73,7 @@ public class AzureStorageProvider : IStorageProvider
             // Convertir la imagen redimensionada a un flujo de memoria
             using (var memoryStream = new MemoryStream())
             {
-                imagenOriginal.SaveAsPng(memoryStream);
+                await imagenOriginal.SaveAsPngAsync(memoryStream);
 
                 memoryStream.Seek(0, SeekOrigin.Begin);
 
@@ -99,7 +99,7 @@ public class AzureStorageProvider : IStorageProvider
     public async Task ResizeAndSave(MemoryStream rutaEntrada, string nombreBlob, int anchoDeseado)
     {
         // Cargar la imagen utilizando ImageSharp
-        using (var imagenOriginal = Image.Load(rutaEntrada))
+        using (var imagenOriginal = await Image.LoadAsync(rutaEntrada))
         {
             if (anchoDeseado > 0)
             {
@@ -114,7 +114,7 @@ public class AzureStorageProvider : IStorageProvider
             // Convertir la imagen redimensionada a un flujo de memoria
             using (var memoryStream = new MemoryStream())
             {
-                imagenOriginal.SaveAsPng(memoryStream);
+                await imagenOriginal.SaveAsPngAsync(memoryStream);
 
                 memoryStream.Seek(0, SeekOrigin.Begin);
 
@@ -156,7 +156,7 @@ public class AzureStorageProvider : IStorageProvider
 
         string nuevoNombreArchivo = $"{nombreArchivo}_tn.png";
 
-        string carpeta = Path.GetDirectoryName(rutaImagen);
+        string carpeta = Path.GetDirectoryName(rutaImagen) ?? string.Empty;
 
         string nuevaRuta = Path.Combine(carpeta, nuevoNombreArchivo).Replace('\\', '/');
 
