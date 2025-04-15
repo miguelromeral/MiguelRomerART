@@ -56,9 +56,6 @@ public class FunctionExcelsize
         {
             _logger.LogInformation("Iniciando Aplicación de Exportación");
 
-            _logger.LogInformation("Configurando EPPlus");
-            ExcelPackage.License.SetNonCommercialPersonal("MiguelRomeral");
-            _excelService.SetPersonalLicense();
 
             _logger.LogInformation("Leyendo documentos desde Firestore");
             List<DrawingModel> listDrawings;

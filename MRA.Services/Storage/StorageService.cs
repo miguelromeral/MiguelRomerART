@@ -7,10 +7,10 @@ namespace MRA.Services.Storage;
 
 public class StorageService : IStorageService
 {
-    private readonly IStorageDatabase _database;
+    private readonly IStorageProvider _database;
     private readonly AppSettings _config;
 
-    public StorageService(AppSettings config, IStorageDatabase db)
+    public StorageService(AppSettings config, IStorageProvider db)
     {
         _config = config;
         _database = db;

@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using MRA.Infrastructure.Settings;
-using MRA.Infrastructure.Database.RemoteConfig;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Microsoft.Extensions.Logging;
+using MRA.Infrastructure.RemoteConfig;
 
 namespace MRA.Infrastructure.Database.Providers;
 

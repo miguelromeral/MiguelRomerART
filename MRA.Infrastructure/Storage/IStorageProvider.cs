@@ -1,6 +1,6 @@
 ﻿namespace MRA.Infrastructure.Storage;
 
-public interface IStorageDatabase
+public interface IStorageProvider
 {
     Task<List<BlobFileInfo>> ListBlobFilesAsync();
 

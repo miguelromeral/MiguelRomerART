@@ -16,9 +16,9 @@ public static class ServicesStartup
     {
         services.AddCustomAzureAppConfiguration();
 
+        services.AddSingleton<IExcelService, ExcelService>();
         services.AddSingleton<IStorageService, StorageService>();
         services.AddSingleton<IRemoteConfigService, RemoteConfigService>();
-        services.AddSingleton<IExcelService, ExcelService>();
 
         services.AddSingleton<ICollectionService, CollectionService>();
         services.AddSingleton<IDrawingService, DrawingService>();

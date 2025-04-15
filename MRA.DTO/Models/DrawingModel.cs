@@ -1,7 +1,7 @@
 ﻿using Google.Protobuf;
 using MRA.DTO;
-using MRA.DTO.Excel.Attributes;
 using MRA.DTO.Models.Interfaces;
+using MRA.Infrastructure.Excel.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
