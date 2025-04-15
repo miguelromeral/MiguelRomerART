@@ -8,6 +8,7 @@ namespace MRA.Services.Excel.Interfaces;
 public interface IExcelService
 {
     string GetEPPlusLicense();
+    void SetPersonalLicense();
     string GetFileName();
 
     List<ExcelColumnInfo> GetPropertiesAttributes<T>();

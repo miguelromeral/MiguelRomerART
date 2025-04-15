@@ -2,20 +2,19 @@
 using Microsoft.Extensions.Logging;
 using MRA.Infrastructure.Settings;
 using MRA.DTO.ViewModels.Art;
-using MRA.Services.AzureStorage;
 using MRA.Services.Models.Inspirations;
 using MRA.Services.Models.Collections;
 using MRA.DTO.Models;
 using MRA.Services.Models.Drawings;
-using MRA.DTO.Firebase.RemoteConfig;
 using MRA.Services.RemoteConfig;
 using MRA.Services.Cache;
+using MRA.Services.Storage;
 
 namespace MRA.Services
 {
     public class AppService : CacheServiceBase, IAppService
     {
-        private readonly IAzureStorageService _azureStorageService;
+        private readonly IStorageService _storageService;
         private readonly IDrawingService _drawingService;
         private readonly IInspirationService _inspirationService;
         private readonly ICollectionService _collectionService;
@@ -28,7 +27,7 @@ namespace MRA.Services
 
         public AppService(
             IMemoryCache cache, 
-            IAzureStorageService storageService, 
+            IStorageService storageService, 
             IRemoteConfigService remoteConfigService,
             IDrawingService drawingService,
             IInspirationService inspirationService,
@@ -38,7 +37,7 @@ namespace MRA.Services
         {
             _appConfiguration = appConfig;
             _logger = logger;
-            _azureStorageService = storageService;
+            _storageService = storageService;
             _remoteConfigService = remoteConfigService;
             _drawingService = drawingService;
             _inspirationService = inspirationService;
@@ -54,7 +53,6 @@ namespace MRA.Services
                 useCache: cache);
         }
 
-        public string GetAzureUrlBase() => _azureStorageService.GetBlobURL();
         public async Task<IEnumerable<InspirationModel>> GetAllInspirations()
         {
             return await GetOrSetFromCacheAsync("all_inspirations", async () =>
@@ -329,7 +327,7 @@ namespace MRA.Services
         {
             foreach (var d in drawings)
             {
-                d.UrlBase = _azureStorageService.GetBlobURL();
+                d.UrlBase = _storageService.GetBlobURL();
             }
         }
 
@@ -358,20 +356,5 @@ namespace MRA.Services
             },
             useCache: cache);
         }
-
-        public async Task<bool> ExistsBlob(string rutaBlob) => await _azureStorageService.ExistsBlob(rutaBlob);
-
-        public async Task<bool> AddAsync(CollectionModel model, List<DrawingModel> drawings)
-        {
-            return await _collectionService.SaveCollectionAsync(model.Id, model);
-        }
-
-        public async Task RedimensionarYGuardarEnAzureStorage(string rutaEntrada, string nombreBlob, int anchoDeseado) =>
-            await _azureStorageService.RedimensionarYGuardarEnAzureStorage(rutaEntrada, nombreBlob, anchoDeseado);
-
-        public async Task RedimensionarYGuardarEnAzureStorage(MemoryStream rutaEntrada, string nombreBlob, int anchoDeseado) =>
-            await _azureStorageService.RedimensionarYGuardarEnAzureStorage(rutaEntrada, nombreBlob, anchoDeseado);
-
-        public string CrearThumbnailName(string rutaImagen) => _azureStorageService.CrearThumbnailName(rutaImagen);
     }
 }

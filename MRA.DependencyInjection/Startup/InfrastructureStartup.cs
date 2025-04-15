@@ -5,6 +5,7 @@ using MRA.DTO.Models;
 using MRA.Infrastructure.Database.Providers;
 using MRA.Infrastructure.Database.Documents.Interfaces;
 using MRA.Infrastructure.Database.RemoteConfig;
+using MRA.Infrastructure.Storage;
 
 namespace MRA.DependencyInjection.Startup;
 
@@ -14,6 +15,7 @@ public static class InfrastructureStartup
     {
         services.AddCustomAzureDatabaseMongoDb();
         
+        services.AddSingleton<IStorageDatabase, AzureStorageDatabase>();
         services.AddSingleton<IRemoteConfigDatabase, AzureAppConfigurationDatabase>();
 
         services.AddSingleton<IDocumentMapper<CollectionModel, ICollectionDocument>, CollectionMapper>();

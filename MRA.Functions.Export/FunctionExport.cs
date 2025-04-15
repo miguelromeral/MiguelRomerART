@@ -8,11 +8,11 @@ using Microsoft.Extensions.Logging;
 using MRA.DTO.Models;
 using MRA.Infrastructure.Settings;
 using MRA.Services;
-using MRA.Services.AzureStorage;
 using MRA.Services.Excel;
 using MRA.Services.Excel.Interfaces;
 using MRA.Services.Models.Drawings;
 using MRA.Services.RemoteConfig;
+using MRA.Services.Storage;
 using OfficeOpenXml;
 
 namespace MRA.Functions.Export
@@ -21,7 +21,7 @@ namespace MRA.Functions.Export
     {
         private readonly ILogger<FunctionExport> _logger;
         private readonly IExcelService _excelService;
-        private readonly IAzureStorageService _azureStorageService;
+        private readonly IStorageService _storageService;
         private readonly IRemoteConfigService _remoteConfigService;
         private readonly IDrawingService _drawingService;
         private readonly IAppService _appService;
@@ -30,7 +30,7 @@ namespace MRA.Functions.Export
         public FunctionExport(
             ILogger<FunctionExport> logger,
             IExcelService excelService,
-            IAzureStorageService azureStorageService,
+            IStorageService storageService,
             IRemoteConfigService remoteConfigService,
             IDrawingService drawingService,
             IAppService appService,
@@ -40,7 +40,7 @@ namespace MRA.Functions.Export
             _appConfiguration = appConfiguration;
             _excelService = excelService;
             _logger = logger;
-            _azureStorageService = azureStorageService;
+            _storageService = storageService;
             _remoteConfigService = remoteConfigService;
             _drawingService = drawingService;
             _appService = appService;
@@ -107,7 +107,7 @@ namespace MRA.Functions.Export
 
                         try
                         {
-                            await _azureStorageService.GuardarExcelEnAzureStorage(memoryStream, _appConfiguration.AzureStorage.ExportLocation, fileName);
+                            await _storageService.Save(memoryStream, _appConfiguration.AzureStorage.ExportLocation, fileName);
                         }
                         catch (Exception ex)
                         {

@@ -3,8 +3,6 @@ using MRA.DependencyInjection;
 using MRA.DependencyInjection.Startup;
 
 
-Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Logging.AddCustomLogging(builder.Configuration, builder.Environment);

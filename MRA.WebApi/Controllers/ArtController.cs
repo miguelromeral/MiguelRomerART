@@ -9,6 +9,7 @@ using MRA.Services.Models.Drawings;
 using MRA.Services.Models.Collections;
 using MRA.DTO.Exceptions;
 using MRA.DTO.Models;
+using MRA.Services.Storage;
 
 namespace MRA.WebApi.Controllers
 {
@@ -18,6 +19,7 @@ namespace MRA.WebApi.Controllers
     {
 
         private readonly IAppService _appService;
+        private readonly IStorageService _storageService;
         private readonly IDrawingService _drawingService;
         private readonly ICollectionService _collectionService;
         private readonly ILogger<ArtController> _logger;
@@ -26,12 +28,14 @@ namespace MRA.WebApi.Controllers
             ILogger<ArtController> logger, 
             IAppService appService,
             IDrawingService drawingService,
+            IStorageService storageService,
             ICollectionService collectionService
             )
         {
             _logger = logger;
             _appService = appService;
             _drawingService = drawingService;
+            _storageService = storageService;
             _collectionService = collectionService;
         }
 
@@ -295,15 +299,15 @@ namespace MRA.WebApi.Controllers
             try
             {
                 _logger.LogInformation($"Comprobando si existe blob de Azure \"{request.Id}\"");
-                var existe = await _appService.ExistsBlob(request.Id);
+                var existe = await _storageService.ExistsBlob(request.Id);
                 if (!existe)
                 {
                     _logger.LogWarning($"No existe el blob de Azure \"{request.Id}\"");
                 }
 
-                var blobLocationThumbnail = _appService.CrearThumbnailName(request.Id);
+                var blobLocationThumbnail = _storageService.CrearThumbnailName(request.Id);
 
-                var urlBase = _appService.GetAzureUrlBase();
+                var urlBase = _storageService.GetBlobURL();
                 var url = urlBase + request.Id;
                 var url_tn = urlBase + blobLocationThumbnail;
 
@@ -341,13 +345,13 @@ namespace MRA.WebApi.Controllers
                     return BadRequest(new { message = $"No se ha proporcinoado ningún fichero" });
                 }
 
-                var blobLocationThumbnail = _appService.CrearThumbnailName(path);
+                var blobLocationThumbnail = _storageService.CrearThumbnailName(path);
                 await UploadImage(image, blobLocationThumbnail, size);
                 _logger.LogInformation($"Subida imagen de Thumbnail a \"{blobLocationThumbnail}\"");
                 await UploadImage(image, path, 0);
                 _logger.LogInformation($"Subida imagen a \"{path}\"");
 
-                var urlBase = _appService.GetAzureUrlBase();
+                var urlBase = _storageService.GetBlobURL();
                 var url = urlBase + path;
                 var url_tn = urlBase + blobLocationThumbnail;
 
@@ -375,7 +379,7 @@ namespace MRA.WebApi.Controllers
                 await azureImage.CopyToAsync(imageStream);
                 imageStream.Position = 0;
 
-                await _appService.RedimensionarYGuardarEnAzureStorage(imageStream, path, azureImageThumbnailSize);
+                await _storageService.ResizeAndSave(imageStream, path, azureImageThumbnailSize);
             }
         }
         #endregion

@@ -450,4 +450,8 @@ public class ExcelService : IExcelService
         }
     }
 
+    public void SetPersonalLicense()
+    {
+        ExcelPackage.License.SetNonCommercialPersonal("MiguelRomeral");
+    }
 }

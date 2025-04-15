@@ -6,6 +6,7 @@ using MRA.Services.Models.Collections;
 using MRA.Services.Models.Drawings;
 using MRA.Services.Models.Inspirations;
 using MRA.Services.RemoteConfig;
+using MRA.Services.Storage;
 
 namespace MRA.DependencyInjection.Startup;
 
@@ -15,10 +16,10 @@ public static class ServicesStartup
     {
         services.AddCustomAzureAppConfiguration();
 
-        services.AddCustomAzureStorage();
-
+        services.AddSingleton<IStorageService, StorageService>();
         services.AddSingleton<IRemoteConfigService, RemoteConfigService>();
         services.AddSingleton<IExcelService, ExcelService>();
+
         services.AddSingleton<ICollectionService, CollectionService>();
         services.AddSingleton<IDrawingService, DrawingService>();
         services.AddSingleton<IInspirationService, InspirationService>();
