@@ -229,10 +229,10 @@ namespace MRA.WebApi.Controllers
                 _logger.LogInformation($"Guardando dibujo \"{id}\"");
                 var drawing = new DrawingModel()
                 {
-                    ListComments = request.ListComments,
-                    ListCommentsStyle = request.ListCommentsStyle,
-                    ListCommentsPros = request.ListCommentsPros,
-                    ListCommentsCons = request.ListCommentsCons,
+                    ListComments = request.ListComments ?? [],
+                    ListCommentsStyle = request.ListCommentsStyle ?? [],
+                    ListCommentsPros = request.ListCommentsPros ?? [],
+                    ListCommentsCons = request.ListCommentsCons ?? [],
                     Date = request.DateHyphen.Replace("-", "/"),
                     DateHyphen = request.DateHyphen,
                     Favorite = request.Favorite,
@@ -250,11 +250,11 @@ namespace MRA.WebApi.Controllers
                     Filter = request.Filter,
                     SpotifyUrl = request.SpotifyUrl,
                     Tags = request.TagsText.Split(DrawingModel.SEPARATOR_TAGS).ToList(),
-                    Time = request.Time,
-                    Title = request.Title,
+                    Time = request.Time ?? 0,
+                    Title = request.Title ?? string.Empty,
                     Type = request.Type,
                     InstagramUrl = request.InstagramUrl,
-                    TwitterUrl = request.TwitterUrl,
+                    TwitterUrl = request.BlueskyUrl,
                     Visible = request.Visible
                 };
 
@@ -325,7 +325,7 @@ namespace MRA.WebApi.Controllers
 
         [HttpPost("drawing/upload/blob")]
         [Authorize]
-        public async Task<ActionResult<UploadAzureImageResponse>> DrawingUploadBlob([FromForm] IFormFile image, [FromForm] int size, [FromForm] string path)
+        public async Task<ActionResult<UploadAzureImageResponse>> DrawingUploadBlob(IFormFile image, [FromForm] int size, [FromForm] string path)
         {
             try
             {

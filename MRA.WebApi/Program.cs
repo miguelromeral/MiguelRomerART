@@ -1,7 +1,9 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
 using MRA.WebApi.Startup;
 using MRA.DependencyInjection;
 using MRA.DependencyInjection.Startup;
+
+
+Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,14 +34,6 @@ builder.Services.AddSession();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-// Autenticación con cookies
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie("Cookies", options =>
-    {
-        options.Cookie.Name = "CookieMiguelRomeral";
-        options.LoginPath = "/Admin/Login";
-    });
 
 var app = builder.Build();
 

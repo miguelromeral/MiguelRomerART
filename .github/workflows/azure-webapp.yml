@@ -6,7 +6,7 @@ name: MRA.WebApi Azure Deployment
 
 env:
   AZURE_WEBAPP_NAME: MRAWebApi20240716105924
-  DOTNET_VERSION: '6'
+  DOTNET_VERSION: '9'
   CSPROJ_PATH: './MRA.WebApi/MRA.WebApi.csproj'
 
 on:
