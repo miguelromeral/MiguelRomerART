@@ -1,40 +1,57 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace MRA.DTO.ViewModels.Art
-{
-    public class SaveDrawingRequest
-    {
-        public bool IsEditing { get; set; }
-        public string Id { get; set; }
-        public string Path { get; set; }
-        public string PathThumbnail { get; set; }
-        public bool Visible { get; set; }
-        public int Type { get; set; }
-        public string TagsText { get; set; }
-        public string Name { get; set; }
-        public string ModelName { get; set; }
-        public string SpotifyUrl { get; set; }
-        public string Title { get; set; }
-        public string DateHyphen { get; set; }
-        public int Software { get; set; }
-        public int Paper { get; set; }
-        public int Time { get; set; }
-        public int ProductType { get; set; }
-        public string ProductName { get; set; }
-        public bool Favorite { get; set; }
-        public string ReferenceUrl { get; set; }
-        public string InstagramUrl { get; set; }
-        public string TwitterUrl { get; set; }
-        public int ScoreCritic { get; set; }
-        public int Filter { get; set; }
-        public List<string> ListComments { get; set; }
-        public List<string> ListCommentsPros { get; set; }
-        public List<string> ListCommentsCons { get; set; }
-        public List<string> ListCommentsStyle { get; set; }
-    }
+namespace MRA.DTO.ViewModels.Art;
+
+public class SaveDrawingRequest
+{   
+    public string Id { get; set; }
+
+    [Required]
+    public string? Path { get; set; }
+    [Required]
+    public string? PathThumbnail { get; set; }
+
+    [Required]
+    public bool Visible { get; set; }
+
+    [Required]
+    public int Type { get; set; }
+    public string? TagsText { get; set; }
+    public string? Name { get; set; }
+    public string? ModelName { get; set; }
+    public string? SpotifyUrl { get; set; }
+    public string? Title { get; set; }
+
+    [Required]
+    public string DateHyphen { get; set; }
+
+    [Required]
+    public int Software { get; set; }
+
+    [Required]
+    public int Paper { get; set; }
+
+    public int? Time { get; set; }
+
+    [Required]
+    public int ProductType { get; set; }
+    public string? ProductName { get; set; }
+
+    [Required]
+    public bool Favorite { get; set; }
+    
+    public string? ReferenceUrl { get; set; }
+    public string? InstagramUrl { get; set; }
+    public string? BlueskyUrl { get; set; }
+
+    [Required]
+    public int ScoreCritic { get; set; }
+
+    [Required]
+    public int Filter { get; set; }
+
+    public List<string>? ListComments { get; set; }
+    public List<string>? ListCommentsPros { get; set; }
+    public List<string>? ListCommentsCons { get; set; }
+    public List<string>? ListCommentsStyle { get; set; }
 }
