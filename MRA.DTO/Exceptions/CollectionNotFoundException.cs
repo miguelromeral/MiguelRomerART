@@ -7,13 +7,13 @@ public class CollectionNotFoundException : DocumentNotFoundException
     {
     }
 
-    public CollectionNotFoundException(string drawingId)
-        : base(CustomMessage(drawingId))
+    public CollectionNotFoundException(string id)
+        : base(CustomMessage(id))
     {
     }
 
-    public CollectionNotFoundException(string drawingId, Exception inner)
-        : base(CustomMessage(drawingId), inner)
+    public CollectionNotFoundException(string id, Exception inner)
+        : base(CustomMessage(id), inner)
     {
     }
 

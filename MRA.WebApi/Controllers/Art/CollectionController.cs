@@ -7,12 +7,13 @@ using MRA.DTO.Exceptions;
 using MRA.WebApi.Models.Responses;
 using MRA.DTO.Models;
 using MRA.WebApi.Models.Requests;
+using MRA.WebApi.Models.Responses.Errors;
 
 namespace MRA.WebApi.Controllers.Art;
 
 [ApiController]
 [Route("api/art/collection")]
-public class CollectionController : Controller
+public class CollectionController : ControllerBase
 {
     private readonly IAppService _appService;
     private readonly ICollectionService _collectionService;
@@ -48,20 +49,19 @@ public class CollectionController : Controller
     {
         try
         {
-            _logger.LogInformation($"Solicitados detalles públicos de colección \"{id}\"");
             var collection = await _appService.FindCollectionByIdAsync(id, onlyIfVisible: onlyIfVisible, cache: true);
             return Ok(new CollectionResponse(collection));
         }
         catch (CollectionNotFoundException cnf)
         {
-            _logger.LogWarning($"No se encontró ninguna colección \"{id}\"");
-            return NotFound(new { message = $"No collection found with ID \"{id}\"" });
+            _logger.LogWarning(cnf, cnf.Message);
+            return NotFound(new NotFoundResponse(cnf.Message));
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Error al recuperar los detalles públicos de la colección \"{id}\": " + ex.Message);
-            return StatusCode(StatusCodes.Status500InternalServerError,
-                new { message = $"Error when retrieving collection with ID \"{id}\"" });
+            _logger.LogError(ex, "Error when retrieving collection with ID '{Id}'.", id);
+            return StatusCode(StatusCodes.Status500InternalServerError, 
+                new NotFoundResponse($"Error when retrieving collection with ID \"{id}\""));
         }
     }
 
