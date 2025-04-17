@@ -116,32 +116,17 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
       - name: Download coverage report artifact
         uses: actions/download-artifact@v4
         with:
           name: html-coverage-report
 
-      - name: List files in current directory
-        run: ls -l
-
-      - name: Rename downloaded artifact (if necessary)
-        run: |
-          if [ -f "html-coverage-report.zip" ]; then
-            echo "File found: html-coverage-report.zip"
-          else
-            echo "Renaming downloaded artifact to html-coverage-report.zip"
-            mv html-coverage-report html-coverage-report.zip
-          fi
-
-      - name: Unzip downloaded artifact
+      - name: Create directory and move files to ${{ env.PUBLISH_COVERAGE_HTML_PATH }}
         run: |
           mkdir -p ${{ env.PUBLISH_COVERAGE_HTML_PATH }}
-          unzip html-coverage-report.zip -d ${{ env.PUBLISH_COVERAGE_HTML_PATH }}
+          mv * ${{ env.PUBLISH_COVERAGE_HTML_PATH }}
 
-      - name: List files in coverage report directory
+      - name: List files in ${{ env.PUBLISH_COVERAGE_HTML_PATH }}
         run: ls -R ${{ env.PUBLISH_COVERAGE_HTML_PATH }}
 
       - name: Disable Jekyll
