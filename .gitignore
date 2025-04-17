@@ -382,3 +382,6 @@ FodyWeavers.xsd
 /PythonParsers/*.json
 /MRA.DependencyInjection/appsettings.Local.json
 /tools
+
+# MRA Test Results
+/MRA.TestingResults

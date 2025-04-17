@@ -124,6 +124,11 @@ jobs:
         with:
           name: html-coverage-report
          
+      - name: Unzip downloaded artifact
+        run: |
+          mkdir -p ${{ env.PUBLISH_COVERAGE_HTML_PATH }}
+          unzip html-coverage-report.zip -d ${{ env.PUBLISH_COVERAGE_HTML_PATH }}
+
       - name: List files in coverage report directory
         run: ls -R ${{ env.PUBLISH_COVERAGE_HTML_PATH }}
 
