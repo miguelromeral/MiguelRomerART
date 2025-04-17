@@ -8,5 +8,5 @@ On MRA.UnitTests:
 
 ```
 > dotnet test --collect:"XPlat Code Coverage"
-> reportgenerator "-reports:**/TestResults/**/*.xml" "-targetdir:TestResults/CoverageReport" "-reporttypes:Html"
+> reportgenerator "-reports:**/MRA.TestingResults/**/*.xml" "-targetdir:MRA.TestingResults/CoverageReport" "-reporttypes:Html"
 ```

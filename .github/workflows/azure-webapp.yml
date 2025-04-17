@@ -11,6 +11,7 @@ env:
   TEST_PROJECT_PATH: './MRA.UnitTests/MRA.UnitTests.csproj'
   TEST_RESULTS_PATH: './MRA.TestingResults'
   COVERAGE_HTML_PATH: './MRA.TestingResults/CoverageReport'
+  PUBLISH_COVERAGE_HTML_PATH: 'MRA.TestingResults/CoverageReport'
 
 on:
   push:
@@ -28,14 +29,6 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
-          
-      # - name: Set up dependency caching for faster builds
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: ~/.nuget/packages
-      #     key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-nuget-
 
       - name: Install dependencies
         run: dotnet restore ${{env.CSPROJ_PATH}}
@@ -135,4 +128,4 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: TestResults/CoverageReport/
+          publish_dir: ${{ env.PUBLISH_COVERAGE_HTML_PATH }}/

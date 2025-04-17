@@ -7,7 +7,7 @@
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
     <CollectCoverage>true</CollectCoverage>
-    <CoverletOutput>TestResults/coverage</CoverletOutput>
+    <CoverletOutput>MRA.TestingResults/coverage</CoverletOutput>
     <CoverletOutputFormat>json,html,cobertura,lcov,opencover,xml</CoverletOutputFormat>
     <RunSettingsFilePath>$(MSBuildProjectDirectory)\coverlet.runsettings</RunSettingsFilePath>
   </PropertyGroup>
@@ -40,7 +40,7 @@
   </ItemGroup>
 
   <Target Name="CleanTestResults" BeforeTargets="Test">
-    <RemoveDir Directories="TestResults" />
+    <RemoveDir Directories="MRA.TestingResults" />
   </Target>
 
 </Project>

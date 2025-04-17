@@ -4,7 +4,7 @@
       <DataCollector friendlyName="XPlat Code Coverage">
         <Configuration>
           <Format>json,html,cobertura,lcov,opencover,xml</Format>
-          <OutputDirectory>$(MSBuildProjectDirectory)/TestResults/coverage</OutputDirectory>
+          <OutputDirectory>$(MSBuildProjectDirectory)/MRA.TestingResults/coverage</OutputDirectory>
         </Configuration>
       </DataCollector>
     </DataCollectors>
