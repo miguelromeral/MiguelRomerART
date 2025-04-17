@@ -123,6 +123,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: html-coverage-report
+         
+      - name: List files in coverage report directory
+        run: ls -R ${{ env.PUBLISH_COVERAGE_HTML_PATH }}
+
+      - name: Disable Jekyll
+        run: echo > ${{ env.PUBLISH_COVERAGE_HTML_PATH }}/.nojekyll
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
