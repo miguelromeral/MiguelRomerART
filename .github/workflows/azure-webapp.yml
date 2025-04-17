@@ -1,3 +1,4 @@
+
 permissions:
   contents: write
 
@@ -17,8 +18,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  setup:
+  build:
     runs-on: windows-latest
+
     steps:
       - uses: actions/checkout@v4
 
@@ -35,24 +37,16 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuget-
 
-  build:
-    runs-on: windows-latest
-    needs: setup
-    steps:
       - name: Install dependencies
-        run: dotnet restore ${{ env.CSPROJ_PATH }}
+        run: dotnet restore ${{env.CSPROJ_PATH}}
       
       - name: Create temporary appsettings.Local.json
         run: |
           echo "{}" > MRA.DependencyInjection/appsettings.Local.json
           
       - name: Build
-        run: dotnet build ${{ env.CSPROJ_PATH }} --configuration Release --no-restore
-
-  test:
-    runs-on: windows-latest
-    needs: build
-    steps:
+        run: dotnet build ${{env.CSPROJ_PATH}} --configuration Release --no-restore
+        
       - name: Remove previous test results
         run: rm -rf ${{ env.TEST_RESULTS_PATH }}
 
@@ -80,23 +74,15 @@ jobs:
           name: html-coverage-report
           path: ${{ env.COVERAGE_HTML_PATH }}/
 
-  publish-artifacts:
-    runs-on: windows-latest
-    needs: test
-    steps:
       - name: Publish
-        run: dotnet publish ${{ env.CSPROJ_PATH }} -c Release -o ${{ github.workspace }}/publish --no-build
+        run: dotnet publish ${{env.CSPROJ_PATH}} -c Release -o ${{github.workspace}}/publish --no-build
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
-          path: ${{ github.workspace }}/publish
+          path: ${{github.workspace}}/publish
 
-  create-tag:
-    runs-on: windows-latest
-    needs: test
-    steps:
       - name: Extract version from .csproj (PowerShell)
         id: extract-version
         shell: pwsh
@@ -119,7 +105,7 @@ jobs:
 
   deploy:
     runs-on: windows-latest
-    needs: publish-artifacts
+    needs: build
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
@@ -141,7 +127,7 @@ jobs:
 
   deploy-coverage:
     runs-on: ubuntu-latest
-    needs: test
+    needs: build
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -155,4 +141,4 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ${{ env.COVERAGE_HTML_PATH }}/
+          publish_dir: TestResults/CoverageReport/
