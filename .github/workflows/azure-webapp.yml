@@ -121,19 +121,15 @@ jobs:
         with:
           name: html-coverage-report
 
-      - name: Create directory and move files to ${{ env.PUBLISH_COVERAGE_HTML_PATH }}
-        run: |
-          mkdir -p ${{ env.PUBLISH_COVERAGE_HTML_PATH }}
-          mv * ${{ env.PUBLISH_COVERAGE_HTML_PATH }}
-
-      - name: List files in ${{ env.PUBLISH_COVERAGE_HTML_PATH }}
-        run: ls -R ${{ env.PUBLISH_COVERAGE_HTML_PATH }}
+      - name: List files in current directory
+        run: ls -l
 
       - name: Disable Jekyll
-        run: echo > ${{ env.PUBLISH_COVERAGE_HTML_PATH }}/.nojekyll
+        run: echo > .nojekyll
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ${{ env.PUBLISH_COVERAGE_HTML_PATH }}/
+          publish_dir: .
+          destination_dir: ${{ env.PUBLISH_COVERAGE_HTML_PATH }}
