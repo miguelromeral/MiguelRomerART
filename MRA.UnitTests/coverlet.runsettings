@@ -1,11 +1,10 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<RunSettings>
+﻿<RunSettings>
   <DataCollectionRunSettings>
     <DataCollectors>
-      <DataCollector friendlyName="XPlat code coverage">
+      <DataCollector friendlyName="XPlat Code Coverage">
         <Configuration>
-          <Format>json,cobertura,lcov,opencover</Format>
-          <OutputDirectory>TestResults</OutputDirectory>
+          <Format>json,html,cobertura,lcov,opencover</Format>
+          <OutputDirectory>$(MSBuildProjectDirectory)/TestResults/coverage</OutputDirectory>
         </Configuration>
       </DataCollector>
     </DataCollectors>

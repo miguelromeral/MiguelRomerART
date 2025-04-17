@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
 using MRA.DTO.Exceptions;
+using MRA.DTO.Exceptions.Collections;
 using MRA.DTO.Models;
 using MRA.WebApi.Controllers.Art;
 using MRA.WebApi.Models.Responses;
 
-namespace MRA.UnitTests.Controllers.Art.Collection.Details;
+namespace MRA.UnitTests.Controllers.Art.Collection;
 
 public class CollectionControllerTestsDetails : CollectionControllerTestsDetailsBase
 {
@@ -42,14 +43,13 @@ public class CollectionControllerTestsDetails : CollectionControllerTestsDetails
         return await FetchDetails(controller, collectionId);
     }
 
-    protected override void Assert_Details_Ok(CollectionModel expectedCollection, OkObjectResult okResult)
+    protected override void Assert_Details_Ok(CollectionModel expectedCollection, CollectionResponse response)
     {
-        var response = okResult.Value as CollectionResponse;
         Assert.NotNull(response);
         Assert.Equal(expectedCollection.Id, response.Id);
         Assert.Equal(expectedCollection.Name, response.Name);
         Assert.Equal(expectedCollection.Description, response.Description);
-        Assert.Equal(expectedCollection.Drawings.Count(), response.Drawings.Count);
+        Assert.Equal(expectedCollection.Drawings.Count(), response.Drawings.Count());
         for (int i = 0; i < expectedCollection.Drawings.Count(); i++)
         {
             DrawingModel drawing = expectedCollection.Drawings.ElementAt(i);

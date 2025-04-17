@@ -1,10 +1,10 @@
 ﻿namespace MRA.WebApi.Models.Responses.Errors;
 
-public class NotFoundResponse
+public class ErrorResponse
 {
     public string Message { get; private set; }
 
-    public NotFoundResponse(string message)
+    public ErrorResponse(string message)
     {
         Message = message;
     }
