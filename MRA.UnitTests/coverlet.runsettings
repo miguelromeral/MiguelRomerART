@@ -3,7 +3,7 @@
     <DataCollectors>
       <DataCollector friendlyName="XPlat Code Coverage">
         <Configuration>
-          <Format>json,html,cobertura,lcov,opencover</Format>
+          <Format>json,html,cobertura,lcov,opencover,xml</Format>
           <OutputDirectory>$(MSBuildProjectDirectory)/TestResults/coverage</OutputDirectory>
         </Configuration>
       </DataCollector>

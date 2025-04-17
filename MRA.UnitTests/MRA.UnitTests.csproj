@@ -8,7 +8,7 @@
     <IsTestProject>true</IsTestProject>
     <CollectCoverage>true</CollectCoverage>
     <CoverletOutput>TestResults/coverage</CoverletOutput>
-    <CoverletOutputFormat>json,html</CoverletOutputFormat>
+    <CoverletOutputFormat>json,html,cobertura,lcov,opencover,xml</CoverletOutputFormat>
     <RunSettingsFilePath>$(MSBuildProjectDirectory)\coverlet.runsettings</RunSettingsFilePath>
   </PropertyGroup>
 
