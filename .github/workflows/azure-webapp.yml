@@ -9,8 +9,8 @@ env:
   DOTNET_VERSION: '9'
   CSPROJ_PATH: './MRA.WebApi/MRA.WebApi.csproj'
   TEST_PROJECT_PATH: './MRA.UnitTests/MRA.UnitTests.csproj'
-  TEST_RESULTS_PATH: './TestResults'
-  COVERAGE_HTML_PATH: './MRA.UnitTests/TestResults/CoverageReport'
+  TEST_RESULTS_PATH: './MRA.TestingResults'
+  COVERAGE_HTML_PATH: './MRA.TestingResults/CoverageReport'
 
 on:
   push:
