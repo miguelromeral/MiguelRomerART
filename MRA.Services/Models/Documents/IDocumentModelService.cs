@@ -8,6 +8,6 @@ public interface IDocumentModelService<Model>
     Task<IEnumerable<Model>> GetAllAsync();
     Task<bool> ExistsAsync(string id);
     Task<Model> FindAsync(string id);
-    Task<bool> SetAsync(string id, Model document);
+    Task<bool> SetAsync(string id, Model model);
     Task<bool> DeleteAsync(string id);
 }

@@ -13,7 +13,7 @@ public abstract class DocumentModelService<Model, Document> : IDocumentModelServ
     private readonly IDocumentsDatabase _db;
     protected IDocumentMapper<Model, Document> Converter;
 
-    public DocumentModelService(string collectionName, IDocumentMapper<Model, Document> converter, IDocumentsDatabase db)
+    protected DocumentModelService(string collectionName, IDocumentMapper<Model, Document> converter, IDocumentsDatabase db)
     {
         _collectionName = collectionName;
         Converter = converter;

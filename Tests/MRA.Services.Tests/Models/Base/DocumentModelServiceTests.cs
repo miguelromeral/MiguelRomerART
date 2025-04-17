@@ -12,7 +12,6 @@ public class DocumentModelServiceTests
     private readonly Mock<IDocumentMapper<InspirationModel, IInspirationDocument>> _mapperMock;
     private readonly Mock<IDocumentsDatabase> _dbMock;
     private readonly string _collectionName = "TestCollection";
-    private TestDocumentModelService _service;
 
 
     public DocumentModelServiceTests()
@@ -21,9 +20,9 @@ public class DocumentModelServiceTests
         _dbMock = new Mock<IDocumentsDatabase>();
     }
 
-    private void CreateService()
+    private TestDocumentModelService CreateService()
     {
-        _service = new TestDocumentModelService(_collectionName, _mapperMock.Object, _dbMock.Object);
+        return new TestDocumentModelService(_collectionName, _mapperMock.Object, _dbMock.Object);
     }
 
     [Fact]
@@ -33,9 +32,7 @@ public class DocumentModelServiceTests
         _dbMock.Setup(db => db.DocumentExistsAsync(_collectionName, docId))
                .ReturnsAsync(true);
 
-        CreateService();
-
-        var result = await _service.ExistsAsync(docId);
+        var result = await CreateService().ExistsAsync(docId);
 
         Assert.True(result);
     }
@@ -47,9 +44,7 @@ public class DocumentModelServiceTests
         _dbMock.Setup(db => db.DocumentExistsAsync(_collectionName, docId))
                .ReturnsAsync(false);
 
-        CreateService();
-
-        var result = await _service.ExistsAsync(docId);
+        var result = await CreateService().ExistsAsync(docId);
 
         Assert.False(result);
     }
@@ -62,9 +57,7 @@ public class DocumentModelServiceTests
         _dbMock.Setup(db => db.DocumentExistsAsync(_collectionName, docId))
                .ThrowsAsync(new Exception("DB error"));
 
-        CreateService();
-
-        await Assert.ThrowsAsync<Exception>(() => _service.ExistsAsync(docId));
+        await Assert.ThrowsAsync<Exception>(() => CreateService().ExistsAsync(docId));
     }
 
 
@@ -81,9 +74,7 @@ public class DocumentModelServiceTests
                    .Returns(models[0])
                    .Returns(models[1]);
 
-        CreateService();
-
-        var result = (await _service.GetAllAsync()).ToList();
+        var result = (await CreateService().GetAllAsync()).ToList();
 
         Assert.Equal(2, result.Count);
         Assert.Equal(models[0], result[0]);
@@ -96,9 +87,7 @@ public class DocumentModelServiceTests
         _dbMock.Setup(db => db.GetAllDocumentsAsync<IInspirationDocument>(_collectionName))
                .ThrowsAsync(new Exception("DB failure"));
 
-        CreateService();
-
-        await Assert.ThrowsAsync<Exception>(() => _service.GetAllAsync());
+        await Assert.ThrowsAsync<Exception>(() => CreateService().GetAllAsync());
     }
 
     [Fact]
@@ -114,9 +103,7 @@ public class DocumentModelServiceTests
         _mapperMock.Setup(m => m.ConvertToModel(document))
                    .Returns(model);
 
-        CreateService();
-
-        var result = await _service.FindAsync(docId);
+        var result = await CreateService().FindAsync(docId);
 
         Assert.Equal(model, result);
     }
@@ -129,9 +116,7 @@ public class DocumentModelServiceTests
         _dbMock.Setup(db => db.GetDocumentAsync<IInspirationDocument>(_collectionName, docId))
                .ThrowsAsync(new Exception("DB error"));
 
-        CreateService();
-
-        await Assert.ThrowsAsync<Exception>(() => _service.FindAsync(docId));
+        await Assert.ThrowsAsync<Exception>(() => CreateService().FindAsync(docId));
     }
 
     [Fact]
@@ -146,9 +131,7 @@ public class DocumentModelServiceTests
         _mapperMock.Setup(m => m.ConvertToModel(doc))
                    .Throws(new Exception("Mapping fail"));
 
-        CreateService();
-
-        await Assert.ThrowsAsync<Exception>(() => _service.FindAsync(docId));
+        await Assert.ThrowsAsync<Exception>(() => CreateService().FindAsync(docId));
     }
 
 
@@ -165,9 +148,7 @@ public class DocumentModelServiceTests
         _dbMock.Setup(db => db.SetDocumentAsync(_collectionName, docId, document))
                .ReturnsAsync(true);
 
-        CreateService();
-
-        var result = await _service.SetAsync(docId, model);
+        var result = await CreateService().SetAsync(docId, model);
 
         Assert.True(result);
     }
@@ -181,9 +162,7 @@ public class DocumentModelServiceTests
         _mapperMock.Setup(m => m.ConvertToDocument(model))
                    .Throws(new Exception("Mapping fail"));
 
-        CreateService();
-
-        await Assert.ThrowsAsync<Exception>(() => _service.SetAsync(docId, model));
+        await Assert.ThrowsAsync<Exception>(() => CreateService().SetAsync(docId, model));
     }
 
     [Fact]
@@ -199,9 +178,7 @@ public class DocumentModelServiceTests
         _dbMock.Setup(db => db.SetDocumentAsync(_collectionName, docId, document))
                .ThrowsAsync(new Exception("DB write fail"));
 
-        CreateService();
-
-        await Assert.ThrowsAsync<Exception>(() => _service.SetAsync(docId, model));
+        await Assert.ThrowsAsync<Exception>(() => CreateService().SetAsync(docId, model));
     }
 
     [Fact]
@@ -212,9 +189,7 @@ public class DocumentModelServiceTests
         _dbMock.Setup(db => db.DeleteDocumentAsync(_collectionName, docId))
                .ReturnsAsync(true);
 
-        CreateService();
-
-        var result = await _service.DeleteAsync(docId);
+        var result = await CreateService().DeleteAsync(docId);
 
         Assert.True(result);
     }
@@ -227,9 +202,7 @@ public class DocumentModelServiceTests
         _dbMock.Setup(db => db.DeleteDocumentAsync(_collectionName, docId))
                .ThrowsAsync(new Exception("DB delete fail"));
 
-        CreateService();
-
-        await Assert.ThrowsAsync<Exception>(() => _service.DeleteAsync(docId));
+        await Assert.ThrowsAsync<Exception>(() => CreateService().DeleteAsync(docId));
     }
 
 }
