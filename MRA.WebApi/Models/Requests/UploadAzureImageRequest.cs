@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MRA.DTO.ViewModels.Art
+﻿namespace MRA.WebApi.Models.Requests
 {
     public class UploadAzureImageRequest
     {

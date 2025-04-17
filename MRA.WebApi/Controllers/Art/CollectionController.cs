@@ -1,18 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MRA.Services.Models.Collections;
-using MRA.Services.Models.Drawings;
 using MRA.Services;
 using Microsoft.AspNetCore.Authorization;
-using MRA.DTO.Exceptions;
 using MRA.WebApi.Models.Responses;
-using MRA.DTO.Models;
 using MRA.WebApi.Models.Requests;
+using MRA.WebApi.Models.Responses.Errors;
+using MRA.DTO.Exceptions.Collections;
 
 namespace MRA.WebApi.Controllers.Art;
 
 [ApiController]
 [Route("api/art/collection")]
-public class CollectionController : Controller
+public class CollectionController : ControllerBase
 {
     private readonly IAppService _appService;
     private readonly ICollectionService _collectionService;
@@ -48,20 +47,19 @@ public class CollectionController : Controller
     {
         try
         {
-            _logger.LogInformation($"Solicitados detalles públicos de colección \"{id}\"");
             var collection = await _appService.FindCollectionByIdAsync(id, onlyIfVisible: onlyIfVisible, cache: true);
             return Ok(new CollectionResponse(collection));
         }
         catch (CollectionNotFoundException cnf)
         {
-            _logger.LogWarning($"No se encontró ninguna colección \"{id}\"");
-            return NotFound(new { message = $"No collection found with ID \"{id}\"" });
+            _logger.LogWarning(cnf, cnf.Message);
+            return NotFound(new ErrorResponse(cnf.Message));
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Error al recuperar los detalles públicos de la colección \"{id}\": " + ex.Message);
-            return StatusCode(StatusCodes.Status500InternalServerError,
-                new { message = $"Error when retrieving collection with ID \"{id}\"" });
+            _logger.LogError(ex, ErrorMessages.Collection.FetchDetails.InternalServer(id));
+            return StatusCode(StatusCodes.Status500InternalServerError, 
+                new ErrorResponse(ErrorMessages.Collection.FetchDetails.InternalServer(id)));
         }
     }
 
@@ -70,28 +68,27 @@ public class CollectionController : Controller
     {
         try
         {
-            _logger.LogInformation($"Comprobando si existe colección \"{id}\"");
             var exists = await _collectionService.ExistsCollection(id);
-            _logger.LogInformation($"Existe colección \"{id}\": {(exists ? "Sí" : "No")}");
+            _logger.LogInformation("Existe colección '{Id}': {Exists}", id, (exists ? "Sí" : "No"));
             return Ok(exists);
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Error al comprobar colección \"{id}\": " + ex.Message);
-            return StatusCode(StatusCodes.Status500InternalServerError,
-                new { message = $"Error when checking collection \"{id}\"" });
+            _logger.LogError(ex, "Error al comprobar colección '{Id}'.", id);
+            return StatusCode(StatusCodes.Status500InternalServerError, 
+                new ErrorResponse($"Error when checking collection \"{id}\""));
         }
     }
 
     [HttpGet("list")]
-    public async Task<ActionResult<IEnumerable<CollectionResponse>>> Collections()
+    public async Task<ActionResult<IEnumerable<CollectionResponse>>> List()
     {
         return await FetchCollectionList(true);
     }
 
     [HttpGet("full-list")]
     [Authorize]
-    public async Task<ActionResult<IEnumerable<CollectionResponse>>> CollectionsFull()
+    public async Task<ActionResult<IEnumerable<CollectionResponse>>> FullList()
     {
         return await FetchCollectionList(false);
     }
@@ -100,16 +97,28 @@ public class CollectionController : Controller
     {
         try
         {
-            _logger.LogInformation("Solicitadas Colecciones");
+            _logger.LogInformation("Fetching collections, only visible: {OnlyIfVisible}", (onlyIfVisible));
             var collections = await _appService.GetAllCollectionsAsync(onlyIfVisible: onlyIfVisible, cache: true);
-            _logger.LogInformation("Colecciones Públicas: " + collections.Count());
-            return Ok(collections.Select(c => new CollectionResponse(c)));
+
+            if (onlyIfVisible && collections.Any(c => c.Drawings.Any(d => !d.Visible)))
+            {
+                throw new VisibleCollectionRetrievedException();
+            }
+
+            _logger.LogInformation("{Count} collections found" , collections.Count());
+            return Ok(collections.Select(c => new CollectionResponse(c)).ToList());
+        }
+        catch (VisibleCollectionRetrievedException vcr)
+        {
+            _logger.LogError(vcr, vcr.Message);
+            return StatusCode(StatusCodes.Status503ServiceUnavailable,
+                new ErrorResponse(vcr.Message));
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error al recuperar las colecciones: " + ex.Message);
+            _logger.LogError(ex, ErrorMessages.Collection.FetchList.InternalServer);
             return StatusCode(StatusCodes.Status500InternalServerError,
-                new { message = "Error when fetching collections." });
+                new ErrorResponse(ErrorMessages.Collection.FetchList.InternalServer));
         }
     }
 
@@ -119,31 +128,24 @@ public class CollectionController : Controller
     {
         try
         {
-            _logger.LogInformation($"Guardando colección \"{model.Id}\"");
-            var collection = new CollectionModel()
-            {
-                Id = model.Id,
-                Description = model.Description,
-                Name = model.Name,
-                Order = model.Order,
-                DrawingIds = model.DrawingsIds
-            };
+            _logger.LogInformation("Saving collection '{Id}'", model.Id);
+            var collection = model.GetModel();
             if (String.IsNullOrEmpty(collection.Id))
             {
-                _logger.LogWarning("No se ha proporcionado un ID correcto para la colección");
-                return BadRequest(new { message = "No correct ID provided for the collection" });
+                _logger.LogWarning(ErrorMessages.Collection.Save.IdNotProvided);
+                return BadRequest(new ErrorResponse(ErrorMessages.Collection.Save.IdNotProvided));
             }
 
             await _collectionService.SaveCollectionAsync(id, collection);
-            _logger.LogInformation($"Guardada colección \"{model.Id}\" con éxito");
+            _logger.LogInformation("Saved collection '{Id}'", model.Id);
             _appService.CleanAllCache();
-            return new CollectionResponse(collection);
+            return Ok(new CollectionResponse(collection));
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Error al guardar colección \"{id}\": " + ex.Message);
+            _logger.LogError(ex, ErrorMessages.Collection.Save.InternalServer(model.Id));
             return StatusCode(StatusCodes.Status500InternalServerError,
-                new { message = $"Error when saving collection \"{id}\"" });
+                new ErrorResponse(ErrorMessages.Collection.Save.InternalServer(model.Id)));
         }
     }
 
@@ -153,22 +155,21 @@ public class CollectionController : Controller
     {
         try
         {
-            _logger.LogInformation($"Eliminando colección \"{id}\"");
             await _collectionService.DeleteCollection(id);
-            _logger.LogInformation($"Colección \"{id}\" eliminada con éxito");
+            _logger.LogInformation("Colección '{Id}' eliminada con éxito", id);
             _appService.CleanAllCache();
             return Ok(true);
         }
         catch (CollectionNotFoundException cnf)
         {
-            _logger.LogWarning($"No se encontró ninguna colección \"{id}\"");
-            return NotFound(new { message = $"No collection found with ID \"{id}\"" });
+            _logger.LogWarning(cnf, cnf.Message);
+            return NotFound(new ErrorResponse(cnf.Message));
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Error al eliminar colección \"{id}\": " + ex.Message);
+            _logger.LogError(ex, ErrorMessages.Collection.Delete.InternalServer(id));
             return StatusCode(StatusCodes.Status500InternalServerError,
-                new { message = $"Error when removing collection \"{id}\"" });
+                new ErrorResponse(ErrorMessages.Collection.Delete.InternalServer(id)));
         }
     }
 }

@@ -5,6 +5,7 @@ using MRA.DTO.Exceptions;
 using MRA.Infrastructure.Database.Providers.Interfaces;
 using MRA.DTO.Mapper.Interfaces;
 using MRA.Infrastructure.Database.Documents.Interfaces;
+using MRA.DTO.Exceptions.Collections;
 
 namespace MRA.Services.Models.Collections;
 
@@ -21,10 +22,6 @@ public class CollectionService : DocumentModelService<CollectionModel, ICollecti
     public async Task<IEnumerable<CollectionModel>> GetAllCollectionsAsync(bool onlyIfVisible)
     {
         var collections = await GetAllAsync();
-
-        //if (onlyIfVisible)
-        //    collections = collections.Where(d => d.Visible);
-
         return collections;
     }
 
