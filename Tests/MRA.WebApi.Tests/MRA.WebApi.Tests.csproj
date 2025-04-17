@@ -9,7 +9,6 @@
     <CollectCoverage>true</CollectCoverage>
     <CoverletOutput>MRA.TestingResults/coverage</CoverletOutput>
     <CoverletOutputFormat>json,html,cobertura,lcov,opencover,xml</CoverletOutputFormat>
-    <RunSettingsFilePath>$(MSBuildProjectDirectory)\coverlet.runsettings</RunSettingsFilePath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,11 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MRA.DependencyInjection\MRA.DependencyInjection.csproj" />
-    <ProjectReference Include="..\MRA.DTO\MRA.DTO.csproj" />
-    <ProjectReference Include="..\MRA.Infrastructure\MRA.Infrastructure.csproj" />
-    <ProjectReference Include="..\MRA.Services\MRA.Services.csproj" />
-    <ProjectReference Include="..\MRA.WebApi\MRA.WebApi.csproj" />
+    <ProjectReference Include="..\..\MRA.WebApi\MRA.WebApi.csproj" />
   </ItemGroup>
   
   <ItemGroup>

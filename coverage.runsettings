@@ -1,10 +1,10 @@
-﻿<RunSettings>
+<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
   <DataCollectionRunSettings>
     <DataCollectors>
-      <DataCollector friendlyName="XPlat Code Coverage">
+      <DataCollector friendlyName="XPlat code coverage">
         <Configuration>
           <Format>json,html,cobertura,lcov,opencover,xml</Format>
-          <OutputDirectory>$(MSBuildProjectDirectory)/MRA.TestingResults/coverage</OutputDirectory>
         </Configuration>
       </DataCollector>
     </DataCollectors>
