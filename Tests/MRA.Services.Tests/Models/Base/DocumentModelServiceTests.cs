@@ -26,7 +26,7 @@ public class DocumentModelServiceTests
     }
 
     [Fact]
-    public async Task ExistsAsync_ReturnsTrue_WhenDocumentExists()
+    public async Task ExistsAsync_Ok_Exists()
     {
         var docId = "123";
         _dbMock.Setup(db => db.DocumentExistsAsync(_collectionName, docId))
@@ -38,7 +38,7 @@ public class DocumentModelServiceTests
     }
 
     [Fact]
-    public async Task ExistsAsync_ReturnsFalse_WhenDocumentDoesNotExist()
+    public async Task ExistsAsync_Ok_NotExists()
     {
         var docId = "456";
         _dbMock.Setup(db => db.DocumentExistsAsync(_collectionName, docId))
@@ -50,7 +50,7 @@ public class DocumentModelServiceTests
     }
 
     [Fact]
-    public async Task ExistsAsync_ThrowsException_WhenDatabaseFails()
+    public async Task ExistsAsync_Error_DatabaseFails()
     {
         var docId = "123";
 
@@ -62,7 +62,7 @@ public class DocumentModelServiceTests
 
 
     [Fact]
-    public async Task GetAllAsync_ReturnsMappedModels()
+    public async Task GetAllAsync_Ok()
     {
         var documents = new List<IInspirationDocument> { Mock.Of<IInspirationDocument>(), Mock.Of<IInspirationDocument>() };
         var models = new List<InspirationModel> { new(), new() };
@@ -82,7 +82,7 @@ public class DocumentModelServiceTests
     }
 
     [Fact]
-    public async Task GetAllAsync_ThrowsException_WhenDatabaseFails()
+    public async Task GetAllAsync_Error_DatabaseFails()
     {
         _dbMock.Setup(db => db.GetAllDocumentsAsync<IInspirationDocument>(_collectionName))
                .ThrowsAsync(new Exception("DB failure"));
@@ -91,7 +91,7 @@ public class DocumentModelServiceTests
     }
 
     [Fact]
-    public async Task FindAsync_ReturnsMappedModel()
+    public async Task FindAsync_Ok()
     {
         var docId = "doc123";
         var document = Mock.Of<IInspirationDocument>();
@@ -109,7 +109,7 @@ public class DocumentModelServiceTests
     }
 
     [Fact]
-    public async Task FindAsync_ThrowsException_WhenDatabaseFails()
+    public async Task FindAsync_Error_DatabaseFails()
     {
         var docId = "fail";
 
@@ -120,7 +120,7 @@ public class DocumentModelServiceTests
     }
 
     [Fact]
-    public async Task FindAsync_ThrowsException_WhenMapperFails()
+    public async Task FindAsync_Error_MapperFails()
     {
         var docId = "fail";
         var doc = Mock.Of<IInspirationDocument>();
@@ -136,7 +136,7 @@ public class DocumentModelServiceTests
 
 
     [Fact]
-    public async Task SetAsync_ConvertsAndStoresDocument()
+    public async Task SetAsync_Ok()
     {
         var docId = "doc456";
         var model = new InspirationModel();
@@ -154,7 +154,7 @@ public class DocumentModelServiceTests
     }
 
     [Fact]
-    public async Task SetAsync_ThrowsException_WhenMapperFails()
+    public async Task SetAsync_Error_MapperFails()
     {
         var docId = "set123";
         var model = new InspirationModel();
@@ -166,7 +166,7 @@ public class DocumentModelServiceTests
     }
 
     [Fact]
-    public async Task SetAsync_ThrowsException_WhenDatabaseFails()
+    public async Task SetAsync_Ok_DatabaseFails()
     {
         var docId = "set456";
         var model = new InspirationModel();
@@ -182,7 +182,7 @@ public class DocumentModelServiceTests
     }
 
     [Fact]
-    public async Task DeleteAsync_DeletesDocument()
+    public async Task DeleteAsync_Ok()
     {
         var docId = "doc789";
 
@@ -195,7 +195,7 @@ public class DocumentModelServiceTests
     }
 
     [Fact]
-    public async Task DeleteAsync_ThrowsException_WhenDatabaseFails()
+    public async Task DeleteAsync_Error_DatabaseFails()
     {
         var docId = "del999";
 

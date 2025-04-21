@@ -5,7 +5,6 @@ using MRA.DTO.Models;
 using MRA.DTO.ViewModels.Art;
 using MRA.DTO.ViewModels.Art.Select;
 using MRA.Services;
-using MRA.Services.Models.Collections;
 using MRA.Services.Models.Drawings;
 using MRA.Services.Storage;
 using MRA.WebApi.Models.Responses;
@@ -125,7 +124,7 @@ public class DrawingController : Controller
 
 
     [HttpPost("filter")]
-    public async Task<ActionResult<DrawingFilterResultsResponse>> Filter([FromBody] DrawingFilter filters)
+    public async Task<ActionResult<FilterResults>> Filter([FromBody] DrawingFilter filters)
     {
         filters.OnlyVisible = true;
         return await FilteringDrawings(filters);
@@ -133,20 +132,20 @@ public class DrawingController : Controller
 
     [Authorize]
     [HttpPost("full-filter")]
-    public async Task<ActionResult<DrawingFilterResultsResponse>> FullFilter([FromBody] DrawingFilter filters)
+    public async Task<ActionResult<FilterResults>> FullFilter([FromBody] DrawingFilter filters)
     {
         filters.OnlyVisible = false;
         return await FilteringDrawings(filters);
     }
 
-    private async Task<ActionResult<DrawingFilterResultsResponse>> FilteringDrawings(DrawingFilter filters)
+    private async Task<ActionResult<FilterResults>> FilteringDrawings(DrawingFilter filters)
     {
         try
         {
             _logger.LogInformation($"Filtering drawings");
             var results = await _appService.FilterDrawingsAsync(filters);
-            _logger.LogInformation($"Dibujos filtrados: {results.TotalDrawings.Count()}");
-            return Ok(new DrawingFilterResultsResponse(results));
+            _logger.LogInformation("Dibujos filtrados: {Count}", results.TotalDrawings.Count());
+            return Ok(results);
         }
         catch (Exception ex)
         {
@@ -239,7 +238,7 @@ public class DrawingController : Controller
             };
 
             await _drawingService.SaveDrawingAsync(id, drawing);
-            _appService.CleanAllCache();
+            _appService.Clear();
             return Ok(drawing);
         }
         catch (Exception ex)

@@ -138,7 +138,7 @@ public class CollectionController : ControllerBase
 
             await _collectionService.SaveCollectionAsync(id, collection);
             _logger.LogInformation("Saved collection '{Id}'", model.Id);
-            _appService.CleanAllCache();
+            _appService.Clear();
             return Ok(new CollectionResponse(collection));
         }
         catch (Exception ex)
@@ -157,7 +157,7 @@ public class CollectionController : ControllerBase
         {
             await _collectionService.DeleteCollection(id);
             _logger.LogInformation("Colección '{Id}' eliminada con éxito", id);
-            _appService.CleanAllCache();
+            _appService.Clear();
             return Ok(true);
         }
         catch (CollectionNotFoundException cnf)

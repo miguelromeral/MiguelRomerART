@@ -7,6 +7,8 @@ using MRA.Infrastructure.Database.Documents.Interfaces;
 using MRA.Infrastructure.Storage;
 using MRA.Infrastructure.Excel;
 using MRA.Infrastructure.RemoteConfig;
+using MRA.Infrastructure.Cache;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace MRA.DependencyInjection.Startup;
 
@@ -19,6 +21,9 @@ public static class InfrastructureStartup
         services.AddSingleton<IExcelProvider, EPPlusExcelProvider>();
         services.AddSingleton<IStorageProvider, AzureStorageProvider>();
         services.AddSingleton<IRemoteConfigDatabase, AzureAppConfigurationDatabase>();
+
+        services.AddSingleton<IMemoryCache>(new MemoryCache(new MemoryCacheOptions()));
+        services.AddSingleton<ICacheProvider, MicrosoftCacheProvider>();
 
         services.AddSingleton<IDocumentMapper<CollectionModel, ICollectionDocument>, CollectionMapper>();
         services.AddSingleton<IDocumentMapper<DrawingModel, IDrawingDocument>, DrawingMapper>();

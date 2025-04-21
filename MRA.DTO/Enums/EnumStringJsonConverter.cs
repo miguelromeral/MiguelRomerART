@@ -1,4 +1,6 @@
 ﻿using MRA.Infrastructure.Enums;
+using System.ComponentModel;
+using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -8,18 +10,34 @@ public class EnumStringJsonConverter<TEnum> : JsonConverter<TEnum> where TEnum :
 {
     public override TEnum Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        if (reader.TokenType == JsonTokenType.String && Enum.TryParse(reader.GetString(), true, out TEnum result))
+        if (reader.TokenType == JsonTokenType.String)
         {
-            return result;
+            var stringValue = reader.GetString();
+
+            foreach (var field in typeof(TEnum).GetFields())
+            {
+                var descriptionAttribute = field.GetCustomAttribute<DescriptionAttribute>();
+                if (descriptionAttribute != null && descriptionAttribute.Description == stringValue)
+                {
+                    return (TEnum)field.GetValue(null);
+                }
+            }
+
+            if (Enum.TryParse(stringValue, true, out TEnum result))
+            {
+                return result;
+            }
         }
 
-        if (reader.TokenType == JsonTokenType.Number && Enum.IsDefined(typeof(TEnum), reader.GetInt32()))
+        if (reader.TokenType == JsonTokenType.Number)
         {
-            return (TEnum)Enum.ToObject(typeof(TEnum), reader.GetInt32());
+            var intValue = reader.GetInt32();
+            if (Enum.IsDefined(typeof(TEnum), intValue))
+            {
+                return (TEnum)Enum.ToObject(typeof(TEnum), intValue);
+            }
         }
 
-        //throw new JsonException($"No se puede convertir el valor '{reader.GetString()}' al tipo {typeof(TEnum).Name}.");
-        //return (TEnum)(object)-1;
         return EnumExtensions.GetDefaultValue<TEnum>();
     }
 

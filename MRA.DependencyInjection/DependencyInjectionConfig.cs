@@ -15,8 +15,6 @@ public static class DependencyInjectionConfig
         services.AddCustomConfiguration();
         services.AddCustomLogger();
 
-        services.AddSingleton<IMemoryCache>(new MemoryCache(new MemoryCacheOptions()));
-
         services.AddCustomInfrastructure();
         services.AddCustomServices();
 

@@ -16,6 +16,6 @@ namespace MRA.Services
         IEnumerable<DrawingModel> CalculatePopularityOfListDrawings(IEnumerable<DrawingModel> drawings);
 
         
-        void CleanAllCache();
+        void Clear();
     }
 }

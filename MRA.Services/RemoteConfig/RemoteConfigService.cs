@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
+using MRA.Infrastructure.Cache;
 using MRA.Infrastructure.RemoteConfig;
 using MRA.Infrastructure.Settings;
 using MRA.Services.Cache;
@@ -12,7 +13,7 @@ public class RemoteConfigService : CacheServiceBase, IRemoteConfigService
     private readonly IRemoteConfigDatabase _remoteConfig;
 
     public RemoteConfigService(
-            IMemoryCache cache, 
+            ICacheProvider cache, 
             AppSettings appSettings, 
             IRemoteConfigDatabase remoteConfigDatabase) : base(appSettings, cache)
     {
