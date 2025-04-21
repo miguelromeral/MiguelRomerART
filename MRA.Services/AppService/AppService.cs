@@ -38,7 +38,6 @@ namespace MRA.Services
             ILogger<AppService> logger,
             AppSettings appConfig) : base(appConfig, cache)
         {
-            _appConfiguration = appConfig;
             _logger = logger;
             _storageService = storageService;
             _remoteConfigService = remoteConfigService;
