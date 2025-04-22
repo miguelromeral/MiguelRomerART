@@ -12,19 +12,28 @@ public class AzureStorageProvider : IStorageProvider
     private readonly string connectionString;
     private readonly string blobPath;
 
-    private readonly BlobServiceClient _blobServiceClient;
+    private BlobServiceClient _blobServiceClient;
+    private BlobServiceClient BlobServiceClient
+    {
+        get
+        {
+            if(_blobServiceClient is null)
+                _blobServiceClient = new BlobServiceClient(connectionString);
+
+            return _blobServiceClient;
+        }
+    }
 
     public AzureStorageProvider(AppSettings config)
     {
         blobContainer = config.AzureStorage.BlobStorageContainer;
         connectionString = config.AzureStorage.ConnectionString;
         blobPath = config.AzureStorage.BlobPath;
-        _blobServiceClient = new BlobServiceClient(connectionString);
     }
 
     public async Task<List<BlobFileInfo>> ListBlobFilesAsync()
     {
-        var containerClient = _blobServiceClient.GetBlobContainerClient(blobContainer);
+        var containerClient = BlobServiceClient.GetBlobContainerClient(blobContainer);
 
         var blobFiles = new List<BlobFileInfo>();
         await foreach (var blobItem in containerClient.GetBlobsAsync())
@@ -48,7 +57,7 @@ public class AzureStorageProvider : IStorageProvider
 
     public async Task<bool> ExistsBlob(string rutaBlob)
     {
-        BlobContainerClient containerClient = _blobServiceClient.GetBlobContainerClient(blobContainer);
+        BlobContainerClient containerClient = BlobServiceClient.GetBlobContainerClient(blobContainer);
 
         var tmp2 = await containerClient.GetBlobClient(rutaBlob).ExistsAsync();
 
@@ -78,7 +87,7 @@ public class AzureStorageProvider : IStorageProvider
                 memoryStream.Seek(0, SeekOrigin.Begin);
 
                 // Obtener el contenedor
-                BlobContainerClient containerClient = _blobServiceClient.GetBlobContainerClient(blobContainer);
+                BlobContainerClient containerClient = BlobServiceClient.GetBlobContainerClient(blobContainer);
 
                 // Obtener el blob
                 BlobClient blobClient = containerClient.GetBlobClient(nombreBlob);
@@ -119,7 +128,7 @@ public class AzureStorageProvider : IStorageProvider
                 memoryStream.Seek(0, SeekOrigin.Begin);
 
                 // Obtener el contenedor
-                BlobContainerClient containerClient = _blobServiceClient.GetBlobContainerClient(blobContainer);
+                BlobContainerClient containerClient = BlobServiceClient.GetBlobContainerClient(blobContainer);
 
                 // Obtener el blob
                 BlobClient blobClient = containerClient.GetBlobClient(nombreBlob);

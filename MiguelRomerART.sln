@@ -40,6 +40,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{02EA681E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MRA.Services.Tests", "Tests\MRA.Services.Tests\MRA.Services.Tests.csproj", "{1A2FFB23-AFDB-419A-BCF9-1C04C1974A98}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MRA.DependencyInjection.Tests", "Tests\MRA.DependencyInjection.Tests\MRA.DependencyInjection.Tests.csproj", "{FD021F37-A22C-4788-98A7-C05EB72D2CA3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -90,6 +92,10 @@ Global
 		{1A2FFB23-AFDB-419A-BCF9-1C04C1974A98}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1A2FFB23-AFDB-419A-BCF9-1C04C1974A98}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1A2FFB23-AFDB-419A-BCF9-1C04C1974A98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD021F37-A22C-4788-98A7-C05EB72D2CA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD021F37-A22C-4788-98A7-C05EB72D2CA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD021F37-A22C-4788-98A7-C05EB72D2CA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD021F37-A22C-4788-98A7-C05EB72D2CA3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -97,6 +103,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{D5C4790D-E3AD-EC8D-E7A4-648E525BF68D} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{1A2FFB23-AFDB-419A-BCF9-1C04C1974A98} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{FD021F37-A22C-4788-98A7-C05EB72D2CA3} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {58711A87-88DD-4222-942B-37FF0D11299F}
