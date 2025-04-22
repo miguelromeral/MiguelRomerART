@@ -10,7 +10,6 @@ namespace MRA.DTO.Models;
 public class DrawingModel : IModel
 {
     public const string SEPARATOR_COMMENTS = "#";
-    public const string SEPARATOR_TAGS = " ";
 
     public DrawingModel()
     {   

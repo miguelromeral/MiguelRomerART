@@ -24,9 +24,5 @@ public static class InfrastructureStartup
 
         services.AddSingleton<IMemoryCache>(new MemoryCache(new MemoryCacheOptions()));
         services.AddSingleton<ICacheProvider, MicrosoftCacheProvider>();
-
-        services.AddSingleton<IDocumentMapper<CollectionModel, ICollectionDocument>, CollectionMapper>();
-        services.AddSingleton<IDocumentMapper<DrawingModel, IDrawingDocument>, DrawingMapper>();
-        services.AddSingleton<IDocumentMapper<InspirationModel, IInspirationDocument>, InspirationMapper>();
     }
 }

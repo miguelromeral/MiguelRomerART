@@ -76,12 +76,12 @@ public class DrawingController : Controller
         {
             _logger.LogInformation("Solicitados Modelos");
             var models = await _drawingService.GetModelsAsync();
-            _logger.LogInformation("Modelos recuperados: " + models.Count());
-            return Ok(models);
+            _logger.LogInformation("Modelos recuperados: '{Count}'", models.Count());
+            return Ok(models.Select(x => x.ModelName));
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error al recuperar los modelos: " + ex.Message);
+            _logger.LogError(ex, "Error al recuperar los modelos");
             return StatusCode(StatusCodes.Status500InternalServerError,
                 new { message = "Error al recuperar los modelos." });
         }
@@ -205,7 +205,7 @@ public class DrawingController : Controller
     {
         try
         {
-            _logger.LogInformation($"Guardando dibujo \"{id}\"");
+            _logger.LogInformation("Guardando dibujo '{Id}'", id);
             var drawing = new DrawingModel()
             {
                 ListComments = request.ListComments ?? [],
@@ -228,7 +228,7 @@ public class DrawingController : Controller
                 Software = request.Software,
                 Filter = request.Filter,
                 SpotifyUrl = request.SpotifyUrl,
-                Tags = request.TagsText?.Split(DrawingModel.SEPARATOR_TAGS) ?? [],
+                Tags = request.TagsText?.Split(DrawingTagManager.TAG_SEPARATOR) ?? [],
                 Time = request.Time ?? 0,
                 Title = request.Title ?? string.Empty,
                 Type = request.Type,
@@ -237,7 +237,7 @@ public class DrawingController : Controller
                 Visible = request.Visible
             };
 
-            await _drawingService.SaveDrawingAsync(id, drawing);
+            await _drawingService.SaveDrawingAsync(drawing);
             _appService.Clear();
             return Ok(drawing);
         }

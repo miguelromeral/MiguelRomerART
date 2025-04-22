@@ -6,6 +6,7 @@ using MRA.Infrastructure.Excel;
 using MRA.Infrastructure.Excel.Attributes;
 using MRA.Infrastructure.Settings;
 using MRA.Services.Excel.Interfaces;
+using MRA.Services.Models.Drawings;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using OfficeOpenXml.Table;
@@ -129,7 +130,7 @@ public class ExcelService : IExcelService
                 switch (prop.Attribute.Name)
                 {
                     case "Tags":
-                        cell.Value = String.Join(DrawingModel.SEPARATOR_TAGS, stringList);
+                        cell.Value = String.Join(DrawingTagManager.TAG_SEPARATOR, stringList);
                         break;
                     default:
                         cell.Value = String.Join(EXCEL_SEPARATOR_COMMENTS, stringList);
@@ -292,7 +293,7 @@ public class ExcelService : IExcelService
                 switch (property.Name)
                 {
                     case "Tags":
-                        list = cellValue.ToString().Split(new[] { DrawingModel.SEPARATOR_TAGS }, StringSplitOptions.None).ToList();
+                        list = cellValue.ToString().Split(new[] { DrawingTagManager.TAG_SEPARATOR }, StringSplitOptions.None).ToList();
                         break;
                     default:
                         list = cellValue.ToString().Split(new[] { EXCEL_SEPARATOR_COMMENTS }, StringSplitOptions.None).ToList();

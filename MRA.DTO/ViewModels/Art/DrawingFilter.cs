@@ -8,22 +8,22 @@ namespace MRA.DTO.ViewModels.Art;
 
 public class DrawingFilter
 {
-    public const string NoProduct = "none";
-    public const string NoCharacter = "none";
-    public const string NoModel = "none";
+    public const string PRODUCT_NONE = "none";
+    public const string CHARACTER_NONE = "none";
+    public const string MODEL_NONE = "none";
 
     [JsonConverter(typeof(EnumStringJsonConverter<DrawingTypes>))]
     public DrawingTypes Type { get; set; }
 
     public DrawingProductTypes ProductType { get; set; }
 
-    public string? ProductName { get; set; }
+    public string ProductName { get; set; }
 
-    public string? ModelName { get; set; }
+    public string ModelName { get; set; }
 
-    public string? CharacterName { get; set; }
+    public string CharacterName { get; set; }
 
-    public string? Collection { get; set; }
+    public string Collection { get; set; }
 
     public DrawingSoftwares Software { get; set; }
 
@@ -34,8 +34,8 @@ public class DrawingFilter
 
     public bool? Spotify { get; set; }
 
-    public string? TextQuery { get; set; }
-    public List<string> Tags { get { return (TextQuery ?? "").Split(" ").Select(x => x.ToLower()).ToList(); } }
+    public string TextQuery { get; set; }
+    public IEnumerable<string> Tags { get { return TextQuery.Split(" ").Select(x => x.ToLower()); } }
     
     public bool Favorites { get; set; }
     
@@ -70,29 +70,16 @@ public class DrawingFilter
     {
         var noFilters = GetModelNoFilters();
 
-        return Sortby == noFilters.Sortby && TextQuery == noFilters.TextQuery && Type == noFilters.Type
-            && ProductType == noFilters.ProductType && ProductName == noFilters.ProductName
-            && Collection != noFilters.Collection && CharacterName == noFilters.CharacterName
-            && ModelName == noFilters.ModelName && Software == noFilters.Software
-            && Paper == noFilters.Paper;
-    }
-
-    public bool HasNoFilters()
-    {
-        var nofilters = GetModelNoFilters();
-        return
-            Sortby.Equals(nofilters.Sortby) &&
-            (TextQuery ?? "").Equals(nofilters.TextQuery) &&
-            Type.Equals(nofilters.Type) &&
-            ProductType.Equals(nofilters.ProductType) &&
-            (ProductName ?? "").Equals(nofilters.ProductName) &&
-            (Collection ?? "").Equals(nofilters.Collection) &&
-            (CharacterName ?? "").Equals(nofilters.CharacterName) &&
-            (ModelName ?? "").Equals(nofilters.ModelName) &&
-            Software.Equals(nofilters.Software) &&
-            Paper.Equals(nofilters.Paper) &&
-            Spotify == nofilters.Spotify &&
-            Favorites.Equals(nofilters.Favorites) &&
-            OnlyVisible;
+        return 
+            Sortby == noFilters.Sortby && 
+            TextQuery == noFilters.TextQuery && 
+            Type == noFilters.Type && 
+            ProductType == noFilters.ProductType && 
+            ProductName == noFilters.ProductName && 
+            Collection != noFilters.Collection && 
+            CharacterName == noFilters.CharacterName && 
+            ModelName == noFilters.ModelName && 
+            Software == noFilters.Software && 
+            Paper == noFilters.Paper;
     }
 }

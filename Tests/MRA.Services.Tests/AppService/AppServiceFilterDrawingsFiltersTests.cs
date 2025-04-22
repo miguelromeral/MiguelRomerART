@@ -75,7 +75,7 @@ public class AppServiceFilterDrawingsFiltersTests : AppServiceTests
         MockFilters(expectedDrawings);
         _mockDrawingService
             .Setup(x => x.DeleteAndAdjustTags(It.IsAny<IEnumerable<string>>()))
-            .Returns((List<string> tags) => tags);
+            .Returns((IEnumerable<string> tags) => tags);
 
         var result = await _mockAppService.Object.FilterDrawingsAsync(filters);
 
@@ -96,7 +96,7 @@ public class AppServiceFilterDrawingsFiltersTests : AppServiceTests
             };
         var expectedDrawings = allDrawings.Where(d => string.IsNullOrEmpty(d.ProductName)).ToList();
 
-        await FilterProductName(allDrawings, DrawingFilter.NoProduct, expectedDrawings);
+        await FilterProductName(allDrawings, DrawingFilter.PRODUCT_NONE, expectedDrawings);
     }
 
     [Fact]
@@ -133,7 +133,7 @@ public class AppServiceFilterDrawingsFiltersTests : AppServiceTests
             };
         var expectedDrawings = allDrawings.Where(d => string.IsNullOrEmpty(d.Name)).ToList();
 
-        await FilterCharacterName(allDrawings, DrawingFilter.NoCharacter, expectedDrawings);
+        await FilterCharacterName(allDrawings, DrawingFilter.CHARACTER_NONE, expectedDrawings);
     }
 
     [Fact]
@@ -170,7 +170,7 @@ public class AppServiceFilterDrawingsFiltersTests : AppServiceTests
             };
         var expectedDrawings = allDrawings.Where(d => string.IsNullOrEmpty(d.ModelName)).ToList();
 
-        await FilterModelName(allDrawings, DrawingFilter.NoCharacter, expectedDrawings);
+        await FilterModelName(allDrawings, DrawingFilter.CHARACTER_NONE, expectedDrawings);
     }
 
     [Fact]

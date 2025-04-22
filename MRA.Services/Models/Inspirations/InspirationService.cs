@@ -4,6 +4,7 @@ using MRA.Infrastructure.Database.Providers.Interfaces;
 using MRA.DTO.Mapper.Interfaces;
 using MRA.Infrastructure.Settings;
 using MRA.Infrastructure.Database.Documents.Interfaces;
+using MRA.DTO.Mapper;
 
 namespace MRA.Services.Models.Inspirations;
 
@@ -11,9 +12,8 @@ public class InspirationService : DocumentModelService<InspirationModel, IInspir
 {
     public InspirationService(
         AppSettings appConfig,
-        IDocumentMapper<InspirationModel, IInspirationDocument> converter,
         IDocumentsDatabase db) 
-        : base(collectionName: appConfig.Database.Collections.Inspirations, converter, db)
+        : base(collectionName: appConfig.Database.Collections.Inspirations, new InspirationMapper(), db)
     {
     }
 

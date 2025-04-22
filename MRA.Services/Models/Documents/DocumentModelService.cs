@@ -27,13 +27,14 @@ public abstract class DocumentModelService<Model, Document> : IDocumentModelServ
 
     public async Task<IEnumerable<Model>> GetAllAsync()
     {
-        var tmp = (await _db.GetAllDocumentsAsync<Document>(_collectionName));
-        return tmp.Select(Converter.ConvertToModel);
+        var documentList = (await _db.GetAllDocumentsAsync<Document>(_collectionName));
+        return documentList.Select(Converter.ConvertToModel);
     }
 
     public async Task<Model> FindAsync(string id)
     {
-        return Converter.ConvertToModel(await _db.GetDocumentAsync<Document>(_collectionName, id));
+        var document = await _db.GetDocumentAsync<Document>(_collectionName, id);
+        return Converter.ConvertToModel(document);
     }
 
     public async Task<bool> SetAsync(string id, Model model)

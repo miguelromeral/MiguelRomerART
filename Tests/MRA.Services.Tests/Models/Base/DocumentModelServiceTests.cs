@@ -2,7 +2,6 @@
 using MRA.DTO.Mapper.Interfaces;
 using MRA.DTO.Models;
 using MRA.Infrastructure.Database.Documents.Interfaces;
-using MRA.Infrastructure.Database.Documents.MongoDb;
 using MRA.Infrastructure.Database.Providers.Interfaces;
 
 namespace MRA.Services.Tests.Models.Base;

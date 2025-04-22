@@ -273,7 +273,7 @@ namespace MRA.Services
         {
             if (!String.IsNullOrEmpty(filter.ModelName))
             {
-                if (filter.ModelName.Equals(DrawingFilter.NoModel))
+                if (filter.ModelName.Equals(DrawingFilter.MODEL_NONE))
                 {
                     drawings = drawings.Where(x =>
                         string.IsNullOrEmpty(x.ModelName)).ToList();
@@ -293,7 +293,7 @@ namespace MRA.Services
         {
             if (!String.IsNullOrEmpty(filter.CharacterName))
             {
-                if (filter.CharacterName.Equals(DrawingFilter.NoCharacter))
+                if (filter.CharacterName.Equals(DrawingFilter.CHARACTER_NONE))
                 {
                     drawings = drawings.Where(x =>
                         string.IsNullOrEmpty(x.Name)).ToList();
@@ -313,7 +313,7 @@ namespace MRA.Services
         {
             if (!String.IsNullOrEmpty(filter.ProductName))
             {
-                if (filter.ProductName.Equals(DrawingFilter.NoProduct))
+                if (filter.ProductName.Equals(DrawingFilter.PRODUCT_NONE))
                 {
                     drawings = drawings.Where(x =>
                         string.IsNullOrEmpty(x.ProductName)).ToList();
@@ -335,7 +335,7 @@ namespace MRA.Services
             {
                 var tags = _drawingService.DeleteAndAdjustTags(filter.Tags).Select(x => x.ToLower());
                 drawings = drawings.Where(x =>
-                    x.Tags.Join(tags, t1 => t1.ToLower(), t2 => t2, (t1, t2) => t1.Contains(t2)).Any()).ToList();
+                    x.Tags.Join(tags, t1 => t1.ToLower(), t2 => t2, (t1, t2) => t1.Contains(t2)).Any());
             }
 
             return drawings;

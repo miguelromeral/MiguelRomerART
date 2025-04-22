@@ -6,6 +6,8 @@ using MRA.Infrastructure.Database.Providers.Interfaces;
 using MRA.DTO.Mapper.Interfaces;
 using MRA.Infrastructure.Database.Documents.Interfaces;
 using MRA.DTO.Exceptions.Collections;
+using System.Linq.Expressions;
+using MRA.DTO.Mapper;
 
 namespace MRA.Services.Models.Collections;
 
@@ -13,9 +15,8 @@ public class CollectionService : DocumentModelService<CollectionModel, ICollecti
 {
     public CollectionService(
         AppSettings appConfig,
-        IDocumentMapper<CollectionModel, ICollectionDocument> converter,
         IDocumentsDatabase db)
-        : base(collectionName: appConfig.Database.Collections.Collections, converter, db)
+        : base(collectionName: appConfig.Database.Collections.Collections, new CollectionMapper(), db)
     {
     }
 

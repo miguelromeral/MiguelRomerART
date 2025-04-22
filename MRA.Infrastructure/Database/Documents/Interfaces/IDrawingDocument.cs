@@ -29,7 +29,7 @@ public interface IDrawingDocument : IDocument
     string instagram_url { get; set; }
     int software { get; set; }
     int paper { get; set; }
-    IEnumerable<string>? tags { get; set; }
+    IEnumerable<string> tags { get; set; }
     int score_critic { get; set; }
     double score_popular { get; set; }
     int votes_popular { get; set; }

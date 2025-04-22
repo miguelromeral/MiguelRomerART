@@ -1,54 +1,74 @@
-﻿//using MongoDB.Driver.Core.Configuration;
-//using MRA.DTO.Mapper.Interfaces;
-//using MRA.DTO.Models;
-//using MRA.Infrastructure.Database.Documents.Interfaces;
-//using MRA.Infrastructure.Database.Providers.Interfaces;
-//using MRA.Infrastructure.Settings.Options;
-//using MRA.Infrastructure.Settings;
-//using MRA.Services.Models.Inspirations;
-//using Moq;
+﻿using MRA.Infrastructure.Database.Documents.Interfaces;
+using MRA.Infrastructure.Settings.Options;
+using MRA.Infrastructure.Settings;
+using MRA.Services.Models.Inspirations;
+using Moq;
+using MRA.Infrastructure.Database.Documents.MongoDb;
+using static MRA.Infrastructure.Settings.Options.DatabaseSettings;
+using MRA.Services.Tests.Models.Base;
+using MRA.DTO.Enums.Inspirations;
 
-//namespace MRA.Services.Tests.Models.Inspirations;
+namespace MRA.Services.Tests.Models.Inspirations;
 
-//public class InspirationServiceTests
-//{
-//    [Fact]
-//    public async Task GetAllInspirationsAsync_ReturnsExpectedInspirations()
-//    {
-//        // Arrange
-//        var expectedInspirations = new List<InspirationModel>
-//        {
-//            new InspirationModel { /* Inicializa propiedades */ },
-//            new InspirationModel { /* Otra */ }
-//        };
+public class InspirationServiceTests : DocumentModelServiceTestsBase
+{
+    private readonly InspirationService _service;
+    protected override string COLLECTION_NAME { get => "inspirations"; }
 
-//        var mapperMock = new Mock<IDocumentMapper<InspirationModel, IInspirationDocument>>();
-//        var dbMock = new Mock<IDocumentsDatabase>();
+    public InspirationServiceTests() : base()
+    {
+        var appSettings = new AppSettings
+        {
+            Database = new DatabaseSettings
+            {
+                Collections = new DatabaseCollectionsOptions
+                {
+                    Inspirations = COLLECTION_NAME
+                }
+            }
+        };
 
-//        var appSettings = new AppSettings
-//        {
-//            Database = new DatabaseSettings
-//            {
-//                Collections = new CollectionSettings
-//                {
-//                    Inspirations = "InspirationsCollection"
-//                }
-//            }
-//        };
+        _service = new InspirationService(appSettings, _mockDb.Object);
+    }
 
-//        // Creamos un mock de la clase base para simular GetAllAsync()
-//        var serviceMock = new Mock<InspirationService>(appSettings, mapperMock.Object, dbMock.Object);
-//        serviceMock
-//            .Protected()
-//            .Setup<Task<IEnumerable<InspirationModel>>>("GetAllAsync")
-//            .ReturnsAsync(expectedInspirations);
+    [Fact]
+    public async Task GetAllInspirationsAsync_Ok()
+    {
+        var inspirationDocuments = new List<IInspirationDocument>
+        {
+            new InspirationMongoDocument
+            {
+                Id = "1",
+                Name = "Inspiration 1",
+                Instagram = "@inspiration1",
+                Twitter = "@inspire1",
+                Type = (int) InspirationTypes.Models,
+                YouTube = "Channel1",
+                Twitch = "Twitch1",
+                Pinterest = "Pinterest1"
+            },
+            new InspirationMongoDocument
+            {
+                Id = "2",
+                Name = "Inspiration 2",
+                Instagram = "@inspiration2",
+                Twitter = "@inspire2",
+                Type = (int) InspirationTypes.Amateurs,
+                YouTube = "Channel2",
+                Twitch = "Twitch2",
+                Pinterest = "Pinterest2"
+            }
+        };
 
-//        var service = serviceMock.Object;
+        MockGetAllDocuments(inspirationDocuments);
 
-//        // Act
-//        var result = await service.GetAllInspirationsAsync();
+        var result = await _service.GetAllInspirationsAsync();
 
-//        // Assert
-//        Assert.Equal(expectedInspirations, result);
-//    }
-//}
+        Assert.NotNull(result);
+        Assert.Equal(2, result.Count());
+
+        var first = result.First();
+        Assert.Equal("Inspiration 1", first.Name);
+        Assert.Equal("@inspiration1", first.Instagram);
+    }
+}
