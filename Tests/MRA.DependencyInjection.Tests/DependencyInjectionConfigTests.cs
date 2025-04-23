@@ -8,6 +8,7 @@ using MRA.Infrastructure.Excel;
 using MRA.Infrastructure.RemoteConfig;
 using MRA.Infrastructure.Settings;
 using MRA.Infrastructure.Storage;
+using MRA.Infrastructure.Storage.Connection;
 using MRA.Services;
 using MRA.Services.Excel.Interfaces;
 using MRA.Services.Models.Collections;
@@ -41,8 +42,10 @@ public class DependencyInjectionConfigTests
     {
         Assert.NotNull(provider.GetService<IDocumentsDatabase>());
 
-        Assert.NotNull(provider.GetService<IExcelProvider>());
+        Assert.NotNull(provider.GetService<IAzureStorageConnection>());
         Assert.NotNull(provider.GetService<IStorageProvider>());
+
+        Assert.NotNull(provider.GetService<IExcelProvider>());
         Assert.NotNull(provider.GetService<IRemoteConfigDatabase>());
 
         Assert.NotNull(provider.GetService<IMemoryCache>());

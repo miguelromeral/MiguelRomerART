@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using System.Reflection;
 
 namespace MRA.DTO
 {
@@ -11,35 +10,11 @@ namespace MRA.DTO
                 return "";
 
             DateTime date = DateTime.ParseExact(Date, "yyyy/MM/dd", CultureInfo.InvariantCulture);
-            //CultureInfo currentCulture = CultureInfo.CurrentCulture;
             var cultureInfo = CultureInfo.GetCultureInfo("es-ES");
             return date.ToString("dd MMMM yyyy", cultureInfo);
             
         }
 
-
-
-        public static string FormattedDateMini(string Date)
-        {
-            if (String.IsNullOrEmpty(Date))
-                return "";
-
-            DateTime date = DateTime.ParseExact(Date, "yyyy/MM/dd", CultureInfo.InvariantCulture);
-            //CultureInfo currentCulture = CultureInfo.CurrentCulture;
-            var cultureInfo = CultureInfo.GetCultureInfo("es-ES");
-            return date.ToString("MMMM yy", cultureInfo);
-        }
-
-        public static string FormattedDateInput(string Date)
-        {
-            if (String.IsNullOrEmpty(Date))
-                return "";
-
-            DateTime date = DateTime.ParseExact(Date, "yyyy/MM/dd", CultureInfo.InvariantCulture);
-            var cultureInfo = CultureInfo.GetCultureInfo("es-ES");
-            return date.ToString("yyyy-MM-dd");
-
-        }
 
         public static double CalculatePopularity(double valor, double puntuacionMaxima, double min = 0, double max = 100)
         {
@@ -65,16 +40,5 @@ namespace MRA.DTO
 
             return CalculatePopularity(ticksFecha, puntuacionMaxima, ticksMin, ticksMax);
         }
-        public static DateTime ConvertirStringADateTime(string fechaString, string formato = "yyyy/MM/dd")
-        {
-            if (String.IsNullOrEmpty(fechaString))
-            {
-                return DateTime.MinValue;
-            }
-
-            DateTime fecha = DateTime.ParseExact(fechaString, formato, CultureInfo.InvariantCulture);
-            return fecha;
-        }
     }
-
 }
