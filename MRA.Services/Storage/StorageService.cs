@@ -1,6 +1,5 @@
 ﻿using Azure.Storage.Blobs.Models;
 using Azure.Storage.Blobs;
-using MRA.Infrastructure.Settings;
 using MRA.Infrastructure.Storage;
 
 namespace MRA.Services.Storage;
@@ -8,11 +7,9 @@ namespace MRA.Services.Storage;
 public class StorageService : IStorageService
 {
     private readonly IStorageProvider _database;
-    private readonly AppSettings _config;
 
-    public StorageService(AppSettings config, IStorageProvider db)
+    public StorageService(IStorageProvider db)
     {
-        _config = config;
         _database = db;
     }
 
@@ -21,7 +18,7 @@ public class StorageService : IStorageService
         return new BlobFileInfo
         {
             Name = blobItem.Name,
-            Url = containerClient.Uri + "/" + blobItem.Name
+            Url = $"{containerClient.Uri}/{blobItem.Name}"
         };
     }
 

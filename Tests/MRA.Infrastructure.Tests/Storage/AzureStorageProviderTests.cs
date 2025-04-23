@@ -70,7 +70,7 @@ namespace MRA.Infrastructure.Tests.Storage
         }
 
         [Fact]
-        public async Task ResizeAndSave_WithPath_CallsUploadImageAsync()
+        public async Task ResizeAndSave_Ok_WithPath()
         {
             var blobName = "resized-image.png";
             var width = 100;
@@ -93,7 +93,7 @@ namespace MRA.Infrastructure.Tests.Storage
         }
 
         [Fact]
-        public async Task ResizeAndSave_WithStream_CallsUploadImageAsync()
+        public async Task ResizeAndSave_Ok_WithStream()
         {
             var width = 100;
 
@@ -115,7 +115,7 @@ namespace MRA.Infrastructure.Tests.Storage
         }
 
         [Fact]
-        public async Task Save_CallsUploadAsync()
+        public async Task Save_Ok()
         {
             var stream = new MemoryStream();
             var blobLocation = "some/location";
