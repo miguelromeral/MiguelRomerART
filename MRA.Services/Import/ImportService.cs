@@ -208,7 +208,7 @@ public class ImportService : IImportService
                 continue;
             }
 
-            throw new NotImplementedException("TODO: fix reading value null in boolean and numbers.");
+            //throw new NotImplementedException("TODO: fix reading value null in boolean and numbers.");
 
             var cellValue = workSheet.GetValue(row, col);
             SetPropertyValue(drawing, propInfo.Property, cellValue);
@@ -268,7 +268,7 @@ public class ImportService : IImportService
                         break;
                 }
             }
-            else if (propType == typeof(List<string>))
+            else if (propType == typeof(IEnumerable<string>))
             {
                 List<string> list;
                 switch (property.Name)
