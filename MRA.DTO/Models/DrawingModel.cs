@@ -32,13 +32,13 @@ public class DrawingModel : IModel
     [ExcelColumn("Path", 10)]
     public string Path { get; set; }
 
-    [ExcelColumn("URL", 11, hidden: true, url: true, wrapText: true)]
+    [ExcelColumn("URL", 11, url: true, wrapText: true)]
     public string Url { get { return UrlBase + Path; } }
 
     [ExcelColumn("Path Thumbnail", 15)]
     public string PathThumbnail { get; set; }
 
-    [ExcelColumn("URL Thumbnail", 16, hidden: true, url: true, wrapText: true)]
+    [ExcelColumn("URL Thumbnail", 16, url: true, wrapText: true)]
     public string UrlThumbnail { get { return UrlBase + PathThumbnail; } }
     #endregion
 
@@ -60,7 +60,7 @@ public class DrawingModel : IModel
     #endregion
 
     #region Product
-    [ExcelColumn("#Product Type", 40, hidden: true, width: 5)]
+    [ExcelColumn("#Product Type", 40, width: 5)]
     public DrawingProductTypes ProductType { get; set; }
 
     [ExcelColumn("Product Type", 41, width: 15)]
@@ -72,25 +72,25 @@ public class DrawingModel : IModel
     #endregion
 
     #region Style
-    [ExcelColumn("#Type", 50, hidden: true, width: 5)]
+    [ExcelColumn("#Type", 50, width: 5)]
     public DrawingTypes Type { get; set; }
 
     [ExcelColumn("Type", 51, width: 20)]
     public string TypeName { get => Type.GetDescription(); }
 
-    [ExcelColumn("#Software", 52, hidden: true, width: 5)]
+    [ExcelColumn("#Software", 52, width: 5)]
     public DrawingSoftwares Software { get; set; }
 
     [ExcelColumn("Software", 53, width: 20)]
     public string SoftwareName { get => Software.GetDescription(); }
 
-    [ExcelColumn("#Paper", 54, hidden: true, width: 5)]
+    [ExcelColumn("#Paper", 54, width: 5)]
     public DrawingPaperSizes Paper { get; set; }
 
     [ExcelColumn("Paper", 55, width: 10)]
     public string PaperHuman { get => Paper.GetDescription(); }
 
-    [ExcelColumn("#Filter", 56, hidden: true, width: 5)]
+    [ExcelColumn("#Filter", 56, width: 5)]
     public DrawingFilterTypes Filter { get; set; }
 
     [ExcelColumn("Filter", 57, width: 20)]
@@ -186,10 +186,10 @@ public class DrawingModel : IModel
     #endregion
 
     #region References
-    [ExcelColumn("Reference URL", 120, hidden: true, url: true, wrapText: true)]
+    [ExcelColumn("Reference URL", 120, url: true, wrapText: true)]
     public string ReferenceUrl { get; set; }
 
-    [ExcelColumn("Spotify URL", 121, hidden: true, url: true, wrapText: true)]
+    [ExcelColumn("Spotify URL", 121, url: true, wrapText: true)]
     public string SpotifyUrl { get; set; }
 
     [ExcelColumn("Spotify Track ID", 122, width: 30)]
@@ -234,7 +234,7 @@ public class DrawingModel : IModel
     #region Tags
     public string TagsText { get; set; }
 
-    [ExcelColumn("Tags", 140, hidden: true)]
+    [ExcelColumn("Tags", 140)]
     public IEnumerable<string> Tags { get; set; }
     #endregion
 
@@ -248,16 +248,16 @@ public class DrawingModel : IModel
         }
     }
 
-    [ExcelColumn("Popularity Date", 151, hidden: true, ignoreOnImport: true, width: 20)]
+    [ExcelColumn("Popularity Date", 151, ignoreOnImport: true, width: 20)]
     public double PopularityDate { get; set; }
 
-    [ExcelColumn("Popularity Critic", 152, hidden: true, ignoreOnImport: true, width: 20)]
+    [ExcelColumn("Popularity Critic", 152, ignoreOnImport: true, width: 20)]
     public double PopularityCritic { get; set; }
 
-    [ExcelColumn("Popularity Popular", 153, hidden: true, ignoreOnImport: true, width: 20)]
+    [ExcelColumn("Popularity Popular", 153, ignoreOnImport: true, width: 20)]
     public double PopularityPopular { get; set; }
 
-    [ExcelColumn("Popularity Favorite", 154, hidden: true, ignoreOnImport: true, width: 20)]
+    [ExcelColumn("Popularity Favorite", 154, ignoreOnImport: true, width: 20)]
     public double PopularityFavorite { get; set; }
 
     public double CalculatePopularity(double dateWeight, int months, double criticWeight, double popularWeight, double favoriteWeight)

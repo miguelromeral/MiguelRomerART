@@ -150,10 +150,6 @@ public class ExcelService : IExcelService
             {
                 cell.Style.WrapText = true;
             }
-            if (prop.Attribute.Hidden && !workSheet.Column(col).Hidden)
-            {
-                workSheet.Column(col).Hidden = true;
-            }
             col++;
         }
     }

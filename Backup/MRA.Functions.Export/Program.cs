@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using MRA.DependencyInjection;
 using MRA.DependencyInjection.Startup;
 
@@ -24,6 +25,12 @@ if (env.IsProduction())
 }
 
 var configuration = configurationBuilder.Build();
+
+builder.Services.AddLogging(loggingBuilder =>
+{
+    loggingBuilder.AddConsole();
+    loggingBuilder.SetMinimumLevel(LogLevel.Debug);
+});
 
 builder.Services.AddSingleton<IConfiguration>(configuration);
 builder.Services.AddDependencyInjectionServices(configuration);

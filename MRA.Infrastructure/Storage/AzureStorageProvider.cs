@@ -68,7 +68,10 @@ public class AzureStorageProvider : IStorageProvider
 
     public async Task<bool> Save(Stream stream, string blobLocation, string blobName)
     {
-        return await _connection.UploadAsync(blobContainer, blobName, stream) is not null;
+        return await _connection.UploadAsync(
+            containerName: blobContainer, 
+            blobPath: Path.Combine(blobLocation, blobName), 
+            stream) is not null;
     }
 
     public string CrearThumbnailName(string imagePath)

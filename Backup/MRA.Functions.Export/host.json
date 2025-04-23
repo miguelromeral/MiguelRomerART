@@ -6,6 +6,12 @@
     }
   },
   "logging": {
+    "logLevel": {
+      "default": "Warning",
+      "Function": "Information",
+      "MRA.Services": "Information",
+      "MRA.Infrastructure": "Information"
+    },
     "applicationInsights": {
       "samplingSettings": {
         "isEnabled": true,

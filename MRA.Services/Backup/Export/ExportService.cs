@@ -1,72 +1,53 @@
-using System;
-using Microsoft.Azure.Functions.Worker;
-using Microsoft.Extensions.Logging;
+锘縰sing Microsoft.Extensions.Logging;
+using MRA.DTO.Models;
 using MRA.Infrastructure.Settings;
+using MRA.Services.Excel;
 using MRA.Services.Excel.Interfaces;
 using MRA.Services.Models.Drawings;
 using MRA.Services.RemoteConfig;
 using MRA.Services.Storage;
-using MRA.Services;
-using MRA.DTO.Models;
-using MRA.Services.Excel;
 using OfficeOpenXml;
 
-namespace MRA.Functions.Excelsize;
+namespace MRA.Services.Backup.Export;
 
-public class FunctionExcelsize
+public class ExportService : IExportService
 {
-    //private readonly ILogger<FunctionExcelsize> _logger;
+    private readonly ILogger<ExportService> _logger;
     private readonly IExcelService _excelService;
     private readonly IStorageService _storageService;
-    private readonly IRemoteConfigService _remoteConfigService;
     private readonly IDrawingService _drawingService;
     private readonly IAppService _appService;
     private readonly AppSettings _appConfiguration;
-    private readonly ILogger _logger;
 
-    public FunctionExcelsize(
-        ILoggerFactory loggerFactory,
+    public ExportService(
+        ILogger<ExportService> logger,
         IExcelService excelService,
         IStorageService storageService,
         IRemoteConfigService remoteConfigService,
         IDrawingService drawingService,
         IAppService appService,
-        AppSettings appConfiguration)
+        AppSettings appConfiguration
+        )
     {
-        _logger = loggerFactory.CreateLogger<FunctionExcelsize>();
         _appConfiguration = appConfiguration;
         _excelService = excelService;
-        //_logger = logger;
+        _logger = logger;
         _storageService = storageService;
-        _remoteConfigService = remoteConfigService;
         _drawingService = drawingService;
         _appService = appService;
     }
 
-    [Function("FunctionExcelsize")]
-    public async Task Run(
-#if DEBUG
-    [TimerTrigger("0 */1 * * * *")]
-#else
-    [TimerTrigger("0 30 12 */1 * *")] // Every day at 12:30 UTC
-#endif      
-    TimerInfo myTimer)
+
+    public async Task ExportDrawings()
     {
         try
         {
-            _logger.LogInformation("Iniciando Aplicaci髇 de Exportaci髇");
+            _logger.LogInformation("Iniciando Aplicaci贸n de Exportaci贸n");
 
 
             _logger.LogInformation("Leyendo documentos desde Firestore");
             List<DrawingModel> listDrawings;
-
-#if DEBUG
-            listDrawings = new List<DrawingModel>(){
-                await _drawingService.FindDrawingAsync("cloud", onlyIfVisible: false, updateViews: false)
-            };
-#else
             listDrawings = (await _drawingService.GetAllDrawingsAsync(onlyIfVisible: false)).ToList();
-#endif
 
             _logger.LogInformation("Calculando Popularidad");
             listDrawings = _appService.CalculatePopularityOfListDrawings(listDrawings).ToList();
@@ -93,25 +74,29 @@ public class FunctionExcelsize
                 {
                     var fileName = _excelService.GetFileName();
 
-                    excel.SaveAs(memoryStream);
+                    await excel.SaveAsAsync(memoryStream);
 
-                    memoryStream.Position = 0; // Restablecer la posici髇 del Stream al inicio
+                    memoryStream.Position = 0; // Restablecer la posici贸n del Stream al inicio
 
                     try
                     {
-                        await _storageService.Save(memoryStream, _appConfiguration.AzureStorage.ExportLocation, fileName);
+                        var success = await _storageService.Save(memoryStream, _appConfiguration.AzureStorage.ExportLocation, fileName);
+                        if (!success)
+                        {
+                            _logger.LogError("File not saved to Storage");
+                        }
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError(ex, $"Error al guardar el archivo \"{fileName}\" en Azure Storage");
+                        _logger.LogError(ex, "Error al guardar el archivo '{FileName}' en Azure Storage", fileName);
                     }
                 }
             }
         }
         catch (Exception ex)
         {
-            _logger?.LogError(ex, "Error durante la exportaci髇");
+            _logger.LogError(ex, "Error durante la exportaci贸n");
         }
-        _logger.LogInformation("Fin de la Exportaci髇 en Azure Functions");
+        _logger.LogInformation("Fin de la Exportaci贸n en Azure Functions");
     }
 }

@@ -2,8 +2,8 @@
 using MRA.DependencyInjection.Startup;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
-using MRA.Services.Import;
 using MRA.DependencyInjection;
+using MRA.Services.Backup.Import;
 
 
 using var loggerFactory = LoggerFactory.Create(builder =>
@@ -35,7 +35,7 @@ try
     var serviceProvider = services.BuildServiceProvider();
 
     var importService = serviceProvider.GetRequiredService<IImportService>();
-    await importService.Import();
+    await importService.ImportDrawings();
 }
 catch (Exception ex)
 {

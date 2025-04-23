@@ -11,8 +11,9 @@ using MRA.Infrastructure.Storage;
 using MRA.Infrastructure.Storage.Connection;
 using MRA.Infrastructure.UserInput;
 using MRA.Services;
+using MRA.Services.Backup.Export;
+using MRA.Services.Backup.Import;
 using MRA.Services.Excel.Interfaces;
-using MRA.Services.Import;
 using MRA.Services.Models.Collections;
 using MRA.Services.Models.Drawings;
 using MRA.Services.Models.Inspirations;
@@ -65,6 +66,7 @@ public class DependencyInjectionConfigTests
         Assert.NotNull(provider.GetService<IRemoteConfigService>());
 
         Assert.NotNull(provider.GetService<IImportService>());
+        Assert.NotNull(provider.GetService<IExportService>());
         Assert.NotNull(provider.GetService<IUserInputService>());
 
         Assert.NotNull(provider.GetService<ICollectionService>());

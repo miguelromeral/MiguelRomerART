@@ -8,8 +8,9 @@ using MRA.Services.Models.Inspirations;
 using MRA.Services.RemoteConfig;
 using MRA.Services.Storage;
 using Microsoft.Extensions.Configuration;
-using MRA.Services.Import;
 using MRA.Services.UserInput;
+using MRA.Services.Backup.Export;
+using MRA.Services.Backup.Import;
 
 namespace MRA.DependencyInjection.Startup;
 
@@ -24,6 +25,7 @@ public static class ServicesStartup
         services.AddSingleton<IRemoteConfigService, RemoteConfigService>();
 
         services.AddSingleton<IImportService, ImportService>();
+        services.AddSingleton<IExportService, ExportService>();
         services.AddSingleton<IUserInputService, UserInputService>();
 
         services.AddSingleton<ICollectionService, CollectionService>();
