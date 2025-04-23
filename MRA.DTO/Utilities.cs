@@ -15,6 +15,11 @@ namespace MRA.DTO
             
         }
 
+        public static string GetStringFromDate(DateTime date)
+        {
+            var cultureInfo = CultureInfo.GetCultureInfo("es-ES");
+            return date.ToString("yyyy/MM/dd", cultureInfo);
+        }
 
         public static double CalculatePopularity(double valor, double puntuacionMaxima, double min = 0, double max = 100)
         {

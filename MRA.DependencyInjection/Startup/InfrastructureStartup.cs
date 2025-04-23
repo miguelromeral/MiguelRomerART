@@ -7,6 +7,7 @@ using MRA.Infrastructure.Cache;
 using Microsoft.Extensions.Caching.Memory;
 using MRA.Infrastructure.Database.Providers.Interfaces;
 using MRA.Infrastructure.Storage.Connection;
+using MRA.Infrastructure.UserInput;
 
 namespace MRA.DependencyInjection.Startup;
 
@@ -19,6 +20,7 @@ public static class InfrastructureStartup
         services.AddSingleton<IAzureStorageConnection, AzureStorageConnection>();
         services.AddSingleton<IStorageProvider, AzureStorageProvider>();
 
+        services.AddSingleton<IUserInputProvider, ConsoleProvider>();
         services.AddSingleton<IExcelProvider, EPPlusExcelProvider>();
         services.AddSingleton<IRemoteConfigDatabase, AzureAppConfigurationDatabase>();
 

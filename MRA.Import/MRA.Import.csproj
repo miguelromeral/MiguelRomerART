@@ -8,15 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="appsettings.json" />
     <None Remove="Credentials\romerart-6a6c3-firebase-adminsdk-4yop5-839e7a0035.json" />
     <None Remove="Credentials\romerart-pre-firebase-adminsdk-2oaeo-a60a5d593b.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Credentials\romerart-6a6c3-firebase-adminsdk-4yop5-839e7a0035.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
@@ -31,6 +27,7 @@
 
   <ItemGroup>
     <PackageReference Include="EPPlus" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.4" />
   </ItemGroup>
 
   <ItemGroup>

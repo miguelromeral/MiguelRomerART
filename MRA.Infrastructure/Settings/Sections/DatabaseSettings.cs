@@ -22,6 +22,12 @@ public class DatabaseSettings
     public class DatabaseDrawingsTagsOptions
     {
         public IEnumerable<string> Delete { get; set; }
-        public IDictionary<string, string> Replace { get; set; }
+        public IEnumerable<DatabaseDrawingsTagsReplaceOptions> Replace { get; set; }
+
+        public class DatabaseDrawingsTagsReplaceOptions
+        {
+            public string Key { get; set; }
+            public string Value { get; set; }
+        }
     }
 }

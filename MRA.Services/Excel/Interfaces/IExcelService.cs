@@ -12,4 +12,6 @@ public interface IExcelService
     void FillSheetsDictionary(ExcelPackage excel, List<ExcelColumnInfo> properties, ExcelWorksheet workSheet);
     
     List<ExcelColumnInfo> GetPropertiesAttributes<T>();
+
+    Dictionary<string, int> GetColumnMapDrawing(ExcelWorksheet workSheet);
 }

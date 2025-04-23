@@ -2,6 +2,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using MRA.Infrastructure.Settings;
 using MRA.Infrastructure.Settings.Options;
+using MRA.Infrastructure.Settings.Sections;
+using static MRA.Infrastructure.Settings.Options.DatabaseSettings;
+using static MRA.Infrastructure.Settings.Options.DatabaseSettings.DatabaseDrawingsTagsOptions;
 
 namespace MRA.DependencyInjection.Startup;
 
@@ -29,7 +32,21 @@ public static class ConfigurationStartup
             EPPlus = config.GetSection("EPPlus").Get<EPPlusSettings>(),
             AzureCosmosDb = config.GetSection("AzureCosmosDb").Get<AzureCosmosSettings>(),
             Database = config.GetSection("Database").Get<DatabaseSettings>(),
-            RemoteConfig = config.GetSection("RemoteConfig").Get<RemoteConfigSettings>()
+            //Database = new DatabaseSettings
+            //{
+            //    Name = config["Database:Name"],
+            //    Collections = config.GetSection("Database:Collections").Get<DatabaseCollectionsOptions>(),
+            //    Drawings = new DatabaseDrawingsOptions
+            //    {
+            //        Tags = new DatabaseDrawingsTagsOptions
+            //        {
+            //            Delete = config.GetSection("Database:Drawings:Tags:Delete").Get<List<string>>(),
+            //            Replace = config.GetSection("Database:Drawings:Tags:Replace").Get<List<DatabaseDrawingsTagsReplaceOptions>>()
+            //        }
+            //    }
+            //},
+            RemoteConfig = config.GetSection("RemoteConfig").Get<RemoteConfigSettings>(),
+            Commands = config.GetSection("Commands").Get<CommandsSettings>()
         };
 
         return appConfig;

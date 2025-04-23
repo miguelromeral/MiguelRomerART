@@ -3,6 +3,7 @@ using MRA.DTO.Enums.DrawingFilter;
 using MRA.DTO.Models;
 using MRA.Infrastructure.Enums;
 using MRA.Infrastructure.Settings;
+using static MRA.Infrastructure.Settings.Options.DatabaseSettings.DatabaseDrawingsTagsOptions;
 
 namespace MRA.Services.Models.Drawings;
 
@@ -116,7 +117,7 @@ public class DrawingTagManager
         return filteredTags;
     }
 
-    private static string ReplaceCharacters(string tag, IDictionary<string, string> toReplace)
+    private static string ReplaceCharacters(string tag, IEnumerable<DatabaseDrawingsTagsReplaceOptions> toReplace)
     {
         var result = tag.ToLower();
         foreach (var change in toReplace)

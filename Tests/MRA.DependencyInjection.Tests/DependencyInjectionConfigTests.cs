@@ -9,13 +9,16 @@ using MRA.Infrastructure.RemoteConfig;
 using MRA.Infrastructure.Settings;
 using MRA.Infrastructure.Storage;
 using MRA.Infrastructure.Storage.Connection;
+using MRA.Infrastructure.UserInput;
 using MRA.Services;
 using MRA.Services.Excel.Interfaces;
+using MRA.Services.Import;
 using MRA.Services.Models.Collections;
 using MRA.Services.Models.Drawings;
 using MRA.Services.Models.Inspirations;
 using MRA.Services.RemoteConfig;
 using MRA.Services.Storage;
+using MRA.Services.UserInput;
 
 namespace MRA.DependencyInjection.Tests;
 
@@ -45,6 +48,7 @@ public class DependencyInjectionConfigTests
         Assert.NotNull(provider.GetService<IAzureStorageConnection>());
         Assert.NotNull(provider.GetService<IStorageProvider>());
 
+        Assert.NotNull(provider.GetService<IUserInputProvider>());
         Assert.NotNull(provider.GetService<IExcelProvider>());
         Assert.NotNull(provider.GetService<IRemoteConfigDatabase>());
 
@@ -59,6 +63,9 @@ public class DependencyInjectionConfigTests
         Assert.NotNull(provider.GetService<IExcelService>());
         Assert.NotNull(provider.GetService<IStorageService>());
         Assert.NotNull(provider.GetService<IRemoteConfigService>());
+
+        Assert.NotNull(provider.GetService<IImportService>());
+        Assert.NotNull(provider.GetService<IUserInputService>());
 
         Assert.NotNull(provider.GetService<ICollectionService>());
         Assert.NotNull(provider.GetService<IDrawingService>());
@@ -145,7 +152,9 @@ public class DependencyInjectionConfigTests
                 { "EPPlus:ExcelPackage:LicenseContext", "NonCommercialPersonal:MiguelRomeral" },
                 { "EPPlus:File:Name", "FirestoreDrawings" },
                 { "EPPlus:File:DateFormat", "yyyyMMdd_HHmm" },
-                { "EPPlus:File:Extension", "xlsx" }
+                { "EPPlus:File:Extension", "xlsx" },
+
+                { "Commands:UpdateEverythingFromExcel", "true" }
             }.ToDictionary(kvp => kvp.Key, kvp => (string?)kvp.Value))
             .Build();
     }

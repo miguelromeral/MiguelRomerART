@@ -9,6 +9,7 @@ using MRA.DTO.Models;
 using MRA.DTO.Exceptions;
 using MRA.DTO.Enums.Drawing;
 using MRA.DTO.ViewModels.Art.Select;
+using static MRA.Infrastructure.Settings.Options.DatabaseSettings.DatabaseDrawingsTagsOptions;
 
 namespace MRA.Services.Tests.Models.Drawings;
 
@@ -33,7 +34,11 @@ public class DrawingServiceTests : DocumentModelServiceTestsBase
                     Tags = new DatabaseDrawingsTagsOptions
                     {
                         Delete = new List<string>() { "delete", "my" },
-                        Replace = new Dictionary<string, string>()
+                        Replace = new List<DatabaseDrawingsTagsReplaceOptions>
+                        {
+                            new DatabaseDrawingsTagsReplaceOptions{ Key = "á", Value = "a" },
+                            new DatabaseDrawingsTagsReplaceOptions{ Key = "é", Value = "e" },
+                        }
                     }
                 }
             },
@@ -42,8 +47,6 @@ public class DrawingServiceTests : DocumentModelServiceTestsBase
                 BlobPath = "/blobpath"
             }
         };
-        _appSettings.Database.Drawings.Tags.Replace.Add("á", "a");
-        _appSettings.Database.Drawings.Tags.Replace.Add("é", "e");
 
         _service = new DrawingService(_appSettings, _mockDb.Object);
     }
