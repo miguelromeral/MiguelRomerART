@@ -65,7 +65,7 @@ public class DrawingControllerDetailsTests : DrawingControllerDetailsBaseTests
         Assert.Equal("12 enero 2025", response.FormattedDate);
         Assert.Equal("1h 30min", response.TimeHuman);
         Assert.Equal("10", response.ViewsHuman);
-        Assert.Equal("5 k", response.LikesHuman);
+        Assert.Equal("5.0 k", response.LikesHuman);
         Assert.Equal("6xq3Bd7MvZVa7pda9tC4MW", response.SpotifyTrackId);
     }
 

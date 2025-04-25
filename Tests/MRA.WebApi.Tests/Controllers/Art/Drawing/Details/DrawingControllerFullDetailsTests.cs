@@ -46,7 +46,7 @@ public class DrawingControllerFullDetailsTests : DrawingControllerDetailsBaseTes
 
         Assert.Equal(string.Empty, response.SpotifyTrackId);
         Assert.Equal("N/A", response.TimeHuman);
-        Assert.Equal("1,2 M", response.LikesHuman);
+        Assert.Equal("1.2 M", response.LikesHuman);
     }
 
     [Fact]

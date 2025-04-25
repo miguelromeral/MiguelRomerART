@@ -1,4 +1,6 @@
-﻿namespace MRA.Extensions;
+﻿using System.Globalization;
+
+namespace MRA.Extensions;
 
 public static class NumberExtensions
 {
@@ -16,17 +18,17 @@ public static class NumberExtensions
 
         if (number < ONE_THOUSAND)
         {
-            return number.ToString();
+            return number.ToString(CultureInfo.InvariantCulture);
         }
         else if (number < ONE_MILLION)
         {
             double valorFormateado = Math.Round((double)number / ONE_THOUSAND, 1);
-            return $"{valorFormateado} {SUFFIX_HUMAN_THOUSANDS}";
+            return $"{valorFormateado.ToString("F1", CultureInfo.InvariantCulture)} {SUFFIX_HUMAN_THOUSANDS}";
         }
         else
         {
             double valorFormateado = Math.Round((double)number / ONE_MILLION, 1);
-            return $"{valorFormateado} {SUFFIX_HUMAN_MILLIONS}";
+            return $"{valorFormateado.ToString("F1", CultureInfo.InvariantCulture)} {SUFFIX_HUMAN_MILLIONS}";
         }
     }
 
