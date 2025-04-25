@@ -386,5 +386,5 @@ FodyWeavers.xsd
 /MRA.TestingResults
 
 # Google Firebase Credentials
-*Credentials/
-*Credentials/*
+Credentials
+Credentials/*
