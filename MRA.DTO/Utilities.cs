@@ -4,23 +4,6 @@ namespace MRA.DTO
 {
     public static class Utilities
     {
-        public static string FormattedDate(string Date)
-        {
-            if (String.IsNullOrEmpty(Date))
-                return "";
-
-            DateTime date = DateTime.ParseExact(Date, "yyyy/MM/dd", CultureInfo.InvariantCulture);
-            var cultureInfo = CultureInfo.GetCultureInfo("es-ES");
-            return date.ToString("dd MMMM yyyy", cultureInfo);
-            
-        }
-
-        public static string GetStringFromDate(DateTime date)
-        {
-            var cultureInfo = CultureInfo.GetCultureInfo("es-ES");
-            return date.ToString("yyyy/MM/dd", cultureInfo);
-        }
-
         public static double CalculatePopularity(double valor, double puntuacionMaxima, double min = 0, double max = 100)
         {
             if (valor < min || valor > max)

@@ -1,9 +1,9 @@
 ﻿using MRA.DTO.Enums.Drawing;
 using MRA.DTO.Models.Interfaces;
+using MRA.Extensions;
 using MRA.Infrastructure.Enums;
 using MRA.Infrastructure.Excel.Attributes;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace MRA.DTO.Models;
 
@@ -106,47 +106,23 @@ public class DrawingModel : IModel
     public string DateHyphen { get; set; }
 
     [ExcelColumn("Formatted Date", 63, width: 20)]
-    public string FormattedDate
-    {
-        get
-        {
-            return Utilities.FormattedDate(Date);
-        }
-    }
+    public string FormattedDate { get => DateObject.FormattedDate(); }
 
     [ExcelColumn("Time (Minutes)", 65, width: 8)]
     public int Time { get; set; }
 
     [ExcelColumn("Time", 66, width: 12)]
-    public string TimeHuman
-    {
-        get
-        {
-            if (Time > 0)
-            {
-                int horas = Time / 60;
-                int minutosRestantes = Time % 60;
-
-                string resultado = (horas > 0 ? horas + "h " : "") + (minutosRestantes > 0 ? minutosRestantes + "min" : "");
-
-                return resultado;
-            }
-            else
-            {
-                return "Sin Estimación";
-            }
-        }
-    }
+    public string TimeHuman { get => Time.GetHumanTime(); }
 
     [ExcelColumn("Views", 67, width: 8)]
     public long Views { get; set; }
 
-    public string ViewsHuman { get { return FormatoLegible(Views); } }
+    public string ViewsHuman => Views.HumanFormat();
 
     [ExcelColumn("Likes", 69, width: 8)]
     public long Likes { get; set; }
 
-    public string LikesHuman { get { return FormatoLegible(Likes); } }
+    public string LikesHuman => Likes.HumanFormat();
     #endregion
 
     #region Scores
@@ -159,7 +135,7 @@ public class DrawingModel : IModel
     [ExcelColumn("Votes Popular", 72, width: 10)]
     public int VotesPopular { get; set; }
 
-    public int ScorePopularHuman { get { return CalculateScorePopular(ScorePopular); } }
+    public int ScorePopularHuman { get => CalculateScorePopular(ScorePopular); }
     public static int CalculateScorePopular(double score) => (int)Math.Round(score);
     #endregion
 
@@ -193,31 +169,7 @@ public class DrawingModel : IModel
     public string SpotifyUrl { get; set; }
 
     [ExcelColumn("Spotify Track ID", 122, width: 30)]
-    public string SpotifyTrackId
-    {
-        get
-        {
-            return String.IsNullOrEmpty(SpotifyUrl) ? "" : GetSpotifyTrackByUrl(SpotifyUrl);
-        }
-    }
-
-    public static string GetSpotifyTrackByUrl(string url)
-    {
-        string pattern = @"\/track\/([^\/?]+)(?:\?|$)";
-
-        Regex regex = new Regex(pattern);
-
-        Match match = regex.Match(url);
-
-        if (match.Success)
-        {
-            return match.Groups[1].Value;
-        }
-        else
-        {
-            return "";
-        }
-    }
+    public string SpotifyTrackId { get => SpotifyUrl.GetSpotifyTrackId(); }
 
     [ExcelColumn("Visible", 123, width: 10)]
     public bool Visible { get; set; }
@@ -286,27 +238,6 @@ public class DrawingModel : IModel
         }
 
         return sb.ToString();
-    }
-
-    public static string FormatoLegible(long numero)
-    {
-        const long UN_MILLON = 1000000;
-        const long MIL = 1000;
-
-        if (numero < MIL)
-        {
-            return numero.ToString();
-        }
-        else if (numero < UN_MILLON)
-        {
-            double valorFormateado = Math.Round((double)numero / MIL, 1);
-            return $"{valorFormateado} k";
-        }
-        else
-        {
-            double valorFormateado = Math.Round((double)numero / UN_MILLON, 1);
-            return $"{valorFormateado} M";
-        }
     }
 
     public string GetId() => Id;

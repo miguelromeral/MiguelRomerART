@@ -4,7 +4,6 @@ using MRA.DTO.Exceptions.Collections;
 using MRA.UnitTests.Extensions;
 using MRA.WebApi.Controllers.Art;
 using MRA.WebApi.Models.Responses.Errors;
-using Xunit.Sdk;
 
 namespace MRA.UnitTests.Controllers.Art.Collection;
 
@@ -58,6 +57,6 @@ public class CollectionControllerTestsDelete : CollectionControllerTestsBase
 
         result
             .Assert_InternalErrorResult()
-            .Assert_ErrorResponse(ErrorMessages.Collection.Delete.InternalServer(id));
+            .Assert_ErrorResponse(ErrorMessages.CollectionErrorMessages.Delete.InternalServer(id));
     }
 }

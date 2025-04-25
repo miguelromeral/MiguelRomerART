@@ -1,8 +1,8 @@
 ﻿namespace MRA.WebApi.Models.Responses.Errors;
 
 public static class ErrorMessages
-{
-    public static class Collection
+{       
+    public static class CollectionErrorMessages
     {
         public static class FetchDetails
         {

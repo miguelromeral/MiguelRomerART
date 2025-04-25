@@ -119,6 +119,7 @@ namespace MRA.Infrastructure.Tests.Storage
         {
             var stream = new MemoryStream();
             var blobLocation = "some/location";
+            var expectedBlobLocation = Path.Combine("some/location", TestImagePath);
 
             _mockConnection
                 .Setup(c => c.UploadAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Stream>()))
@@ -127,7 +128,7 @@ namespace MRA.Infrastructure.Tests.Storage
             var result = await _storageProvider.Save(stream, blobLocation, TestImagePath);
 
             Assert.True(result);
-            _mockConnection.Verify(c => c.UploadAsync(BlobContainer, TestImagePath, stream), Times.Once);
+            _mockConnection.Verify(c => c.UploadAsync(BlobContainer, expectedBlobLocation, stream), Times.Once);
         }
     
     

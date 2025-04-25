@@ -2,7 +2,8 @@
 using Moq;
 using MRA.Services.Models.Collections;
 using MRA.Services;
-using MRA.UnitTests.Helpers;
+using MRA.WebApi.Controllers.Art;
+using MRA.WebApi.Tests.Contexts.Controllers;
 
 namespace MRA.UnitTests.Controllers.Art.Collection;
 
@@ -14,7 +15,7 @@ public abstract class CollectionControllerTestsBase
 
     protected CollectionControllerTestsBase()
     {
-        var context = DependencyInjectionHelper.BuildControllerProviders();
+        var context = ControllerContextFactory.Create<CollectionController>();
 
         _serviceProvider = context.ServiceProvider;
         _mockAppService = context.MockAppService;

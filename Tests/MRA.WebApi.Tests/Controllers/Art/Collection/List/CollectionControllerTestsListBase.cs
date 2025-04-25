@@ -59,7 +59,7 @@ public abstract class CollectionControllerTestsListBase : CollectionControllerTe
     public async Task Base_List_Error_InternalError()
     {
         var controller = _serviceProvider.GetRequiredService<CollectionController>();
-        var expectedError = ErrorMessages.Collection.FetchList.InternalServer;
+        var expectedError = ErrorMessages.CollectionErrorMessages.FetchList.InternalServer;
 
         var result = await MockCollectionListInternalError(controller);
 

@@ -50,7 +50,7 @@ public abstract class CollectionControllerTestsDetailsBase : CollectionControlle
     {
         var controller = _serviceProvider.GetRequiredService<CollectionController>();
         var collectionId = "non-existent-id";
-        var expectedError = ErrorMessages.Collection.FetchDetails.InternalServer(collectionId);
+        var expectedError = ErrorMessages.CollectionErrorMessages.FetchDetails.InternalServer(collectionId);
 
         var result = await MockCollectionDetailsInternalError(controller, collectionId);
 

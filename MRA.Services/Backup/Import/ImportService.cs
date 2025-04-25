@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using MRA.DTO;
 using MRA.DTO.Models;
+using MRA.Extensions;
 using MRA.Infrastructure.Enums;
 using MRA.Infrastructure.Excel.Attributes;
 using MRA.Infrastructure.Settings;
@@ -85,7 +86,7 @@ public class ImportService : IImportService
                 DrawingModel drawingExcel = ReadDrawingFromRow(workSheet, drawingProperties, nameToColumnMap, row);
 
                 logger.LogInformation("Dibujo '{Id}' leído desde Excel", drawingExcel.Id);
-                drawingExcel.Date = Utilities.GetStringFromDate(drawingExcel.DateObject);
+                drawingExcel.Date = drawingExcel.DateObject.FormattedDate();
 
                 DrawingModel? drawingDatabase = listDrawings.FirstOrDefault(x => x.Id == drawingExcel.Id);
 

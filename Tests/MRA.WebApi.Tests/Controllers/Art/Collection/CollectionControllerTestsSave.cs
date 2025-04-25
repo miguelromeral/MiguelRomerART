@@ -60,7 +60,7 @@ public class CollectionControllerTestsSave : CollectionControllerTestsBase
 
         result
             .Assert_BadRequestResult()
-            .Assert_ErrorResponse(ErrorMessages.Collection.Save.IdNotProvided);
+            .Assert_ErrorResponse(ErrorMessages.CollectionErrorMessages.Save.IdNotProvided);
     }
 
     [Fact]
@@ -80,6 +80,6 @@ public class CollectionControllerTestsSave : CollectionControllerTestsBase
 
         result
             .Assert_InternalErrorResult()
-            .Assert_ErrorResponse(ErrorMessages.Collection.Save.InternalServer(requestModel.Id));
+            .Assert_ErrorResponse(ErrorMessages.CollectionErrorMessages.Save.InternalServer(requestModel.Id));
     }
 }

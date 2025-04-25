@@ -44,6 +44,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MRA.Import", "Backup\MRA.Im
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MRA.Functions.Export", "Backup\MRA.Functions.Export\MRA.Functions.Export.csproj", "{D02DEBC6-50C4-96B2-1C28-4BE0E8497636}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{F3CDCBDD-ABF4-4938-BF58-DEA1896031EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MRA.Extensions", "Shared\MRA.Extensions\MRA.Extensions.csproj", "{02B7CD84-AEAE-42ED-9CD2-1EA191B78FB2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -98,6 +102,10 @@ Global
 		{D02DEBC6-50C4-96B2-1C28-4BE0E8497636}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D02DEBC6-50C4-96B2-1C28-4BE0E8497636}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D02DEBC6-50C4-96B2-1C28-4BE0E8497636}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02B7CD84-AEAE-42ED-9CD2-1EA191B78FB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02B7CD84-AEAE-42ED-9CD2-1EA191B78FB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02B7CD84-AEAE-42ED-9CD2-1EA191B78FB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02B7CD84-AEAE-42ED-9CD2-1EA191B78FB2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -109,6 +117,7 @@ Global
 		{C73B4BD5-24BD-4D4C-843E-D87AD038DA0C} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{05DA6A8D-D0B1-9EE6-04BB-D418FF330401} = {9854A3CF-6679-4844-B443-F40218772957}
 		{D02DEBC6-50C4-96B2-1C28-4BE0E8497636} = {9854A3CF-6679-4844-B443-F40218772957}
+		{02B7CD84-AEAE-42ED-9CD2-1EA191B78FB2} = {F3CDCBDD-ABF4-4938-BF58-DEA1896031EF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {58711A87-88DD-4222-942B-37FF0D11299F}
