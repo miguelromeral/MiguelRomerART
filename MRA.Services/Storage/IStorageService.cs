@@ -4,9 +4,9 @@ public interface IStorageService
 {
     Task<bool> ExistsBlob(string rutaBlob);
 
-    Task ResizeAndSave(MemoryStream rutaEntrada, string nombreBlob, int anchoDeseado);
+    Task<bool> ResizeAndSave(MemoryStream rutaEntrada, string nombreBlob, int anchoDeseado);
 
-    Task Save(Stream stream, string blobLocation, string blobName);
+    Task<bool> Save(Stream stream, string blobLocation, string blobName);
 
     string CrearThumbnailName(string rutaImagen);
 

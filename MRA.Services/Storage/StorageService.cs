@@ -1,6 +1,5 @@
 ﻿using Azure.Storage.Blobs.Models;
 using Azure.Storage.Blobs;
-using MRA.Infrastructure.Settings;
 using MRA.Infrastructure.Storage;
 
 namespace MRA.Services.Storage;
@@ -8,11 +7,9 @@ namespace MRA.Services.Storage;
 public class StorageService : IStorageService
 {
     private readonly IStorageProvider _database;
-    private readonly AppSettings _config;
 
-    public StorageService(AppSettings config, IStorageProvider db)
+    public StorageService(IStorageProvider db)
     {
-        _config = config;
         _database = db;
     }
 
@@ -21,7 +18,7 @@ public class StorageService : IStorageService
         return new BlobFileInfo
         {
             Name = blobItem.Name,
-            Url = containerClient.Uri + "/" + blobItem.Name
+            Url = $"{containerClient.Uri}/{blobItem.Name}"
         };
     }
 
@@ -30,14 +27,14 @@ public class StorageService : IStorageService
         return await _database.ExistsBlob(rutaBlob);
     }
 
-    public async Task ResizeAndSave(MemoryStream rutaEntrada, string nombreBlob, int anchoDeseado)
+    public async Task<bool> ResizeAndSave(MemoryStream rutaEntrada, string nombreBlob, int anchoDeseado)
     {
-        await _database.ResizeAndSave(rutaEntrada, nombreBlob, anchoDeseado);
+        return await _database.ResizeAndSave(rutaEntrada, nombreBlob, anchoDeseado);
     }
 
-    public async Task Save(Stream stream, string blobLocation, string blobName)
+    public async Task<bool> Save(Stream stream, string blobLocation, string blobName)
     {
-        await _database.Save(stream, blobLocation, blobName);
+        return await _database.Save(stream, blobLocation, blobName);
     }
 
     public string CrearThumbnailName(string rutaImagen)

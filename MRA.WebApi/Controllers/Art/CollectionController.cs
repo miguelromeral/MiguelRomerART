@@ -57,9 +57,9 @@ public class CollectionController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, ErrorMessages.Collection.FetchDetails.InternalServer(id));
+            _logger.LogError(ex, ErrorMessages.CollectionErrorMessages.FetchDetails.InternalServer(id));
             return StatusCode(StatusCodes.Status500InternalServerError, 
-                new ErrorResponse(ErrorMessages.Collection.FetchDetails.InternalServer(id)));
+                new ErrorResponse(ErrorMessages.CollectionErrorMessages.FetchDetails.InternalServer(id)));
         }
     }
 
@@ -116,9 +116,9 @@ public class CollectionController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, ErrorMessages.Collection.FetchList.InternalServer);
+            _logger.LogError(ex, ErrorMessages.CollectionErrorMessages.FetchList.InternalServer);
             return StatusCode(StatusCodes.Status500InternalServerError,
-                new ErrorResponse(ErrorMessages.Collection.FetchList.InternalServer));
+                new ErrorResponse(ErrorMessages.CollectionErrorMessages.FetchList.InternalServer));
         }
     }
 
@@ -132,20 +132,20 @@ public class CollectionController : ControllerBase
             var collection = model.GetModel();
             if (String.IsNullOrEmpty(collection.Id))
             {
-                _logger.LogWarning(ErrorMessages.Collection.Save.IdNotProvided);
-                return BadRequest(new ErrorResponse(ErrorMessages.Collection.Save.IdNotProvided));
+                _logger.LogWarning(ErrorMessages.CollectionErrorMessages.Save.IdNotProvided);
+                return BadRequest(new ErrorResponse(ErrorMessages.CollectionErrorMessages.Save.IdNotProvided));
             }
 
             await _collectionService.SaveCollectionAsync(id, collection);
             _logger.LogInformation("Saved collection '{Id}'", model.Id);
-            _appService.CleanAllCache();
+            _appService.Clear();
             return Ok(new CollectionResponse(collection));
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, ErrorMessages.Collection.Save.InternalServer(model.Id));
+            _logger.LogError(ex, ErrorMessages.CollectionErrorMessages.Save.InternalServer(model.Id));
             return StatusCode(StatusCodes.Status500InternalServerError,
-                new ErrorResponse(ErrorMessages.Collection.Save.InternalServer(model.Id)));
+                new ErrorResponse(ErrorMessages.CollectionErrorMessages.Save.InternalServer(model.Id)));
         }
     }
 
@@ -157,7 +157,7 @@ public class CollectionController : ControllerBase
         {
             await _collectionService.DeleteCollection(id);
             _logger.LogInformation("Colección '{Id}' eliminada con éxito", id);
-            _appService.CleanAllCache();
+            _appService.Clear();
             return Ok(true);
         }
         catch (CollectionNotFoundException cnf)
@@ -167,9 +167,9 @@ public class CollectionController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, ErrorMessages.Collection.Delete.InternalServer(id));
+            _logger.LogError(ex, ErrorMessages.CollectionErrorMessages.Delete.InternalServer(id));
             return StatusCode(StatusCodes.Status500InternalServerError,
-                new ErrorResponse(ErrorMessages.Collection.Delete.InternalServer(id)));
+                new ErrorResponse(ErrorMessages.CollectionErrorMessages.Delete.InternalServer(id)));
         }
     }
 }

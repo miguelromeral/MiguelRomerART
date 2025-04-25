@@ -27,7 +27,7 @@ public class CollectionMapper : IDocumentMapper<CollectionModel, ICollectionDocu
             name = collection.Name,
             description = collection.Description,
             order = collection.Order,
-            drawingIds = collection.DrawingIds.ToList()
+            drawingIds = collection.DrawingIds
         };
     }
 }

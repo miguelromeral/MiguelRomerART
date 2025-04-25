@@ -6,11 +6,12 @@ public interface IStorageProvider
 
     Task<bool> ExistsBlob(string rutaBlob);
 
-    Task ResizeAndSave(MemoryStream rutaEntrada, string nombreBlob, int anchoDeseado);
+    Task<bool> ResizeAndSave(MemoryStream inputStream, string blobName, int width);
+    Task<bool> ResizeAndSave(string path, string blobName, int width);
 
-    Task Save(Stream stream, string blobLocation, string blobName);
+    Task<bool> Save(Stream stream, string blobLocation, string blobName);
 
-    string CrearThumbnailName(string rutaImagen);
+    string CrearThumbnailName(string imagePath);
 
     string GetBlobURL();
 }

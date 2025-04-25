@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using MRA.Infrastructure.Settings;
 using MRA.DTO.ViewModels.Art;
 using MRA.Infrastructure.Enums;
@@ -11,6 +10,8 @@ using MRA.Services.RemoteConfig;
 using MRA.Services.Cache;
 using MRA.Services.Storage;
 using MRA.DTO.Enums.Drawing;
+using MRA.Infrastructure.Cache;
+using MRA.DTO.Enums.DrawingFilter;
 
 namespace MRA.Services
 {
@@ -22,13 +23,13 @@ namespace MRA.Services
         private readonly ICollectionService _collectionService;
         private readonly ILogger<AppService> _logger;
         private readonly IRemoteConfigService _remoteConfigService;
-        private readonly AppSettings _appConfiguration;
 
-        private const string CACHE_ALL_DRAWINGS = "all_drawings";
-        private const string CACHE_ALL_COLLECTIONS = "all_collections";
+        public const string CACHE_ALL_DRAWINGS = "all_drawings";
+        public const string CACHE_ALL_INSPIRATIONS = "all_inspirations";
+        public const string CACHE_ALL_COLLECTIONS = "all_collections";
 
         public AppService(
-            IMemoryCache cache, 
+            ICacheProvider cache, 
             IStorageService storageService, 
             IRemoteConfigService remoteConfigService,
             IDrawingService drawingService,
@@ -37,7 +38,6 @@ namespace MRA.Services
             ILogger<AppService> logger,
             AppSettings appConfig) : base(appConfig, cache)
         {
-            _appConfiguration = appConfig;
             _logger = logger;
             _storageService = storageService;
             _remoteConfigService = remoteConfigService;
@@ -57,7 +57,7 @@ namespace MRA.Services
 
         public async Task<IEnumerable<InspirationModel>> GetAllInspirations()
         {
-            return await GetOrSetFromCacheAsync("all_inspirations", async () =>
+            return await GetOrSetFromCacheAsync(CACHE_ALL_INSPIRATIONS, async () =>
                 {
                     return await _inspirationService.GetAllInspirationsAsync();
                 }, 
@@ -87,28 +87,28 @@ namespace MRA.Services
             return LinkDrawingToCollection(collection, drawgins);
         }
 
-        private static IEnumerable<CollectionModel> LinkDrawingsToCollections(IEnumerable<CollectionModel> collections, IEnumerable<DrawingModel> drawgins)
+        private static IEnumerable<CollectionModel> LinkDrawingsToCollections(IEnumerable<CollectionModel> collections, IEnumerable<DrawingModel> drawings)
         {
             var newCollections = new List<CollectionModel>();
 
             foreach (var collection in collections)
-                newCollections.Add(LinkDrawingToCollection(collection, drawgins));
+                newCollections.Add(LinkDrawingToCollection(collection, drawings));
             
-            newCollections = newCollections.Where(c => c.Drawings.Count() > 0).ToList();
+            newCollections = newCollections.Where(c => c.Drawings.Any()).ToList();
             return newCollections;
         }
 
         private static CollectionModel LinkDrawingToCollection(CollectionModel collection, IEnumerable<DrawingModel> drawgins)
         {
-            collection.Drawings = drawgins.Where(d => (collection?.DrawingIds?.Contains(d.Id) ?? false));
+            collection.Drawings = drawgins.Where(d => (collection.DrawingIds.Contains(d.Id)));
             return collection;
         }
 
-        public async Task<CollectionModel> FindCollectionByIdAsync(string documentId, bool onlyIfVisible, bool cache = true)
+        public async Task<CollectionModel> FindCollectionByIdAsync(string collectionId, bool onlyIfVisible, bool cache = true)
         {
-            return await GetOrSetFromCacheAsync($"collection_{documentId}", async () =>
+            return await GetOrSetFromCacheAsync($"collection_{collectionId}", async () =>
             {
-                return await FetchCollectionAndLinkDrawings(documentId, onlyIfVisible: onlyIfVisible, cache: cache);
+                return await FetchCollectionAndLinkDrawings(collectionId, onlyIfVisible: onlyIfVisible, cache: cache);
             },
             useCache: cache);
         }
@@ -128,102 +128,8 @@ namespace MRA.Services
             var drawings = await _drawingService.GetAllDrawingsAsync(filter.OnlyVisible);
             var collections = await _collectionService.GetAllCollectionsAsync(filter.OnlyVisible);
             collections = LinkDrawingsToCollections(collections, drawings);
-
-            if (filter.OnlyVisible)
-            {
-                drawings = drawings.Where(x => x.Visible).ToList();
-            }
-            if (filter.Favorites)
-            {
-                drawings = drawings.Where(x => x.Favorite).ToList();
-            }
-            if (!String.IsNullOrEmpty(filter.TextQuery))
-            {
-                var tags = _drawingService.DeleteAndAdjustTags(filter.Tags).Select(x => x.ToLower());
-                drawings = drawings.Where(x =>
-                    x.Tags.Join(tags, t1 => t1.ToLower(), t2 => t2, (t1, t2) => t1.Contains(t2)).Any()).ToList();
-            }
-            if (!String.IsNullOrEmpty(filter.ProductName))
-            {
-                if (filter.ProductName.Equals("none"))
-                {
-                    drawings = drawings.Where(x =>
-                        x.ProductName.Equals("")).ToList();
-                }
-                else
-                {
-                    drawings = drawings.Where(x =>
-                        x.ProductName.Contains(filter.ProductName)).ToList();
-
-                }
-            }
-            if (!String.IsNullOrEmpty(filter.CharacterName))
-            {
-                if (filter.CharacterName.Equals("none"))
-                {
-                    drawings = drawings.Where(x =>
-                        x.Name.Equals("")).ToList();
-                }
-                else
-                {
-                    drawings = drawings.Where(x =>
-                        x.Name.Contains(filter.CharacterName)).ToList();
-
-                }
-            }
-            if (!String.IsNullOrEmpty(filter.ModelName))
-            {
-                if (filter.ModelName.Equals("none"))
-                {
-                    drawings = drawings.Where(x =>
-                        x.ModelName.Equals("")).ToList();
-                }
-                else
-                {
-                    drawings = drawings.Where(x =>
-                        x.ModelName.Contains(filter.ModelName)).ToList();
-
-                }
-            }
-            if (filter.Type != EnumExtensions.GetDefaultValue<DrawingTypes>())
-            {
-                drawings = drawings.Where(x => x.Type == filter.Type).ToList();
-            }
-            if (filter.ProductType != EnumExtensions.GetDefaultValue<DrawingProductTypes>())
-            {
-                drawings = drawings.Where(x => x.ProductType == filter.ProductType).ToList();
-            }
-            if (filter.Software != EnumExtensions.GetDefaultValue<DrawingSoftwares>())
-            {
-                drawings = drawings.Where(x => x.Software == filter.Software).ToList();
-            }
-            if (filter.Paper != EnumExtensions.GetDefaultValue<DrawingPaperSizes>())
-            {
-                drawings = drawings.Where(x => x.Paper == filter.Paper).ToList();
-            }
-            if (filter.Spotify != null)
-            {
-
-                if (filter.Spotify ?? false)
-                {
-                    drawings = drawings.Where(x => !x.SpotifyUrl.Equals("")).ToList();
-                }
-                else
-                {
-                    drawings = drawings.Where(x => x.SpotifyUrl.Equals("")).ToList();
-                }
-            }
-            if (!String.IsNullOrEmpty(filter.Collection))
-            {
-                var collection = collections.FirstOrDefault(x => x.Id.Equals(filter.Collection));
-
-                if (collection != null)
-                {
-                    var idsCollection = collection.Drawings.Select(x => x.Id).ToList();
-                    drawings = drawings.Where(d => idsCollection.Contains(d.Id)).ToList();
-                }
-            }
-
+            
+            drawings = FilterDrawings(filter, drawings, collections);
 
             if (filter.OnlyFilterCollection())
             {
@@ -244,85 +150,215 @@ namespace MRA.Services
             }
             else
             {
-                switch (filter.Sortby)
+                drawings = SortDrawingsByFilter(filter, drawings);
+            }
+            SetBlobUrl(ref drawings);
+
+            return new FilterResults(drawings, collections, filter);
+        }
+
+        private IEnumerable<DrawingModel> SortDrawingsByFilter(DrawingFilter filter, IEnumerable<DrawingModel> drawings)
+        {
+            return filter.Sortby switch
+            {
+                DrawingFilterSortBy.Latest => drawings.SortByLatest(),
+                DrawingFilterSortBy.Oldest => drawings.SortByOldest(),
+                DrawingFilterSortBy.NameAZ => drawings.SortByNameAZ(),
+                DrawingFilterSortBy.NameZA => drawings.SortByNameZA(),
+                DrawingFilterSortBy.LikeAscending => drawings.SortByLikeAscending(),
+                DrawingFilterSortBy.LikeDescending => drawings.SortByLikeDescending(),
+                DrawingFilterSortBy.ViewsAscending => drawings.SortByViewsAscending(),
+                DrawingFilterSortBy.ViewsDescending => drawings.SortByViewsDescending(),
+                DrawingFilterSortBy.AuthorScoreAscending => drawings.SortByAuthorScoreAscending(),
+                DrawingFilterSortBy.AuthorScoreDescending => drawings.SortByAuthorScoreDescending(),
+                DrawingFilterSortBy.UserScoreAscending => drawings.SortByUserScoreAscending(),
+                DrawingFilterSortBy.UserScoreDescending => drawings.SortByUserScoreDescending(),
+                DrawingFilterSortBy.Fastest => drawings.SortByFastest(),
+                DrawingFilterSortBy.Slowest => drawings.SortBySlowest(),
+                _ => CalculatePopularityOfListDrawings(drawings).SortByPopularity()
+            };
+        }
+
+        private IEnumerable<DrawingModel> FilterDrawings(DrawingFilter filter, IEnumerable<DrawingModel> drawings, IEnumerable<CollectionModel> collections)
+        {
+            drawings = FilterDrawings_OnlyVisible(filter, drawings);
+            drawings = FilterDrawings_OnlyFavorites(filter, drawings);
+            drawings = FilterDrawings_TextQuery(filter, drawings);
+            drawings = FilterDrawings_ProductName(filter, drawings);
+            drawings = FilterDrawings_CharacterName(filter, drawings);
+            drawings = FilterDrawings_ModelName(filter, drawings);
+            drawings = FilterDrawings_Type(filter, drawings);
+            drawings = FilterDrawings_ProductType(filter, drawings);
+            drawings = FilterDrawings_Software(filter, drawings);
+            drawings = FilterDrawings_Paper(filter, drawings);
+            drawings = FilterDrawings_Spotify(filter, drawings);
+            drawings = FilterDrawings_Collection(filter, drawings, collections);
+            return drawings;
+        }
+
+        private static IEnumerable<DrawingModel> FilterDrawings_Collection(DrawingFilter filter, IEnumerable<DrawingModel> drawings, IEnumerable<CollectionModel> collections)
+        {
+            if (!String.IsNullOrEmpty(filter.Collection))
+            {
+                var collection = collections.FirstOrDefault(x => x.Id.Equals(filter.Collection));
+
+                if (collection != null)
                 {
-                    case "date-asc":
-                        drawings = drawings.OrderBy(x => x.Date).ToList();
-                        break;
-                    case "date-desc":
-                        drawings = drawings.OrderByDescending(x => x.Date).ToList();
-                        break;
-                    case "name-asc":
-                        drawings = drawings.OrderBy(x => x.Name).ToList();
-                        break;
-                    case "name-desc":
-                        drawings = drawings.OrderByDescending(x => x.Name).ToList();
-                        break;
-                    case "kudos-asc":
-                        drawings = drawings.OrderBy(x => x.Likes).ToList();
-                        break;
-                    case "kudos-desc":
-                        drawings = drawings.OrderByDescending(x => x.Likes).ToList();
-                        break;
-                    case "views-asc":
-                        drawings = drawings.OrderBy(x => x.Views).ToList();
-                        break;
-                    case "views-desc":
-                        drawings = drawings.OrderByDescending(x => x.Views).ToList();
-                        break;
-                    case "scorem-asc":
-                        drawings = drawings.OrderBy(x => x.ScoreCritic).ThenBy(x => x.ScorePopular).ThenBy(x => x.VotesPopular).ToList();
-                        break;
-                    case "scorem-desc":
-                        drawings = drawings.OrderByDescending(x => x.ScoreCritic).ThenByDescending(x => x.ScorePopular).ThenByDescending(x => x.VotesPopular).ToList();
-                        break;
-                    case "scoreu-asc":
-                        drawings = drawings.Where(x => x.VotesPopular > 0).OrderBy(x => x.ScorePopular).ThenBy(x => x.VotesPopular).ToList();
-                        break;
-                    case "scoreu-desc":
-                        drawings = drawings.Where(x => x.VotesPopular > 0).OrderByDescending(x => x.ScorePopular).ThenByDescending(x => x.VotesPopular).ToList();
-                        break;
-                    case "time-asc":
-                        drawings = drawings.OrderBy(x => x.Time).ToList();
-                        break;
-                    case "time-desc":
-                        drawings = drawings.OrderByDescending(x => x.Time).ToList();
-                        break;
-                    default:
-                        drawings = CalculatePopularityOfListDrawings(drawings).OrderByDescending(x => x.Popularity).ToList();
-                        break;
+                    var idsCollection = collection.Drawings.Select(x => x.Id).ToList();
+                    drawings = drawings.Where(d => idsCollection.Contains(d.Id)).ToList();
                 }
             }
 
-            var results = new FilterResults(drawings);
-            var ids = drawings.Select(x => x.Id).ToList();
-            results.FilteredCollections = collections
-                .Where(c => c.Drawings.Any(d => ids.Contains(d.Id)))
-                .Select(x => x.Id)
-                .ToList();
+            return drawings;
+        }
 
-
-            if (filter.PageSize > 0 && filter.PageNumber > 0)
+        private static IEnumerable<DrawingModel> FilterDrawings_Spotify(DrawingFilter filter, IEnumerable<DrawingModel> drawings)
+        {
+            if (filter.Spotify != null)
             {
-                // Saltar los elementos de las páginas anteriores
-                drawings = drawings.Skip((filter.PageNumber - 1) * filter.PageSize)
-                    // Tomar solo los elementos de la página actual
-                    .Take(filter.PageSize)
-                    .ToList();
+                if (filter.Spotify ?? false)
+                {
+                    drawings = drawings.Where(x => !string.IsNullOrEmpty(x.SpotifyUrl)).ToList();
+                }
+                else
+                {
+                    drawings = drawings.Where(x => string.IsNullOrEmpty(x.SpotifyUrl)).ToList();
+                }
             }
 
+            return drawings;
+        }
 
-            //foreach (var d in drawings)
-            //{
-            //    Debug.WriteLine($"{d.Id.PadRight(30)} ({d.Name.PadRight(30)}): [{d.Popularity.ToString("#.###").PadRight(5)} == " +
-            //        $"{d.PopularityDate.ToString("#.##").PadRight(5)} + {d.PopularityCritic.ToString("#.##").PadRight(5)} + {d.PopularityPopular.ToString("#.##").PadRight(5)}" +
-            //        $" + {d.PopularityFavorite.ToString("#.##").PadRight(5)} ]");
-            //}
+        private static IEnumerable<DrawingModel> FilterDrawings_Paper(DrawingFilter filter, IEnumerable<DrawingModel> drawings)
+        {
+            if (filter.Paper != EnumExtensions.GetDefaultValue<DrawingPaperSizes>())
+            {
+                drawings = drawings.Where(x => x.Paper == filter.Paper).ToList();
+            }
 
-            SetBlobUrl(ref drawings);
+            return drawings;
+        }
 
-            results.UpdatefilteredDrawings(drawings);
-            return results;
+        private static IEnumerable<DrawingModel> FilterDrawings_Software(DrawingFilter filter, IEnumerable<DrawingModel> drawings)
+        {
+            if (filter.Software != EnumExtensions.GetDefaultValue<DrawingSoftwares>())
+            {
+                drawings = drawings.Where(x => x.Software == filter.Software).ToList();
+            }
+
+            return drawings;
+        }
+
+        private static IEnumerable<DrawingModel> FilterDrawings_ProductType(DrawingFilter filter, IEnumerable<DrawingModel> drawings)
+        {
+            if (filter.ProductType != EnumExtensions.GetDefaultValue<DrawingProductTypes>())
+            {
+                drawings = drawings.Where(x => x.ProductType == filter.ProductType).ToList();
+            }
+
+            return drawings;
+        }
+
+        private static IEnumerable<DrawingModel> FilterDrawings_Type(DrawingFilter filter, IEnumerable<DrawingModel> drawings)
+        {
+            if (filter.Type != EnumExtensions.GetDefaultValue<DrawingTypes>())
+            {
+                drawings = drawings.Where(x => x.Type == filter.Type).ToList();
+            }
+
+            return drawings;
+        }
+
+        private static IEnumerable<DrawingModel> FilterDrawings_ModelName(DrawingFilter filter, IEnumerable<DrawingModel> drawings)
+        {
+            if (!String.IsNullOrEmpty(filter.ModelName))
+            {
+                if (filter.ModelName.Equals(DrawingFilter.MODEL_NONE))
+                {
+                    drawings = drawings.Where(x =>
+                        string.IsNullOrEmpty(x.ModelName)).ToList();
+                }
+                else
+                {
+                    drawings = drawings.Where(x =>
+                        x.ModelName.Contains(filter.ModelName)).ToList();
+
+                }
+            }
+
+            return drawings;
+        }
+
+        private static IEnumerable<DrawingModel> FilterDrawings_CharacterName(DrawingFilter filter, IEnumerable<DrawingModel> drawings)
+        {
+            if (!String.IsNullOrEmpty(filter.CharacterName))
+            {
+                if (filter.CharacterName.Equals(DrawingFilter.CHARACTER_NONE))
+                {
+                    drawings = drawings.Where(x =>
+                        string.IsNullOrEmpty(x.Name)).ToList();
+                }
+                else
+                {
+                    drawings = drawings.Where(x =>
+                        x.Name.Contains(filter.CharacterName)).ToList();
+
+                }
+            }
+
+            return drawings;
+        }
+
+        private static IEnumerable<DrawingModel> FilterDrawings_ProductName(DrawingFilter filter, IEnumerable<DrawingModel> drawings)
+        {
+            if (!String.IsNullOrEmpty(filter.ProductName))
+            {
+                if (filter.ProductName.Equals(DrawingFilter.PRODUCT_NONE))
+                {
+                    drawings = drawings.Where(x =>
+                        string.IsNullOrEmpty(x.ProductName)).ToList();
+                }
+                else
+                {
+                    drawings = drawings.Where(x =>
+                        x.ProductName.Contains(filter.ProductName)).ToList();
+
+                }
+            }
+
+            return drawings;
+        }
+
+        private IEnumerable<DrawingModel> FilterDrawings_TextQuery(DrawingFilter filter, IEnumerable<DrawingModel> drawings)
+        {
+            if (!String.IsNullOrEmpty(filter.TextQuery))
+            {
+                var tags = _drawingService.DeleteAndAdjustTags(filter.Tags).Select(x => x.ToLower());
+                drawings = drawings.Where(x =>
+                    x.Tags.Join(tags, t1 => t1.ToLower(), t2 => t2, (t1, t2) => t1.Contains(t2)).Any());
+            }
+
+            return drawings;
+        }
+
+        private static IEnumerable<DrawingModel> FilterDrawings_OnlyFavorites(DrawingFilter filter, IEnumerable<DrawingModel> drawings)
+        {
+            if (filter.Favorites)
+            {
+                drawings = drawings.Where(x => x.Favorite).ToList();
+            }
+
+            return drawings;
+        }
+
+        private static IEnumerable<DrawingModel> FilterDrawings_OnlyVisible(DrawingFilter filter, IEnumerable<DrawingModel> drawings)
+        {
+            if (filter.OnlyVisible)
+            {
+                drawings = drawings.Where(x => x.Visible).ToList();
+            }
+
+            return drawings;
         }
 
         private void SetBlobUrl(ref IEnumerable<DrawingModel> drawings)

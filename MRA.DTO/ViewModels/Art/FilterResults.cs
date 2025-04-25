@@ -1,4 +1,4 @@
-﻿using MRA.DTO.Enums.Drawing;
+﻿using Microsoft.Azure.Cosmos.Serialization.HybridRow;
 using MRA.DTO.Models;
 using System.Text.Json.Serialization;
 
@@ -7,9 +7,8 @@ namespace MRA.DTO.ViewModels.Art
     public class FilterResults
     {
         [JsonIgnore]
-        public IEnumerable<DrawingModel> FilteredDrawings { get; set; }
-        [JsonIgnore]
         public IEnumerable<DrawingModel> TotalDrawings { get; set; }
+        public IEnumerable<DrawingModel> FilteredDrawings { get; set; }
         public int FetchedCount { get { return (FilteredDrawings != null ? FilteredDrawings.Count() : 0); } }
         public int TotalCount { get { return TotalDrawings.Count(); } }
         public int TotalTime { get { return TotalDrawings.Sum(x => x.Time); } }
@@ -33,29 +32,30 @@ namespace MRA.DTO.ViewModels.Art
         public IEnumerable<string> FilteredCollections { get; set; }
         public int NDrawingCollections { get { return FilteredCollections.Count(); } }
 
-        public FilterResults()
-        {
 
-        }
-
-        public FilterResults(IEnumerable<DrawingModel> totalDrawings)
+        public FilterResults(IEnumerable<DrawingModel> drawings, IEnumerable<CollectionModel> collections, DrawingFilter filter)
         {
-            TotalDrawings = totalDrawings;
-            FilteredDrawingCharacters = totalDrawings.Select(x => x.Name).Distinct().Where(x => !string.IsNullOrEmpty(x)).ToList();
-            FilteredDrawingModels = totalDrawings.Select(x => x.ModelName).Distinct().Where(x => !string.IsNullOrEmpty(x)).ToList();
-            FilteredDrawingStyles = totalDrawings.Select(x => (int) x.Type).Distinct().ToList();
-            FilteredDrawingProductTypes = totalDrawings.Select(x => (int) x.ProductType).Distinct().ToList();
-            FilteredDrawingProducts = totalDrawings.Select(x => x.ProductName).Distinct().Where(x => !string.IsNullOrEmpty(x)).ToList();
-            FilteredDrawingSoftwares = totalDrawings.Select(x => (int) x.Software).Distinct().Where(x => x > 0).ToList();
-            FilteredDrawingPapers = totalDrawings.Select(x => (int) x.Paper).Distinct().Where(x => x > 0).ToList();
-            NDrawingFavorites = totalDrawings.Count(x => x.Favorite);
-            FilteredCollections = new List<string>();
-            FilteredDrawings = new List<DrawingModel>();
-        }
+            TotalDrawings = drawings;
+            FilteredDrawingCharacters = drawings.Select(x => x.Name).Distinct().Where(x => !string.IsNullOrEmpty(x));
+            FilteredDrawingModels = drawings.Select(x => x.ModelName).Distinct().Where(x => !string.IsNullOrEmpty(x));
+            FilteredDrawingStyles = drawings.Select(x => (int) x.Type).Distinct();
+            FilteredDrawingProductTypes = drawings.Select(x => (int) x.ProductType).Distinct();
+            FilteredDrawingProducts = drawings.Select(x => x.ProductName).Distinct().Where(x => !string.IsNullOrEmpty(x));
+            FilteredDrawingSoftwares = drawings.Select(x => (int) x.Software).Distinct().Where(x => x > 0);
+            FilteredDrawingPapers = drawings.Select(x => (int) x.Paper).Distinct().Where(x => x > 0);
+            NDrawingFavorites = drawings.Count(x => x.Favorite);
 
-        public virtual void UpdatefilteredDrawings(IEnumerable<DrawingModel> drawings)
-        {
+            var ids = drawings.Select(x => x.Id).ToList();
+            FilteredCollections = collections
+                .Where(c => c.Drawings.Any(d => ids.Contains(d.Id)))
+                .Select(x => x.Id);
+
             FilteredDrawings = drawings;
+            if (filter.PageSize > 0 && filter.PageNumber > 0)
+            {
+                FilteredDrawings = drawings.Skip((filter.PageNumber - 1) * filter.PageSize)
+                    .Take(filter.PageSize);
+            }
         }
     }
 }

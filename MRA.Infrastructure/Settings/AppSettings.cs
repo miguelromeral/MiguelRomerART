@@ -1,5 +1,6 @@
 ﻿
 using MRA.Infrastructure.Settings.Options;
+using MRA.Infrastructure.Settings.Sections;
 
 namespace MRA.Infrastructure.Settings;
 
@@ -16,4 +17,10 @@ public class AppSettings
     public AzureCosmosSettings AzureCosmosDb { get; set; }
     public DatabaseSettings Database { get; set; }
     public RemoteConfigSettings RemoteConfig { get; set; }
+    public CommandsSettings Commands { get; set; }
+
+    public AppSettings()
+    {
+
+    }
 }

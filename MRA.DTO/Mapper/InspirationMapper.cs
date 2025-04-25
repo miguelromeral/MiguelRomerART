@@ -1,4 +1,5 @@
-﻿using MRA.DTO.Mapper.Interfaces;
+﻿using MRA.DTO.Enums.Inspirations;
+using MRA.DTO.Mapper.Interfaces;
 using MRA.DTO.Models;
 using MRA.Infrastructure.Database.Documents.Interfaces;
 using MRA.Infrastructure.Database.Documents.MongoDb;
@@ -14,7 +15,7 @@ public class InspirationMapper : IDocumentMapper<InspirationModel, IInspirationD
             Id = drawingDocument.Id,
             Name = drawingDocument.Name,
             Instagram = drawingDocument.Instagram,
-            Type = drawingDocument.Type,
+            Type = (InspirationTypes) drawingDocument.Type,
             Twitter = drawingDocument.Twitter,
             YouTube = drawingDocument.YouTube,
             Twitch = drawingDocument.Twitch,
@@ -30,7 +31,7 @@ public class InspirationMapper : IDocumentMapper<InspirationModel, IInspirationD
             Name = drawing.Name,
             Instagram = drawing.Instagram,
             Twitter = drawing.Twitter,
-            Type = drawing.Type,
+            Type = (int) drawing.Type,
             YouTube = drawing.YouTube,
             Twitch = drawing.Twitch,
             Pinterest = drawing.Pinterest,

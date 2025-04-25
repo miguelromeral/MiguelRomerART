@@ -12,13 +12,12 @@ public interface IDrawingService
 
     Task<IEnumerable<ProductListItem>> GetProductsAsync();
     Task<IEnumerable<CharacterListItem>> GetCharactersAsync();
-    Task<IEnumerable<string>> GetModelsAsync();
+    Task<IEnumerable<ModelListItem>> GetModelsAsync();
 
-    Task<bool> SaveDrawingAsync(string id, DrawingModel model);
-    Task<bool> UpdateViewsAsync(string id);
-    Task<bool> UpdateLikesAsync(string id);
+    Task<DrawingModel> SaveDrawingAsync(DrawingModel model);
+    Task<DrawingModel> UpdateViewsAsync(string id);
+    Task<DrawingModel> UpdateLikesAsync(string id);
     Task<VoteSubmittedModel> VoteDrawingAsync(string documentId, int score);
 
-    void SetAutomaticTags(ref DrawingModel document);
     IEnumerable<string> DeleteAndAdjustTags(IEnumerable<string> tags);
 }

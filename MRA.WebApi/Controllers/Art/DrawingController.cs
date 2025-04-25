@@ -5,10 +5,11 @@ using MRA.DTO.Models;
 using MRA.DTO.ViewModels.Art;
 using MRA.DTO.ViewModels.Art.Select;
 using MRA.Services;
-using MRA.Services.Models.Collections;
 using MRA.Services.Models.Drawings;
 using MRA.Services.Storage;
 using MRA.WebApi.Models.Responses;
+using MRA.WebApi.Models.Responses.Errors;
+using MRA.WebApi.Models.Responses.Errors.Drawings;
 
 namespace MRA.WebApi.Controllers.Art;
 
@@ -34,21 +35,20 @@ public class DrawingController : Controller
     }
 
     [HttpGet("products")]
-    public async Task<ActionResult<List<ProductListItem>>> Products()
+    public async Task<ActionResult<IEnumerable<ProductListItem>>> Products()
     {
         try
         {
-            _logger.LogInformation("Solicitados Productos");
+            _logger.LogInformation("Requesting products");
             var products = await _drawingService.GetProductsAsync();
-            _logger.LogInformation($"Productos recuperados: {products.Count()}");
+            _logger.LogInformation("Products found: {Count}", products.Count());
             return Ok(products);
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error al recuperar los productos: " + ex.Message);
+            _logger.LogError(ex, DrawingProductErrorMessages.InternalServer);
             return StatusCode(StatusCodes.Status500InternalServerError,
-                new { message = "Error al recuperar los productos." });
-
+                new ErrorResponse(DrawingProductErrorMessages.InternalServer));
         }
     }
 
@@ -57,16 +57,16 @@ public class DrawingController : Controller
     {
         try
         {
-            _logger.LogInformation("Solicitados Personajes");
+            _logger.LogInformation("Requesting characters");
             var characters = await _drawingService.GetCharactersAsync();
-            _logger.LogInformation("Personajes recuperados: " + characters.Count());
+            _logger.LogInformation("Characters found: {Count}", characters.Count());
             return Ok(characters);
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error al recuperar los personajes: " + ex.Message);
+            _logger.LogError(ex, DrawingCharactersErrorMessages.InternalServer);
             return StatusCode(StatusCodes.Status500InternalServerError,
-                new { message = "Error al recuperar los personajes." });
+                new ErrorResponse(DrawingCharactersErrorMessages.InternalServer));
         }
     }
 
@@ -75,16 +75,17 @@ public class DrawingController : Controller
     {
         try
         {
-            _logger.LogInformation("Solicitados Modelos");
+            _logger.LogInformation("Requesting models");
             var models = await _drawingService.GetModelsAsync();
-            _logger.LogInformation("Modelos recuperados: " + models.Count());
-            return Ok(models);
+            _logger.LogInformation("Models found: '{Count}'", models.Count());
+            var modelNames = models.Select(x => x.ModelName).ToList();
+            return Ok(modelNames);
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error al recuperar los modelos: " + ex.Message);
+            _logger.LogError(ex, DrawingModelsErrorMessages.InternalServer);
             return StatusCode(StatusCodes.Status500InternalServerError,
-                new { message = "Error al recuperar los modelos." });
+                new ErrorResponse(DrawingModelsErrorMessages.InternalServer));
         }
     }
 
@@ -106,26 +107,26 @@ public class DrawingController : Controller
     {
         try
         {
-            _logger.LogInformation($"Solicitados detalles de dibujo \"{id}\"");
-            var drawing = await _appService.FindDrawingByIdAsync(id, onlyIfVisible: onlyIfVisible, updateViews: false, cache: false);
+            _logger.LogInformation("Requesting drawing details '{Id}'", id);
+            var drawing = await _appService.FindDrawingByIdAsync(id, onlyIfVisible: onlyIfVisible, updateViews: true, cache: false);
             return Ok(drawing);
         }
         catch (DrawingNotFoundException dnf)
         {
-            _logger.LogWarning($"No se encontró ningún dibujo \"{id}\"");
-            return NotFound(new { message = $"No drawing found with ID \"{id}\"" });
+            _logger.LogWarning(dnf, dnf.Message);
+            return NotFound(new ErrorResponse(dnf.Message));
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Error al recuperar los detalles del dibujo \"{id}\": " + ex.Message);
+            _logger.LogError(ex, DrawingDetailsErrorMessages.InternalServer(id));
             return StatusCode(StatusCodes.Status500InternalServerError,
-                new { message = $"Error when fetching drawing with ID \"{id}\"" });
+                new ErrorResponse(DrawingDetailsErrorMessages.InternalServer(id)));
         }
     }
 
 
     [HttpPost("filter")]
-    public async Task<ActionResult<DrawingFilterResultsResponse>> Filter([FromBody] DrawingFilter filters)
+    public async Task<ActionResult<FilterResults>> Filter([FromBody] DrawingFilter filters)
     {
         filters.OnlyVisible = true;
         return await FilteringDrawings(filters);
@@ -133,26 +134,26 @@ public class DrawingController : Controller
 
     [Authorize]
     [HttpPost("full-filter")]
-    public async Task<ActionResult<DrawingFilterResultsResponse>> FullFilter([FromBody] DrawingFilter filters)
+    public async Task<ActionResult<FilterResults>> FullFilter([FromBody] DrawingFilter filters)
     {
         filters.OnlyVisible = false;
         return await FilteringDrawings(filters);
     }
 
-    private async Task<ActionResult<DrawingFilterResultsResponse>> FilteringDrawings(DrawingFilter filters)
+    private async Task<ActionResult<FilterResults>> FilteringDrawings(DrawingFilter filters)
     {
         try
         {
             _logger.LogInformation($"Filtering drawings");
             var results = await _appService.FilterDrawingsAsync(filters);
-            _logger.LogInformation($"Dibujos filtrados: {results.TotalDrawings.Count()}");
-            return Ok(new DrawingFilterResultsResponse(results));
+            _logger.LogInformation("Total drawings found: {Count}", results.TotalDrawings.Count());
+            return Ok(results);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"Error when filtering drawings.");
+            _logger.LogError(ex, DrawingFilterErrorMessages.InternalServer);
             return StatusCode(StatusCodes.Status500InternalServerError,
-                new { message = $"Error when filtering drawings" });
+                new ErrorResponse(DrawingFilterErrorMessages.InternalServer));
         }
     }
 
@@ -206,7 +207,7 @@ public class DrawingController : Controller
     {
         try
         {
-            _logger.LogInformation($"Guardando dibujo \"{id}\"");
+            _logger.LogInformation("Guardando dibujo '{Id}'", id);
             var drawing = new DrawingModel()
             {
                 ListComments = request.ListComments ?? [],
@@ -229,7 +230,7 @@ public class DrawingController : Controller
                 Software = request.Software,
                 Filter = request.Filter,
                 SpotifyUrl = request.SpotifyUrl,
-                Tags = request.TagsText?.Split(DrawingModel.SEPARATOR_TAGS) ?? [],
+                Tags = request.TagsText?.Split(DrawingTagManager.TAG_SEPARATOR) ?? [],
                 Time = request.Time ?? 0,
                 Title = request.Title ?? string.Empty,
                 Type = request.Type,
@@ -238,8 +239,8 @@ public class DrawingController : Controller
                 Visible = request.Visible
             };
 
-            await _drawingService.SaveDrawingAsync(id, drawing);
-            _appService.CleanAllCache();
+            await _drawingService.SaveDrawingAsync(drawing);
+            _appService.Clear();
             return Ok(drawing);
         }
         catch (Exception ex)

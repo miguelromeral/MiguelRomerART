@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using MRA.Infrastructure.Settings;
 using MRA.Infrastructure.Settings.Options;
+using MRA.Infrastructure.Settings.Sections;
 
 namespace MRA.DependencyInjection.Startup;
 
@@ -29,7 +30,8 @@ public static class ConfigurationStartup
             EPPlus = config.GetSection("EPPlus").Get<EPPlusSettings>(),
             AzureCosmosDb = config.GetSection("AzureCosmosDb").Get<AzureCosmosSettings>(),
             Database = config.GetSection("Database").Get<DatabaseSettings>(),
-            RemoteConfig = config.GetSection("RemoteConfig").Get<RemoteConfigSettings>()
+            RemoteConfig = config.GetSection("RemoteConfig").Get<RemoteConfigSettings>(),
+            Commands = config.GetSection("Commands").Get<CommandsSettings>()
         };
 
         return appConfig;

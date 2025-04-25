@@ -1,5 +1,4 @@
-﻿using MRA.Services.Logger;
-
+﻿
 namespace MRA.WebApi.Startup;
 
 public static class LogginStartup
@@ -11,7 +10,5 @@ public static class LogginStartup
         logging.AddConsole();
         if(environment.IsDevelopment())
             logging.AddDebug();
-
-        //logging.AddProvider(new MRLoggerProvider(configuration, new DTO.Options.AppConfiguration()));
     }
 }

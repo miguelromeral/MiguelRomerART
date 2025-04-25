@@ -6,6 +6,7 @@ using MRA.Infrastructure.Excel;
 using MRA.Infrastructure.Excel.Attributes;
 using MRA.Infrastructure.Settings;
 using MRA.Services.Excel.Interfaces;
+using MRA.Services.Models.Drawings;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using OfficeOpenXml.Table;
@@ -129,7 +130,7 @@ public class ExcelService : IExcelService
                 switch (prop.Attribute.Name)
                 {
                     case "Tags":
-                        cell.Value = String.Join(DrawingModel.SEPARATOR_TAGS, stringList);
+                        cell.Value = String.Join(DrawingTagManager.TAG_SEPARATOR, stringList);
                         break;
                     default:
                         cell.Value = String.Join(EXCEL_SEPARATOR_COMMENTS, stringList);
@@ -148,10 +149,6 @@ public class ExcelService : IExcelService
             if (prop.Attribute.WrapText)
             {
                 cell.Style.WrapText = true;
-            }
-            if (prop.Attribute.Hidden && !workSheet.Column(col).Hidden)
-            {
-                workSheet.Column(col).Hidden = true;
             }
             col++;
         }
@@ -213,109 +210,10 @@ public class ExcelService : IExcelService
         return new FileInfo(filePath);
     }
 
-    public DrawingModel ReadDrawingFromRow(ExcelWorksheet workSheet, List<ExcelColumnInfo> drawingProperties, Dictionary<string, int> nameToColumnMap, int row)
-    {
-        var drawing = new DrawingModel();
-
-        foreach (var propInfo in drawingProperties.Where(x => x.Property.CanWrite))
-        {
-            if (!nameToColumnMap.TryGetValue(propInfo.Attribute.Name, out int col))
-            {
-                // Si el nombre de la columna no existe en el mapeo, continuar
-                continue;
-            }
-
-            var cell = workSheet.Cells[row, col];
-            var cellValue = cell.Value;
-
-            // Mapear el valor de la celda al tipo de la propiedad
-            SetPropertyValue(drawing, propInfo.Property, cellValue);
-        }
-
-        return drawing;
-    }
-
-    private void SetPropertyValue(DrawingModel drawing, PropertyInfo property, object cellValue)
-    {
-        if (cellValue == null)
-        {
-            property.SetValue(drawing, null);
-            return;
-        }
-
-        Type propType = property.PropertyType;
-
-        try
-        {
-            if (propType == typeof(string))
-            {
-                property.SetValue(drawing, cellValue.ToString());
-            }
-            else if (propType == typeof(int))
-            {
-                property.SetValue(drawing, Convert.ToInt32(cellValue));
-            }
-            else if (propType == typeof(long))
-            {
-                property.SetValue(drawing, Convert.ToInt64(cellValue));
-            }
-            else if (propType == typeof(double))
-            {
-                property.SetValue(drawing, Convert.ToDouble(cellValue));
-            }
-            else if (propType == typeof(decimal))
-            {
-                property.SetValue(drawing, Convert.ToDecimal(cellValue));
-            }
-            else if (propType == typeof(DateTime))
-            {
-                property.SetValue(drawing, DateTime.FromOADate(Convert.ToDouble(cellValue)));
-            }
-            else if (propType == typeof(bool))
-            {
-                switch (property.Name)
-                {
-                    case "Visible":
-                        property.SetValue(drawing, cellValue.ToString() == EXCEL_VISIBLE_VALUE);
-                        break;
-                    case "Favorite":
-                        property.SetValue(drawing, cellValue.ToString() == EXCEL_FAVORITE_VALUE);
-                        break;
-                    default:
-                        property.SetValue(drawing, cellValue.ToString() == "TRUE");
-                        break;
-                }
-            }
-            else if (propType == typeof(List<string>))
-            {
-                var list = new List<string>();
-                switch (property.Name)
-                {
-                    case "Tags":
-                        list = cellValue.ToString().Split(new[] { DrawingModel.SEPARATOR_TAGS }, StringSplitOptions.None).ToList();
-                        break;
-                    default:
-                        list = cellValue.ToString().Split(new[] { EXCEL_SEPARATOR_COMMENTS }, StringSplitOptions.None).ToList();
-                        break;
-                }
-
-                property.SetValue(drawing, list);
-            }
-            else if (propType == typeof(Uri))
-            {
-                if (Uri.IsWellFormedUriString(cellValue.ToString(), UriKind.Absolute))
-                {
-                    property.SetValue(drawing, new Uri(cellValue.ToString()));
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error setting property {property.Name}: {ex.Message}");
-        }
-    }
     public List<ExcelColumnInfo> GetPropertiesAttributes<T>()
     {
         return _excel.GetPropertiesAttributes<T>();
     }
+
+    public Dictionary<string, int> GetColumnMapDrawing(ExcelWorksheet workSheet) => _excel.GetColumnMapDrawing(workSheet);
 }

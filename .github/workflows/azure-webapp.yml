@@ -8,7 +8,6 @@ env:
   AZURE_WEBAPP_NAME: MRAWebApi20240716105924
   DOTNET_VERSION: '9'
   CSPROJ_PATH: './MRA.WebApi/MRA.WebApi.csproj'
-  TEST_PROJECT_PATH: './MRA.UnitTests/MRA.UnitTests.csproj'
   TEST_RESULTS_PATH: './MRA.TestingResults'
   COVERAGE_HTML_PATH: './MRA.TestingResults/CoverageReport'
   PUBLISH_COVERAGE_HTML_PATH: 'MRA.TestingResults/CoverageReport'
@@ -41,7 +40,7 @@ jobs:
         run: dotnet build ${{env.CSPROJ_PATH}} --configuration Release --no-restore
 
       - name: Run tests with coverage
-        run: dotnet test ${{ env.TEST_PROJECT_PATH }} --configuration Release --collect:"XPlat Code Coverage" --results-directory ${{ env.TEST_RESULTS_PATH }}
+        run: dotnet test --configuration Release --collect:"XPlat Code Coverage" --results-directory ${{ env.TEST_RESULTS_PATH }}
         
       - name: Upload coverage report
         uses: actions/upload-artifact@v4

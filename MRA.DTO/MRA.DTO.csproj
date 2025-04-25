@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MRA.Infrastructure\MRA.Infrastructure.csproj" />
+    <ProjectReference Include="..\Shared\MRA.Extensions\MRA.Extensions.csproj" />
   </ItemGroup>
 
 </Project>

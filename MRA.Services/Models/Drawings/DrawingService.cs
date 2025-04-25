@@ -5,19 +5,21 @@ using MRA.DTO.ViewModels.Art.Select;
 using MRA.Services.Models.Documents;
 using MRA.DTO.ViewModels.Art;
 using MRA.Infrastructure.Database.Providers.Interfaces;
-using MRA.DTO.Mapper.Interfaces;
 using MRA.Infrastructure.Database.Documents.Interfaces;
+using MRA.DTO.Mapper;
 
 namespace MRA.Services.Models.Drawings;
 
 public class DrawingService : DocumentModelService<DrawingModel, IDrawingDocument>, IDrawingService
 {
+    private readonly DrawingTagManager _drawingTagManager;
+
     public DrawingService(
         AppSettings appConfig,
-        IDocumentMapper<DrawingModel, IDrawingDocument> converter,
         IDocumentsDatabase db)
-        : base(collectionName: appConfig.Database.Collections.Drawings, converter, db)
+        : base(collectionName: appConfig.Database.Collections.Drawings, new DrawingMapper(appConfig), db)
     {
+        _drawingTagManager = new DrawingTagManager(appConfig);
     }
 
     public async Task<IEnumerable<DrawingModel>> GetAllDrawingsAsync(bool onlyIfVisible)
@@ -34,12 +36,9 @@ public class DrawingService : DocumentModelService<DrawingModel, IDrawingDocumen
     {
         await CheckIfExistsDrawingAsync(id);
 
-        if (updateViews)
-            await UpdateViewsAsync(id);
+        var drawing = (updateViews ? await UpdateViewsAsync(id) : await FindAsync(id));
 
-        var drawing = await FindAsync(id);
-        if (drawing == null ||
-            (onlyIfVisible && !drawing.Visible))
+        if (onlyIfVisible && !drawing.Visible)
             throw new DrawingNotFoundException(id);
 
         return drawing;
@@ -47,122 +46,63 @@ public class DrawingService : DocumentModelService<DrawingModel, IDrawingDocumen
 
     public async Task<IEnumerable<ProductListItem>> GetProductsAsync()
     {
-        var list = new List<ProductListItem>();
         var drawings = await GetAllAsync();
-        foreach (var product in drawings.Where(x => !string.IsNullOrEmpty(x.ProductName)).Select(x => new { x.ProductName, x.ProductType, x.ProductTypeName }).Distinct().ToList())
-        {
-            if (list.Count(x => x.ProductName == product.ProductName) == 0)
-            {
-                list.Add(new ProductListItem()
-                {
-                    ProductName = product.ProductName,
-                    ProductTypeId = product.ProductType,
-                    ProductType = product.ProductTypeName
-                });
-            }
-        }
-
-        return list;
+        return ProductListItem.GetProductsFromDrawings(drawings);
     }
 
     public async Task<IEnumerable<CharacterListItem>> GetCharactersAsync()
     {
-        var list = new List<CharacterListItem>();
         var drawings = await GetAllAsync();
-
-        foreach (var character in drawings.Where(x => !string.IsNullOrEmpty(x.ProductName)).Select(x => new { x.Name, x.ProductType, x.ProductTypeName }).Distinct().ToList())
-        {
-            if (list.Count(x => x.CharacterName == character.Name) == 0)
-            {
-                list.Add(new CharacterListItem()
-                {
-                    CharacterName = character.Name,
-                    ProductTypeId = character.ProductType,
-                    ProductType = character.ProductTypeName
-                });
-            }
-        }
-
-        return list;
+        return CharacterListItem.GetCharactersFromDrawings(drawings);
     }
 
-    public async Task<IEnumerable<string>> GetModelsAsync()
+    public async Task<IEnumerable<ModelListItem>> GetModelsAsync()
     {
-        var list = new List<string>();
         var drawings = await GetAllAsync();
-
-        foreach (var modelName in drawings.Where(x => !string.IsNullOrEmpty(x.ModelName)).Select(x => x.ModelName).Distinct().ToList())
-        {
-            if (!list.Contains(modelName))
-            {
-                list.Add(modelName);
-            }
-        }
-
-        return list;
+        return ModelListItem.GetModelsFromDrawings(drawings);
     }
 
-    public async Task<bool> SaveDrawingAsync(string id, DrawingModel model)
+    public async Task<DrawingModel> SaveDrawingAsync(DrawingModel model)
     {
-        SetAutomaticTags(ref model);
-        return await SetAsync(id, model);
+        var drawingWithTags = _drawingTagManager.SetAutomaticTags(model);
+        await SetAsync(model.Id, drawingWithTags);
+
+        return drawingWithTags;
     }
 
-    public async Task<bool> UpdateViewsAsync(string id)
+    public async Task<DrawingModel> UpdateViewsAsync(string id)
     {
-        await CheckIfExistsDrawingAsync(id);
-
         var drawing = await FindAsync(id);
         drawing.Views++;
 
-        return await SetAsync(id, drawing);
+        await SetAsync(id, drawing);
+
+        return drawing;
     }
 
-    public async Task<bool> UpdateLikesAsync(string id)
+    public async Task<DrawingModel> UpdateLikesAsync(string id)
     {
         await CheckIfExistsDrawingAsync(id);
 
         var drawing = await FindAsync(id);
         drawing.Likes++;
 
-        return await SetAsync(id, drawing);
+        await SetAsync(id, drawing);
+
+        return drawing;
     }
 
 
     public async Task<VoteSubmittedModel> VoteDrawingAsync(string documentId, int score)
     {
         await CheckIfExistsDrawingAsync(documentId);
-        
-        var votes = new VoteSubmittedModel();
-        try
-        {
-            if (score > 100) score = 100;
-            if (score < 0) score = 0;
 
-            var drawing = await FindAsync(documentId);
+        var drawing = await FindAsync(documentId);
+        drawing.UpdateDrawingScore(score);
 
-            if (drawing.VotesPopular > 0)
-            {
-                votes.NewVotes = drawing.VotesPopular + 1;
-                votes.NewScore = ((drawing.ScorePopular * drawing.VotesPopular) + score) / (drawing.VotesPopular + 1);
-            }
-            else
-            {
-                votes.NewVotes = 1;
-                votes.NewScore = score;
-            }
+        var success = await SetAsync(documentId, drawing);
 
-            drawing.VotesPopular = votes.NewVotes;
-            drawing.ScorePopular = votes.NewScore;
-
-            votes.Success = await SetAsync(documentId, drawing);
-        }
-        catch (Exception ex)
-        {
-            votes.NewVotes = -1;
-            votes.Success = false;
-        }
-        return votes;
+        return new VoteSubmittedModel(drawing, success);
     }
 
     private async Task CheckIfExistsDrawingAsync(string id)
@@ -177,101 +117,9 @@ public class DrawingService : DocumentModelService<DrawingModel, IDrawingDocumen
         return await ExistsAsync(id);
     }
 
-    public void SetAutomaticTags(ref DrawingModel document)
-    {
-        var list = new List<string>();
-        list.AddRange((document.Name ?? "").Split(" ").Select(x => x.ToLower()));
-        list.AddRange((document.ModelName ?? "").Split(" ").Select(x => x.ToLower()));
-        list.AddRange((document.Title ?? "").Split(" ").Select(x => x.ToLower()));
-        if (document.Software > 0)
-        {
-            list.AddRange(document.SoftwareName.Split(" ").Select(x => x.ToLower()));
-        }
-        if (document.Paper > 0)
-        {
-            list.AddRange(document.PaperHuman.Split(" ").Select(x => x.ToLower()));
-        }
-        if (document.Type > 0)
-        {
-            list.AddRange(document.TypeName.Split(" ").Select(x => x.ToLower()));
-        }
-
-        if (document.ProductType > 0)
-        {
-            list.AddRange(document.ProductTypeName.Split(" ").Select(x => x.ToLower()));
-        }
-        list.AddRange(document.ProductName.Split(" ").Select(x => x.ToLower()));
-
-        list.AddRange(document.Tags);
-        document.Tags = DeleteAndAdjustTags(list);
-    }
-
 
     public IEnumerable<string> DeleteAndAdjustTags(IEnumerable<string> tags)
     {
-        var eliminar = new List<string>()
-            {
-                "a",
-                "un",
-                "unas",
-                "unos",
-                "uno",
-                "de",
-                "el",
-                "la",
-                "los",
-                "los",
-                "les",
-                "the"
-            };
-        var processed = tags.Select(x =>
-            x.ToLower()
-            .Replace("á", "a")
-            .Replace("é", "e")
-            .Replace("í", "i")
-            .Replace("ó", "o")
-            .Replace("ú", "u")
-            .Replace("ä", "a")
-            .Replace("ë", "e")
-            .Replace("ï", "i")
-            .Replace("ö", "o")
-            .Replace("ü", "u")
-            .Replace(":", "")
-            .Replace(".", "")
-            .Replace(",", "")
-            .Replace("?", "")
-            .Replace("¿", "")
-            .Replace("/", "")
-            .Replace("`", "")
-            .Replace("(", "")
-            .Replace(")", "")
-            .Replace("'", "")
-            .Replace("@", " ")
-            .Replace("#", " ")
-            .Replace("!", "")
-            .Replace("¡", "")
-            .Replace("~", "")
-            .Replace("$", " ")
-            .Replace("%", " ")
-            .Replace("&", " ")
-            .Replace("\"", "")
-            .Replace(" ", "")
-            .Replace("_", " ")
-            .Replace("-", " ")
-        );
-
-        var final = new List<string>() { };
-        foreach (var s in processed)
-        {
-            foreach (var s2 in s.Split(" "))
-            {
-                if (!eliminar.Contains(s2) && !String.IsNullOrEmpty(s2) && !s2.Equals(" "))
-                {
-                    final.Add(s);
-                }
-            }
-        }
-
-        return final.Distinct().ToList();
+        return _drawingTagManager.DeleteAndAdjustTags(tags);
     }
 }

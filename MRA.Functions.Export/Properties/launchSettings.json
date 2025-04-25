@@ -1,9 +1,0 @@
-{
-  "profiles": {
-    "MRA.Functions.Export": {
-      "commandName": "Project",
-      "commandLineArgs": "--port 7225",
-      "launchBrowser": false
-    }
-  }
-}
