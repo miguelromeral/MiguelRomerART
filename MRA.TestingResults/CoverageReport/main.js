@@ -216,9 +216,9 @@ var assemblies = [
       { "name": "MRA.DependencyInjection.DependencyInjectionConfig", "rp": "MRA.DependencyInjection_DependencyInjectionConfig.html", "cl": 4, "ucl": 0, "cal": 4, "tl": 18, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.DependencyInjection.Startup.AppSettingsStartup", "rp": "MRA.DependencyInjection_AppSettingsStartup.html", "cl": 6, "ucl": 0, "cal": 6, "tl": 18, "cb": 2, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.DependencyInjection.Startup.AzureKeyVaultStartup", "rp": "MRA.DependencyInjection_AzureKeyVaultStartup.html", "cl": 0, "ucl": 4, "cal": 4, "tl": 13, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "MRA.DependencyInjection.Startup.ConfigurationStartup", "rp": "MRA.DependencyInjection_ConfigurationStartup.html", "cl": 20, "ucl": 0, "cal": 20, "tl": 37, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "MRA.DependencyInjection.Startup.InfrastructureStartup", "rp": "MRA.DependencyInjection_InfrastructureStartup.html", "cl": 8, "ucl": 0, "cal": 8, "tl": 28, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "MRA.DependencyInjection.Startup.ServicesStartup", "rp": "MRA.DependencyInjection_ServicesStartup.html", "cl": 9, "ucl": 0, "cal": 9, "tl": 30, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "MRA.DependencyInjection.Startup.ConfigurationStartup", "rp": "MRA.DependencyInjection_ConfigurationStartup.html", "cl": 21, "ucl": 0, "cal": 21, "tl": 39, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "MRA.DependencyInjection.Startup.InfrastructureStartup", "rp": "MRA.DependencyInjection_InfrastructureStartup.html", "cl": 9, "ucl": 0, "cal": 9, "tl": 30, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "MRA.DependencyInjection.Startup.ServicesStartup", "rp": "MRA.DependencyInjection_ServicesStartup.html", "cl": 12, "ucl": 0, "cal": 12, "tl": 37, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
     ]},
   {
     "name": "MRA.DTO",
@@ -233,9 +233,9 @@ var assemblies = [
       { "name": "MRA.DTO.Mapper.DrawingMapper", "rp": "MRA.DTO_DrawingMapper.html", "cl": 72, "ucl": 0, "cal": 72, "tl": 95, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.DTO.Mapper.InspirationMapper", "rp": "MRA.DTO_InspirationMapper.html", "cl": 11, "ucl": 11, "cal": 22, "tl": 40, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.DTO.Models.CollectionModel", "rp": "MRA.DTO_CollectionModel.html", "cl": 10, "ucl": 6, "cal": 16, "tl": 45, "cb": 0, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "MRA.DTO.Models.DrawingModel", "rp": "MRA.DTO_DrawingModel.html", "cl": 55, "ucl": 36, "cal": 91, "tl": 313, "cb": 2, "tb": 20, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "MRA.DTO.Models.DrawingModel", "rp": "MRA.DTO_DrawingModel.html", "cl": 71, "ucl": 2, "cal": 73, "tl": 244, "cb": 6, "tb": 6, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.DTO.Models.InspirationModel", "rp": "MRA.DTO_InspirationModel.html", "cl": 8, "ucl": 2, "cal": 10, "tl": 20, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "MRA.DTO.Utilities", "rp": "MRA.DTO_Utilities.html", "cl": 5, "ucl": 10, "cal": 15, "tl": 44, "cb": 4, "tb": 10, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "MRA.DTO.Utilities", "rp": "MRA.DTO_Utilities.html", "cl": 5, "ucl": 5, "cal": 10, "tl": 32, "cb": 4, "tb": 8, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.DTO.ViewModels.Art.CheckAzurePathRequest", "rp": "MRA.DTO_CheckAzurePathRequest.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 13, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.DTO.ViewModels.Art.DrawingFilter", "rp": "MRA.DTO_DrawingFilter.html", "cl": 45, "ucl": 0, "cal": 45, "tl": 85, "cb": 18, "tb": 18, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.DTO.ViewModels.Art.FilterResults", "rp": "MRA.DTO_FilterResults.html", "cl": 27, "ucl": 15, "cal": 42, "tl": 61, "cb": 2, "tb": 8, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
@@ -244,6 +244,13 @@ var assemblies = [
       { "name": "MRA.DTO.ViewModels.Art.Select.ModelListItem", "rp": "MRA.DTO_ModelListItem.html", "cl": 8, "ucl": 0, "cal": 8, "tl": 22, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.DTO.ViewModels.Art.Select.ProductListItem", "rp": "MRA.DTO_ProductListItem.html", "cl": 12, "ucl": 1, "cal": 13, "tl": 36, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.DTO.ViewModels.Art.VoteSubmittedModel", "rp": "MRA.DTO_VoteSubmittedModel.html", "cl": 9, "ucl": 0, "cal": 9, "tl": 19, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+    ]},
+  {
+    "name": "MRA.Extensions",
+    "classes": [
+      { "name": "MRA.Extensions.DateExtensions", "rp": "MRA.Extensions_DateExtensions.html", "cl": 2, "ucl": 4, "cal": 6, "tl": 24, "cb": 0, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "MRA.Extensions.NumberExtensions", "rp": "MRA.Extensions_NumberExtensions.html", "cl": 17, "ucl": 0, "cal": 17, "tl": 59, "cb": 10, "tb": 10, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "MRA.Extensions.StringExtensions", "rp": "MRA.Extensions_StringExtensions.html", "cl": 4, "ucl": 0, "cal": 4, "tl": 17, "cb": 4, "tb": 4, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
     ]},
   {
     "name": "MRA.Infrastructure",
@@ -263,46 +270,51 @@ var assemblies = [
       { "name": "MRA.Infrastructure.Database.Providers.MongoDbDatabase", "rp": "MRA.Infrastructure_MongoDbDatabase.html", "cl": 6, "ucl": 49, "cal": 55, "tl": 129, "cb": 0, "tb": 14, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.Infrastructure.Enums.DefaultEnumValueAttribute", "rp": "MRA.Infrastructure_DefaultEnumValueAttribute.html", "cl": 4, "ucl": 0, "cal": 4, "tl": 12, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.Infrastructure.Enums.EnumExtensions", "rp": "MRA.Infrastructure_EnumExtensions.html", "cl": 10, "ucl": 1, "cal": 11, "tl": 31, "cb": 4, "tb": 8, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "MRA.Infrastructure.Excel.Attributes.ExcelColumnAttribute", "rp": "MRA.Infrastructure_ExcelColumnAttribute.html", "cl": 0, "ucl": 23, "cal": 23, "tl": 33, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "MRA.Infrastructure.Excel.Attributes.ExcelColumnAttribute", "rp": "MRA.Infrastructure_ExcelColumnAttribute.html", "cl": 0, "ucl": 20, "cal": 20, "tl": 30, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.Infrastructure.Excel.Attributes.ExcelColumnInfo", "rp": "MRA.Infrastructure_ExcelColumnInfo.html", "cl": 0, "ucl": 29, "cal": 29, "tl": 82, "cb": 0, "tb": 36, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.Infrastructure.Excel.EPPlusExcelProvider", "rp": "MRA.Infrastructure_EPPlusExcelProvider.html", "cl": 4, "ucl": 89, "cal": 93, "tl": 197, "cb": 0, "tb": 22, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.Infrastructure.Exceptions.Excel.ExcelColumnNotFoundException", "rp": "MRA.Infrastructure_ExcelColumnNotFoundException.html", "cl": 0, "ucl": 6, "cal": 6, "tl": 18, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.Infrastructure.Exceptions.Excel.ExcelTableNotFoundException", "rp": "MRA.Infrastructure_ExcelTableNotFoundException.html", "cl": 0, "ucl": 2, "cal": 2, "tl": 9, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.Infrastructure.RemoteConfig.RemoteConfigSetting<T>", "rp": "MRA.Infrastructure_RemoteConfigSetting_1.html", "cl": 6, "ucl": 0, "cal": 6, "tl": 13, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "MRA.Infrastructure.Settings.AppSettings", "rp": "MRA.Infrastructure_AppSettings.html", "cl": 11, "ucl": 0, "cal": 11, "tl": 19, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "MRA.Infrastructure.Settings.AppSettings", "rp": "MRA.Infrastructure_AppSettings.html", "cl": 14, "ucl": 0, "cal": 14, "tl": 26, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.Infrastructure.Settings.Options.AdministratorSettings", "rp": "MRA.Infrastructure_AdministratorSettings.html", "cl": 2, "ucl": 0, "cal": 2, "tl": 8, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.Infrastructure.Settings.Options.AzureCosmosSettings", "rp": "MRA.Infrastructure_AzureCosmosSettings.html", "cl": 3, "ucl": 0, "cal": 3, "tl": 8, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.Infrastructure.Settings.Options.AzureKeyVaultSettings", "rp": "MRA.Infrastructure_AzureKeyVaultSettings.html", "cl": 1, "ucl": 0, "cal": 1, "tl": 7, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.Infrastructure.Settings.Options.AzureStorageSettings", "rp": "MRA.Infrastructure_AzureStorageSettings.html", "cl": 4, "ucl": 0, "cal": 4, "tl": 10, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.Infrastructure.Settings.Options.CacheSettings", "rp": "MRA.Infrastructure_CacheSettings.html", "cl": 1, "ucl": 0, "cal": 1, "tl": 7, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "MRA.Infrastructure.Settings.Options.DatabaseSettings", "rp": "MRA.Infrastructure_DatabaseSettings.html", "cl": 10, "ucl": 0, "cal": 10, "tl": 27, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "MRA.Infrastructure.Settings.Options.DatabaseSettings", "rp": "MRA.Infrastructure_DatabaseSettings.html", "cl": 12, "ucl": 0, "cal": 12, "tl": 33, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.Infrastructure.Settings.Options.EPPlusSettings", "rp": "MRA.Infrastructure_EPPlusSettings.html", "cl": 7, "ucl": 0, "cal": 7, "tl": 20, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.Infrastructure.Settings.Options.FirebaseSettings", "rp": "MRA.Infrastructure_FirebaseSettings.html", "cl": 7, "ucl": 0, "cal": 7, "tl": 13, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.Infrastructure.Settings.Options.JwtSettings", "rp": "MRA.Infrastructure_JwtSettings.html", "cl": 3, "ucl": 0, "cal": 3, "tl": 9, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.Infrastructure.Settings.Options.MRALoggerSettings", "rp": "MRA.Infrastructure_MRALoggerSettings.html", "cl": 4, "ucl": 0, "cal": 4, "tl": 10, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.Infrastructure.Settings.Options.RemoteConfigSettings", "rp": "MRA.Infrastructure_RemoteConfigSettings.html", "cl": 8, "ucl": 0, "cal": 8, "tl": 21, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "MRA.Infrastructure.Storage.AzureStorageProvider", "rp": "MRA.Infrastructure_AzureStorageProvider.html", "cl": 28, "ucl": 8, "cal": 36, "tl": 84, "cb": 1, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "MRA.Infrastructure.Settings.Sections.CommandsSettings", "rp": "MRA.Infrastructure_CommandsSettings.html", "cl": 1, "ucl": 0, "cal": 1, "tl": 6, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "MRA.Infrastructure.Storage.AzureStorageProvider", "rp": "MRA.Infrastructure_AzureStorageProvider.html", "cl": 31, "ucl": 8, "cal": 39, "tl": 87, "cb": 1, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.Infrastructure.Storage.BlobFileInfo", "rp": "MRA.Infrastructure_BlobFileInfo.html", "cl": 0, "ucl": 2, "cal": 2, "tl": 7, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.Infrastructure.Storage.Connection.AzureStorageConnection", "rp": "MRA.Infrastructure_AzureStorageConnection.html", "cl": 3, "ucl": 16, "cal": 19, "tl": 52, "cb": 0, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.Infrastructure.Storage.ImageConverter", "rp": "MRA.Infrastructure_ImageConverter.html", "cl": 9, "ucl": 0, "cal": 9, "tl": 24, "cb": 2, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "MRA.Infrastructure.UserInput.ConsoleProvider", "rp": "MRA.Infrastructure_ConsoleProvider.html", "cl": 2, "ucl": 127, "cal": 129, "tl": 256, "cb": 0, "tb": 34, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
     ]},
   {
     "name": "MRA.Services",
     "classes": [
       { "name": "MRA.Services.AppService", "rp": "MRA.Services_AppService.html", "cl": 141, "ucl": 32, "cal": 173, "tl": 398, "cb": 61, "tb": 61, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "MRA.Services.Backup.Export.ExportService", "rp": "MRA.Services_ExportService.html", "cl": 16, "ucl": 36, "cal": 52, "tl": 102, "cb": 0, "tb": 6, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "MRA.Services.Backup.Import.ImportService", "rp": "MRA.Services_ImportService.html", "cl": 12, "ucl": 146, "cal": 158, "tl": 334, "cb": 0, "tb": 72, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.Services.Cache.CacheServiceBase", "rp": "MRA.Services_CacheServiceBase.html", "cl": 6, "ucl": 5, "cal": 11, "tl": 36, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "MRA.Services.Excel.ExcelService", "rp": "MRA.Services_ExcelService.html", "cl": 8, "ucl": 142, "cal": 150, "tl": 322, "cb": 0, "tb": 80, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "MRA.Services.Excel.ExcelService", "rp": "MRA.Services_ExcelService.html", "cl": 8, "ucl": 95, "cal": 103, "tl": 219, "cb": 0, "tb": 44, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.Services.GoogleCredentialHelper", "rp": "MRA.Services_GoogleCredentialHelper.html", "cl": 0, "ucl": 4, "cal": 4, "tl": 20, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.Services.Helpers.ConsoleHelper", "rp": "MRA.Services_ConsoleHelper.html", "cl": 0, "ucl": 128, "cal": 128, "tl": 254, "cb": 0, "tb": 34, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.Services.Models.Collections.CollectionService", "rp": "MRA.Services_CollectionService.html", "cl": 2, "ucl": 17, "cal": 19, "tl": 60, "cb": 0, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.Services.Models.Documents.DocumentModelService<T1, T2>", "rp": "MRA.Services_DocumentModelService_2.html", "cl": 18, "ucl": 0, "cal": 18, "tl": 50, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.Services.Models.Drawings.DrawingService", "rp": "MRA.Services_DrawingService.html", "cl": 51, "ucl": 0, "cal": 51, "tl": 125, "cb": 10, "tb": 10, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.Services.Models.Drawings.DrawingSortExtensions", "rp": "MRA.Services_DrawingSortExtensions.html", "cl": 21, "ucl": 0, "cal": 21, "tl": 87, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "MRA.Services.Models.Drawings.DrawingTagManager", "rp": "MRA.Services_DrawingTagManager.html", "cl": 51, "ucl": 0, "cal": 51, "tl": 135, "cb": 11, "tb": 12, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "MRA.Services.Models.Drawings.DrawingTagManager", "rp": "MRA.Services_DrawingTagManager.html", "cl": 51, "ucl": 0, "cal": 51, "tl": 136, "cb": 11, "tb": 12, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.Services.Models.Drawings.DrawingVoteManager", "rp": "MRA.Services_DrawingVoteManager.html", "cl": 11, "ucl": 0, "cal": 11, "tl": 33, "cb": 6, "tb": 6, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.Services.Models.Inspirations.InspirationService", "rp": "MRA.Services_InspirationService.html", "cl": 4, "ucl": 0, "cal": 4, "tl": 24, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.Services.RemoteConfig.RemoteConfigService", "rp": "MRA.Services_RemoteConfigService.html", "cl": 13, "ucl": 10, "cal": 23, "tl": 58, "cb": 0, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "MRA.Services.Storage.StorageService", "rp": "MRA.Services_StorageService.html", "cl": 7, "ucl": 10, "cal": 17, "tl": 49, "cb": 0, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "MRA.Services.Storage.StorageService", "rp": "MRA.Services_StorageService.html", "cl": 11, "ucl": 5, "cal": 16, "tl": 46, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "MRA.Services.UserInput.UserInputService", "rp": "MRA.Services_UserInputService.html", "cl": 3, "ucl": 4, "cal": 7, "tl": 21, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
     ]},
   {
     "name": "MRA.WebApi",
@@ -310,7 +322,7 @@ var assemblies = [
       { "name": "MRA.WebApi.Controllers.AboutController", "rp": "MRA.WebApi_AboutController.html", "cl": 0, "ucl": 9, "cal": 9, "tl": 30, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.WebApi.Controllers.AccountController", "rp": "MRA.WebApi_AccountController.html", "cl": 0, "ucl": 4, "cal": 4, "tl": 29, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.WebApi.Controllers.Art.CollectionController", "rp": "MRA.WebApi_CollectionController.html", "cl": 76, "ucl": 0, "cal": 76, "tl": 175, "cb": 4, "tb": 4, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "MRA.WebApi.Controllers.Art.DrawingController", "rp": "MRA.WebApi_DrawingController.html", "cl": 0, "ucl": 188, "cal": 188, "tl": 360, "cb": 0, "tb": 22, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "MRA.WebApi.Controllers.Art.DrawingController", "rp": "MRA.WebApi_DrawingController.html", "cl": 63, "ucl": 126, "cal": 189, "tl": 362, "cb": 0, "tb": 22, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.WebApi.Controllers.ArtController", "rp": "MRA.WebApi_ArtController.html", "cl": 0, "ucl": 13, "cal": 13, "tl": 42, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.WebApi.Controllers.AuthController", "rp": "MRA.WebApi_AuthController.html", "cl": 0, "ucl": 42, "cal": 42, "tl": 84, "cb": 0, "tb": 4, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.WebApi.Models.Auth.UserDto", "rp": "MRA.WebApi_UserDto.html", "cl": 0, "ucl": 3, "cal": 3, "tl": 8, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
@@ -320,6 +332,7 @@ var assemblies = [
       { "name": "MRA.WebApi.Models.Requests.UploadAzureImageRequest", "rp": "MRA.WebApi_UploadAzureImageRequest.html", "cl": 0, "ucl": 3, "cal": 3, "tl": 9, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.WebApi.Models.Responses.CheckAzurePathResponse", "rp": "MRA.WebApi_CheckAzurePathResponse.html", "cl": 0, "ucl": 4, "cal": 4, "tl": 10, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.WebApi.Models.Responses.CollectionResponse", "rp": "MRA.WebApi_CollectionResponse.html", "cl": 14, "ucl": 0, "cal": 14, "tl": 31, "cb": 4, "tb": 4, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "MRA.WebApi.Models.Responses.Errors.Drawings.DrawingDetailsErrorMessages", "rp": "MRA.WebApi_DrawingDetailsErrorMessages.html", "cl": 1, "ucl": 1, "cal": 2, "tl": 8, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.WebApi.Models.Responses.Errors.ErrorMessages", "rp": "MRA.WebApi_ErrorMessages.html", "cl": 3, "ucl": 0, "cal": 3, "tl": 31, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.WebApi.Models.Responses.Errors.ErrorResponse", "rp": "MRA.WebApi_ErrorResponse.html", "cl": 4, "ucl": 0, "cal": 4, "tl": 11, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "MRA.WebApi.Models.Responses.UploadAzureImageResponse", "rp": "MRA.WebApi_UploadAzureImageResponse.html", "cl": 0, "ucl": 5, "cal": 5, "tl": 11, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
@@ -341,16 +354,22 @@ var riskHotspotMetrics = [
 
 var riskHotspots = [
   {
-    "assembly": "MRA.Services", "class": "MRA.Services.Excel.ExcelService", "reportPath": "MRA.Services_ExcelService.html", "methodName": "FillDrawingRow(OfficeOpenXml.ExcelWorksheet&,System.Collections.Generic.List`1<MRA.Infrastructure.Excel.Attributes.ExcelColumnInfo>,MRA.DTO.Models.DrawingModel,System.Int32)", "methodShortName": "FillDrawingRow(...)", "fileIndex": 0, "line": 93,
+    "assembly": "MRA.Services", "class": "MRA.Services.Backup.Import.ImportService", "reportPath": "MRA.Services_ImportService.html", "methodName": "SetPropertyValue(MRA.DTO.Models.DrawingModel,System.Reflection.PropertyInfo,System.Object)", "methodShortName": "SetPropertyValue(...)", "fileIndex": 0, "line": 223,
     "metrics": [
       { "value": 1640, "exceeded": true },
       { "value": 40, "exceeded": true },
     ]},
   {
-    "assembly": "MRA.Services", "class": "MRA.Services.Excel.ExcelService", "reportPath": "MRA.Services_ExcelService.html", "methodName": "SetPropertyValue(MRA.DTO.Models.DrawingModel,System.Reflection.PropertyInfo,System.Object)", "methodShortName": "SetPropertyValue(...)", "fileIndex": 0, "line": 241,
+    "assembly": "MRA.Services", "class": "MRA.Services.Backup.Import.ImportService", "reportPath": "MRA.Services_ImportService.html", "methodName": "ImportDrawings()", "methodShortName": "ImportDrawings()", "fileIndex": 0, "line": 42,
     "metrics": [
-      { "value": 812, "exceeded": true },
-      { "value": 28, "exceeded": true },
+      { "value": 1482, "exceeded": true },
+      { "value": 38, "exceeded": true },
+    ]},
+  {
+    "assembly": "MRA.Services", "class": "MRA.Services.Excel.ExcelService", "reportPath": "MRA.Services_ExcelService.html", "methodName": "FillDrawingRow(OfficeOpenXml.ExcelWorksheet&,System.Collections.Generic.List`1<MRA.Infrastructure.Excel.Attributes.ExcelColumnInfo>,MRA.DTO.Models.DrawingModel,System.Int32)", "methodShortName": "FillDrawingRow(...)", "fileIndex": 0, "line": 93,
+    "metrics": [
+      { "value": 1332, "exceeded": true },
+      { "value": 36, "exceeded": true },
     ]},
   {
     "assembly": "MRA.Infrastructure", "class": "MRA.Infrastructure.Excel.Attributes.ExcelColumnInfo", "reportPath": "MRA.Infrastructure_ExcelColumnInfo.html", "methodName": "SameValues(T,T)", "methodShortName": "SameValues(...)", "fileIndex": 0, "line": 18,
@@ -371,7 +390,7 @@ var riskHotspots = [
       { "value": 14, "exceeded": false },
     ]},
   {
-    "assembly": "MRA.WebApi", "class": "MRA.WebApi.Controllers.Art.DrawingController", "reportPath": "MRA.WebApi_DrawingController.html", "methodName": "Save()", "methodShortName": "Save()", "fileIndex": 0, "line": 208,
+    "assembly": "MRA.WebApi", "class": "MRA.WebApi.Controllers.Art.DrawingController", "reportPath": "MRA.WebApi_DrawingController.html", "methodName": "Save()", "methodShortName": "Save()", "fileIndex": 0, "line": 210,
     "metrics": [
       { "value": 210, "exceeded": true },
       { "value": 14, "exceeded": false },
@@ -383,16 +402,16 @@ var riskHotspots = [
       { "value": 12, "exceeded": false },
     ]},
   {
-    "assembly": "MRA.Services", "class": "MRA.Services.Helpers.ConsoleHelper", "reportPath": "MRA.Services_ConsoleHelper.html", "methodName": "FillIntValue(System.Boolean,System.Int32,System.String,System.Collections.Generic.Dictionary`2<System.Int32,System.String>)", "methodShortName": "FillIntValue(...)", "fileIndex": 0, "line": 119,
+    "assembly": "MRA.Infrastructure", "class": "MRA.Infrastructure.UserInput.ConsoleProvider", "reportPath": "MRA.Infrastructure_ConsoleProvider.html", "methodName": "FillIntValue(System.Boolean,System.Int32,System.String,System.Collections.Generic.Dictionary`2<System.Int32,System.String>)", "methodShortName": "FillIntValue(...)", "fileIndex": 0, "line": 120,
     "metrics": [
       { "value": 72, "exceeded": true },
       { "value": 8, "exceeded": false },
     ]},
   {
-    "assembly": "MRA.DTO", "class": "MRA.DTO.Models.DrawingModel", "reportPath": "MRA.DTO_DrawingModel.html", "methodName": "get_TimeHuman()", "methodShortName": "get_TimeHuman()", "fileIndex": 0, "line": 125,
+    "assembly": "MRA.Services", "class": "MRA.Services.Helpers.ConsoleHelper", "reportPath": "MRA.Services_ConsoleHelper.html", "methodName": "FillIntValue(System.Boolean,System.Int32,System.String,System.Collections.Generic.Dictionary`2<System.Int32,System.String>)", "methodShortName": "FillIntValue(...)", "fileIndex": 0, "line": 119,
     "metrics": [
-      { "value": 42, "exceeded": true },
-      { "value": 6, "exceeded": false },
+      { "value": 72, "exceeded": true },
+      { "value": 8, "exceeded": false },
     ]},
   {
     "assembly": "MRA.Infrastructure", "class": "MRA.Infrastructure.Cache.MicrosoftCacheProvider", "reportPath": "MRA.Infrastructure_MicrosoftCacheProvider.html", "methodName": "GetOrSetFromCacheAsync()", "methodShortName": "GetOrSetFromCacheAsync()", "fileIndex": 0, "line": 85,
@@ -402,6 +421,24 @@ var riskHotspots = [
     ]},
   {
     "assembly": "MRA.Infrastructure", "class": "MRA.Infrastructure.Excel.EPPlusExcelProvider", "reportPath": "MRA.Infrastructure_EPPlusExcelProvider.html", "methodName": "GetPropertiesAttributes()", "methodShortName": "GetPropertiesAttributes()", "fileIndex": 0, "line": 28,
+    "metrics": [
+      { "value": 42, "exceeded": true },
+      { "value": 6, "exceeded": false },
+    ]},
+  {
+    "assembly": "MRA.Infrastructure", "class": "MRA.Infrastructure.UserInput.ConsoleProvider", "reportPath": "MRA.Infrastructure_ConsoleProvider.html", "methodName": "FillBoolValue(System.Boolean,System.Boolean,System.String)", "methodShortName": "FillBoolValue(...)", "fileIndex": 0, "line": 188,
+    "metrics": [
+      { "value": 42, "exceeded": true },
+      { "value": 6, "exceeded": false },
+    ]},
+  {
+    "assembly": "MRA.Infrastructure", "class": "MRA.Infrastructure.UserInput.ConsoleProvider", "reportPath": "MRA.Infrastructure_ConsoleProvider.html", "methodName": "PrintPropreties(System.Object)", "methodShortName": "PrintPropreties(...)", "fileIndex": 0, "line": 238,
+    "metrics": [
+      { "value": 42, "exceeded": true },
+      { "value": 6, "exceeded": false },
+    ]},
+  {
+    "assembly": "MRA.Services", "class": "MRA.Services.Backup.Export.ExportService", "reportPath": "MRA.Services_ExportService.html", "methodName": "ExportDrawings()", "methodShortName": "ExportDrawings()", "fileIndex": 0, "line": 45,
     "metrics": [
       { "value": 42, "exceeded": true },
       { "value": 6, "exceeded": false },

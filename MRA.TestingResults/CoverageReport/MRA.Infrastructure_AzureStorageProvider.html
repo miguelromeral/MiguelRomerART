@@ -36,12 +36,12 @@
 <div class="card">
 <div class="card-header">Line coverage</div>
 <div class="card-body">
-<div class="large cardpercentagebar cardpercentagebar22">77%</div>
+<div class="large cardpercentagebar cardpercentagebar21">79%</div>
 <div class="table">
 <table>
 <tr>
 <th>Covered lines:</th>
-<td class="limit-width right" title="28">28</td>
+<td class="limit-width right" title="31">31</td>
 </tr>
 <tr>
 <th>Uncovered lines:</th>
@@ -49,15 +49,15 @@
 </tr>
 <tr>
 <th>Coverable lines:</th>
-<td class="limit-width right" title="36">36</td>
+<td class="limit-width right" title="39">39</td>
 </tr>
 <tr>
 <th>Total lines:</th>
-<td class="limit-width right" title="84">84</td>
+<td class="limit-width right" title="87">87</td>
 </tr>
 <tr>
 <th>Line coverage:</th>
-<td class="limit-width right" title="28 of 36">77.7%</td>
+<td class="limit-width right" title="31 of 39">79.4%</td>
 </tr>
 </table>
 </div>
@@ -116,7 +116,7 @@
 <tr><td title="ResizeAndSave()"><a href="#file0_line54" class="navigatetohash">ResizeAndSave()</a></td><td>100%</td><td>1</td><td>1</td><td>100%</td></tr>
 <tr><td title="UploadImageToBlob()"><a href="#file0_line61" class="navigatetohash">UploadImageToBlob()</a></td><td>100%</td><td>1</td><td>1</td><td>100%</td></tr>
 <tr><td title="Save()"><a href="#file0_line71" class="navigatetohash">Save()</a></td><td>100%</td><td>1</td><td>1</td><td>100%</td></tr>
-<tr><td title="CrearThumbnailName(System.String)"><a href="#file0_line76" class="navigatetohash">CrearThumbnailName(...)</a></td><td>50%</td><td>2</td><td>2</td><td>100%</td></tr>
+<tr><td title="CrearThumbnailName(System.String)"><a href="#file0_line79" class="navigatetohash">CrearThumbnailName(...)</a></td><td>50%</td><td>2</td><td>2</td><td>100%</td></tr>
 </tbody>
 </table>
 </div>
@@ -196,24 +196,27 @@
 <tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line68"></a><code>68</code></td><td></td><td class="lightgray"><code></code></td></tr>
 <tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line69"></a><code>69</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;async&nbsp;Task&lt;bool&gt;&nbsp;Save(Stream&nbsp;stream,&nbsp;string&nbsp;blobLocation,&nbsp;string&nbsp;blobName)</code></td></tr>
 <tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line70"></a><code>70</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;{</code></td></tr>
-<tr class="coverableline" title="Covered (1 visits)" data-coverage="{'AllTestMethods': {'VC': '1', 'LVS': 'green'}}"><td class="green">&nbsp;</td><td class="leftmargin rightmargin right">1</td><td class="rightmargin right"><a id="file0_line71"></a><code>71</code></td><td></td><td class="lightgreen"><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;await&nbsp;_connection.UploadAsync(blobContainer,&nbsp;blobName,&nbsp;stream)&nbsp;is&nbsp;not&nbsp;null;</code></td></tr>
-<tr class="coverableline" title="Covered (1 visits)" data-coverage="{'AllTestMethods': {'VC': '1', 'LVS': 'green'}}"><td class="green">&nbsp;</td><td class="leftmargin rightmargin right">1</td><td class="rightmargin right"><a id="file0_line72"></a><code>72</code></td><td></td><td class="lightgreen"><code>&nbsp;&nbsp;&nbsp;&nbsp;}</code></td></tr>
-<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line73"></a><code>73</code></td><td></td><td class="lightgray"><code></code></td></tr>
-<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line74"></a><code>74</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;string&nbsp;CrearThumbnailName(string&nbsp;imagePath)</code></td></tr>
-<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line75"></a><code>75</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;{</code></td></tr>
-<tr class="coverableline" title="Covered (1 visits)" data-coverage="{'AllTestMethods': {'VC': '1', 'LVS': 'green'}}"><td class="green">&nbsp;</td><td class="leftmargin rightmargin right">1</td><td class="rightmargin right"><a id="file0_line76"></a><code>76</code></td><td></td><td class="lightgreen"><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;string&nbsp;fileName&nbsp;=&nbsp;Path.GetFileNameWithoutExtension(imagePath);</code></td></tr>
-<tr class="coverableline" title="Covered (1 visits)" data-coverage="{'AllTestMethods': {'VC': '1', 'LVS': 'green'}}"><td class="green">&nbsp;</td><td class="leftmargin rightmargin right">1</td><td class="rightmargin right"><a id="file0_line77"></a><code>77</code></td><td></td><td class="lightgreen"><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;string&nbsp;thumbnailFileName&nbsp;=&nbsp;$&quot;{fileName}_tn.png&quot;;</code></td></tr>
-<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line78"></a><code>78</code></td><td></td><td class="lightgray"><code></code></td></tr>
-<tr class="coverableline" title="Partially covered (1 visits, 1 of 2 branches are covered)" data-coverage="{'AllTestMethods': {'VC': '1', 'LVS': 'orange'}}"><td class="orange">&nbsp;</td><td class="leftmargin rightmargin right">1</td><td class="rightmargin right"><a id="file0_line79"></a><code>79</code></td><td class="percentagebar percentagebar50"><i class="icon-fork"></i></td><td class="lightorange"><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;string&nbsp;folder&nbsp;=&nbsp;Path.GetDirectoryName(imagePath)&nbsp;??&nbsp;string.Empty;</code></td></tr>
-<tr class="coverableline" title="Covered (1 visits)" data-coverage="{'AllTestMethods': {'VC': '1', 'LVS': 'green'}}"><td class="green">&nbsp;</td><td class="leftmargin rightmargin right">1</td><td class="rightmargin right"><a id="file0_line80"></a><code>80</code></td><td></td><td class="lightgreen"><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;string&nbsp;newPath&nbsp;=&nbsp;Path.Combine(folder,&nbsp;thumbnailFileName).Replace(&#39;\\&#39;,&nbsp;&#39;/&#39;);</code></td></tr>
+<tr class="coverableline" title="Covered (1 visits)" data-coverage="{'AllTestMethods': {'VC': '1', 'LVS': 'green'}}"><td class="green">&nbsp;</td><td class="leftmargin rightmargin right">1</td><td class="rightmargin right"><a id="file0_line71"></a><code>71</code></td><td></td><td class="lightgreen"><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;await&nbsp;_connection.UploadAsync(</code></td></tr>
+<tr class="coverableline" title="Covered (1 visits)" data-coverage="{'AllTestMethods': {'VC': '1', 'LVS': 'green'}}"><td class="green">&nbsp;</td><td class="leftmargin rightmargin right">1</td><td class="rightmargin right"><a id="file0_line72"></a><code>72</code></td><td></td><td class="lightgreen"><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;containerName:&nbsp;blobContainer,</code></td></tr>
+<tr class="coverableline" title="Covered (1 visits)" data-coverage="{'AllTestMethods': {'VC': '1', 'LVS': 'green'}}"><td class="green">&nbsp;</td><td class="leftmargin rightmargin right">1</td><td class="rightmargin right"><a id="file0_line73"></a><code>73</code></td><td></td><td class="lightgreen"><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;blobPath:&nbsp;Path.Combine(blobLocation,&nbsp;blobName),</code></td></tr>
+<tr class="coverableline" title="Covered (1 visits)" data-coverage="{'AllTestMethods': {'VC': '1', 'LVS': 'green'}}"><td class="green">&nbsp;</td><td class="leftmargin rightmargin right">1</td><td class="rightmargin right"><a id="file0_line74"></a><code>74</code></td><td></td><td class="lightgreen"><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stream)&nbsp;is&nbsp;not&nbsp;null;</code></td></tr>
+<tr class="coverableline" title="Covered (1 visits)" data-coverage="{'AllTestMethods': {'VC': '1', 'LVS': 'green'}}"><td class="green">&nbsp;</td><td class="leftmargin rightmargin right">1</td><td class="rightmargin right"><a id="file0_line75"></a><code>75</code></td><td></td><td class="lightgreen"><code>&nbsp;&nbsp;&nbsp;&nbsp;}</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line76"></a><code>76</code></td><td></td><td class="lightgray"><code></code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line77"></a><code>77</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;string&nbsp;CrearThumbnailName(string&nbsp;imagePath)</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line78"></a><code>78</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;{</code></td></tr>
+<tr class="coverableline" title="Covered (1 visits)" data-coverage="{'AllTestMethods': {'VC': '1', 'LVS': 'green'}}"><td class="green">&nbsp;</td><td class="leftmargin rightmargin right">1</td><td class="rightmargin right"><a id="file0_line79"></a><code>79</code></td><td></td><td class="lightgreen"><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;string&nbsp;fileName&nbsp;=&nbsp;Path.GetFileNameWithoutExtension(imagePath);</code></td></tr>
+<tr class="coverableline" title="Covered (1 visits)" data-coverage="{'AllTestMethods': {'VC': '1', 'LVS': 'green'}}"><td class="green">&nbsp;</td><td class="leftmargin rightmargin right">1</td><td class="rightmargin right"><a id="file0_line80"></a><code>80</code></td><td></td><td class="lightgreen"><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;string&nbsp;thumbnailFileName&nbsp;=&nbsp;$&quot;{fileName}_tn.png&quot;;</code></td></tr>
 <tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line81"></a><code>81</code></td><td></td><td class="lightgray"><code></code></td></tr>
-<tr class="coverableline" title="Covered (1 visits)" data-coverage="{'AllTestMethods': {'VC': '1', 'LVS': 'green'}}"><td class="green">&nbsp;</td><td class="leftmargin rightmargin right">1</td><td class="rightmargin right"><a id="file0_line82"></a><code>82</code></td><td></td><td class="lightgreen"><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;newPath;</code></td></tr>
-<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line83"></a><code>83</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;}</code></td></tr>
-<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line84"></a><code>84</code></td><td></td><td class="lightgray"><code>}</code></td></tr>
+<tr class="coverableline" title="Partially covered (1 visits, 1 of 2 branches are covered)" data-coverage="{'AllTestMethods': {'VC': '1', 'LVS': 'orange'}}"><td class="orange">&nbsp;</td><td class="leftmargin rightmargin right">1</td><td class="rightmargin right"><a id="file0_line82"></a><code>82</code></td><td class="percentagebar percentagebar50"><i class="icon-fork"></i></td><td class="lightorange"><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;string&nbsp;folder&nbsp;=&nbsp;Path.GetDirectoryName(imagePath)&nbsp;??&nbsp;string.Empty;</code></td></tr>
+<tr class="coverableline" title="Covered (1 visits)" data-coverage="{'AllTestMethods': {'VC': '1', 'LVS': 'green'}}"><td class="green">&nbsp;</td><td class="leftmargin rightmargin right">1</td><td class="rightmargin right"><a id="file0_line83"></a><code>83</code></td><td></td><td class="lightgreen"><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;string&nbsp;newPath&nbsp;=&nbsp;Path.Combine(folder,&nbsp;thumbnailFileName).Replace(&#39;\\&#39;,&nbsp;&#39;/&#39;);</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line84"></a><code>84</code></td><td></td><td class="lightgray"><code></code></td></tr>
+<tr class="coverableline" title="Covered (1 visits)" data-coverage="{'AllTestMethods': {'VC': '1', 'LVS': 'green'}}"><td class="green">&nbsp;</td><td class="leftmargin rightmargin right">1</td><td class="rightmargin right"><a id="file0_line85"></a><code>85</code></td><td></td><td class="lightgreen"><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;newPath;</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line86"></a><code>86</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;}</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line87"></a><code>87</code></td><td></td><td class="lightgray"><code>}</code></td></tr>
 </tbody>
 </table>
 </div>
-<div class="footer">Generated by: ReportGenerator 5.4.5.0<br />4/23/2025 - 9:25:47 AM<br /><a href="https://github.com/danielpalme/ReportGenerator">GitHub</a> | <a href="https://reportgenerator.io">reportgenerator.io</a></div></div>
+<div class="footer">Generated by: ReportGenerator 5.4.5.0<br />4/25/2025 - 4:47:30 PM<br /><a href="https://github.com/danielpalme/ReportGenerator">GitHub</a> | <a href="https://reportgenerator.io">reportgenerator.io</a></div></div>
 <div class="containerright">
 <div class="containerrightfixed">
 <h1>Methods/Properties</h1>
@@ -226,7 +229,7 @@
 <a href="#file0_line54" class="navigatetohash percentagebar percentagebar100" title="Line coverage: 100% - ResizeAndSave()"><i class="icon-cube"></i>ResizeAndSave()</a><br />
 <a href="#file0_line61" class="navigatetohash percentagebar percentagebar100" title="Line coverage: 100% - UploadImageToBlob()"><i class="icon-cube"></i>UploadImageToBlob()</a><br />
 <a href="#file0_line71" class="navigatetohash percentagebar percentagebar100" title="Line coverage: 100% - Save()"><i class="icon-cube"></i>Save()</a><br />
-<a href="#file0_line76" class="navigatetohash percentagebar percentagebar100" title="Line coverage: 100% - CrearThumbnailName(System.String)"><i class="icon-cube"></i>CrearThumbnailName(System.String)</a><br />
+<a href="#file0_line79" class="navigatetohash percentagebar percentagebar100" title="Line coverage: 100% - CrearThumbnailName(System.String)"><i class="icon-cube"></i>CrearThumbnailName(System.String)</a><br />
 <br/></div>
 </div></div>
 <script type="text/javascript">
