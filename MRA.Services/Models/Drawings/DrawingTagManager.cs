@@ -57,7 +57,7 @@ public class DrawingTagManager
 
     private static IEnumerable<string> SetAutomaticTags_Software(DrawingModel document, List<string> list)
     {
-        if (document.Software != EnumExtensions.GetDefaultValue<DrawingSoftwares>())
+        if (document.Software != (int) EnumExtensions.GetDefaultValue<DrawingSoftwares>())
         {
             list.AddRange(document.SoftwareName.Split(TAG_SEPARATOR).Select(x => x.ToLower()));
         }
@@ -66,7 +66,7 @@ public class DrawingTagManager
 
     private static IEnumerable<string> SetAutomaticTags_Paper(DrawingModel document, List<string> list)
     {
-        if (document.Paper != EnumExtensions.GetDefaultValue<DrawingPaperSizes>())
+        if (document.Paper != (int) EnumExtensions.GetDefaultValue<DrawingPaperSizes>())
         {
             list.AddRange(document.PaperHuman.Split(TAG_SEPARATOR).Select(x => x.ToLower()));
         }
@@ -75,7 +75,7 @@ public class DrawingTagManager
 
     private static IEnumerable<string> SetAutomaticTags_Type(DrawingModel document, List<string> list)
     {
-        if (document.Type != EnumExtensions.GetDefaultValue<DrawingTypes>())
+        if (document.Type != (int) EnumExtensions.GetDefaultValue<DrawingTypes>())
         {
             list.AddRange(document.TypeName.Split(TAG_SEPARATOR).Select(x => x.ToLower()));
         }
@@ -84,7 +84,7 @@ public class DrawingTagManager
 
     private static IEnumerable<string> SetAutomaticTags_ProductType(DrawingModel document, List<string> list)
     {
-        if (document.ProductType != EnumExtensions.GetDefaultValue<DrawingProductTypes>())
+        if (document.ProductType != (int) EnumExtensions.GetDefaultValue<DrawingProductTypes>())
         {
             list.AddRange(document.ProductTypeName.Split(TAG_SEPARATOR).Select(x => x.ToLower()));
         }

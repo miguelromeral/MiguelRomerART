@@ -28,4 +28,12 @@ public static class EnumExtensions
             ? (TEnum)attribute.DefaultValue
             : default(TEnum); // Si no hay atributo, usar default
     }
+    public static TEnum ToEnum<TEnum>(this int value) where TEnum : struct, Enum
+    {
+        if (Enum.IsDefined(typeof(TEnum), value))
+        {
+            return (TEnum)Enum.ToObject(typeof(TEnum), value);
+        }
+        throw new ArgumentException($"Value '{value}' is not defined for enum type '{typeof(TEnum).Name}'.");
+    }
 }
