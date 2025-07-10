@@ -453,10 +453,10 @@ public class DrawingServiceTests : DocumentModelServiceTestsBase
             Name = name,
             ModelName = modelName,
             Title = title,
-            Software = DrawingSoftwares.ClipStudioPaint,
-            Paper = DrawingPaperSizes.A4,
-            Type = DrawingTypes.Digital,
-            ProductType = DrawingProductTypes.Videogame,
+            Software = (int) DrawingSoftwares.ClipStudioPaint,
+            Paper = (int) DrawingPaperSizes.A4,
+            Type = (int) DrawingTypes.Digital,
+            ProductType = (int) DrawingProductTypes.Videogame,
             ProductName = productName,
         };
 

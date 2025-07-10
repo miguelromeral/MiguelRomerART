@@ -27,7 +27,7 @@ public class DrawingControllerDetailsTests : DrawingControllerDetailsBaseTests
             UrlBase = "https://my.url.com",
             Path = "/image.png",
             PathThumbnail = "/image_tn.png",
-            Filter = DrawingFilterTypes.SamsungGalaxy,
+            Filter = (int) DrawingFilterTypes.SamsungGalaxy,
             Date = "2025-01-12",
             DateObject = new DateTime(2025, 1, 12, 0, 0, 0, DateTimeKind.Utc),
             Time = 90,

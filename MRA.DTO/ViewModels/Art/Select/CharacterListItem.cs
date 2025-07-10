@@ -1,6 +1,7 @@
 ﻿using Google.Api.Gax.ResourceNames;
 using MRA.DTO.Enums.Drawing;
 using MRA.DTO.Models;
+using MRA.Infrastructure.Enums;
 
 namespace MRA.DTO.ViewModels.Art.Select
 {
@@ -20,7 +21,7 @@ namespace MRA.DTO.ViewModels.Art.Select
         {
             return drawings
                 .Where(x => !string.IsNullOrEmpty(x.Name))
-                .Select(x => new CharacterListItem(x.Name, x.ProductType))
+                .Select(x => new CharacterListItem(x.Name, x.ProductType.ToEnum<DrawingProductTypes>()))
                 .Distinct();
         }
 

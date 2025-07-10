@@ -20,7 +20,7 @@ public class ProductListItem
     {
         return drawings
             .Where(x => !string.IsNullOrEmpty(x.ProductName))
-            .Select(x => new ProductListItem(x.ProductName, x.ProductType))
+            .Select(x => new ProductListItem(x.ProductName, x.ProductType.ToEnum<DrawingProductTypes>()))
             .Distinct();
     }
 

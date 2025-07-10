@@ -61,10 +61,10 @@ public class DrawingModel : IModel
 
     #region Product
     [ExcelColumn("#Product Type", 40, width: 5)]
-    public DrawingProductTypes ProductType { get; set; }
+    public int ProductType { get; set; }
 
     [ExcelColumn("Product Type", 41, width: 15)]
-    public string ProductTypeName { get => ProductType.GetDescription(); }
+    public string ProductTypeName { get => ProductType.ToEnum<DrawingProductTypes>().GetDescription(); }
     
 
     [ExcelColumn("Product", 42, width: 30)]
@@ -73,28 +73,28 @@ public class DrawingModel : IModel
 
     #region Style
     [ExcelColumn("#Type", 50, width: 5)]
-    public DrawingTypes Type { get; set; }
+    public int Type { get; set; }
 
     [ExcelColumn("Type", 51, width: 20)]
-    public string TypeName { get => Type.GetDescription(); }
+    public string TypeName { get => Type.ToEnum<DrawingTypes>().GetDescription(); }
 
     [ExcelColumn("#Software", 52, width: 5)]
-    public DrawingSoftwares Software { get; set; }
+    public int Software { get; set; }
 
     [ExcelColumn("Software", 53, width: 20)]
-    public string SoftwareName { get => Software.GetDescription(); }
+    public string SoftwareName { get => Software.ToEnum<DrawingSoftwares>().GetDescription(); }
 
     [ExcelColumn("#Paper", 54, width: 5)]
-    public DrawingPaperSizes Paper { get; set; }
+    public int Paper { get; set; }
 
     [ExcelColumn("Paper", 55, width: 10)]
-    public string PaperHuman { get => Paper.GetDescription(); }
+    public string PaperHuman { get => Paper.ToEnum<DrawingPaperSizes>().GetDescription(); }
 
     [ExcelColumn("#Filter", 56, width: 5)]
-    public DrawingFilterTypes Filter { get; set; }
+    public int Filter { get; set; }
 
     [ExcelColumn("Filter", 57, width: 20)]
-    public string FilterName { get => Filter.GetDescription(); }
+    public string FilterName { get => Filter.ToEnum<DrawingFilterTypes>().GetDescription(); }
     #endregion
 
     #region Details

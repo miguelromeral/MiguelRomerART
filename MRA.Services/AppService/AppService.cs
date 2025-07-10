@@ -233,7 +233,7 @@ namespace MRA.Services
         {
             if (filter.Paper != EnumExtensions.GetDefaultValue<DrawingPaperSizes>())
             {
-                drawings = drawings.Where(x => x.Paper == filter.Paper).ToList();
+                drawings = drawings.Where(x => x.Paper == (int) filter.Paper).ToList();
             }
 
             return drawings;
@@ -243,7 +243,7 @@ namespace MRA.Services
         {
             if (filter.Software != EnumExtensions.GetDefaultValue<DrawingSoftwares>())
             {
-                drawings = drawings.Where(x => x.Software == filter.Software).ToList();
+                drawings = drawings.Where(x => x.Software == (int) filter.Software).ToList();
             }
 
             return drawings;
@@ -253,7 +253,7 @@ namespace MRA.Services
         {
             if (filter.ProductType != EnumExtensions.GetDefaultValue<DrawingProductTypes>())
             {
-                drawings = drawings.Where(x => x.ProductType == filter.ProductType).ToList();
+                drawings = drawings.Where(x => x.ProductType == (int) filter.ProductType).ToList();
             }
 
             return drawings;
@@ -263,7 +263,7 @@ namespace MRA.Services
         {
             if (filter.Type != EnumExtensions.GetDefaultValue<DrawingTypes>())
             {
-                drawings = drawings.Where(x => x.Type == filter.Type).ToList();
+                drawings = drawings.Where(x => x.Type == (int) filter.Type).ToList();
             }
 
             return drawings;
@@ -377,12 +377,14 @@ namespace MRA.Services
             double wPopular = _remoteConfigService.GetPopularityPopular();
             double wFavorite = _remoteConfigService.GetPopularityFavorite();
 
+            var newList = new List<DrawingModel>();
             foreach (var d in drawings)
             {
                 d.CalculatePopularity(wDate, wMonths, wCritic, wPopular, wFavorite);
+                newList.Add(d);
             }
 
-            return drawings;
+            return newList;
         }
 
 
