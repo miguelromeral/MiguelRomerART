@@ -377,12 +377,14 @@ namespace MRA.Services
             double wPopular = _remoteConfigService.GetPopularityPopular();
             double wFavorite = _remoteConfigService.GetPopularityFavorite();
 
+            var newList = new List<DrawingModel>();
             foreach (var d in drawings)
             {
                 d.CalculatePopularity(wDate, wMonths, wCritic, wPopular, wFavorite);
+                newList.Add(d);
             }
 
-            return drawings;
+            return newList;
         }
 
 
