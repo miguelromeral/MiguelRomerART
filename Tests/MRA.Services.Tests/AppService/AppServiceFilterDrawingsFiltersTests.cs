@@ -203,10 +203,10 @@ public class AppServiceFilterDrawingsFiltersTests : AppServiceTests
         var filteredType = DrawingTypes.GraphitePencils;
         var allDrawings = new List<DrawingModel>
             {
-                new DrawingModel { Id = "1", Type = filteredType },
-                new DrawingModel { Id = "2", Type = DrawingTypes.Digital }
+                new DrawingModel { Id = "1", Type = (int) filteredType },
+                new DrawingModel { Id = "2", Type = (int) DrawingTypes.Digital }
             };
-        var expectedDrawings = allDrawings.Where(d => d.Type == filteredType).ToList();
+        var expectedDrawings = allDrawings.Where(d => d.Type == (int) filteredType).ToList();
 
         var filters = DrawingFilter.GetModelNoFilters();
         filters.Type = filteredType;
@@ -221,10 +221,10 @@ public class AppServiceFilterDrawingsFiltersTests : AppServiceTests
         var filteredProductType = DrawingProductTypes.ActorActress;
         var allDrawings = new List<DrawingModel>
             {
-                new DrawingModel { Id = "1", ProductType = filteredProductType },
-                new DrawingModel { Id = "2", ProductType = DrawingProductTypes.Influencer }
+                new DrawingModel { Id = "1", ProductType = (int) filteredProductType },
+                new DrawingModel { Id = "2", ProductType = (int) DrawingProductTypes.Influencer }
             };
-        var expectedDrawings = allDrawings.Where(d => d.ProductType == filteredProductType).ToList();
+        var expectedDrawings = allDrawings.Where(d => d.ProductType == (int) filteredProductType).ToList();
 
         var filters = DrawingFilter.GetModelNoFilters();
         filters.ProductType = filteredProductType;
@@ -239,10 +239,10 @@ public class AppServiceFilterDrawingsFiltersTests : AppServiceTests
         var filteredSoftware = DrawingSoftwares.ClipStudioPaint;
         var allDrawings = new List<DrawingModel>
             {
-                new DrawingModel { Id = "1", Software = filteredSoftware },
-                new DrawingModel { Id = "2", Software = DrawingSoftwares.MedibangPaint }
+                new DrawingModel { Id = "1", Software = (int) filteredSoftware },
+                new DrawingModel { Id = "2", Software = (int) DrawingSoftwares.MedibangPaint }
             };
-        var expectedDrawings = allDrawings.Where(d => d.Software == filteredSoftware).ToList();
+        var expectedDrawings = allDrawings.Where(d => d.Software == (int) filteredSoftware).ToList();
 
         var filters = DrawingFilter.GetModelNoFilters();
         filters.Software = filteredSoftware;
@@ -257,10 +257,10 @@ public class AppServiceFilterDrawingsFiltersTests : AppServiceTests
         var filteredPaper = DrawingPaperSizes.A4;
         var allDrawings = new List<DrawingModel>
             {
-                new DrawingModel { Id = "1", Paper = filteredPaper },
-                new DrawingModel { Id = "2", Paper = DrawingPaperSizes.Unknown }
+                new DrawingModel { Id = "1", Paper = (int) filteredPaper },
+                new DrawingModel { Id = "2", Paper = (int) DrawingPaperSizes.Unknown }
             };
-        var expectedDrawings = allDrawings.Where(d => d.Paper == filteredPaper).ToList();
+        var expectedDrawings = allDrawings.Where(d => d.Paper == (int) filteredPaper).ToList();
 
         var filters = DrawingFilter.GetModelNoFilters();
         filters.Paper = filteredPaper;
