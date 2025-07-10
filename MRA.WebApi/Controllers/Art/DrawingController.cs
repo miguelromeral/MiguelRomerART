@@ -10,6 +10,7 @@ using MRA.Services.Storage;
 using MRA.WebApi.Models.Responses;
 using MRA.WebApi.Models.Responses.Errors;
 using MRA.WebApi.Models.Responses.Errors.Drawings;
+using System.Globalization;
 
 namespace MRA.WebApi.Controllers.Art;
 
@@ -208,6 +209,7 @@ public class DrawingController : Controller
         try
         {
             _logger.LogInformation("Guardando dibujo '{Id}'", id);
+            var dateObject = DateTime.ParseExact(request.DateHyphen, "yyyy-MM-dd", CultureInfo.InvariantCulture);
             var drawing = new DrawingModel()
             {
                 ListComments = request.ListComments ?? [],
@@ -216,24 +218,25 @@ public class DrawingController : Controller
                 ListCommentsCons = request.ListCommentsCons ?? [],
                 Date = request.DateHyphen.Replace("-", "/"),
                 DateHyphen = request.DateHyphen,
+                DateObject = dateObject,
                 Favorite = request.Favorite,
                 Id = request.Id,
                 ModelName = request.ModelName,
                 Name = request.Name,
-                Paper = (int) request.Paper,
+                Paper = (int)request.Paper,
                 Path = request.Path,
                 PathThumbnail = request.PathThumbnail,
                 ProductName = request.ProductName,
-                ProductType = (int) request.ProductType,
+                ProductType = (int)request.ProductType,
                 ReferenceUrl = request.ReferenceUrl,
                 ScoreCritic = request.ScoreCritic,
-                Software = (int) request.Software,
-                Filter = (int) request.Filter,
+                Software = (int)request.Software,
+                Filter = (int)request.Filter,
                 SpotifyUrl = request.SpotifyUrl,
                 Tags = request.TagsText?.Split(DrawingTagManager.TAG_SEPARATOR) ?? [],
                 Time = request.Time ?? 0,
                 Title = request.Title ?? string.Empty,
-                Type = (int) request.Type,
+                Type = (int)request.Type,
                 InstagramUrl = request.InstagramUrl,
                 TwitterUrl = request.BlueskyUrl,
                 Visible = request.Visible
