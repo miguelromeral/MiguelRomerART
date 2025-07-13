@@ -18,6 +18,8 @@ public class DrawingMapper : IDocumentMapper<DrawingModel, IDrawingDocument>
 
     public DrawingModel ConvertToModel(IDrawingDocument drawingDocument)
     {
+        var dateDrawingAt = drawingDocument.drawingAt.ToUniversalTime();
+
         return new DrawingModel
         {
             Id = drawingDocument.Id,
@@ -25,9 +27,9 @@ public class DrawingMapper : IDocumentMapper<DrawingModel, IDrawingDocument>
             Type = drawingDocument.type,
             Title = drawingDocument.title,
             Name = drawingDocument.name,
-            Date = drawingDocument.drawingAt.ToString("yyyy/MM/dd"),
-            DateHyphen = drawingDocument.drawingAt.ToString("yyyy-MM-dd"),
-            DateObject = drawingDocument.drawingAt,
+            Date = dateDrawingAt.ToString("yyyy/MM/dd"),
+            DateHyphen = dateDrawingAt.ToString("yyyy-MM-dd"),
+            DateObject = dateDrawingAt,
             Time = drawingDocument.time ?? 0,
             ProductType = drawingDocument.product_type,
             ProductName = drawingDocument.product_name,
@@ -58,13 +60,16 @@ public class DrawingMapper : IDocumentMapper<DrawingModel, IDrawingDocument>
 
     public IDrawingDocument ConvertToDocument(DrawingModel drawing)
     {
+        var dateDrawingAt = new DateTime(drawing.DateObject.Year, drawing.DateObject.Month, drawing.DateObject.Day, 
+            0, 0, 0, DateTimeKind.Utc).ToUniversalTime();
+
         return new DrawingMongoDocument
         {
             Id = drawing.Id,
             path = drawing.Path,
             type = drawing.Type,
             title = drawing.Title,
-            drawingAt = drawing.DateObject.ToUniversalTime(),
+            drawingAt = dateDrawingAt,
             time = drawing.Time,
             name = drawing.Name,
             product_type = drawing.ProductType,
