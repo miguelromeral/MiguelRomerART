@@ -242,9 +242,10 @@ public class DrawingController : Controller
                 Visible = request.Visible
             };
 
-            await _drawingService.SaveDrawingAsync(drawing);
+            var savedDrawing = await _drawingService.SaveDrawingAsync(drawing);
             _appService.Clear();
-            return Ok(drawing);
+            savedDrawing.TagsText = string.Join(DrawingTagManager.TAG_SEPARATOR, savedDrawing.Tags);
+            return Ok(savedDrawing);
         }
         catch (Exception ex)
         {
