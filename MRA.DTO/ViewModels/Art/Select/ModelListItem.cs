@@ -17,6 +17,6 @@ public class ModelListItem
         return drawings
             .Where(x => !string.IsNullOrEmpty(x.ModelName))
             .Select(x => new ModelListItem(x.ModelName))
-            .Distinct();
+            .DistinctBy(x => x.ModelName);
     }
 }
