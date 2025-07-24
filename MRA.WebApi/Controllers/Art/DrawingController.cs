@@ -226,6 +226,7 @@ public class DrawingController : Controller
                 Paper = (int)request.Paper,
                 Path = request.Path,
                 PathThumbnail = request.PathThumbnail,
+                PathTimelapse = request.PathTimelapse,
                 ProductName = request.ProductName,
                 ProductType = (int)request.ProductType,
                 ReferenceUrl = request.ReferenceUrl,

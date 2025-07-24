@@ -13,6 +13,9 @@ public class DrawingMongoDocument : MongoDocumentBase, IDrawingDocument
     [BsonElement("path_thumbnail")]
     public string path_thumbnail { get; set; }
 
+    [BsonElement("path_timelapse")]
+    public string path_timelapse { get; set; }
+
     [BsonElement("type")]
     public int type { get; set; }
 

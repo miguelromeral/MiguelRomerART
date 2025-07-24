@@ -5,6 +5,7 @@ public interface IDrawingDocument : IDocument
     string Id { get; set; }
     string path { get; set; }
     string path_thumbnail { get; set; }
+    string path_timelapse { get; set; }
     int type { get; set; }
     bool? visible { get; set; }
     string name { get; set; }
