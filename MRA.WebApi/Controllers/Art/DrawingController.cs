@@ -7,10 +7,12 @@ using MRA.DTO.ViewModels.Art.Select;
 using MRA.Services;
 using MRA.Services.Models.Drawings;
 using MRA.Services.Storage;
+using MRA.WebApi.Models.Requests.Azure;
 using MRA.WebApi.Models.Responses;
 using MRA.WebApi.Models.Responses.Errors;
 using MRA.WebApi.Models.Responses.Errors.Drawings;
 using System.Globalization;
+using System.IO;
 
 namespace MRA.WebApi.Controllers.Art;
 
@@ -226,6 +228,7 @@ public class DrawingController : Controller
                 Paper = (int)request.Paper,
                 Path = request.Path,
                 PathThumbnail = request.PathThumbnail,
+                PathTimelapse = request.PathTimelapse,
                 ProductName = request.ProductName,
                 ProductType = (int)request.ProductType,
                 ReferenceUrl = request.ReferenceUrl,
@@ -309,8 +312,8 @@ public class DrawingController : Controller
     }
 
     [Authorize]
-    [HttpPost("upload/blob")]
-    public async Task<ActionResult<UploadAzureImageResponse>> UploadBlob(IFormFile image, [FromForm] int size, [FromForm] string path)
+    [HttpPost("upload/image")]
+    public async Task<ActionResult<UploadAzureImageResponse>> UploadBlobImage(IFormFile image, [FromForm] int size, [FromForm] string path)
     {
         try
         {
@@ -343,6 +346,50 @@ public class DrawingController : Controller
                 Url = url,
                 UrlThumbnail = url_tn,
                 PathThumbnail = blobLocationThumbnail
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al subir blob de Azure: " + ex.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError,
+                new { message = $"Error when uploading blob" });
+        }
+    }
+
+
+    [Authorize]
+    [HttpPost("upload/blob")]
+    public async Task<ActionResult<UploadAzureBlobResponse>> UploadBlob(IFormFile file, [FromForm] string path)
+    {
+        try
+        {
+            _logger.LogInformation($"Subiendo fichero a Azure \"{file.FileName}\"");
+            if (file == null || file.Length == 0)
+            {
+                _logger.LogWarning("No se ha proporcionado ningún fichero");
+                return BadRequest(new { message = $"No se ha proporcinoado ningún fichero" });
+            }
+
+            using (var fileStream = new MemoryStream())
+            {
+                await file.CopyToAsync(fileStream);
+                fileStream.Position = 0;
+
+                await _storageService.Save(fileStream, path, file.FileName);
+            }
+
+            path = $"{path}/{file.FileName}";
+            _logger.LogInformation($"Subido fichero a \"{path}\"");
+
+            var urlBase = _storageService.GetBlobURL();
+            var url = urlBase + path;
+
+            return Ok(new UploadAzureBlobResponse()
+            {
+                Ok = true,
+                Error = "",
+                Url = url,
+                Path = path,
             });
         }
         catch (Exception ex)

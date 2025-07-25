@@ -33,14 +33,25 @@ public class DrawingModel : IModel
     public string Path { get; set; }
 
     [ExcelColumn("URL", 11, url: true, wrapText: true)]
-    public string Url { get { return UrlBase + Path; } }
+    public string Url { get { return GetUrlIfNotNull(Path); } }
 
     [ExcelColumn("Path Thumbnail", 15)]
     public string PathThumbnail { get; set; }
 
     [ExcelColumn("URL Thumbnail", 16, url: true, wrapText: true)]
-    public string UrlThumbnail { get { return UrlBase + PathThumbnail; } }
+    public string UrlThumbnail { get { return GetUrlIfNotNull(PathThumbnail); } }
+
+    [ExcelColumn("Path Timelapse", 17)]
+    public string PathTimelapse { get; set; }
+
+    [ExcelColumn("URL Timelapse", 18, url: true, wrapText: true)]
+    public string UrlTimelapse { get { return GetUrlIfNotNull(PathTimelapse); } }
     #endregion
+
+    private string GetUrlIfNotNull(string path)
+    {
+        return string.IsNullOrEmpty(path) ? string.Empty : UrlBase + path;
+    }
 
     #region Title
     [ExcelColumn("Title", 20)]

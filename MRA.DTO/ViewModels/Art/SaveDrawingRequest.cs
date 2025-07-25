@@ -11,6 +11,7 @@ public class SaveDrawingRequest
     public string? Path { get; set; }
     [Required]
     public string? PathThumbnail { get; set; }
+    public string? PathTimelapse { get; set; }
 
     [Required]
     public bool Visible { get; set; }
